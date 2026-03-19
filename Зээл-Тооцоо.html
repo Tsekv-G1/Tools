@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ЗЭЭЛИЙН ТООЦООЛУУР — PRODUCTDROP.MN</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#04040a;--bg2:#07070f;--card:#0b0b14;--card2:#0e0e1a;
+  --border:rgba(255,255,255,0.055);--border2:rgba(255,255,255,0.09);
+  --gold:#f0b429;--gold2:#d4880a;
+  --cyan:#06d6f5;--green:#2ecc8a;--purple:#9d6ff7;
+  --red:#ff4d6d;--orange:#ff7c2a;
+  --text:#ddddf0;--text2:#9999b8;--text3:#5a5a7a;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.6;overflow-x:hidden;}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:2000;opacity:.02;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");}
+@media(pointer:fine){body{cursor:none;}button,a,input[type=range]{cursor:none;}#cur,#cur2{display:block;}}
+@media(pointer:coarse){button,a{cursor:pointer;}#cur,#cur2{display:none;}}
+#cur,#cur2{position:fixed;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);display:none;}
+#cur{width:8px;height:8px;background:var(--gold);}
+#cur2{width:28px;height:28px;border:1px solid rgba(240,180,41,.35);transition:left .1s ease,top .1s ease;}
+nav{position:sticky;top:0;z-index:500;background:rgba(4,4,10,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 14px;display:flex;align-items:center;height:50px;gap:10px;}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:.1em;background:linear-gradient(90deg,var(--gold),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;flex-shrink:0;}
+.nav-links{display:flex;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex:1;}
+.nav-links::-webkit-scrollbar{display:none;}
+.nav-link{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.07em;color:var(--text3);text-decoration:none;white-space:nowrap;padding:5px 9px;border-radius:4px;border-bottom:2px solid transparent;transition:all .2s;}
+.nav-link:hover,.nav-link.on{color:var(--text);border-bottom-color:var(--gold);}
+.nav-badge{font-family:'JetBrains Mono',monospace;font-size:8px;padding:2px 8px;border-radius:3px;background:rgba(240,180,41,.12);color:var(--gold);letter-spacing:.08em;white-space:nowrap;flex-shrink:0;}
+@media(max-width:400px){.nav-badge{display:none;}}
+.wrap{max-width:1100px;margin:0 auto;padding:0 14px;}
+@media(min-width:600px){.wrap{padding:0 24px;}}
+.sec{padding:52px 0;border-bottom:1px solid var(--border);opacity:0;transform:translateY(22px);transition:opacity .6s,transform .6s;}
+.sec.vis{opacity:1;transform:none;}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%);pointer-events:none;}
+.hero{padding:48px 0 40px;position:relative;overflow:hidden;opacity:0;transform:translateY(22px);transition:opacity .8s,transform .8s;}
+.hero.vis{opacity:1;transform:none;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+.orb-g{width:380px;height:380px;top:-60px;left:-80px;background:radial-gradient(ellipse,rgba(240,180,41,.07) 0%,transparent 70%);}
+.orb-c{width:280px;height:280px;bottom:-40px;right:-60px;background:radial-gradient(ellipse,rgba(6,214,245,.05) 0%,transparent 70%);}
+.ctag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;padding:4px 12px;border-radius:3px;margin-bottom:12px;font-weight:500;background:rgba(240,180,41,.1);color:var(--gold);}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,12vw,88px);line-height:.92;letter-spacing:.02em;margin-bottom:14px;}
+.grad-text{background:linear-gradient(135deg,var(--gold),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-sub{font-size:14px;color:var(--text2);max-width:480px;line-height:1.65;margin-bottom:24px;}
+.stat-row{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:28px;}
+.stat-item{padding:14px 10px;text-align:center;border-right:1px solid var(--border);border-bottom:1px solid var(--border);}
+.stat-item:nth-child(2){border-right:none;}
+.stat-item:nth-child(3){border-bottom:none;}
+.stat-item:nth-child(4){border-right:none;border-bottom:none;}
+@media(min-width:680px){
+  .stat-row{grid-template-columns:repeat(4,1fr);}
+  .stat-item{border-bottom:none!important;}
+  .stat-item:nth-child(2){border-right:1px solid var(--border)!important;}
+  .stat-item:nth-child(3){border-right:1px solid var(--border)!important;}
+}
+.stat-n{font-family:'Bebas Neue',sans-serif;font-size:clamp(20px,5vw,32px);line-height:1;}
+.stat-l{font-size:8px;color:var(--text3);letter-spacing:.1em;margin-top:2px;}
+.sec-label{display:flex;align-items:center;gap:10px;margin-bottom:24px;}
+.sec-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.1em;flex-shrink:0;}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,7vw,52px);line-height:.92;flex-shrink:0;}
+.sec-line{flex:1;height:1px;background:var(--border);}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;position:relative;overflow:hidden;transition:border-color .3s;}
+@media(min-width:600px){.card{padding:24px 26px;}}
+.card:hover{border-color:var(--border2);}
+.card-top-bar{position:absolute;top:0;left:0;right:0;height:2px;border-radius:16px 16px 0 0;}
+.grid2{display:grid;grid-template-columns:1fr;gap:10px;}
+.grid3{display:grid;grid-template-columns:1fr;gap:10px;}
+@media(min-width:580px){.grid2{grid-template-columns:1fr 1fr;gap:12px;}}
+@media(min-width:780px){.grid3{grid-template-columns:repeat(3,1fr);gap:12px;}}
+.field{margin-bottom:14px;}
+.field label{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--text3);margin-bottom:6px;}
+.field input,.field select{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:12px 13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;outline:none;-webkit-appearance:none;appearance:none;transition:border-color .2s,background .2s;}
+.field input:focus,.field select:focus{border-color:rgba(240,180,41,.4);background:rgba(240,180,41,.03);}
+.field input::placeholder{color:var(--text3);}
+.ip{position:relative;}
+.ip span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);pointer-events:none;}
+.ip input{padding-left:28px;}
+.slider-wrap{margin-bottom:14px;}
+.slider-lbl{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;color:var(--text3);margin-bottom:9px;}
+.slider-lbl span{color:var(--gold);font-size:10px;}
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:2px;background:var(--border2);outline:none;touch-action:manipulation;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--gold);border:2px solid var(--bg);box-shadow:0 0 8px rgba(240,180,41,.4);}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--gold);border:2px solid var(--bg);}
+/* Debt rows — mobile: stacked, desktop: grid */
+.debt-row{padding:12px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:13px;margin-bottom:8px;transition:border-color .2s;}
+.debt-row.urgent{border-left:3px solid var(--red);}
+.debt-row.high{border-left:3px solid var(--orange);}
+.debt-row.ok{border-left:3px solid var(--green);}
+.dr-top{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+.dr-top .field{flex:1;margin:0;}
+.dr-bot{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.btn-del{width:38px;height:38px;min-width:38px;border-radius:10px;border:1px solid rgba(255,77,109,.25);background:rgba(255,77,109,.06);color:var(--red);font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s;line-height:1;touch-action:manipulation;}
+.btn-del:active{background:rgba(255,77,109,.18);}
+@media(min-width:620px){
+  .debt-row{display:grid;grid-template-columns:1fr 130px 110px 38px;gap:8px;align-items:end;padding:13px 14px;}
+  .dr-top,.dr-bot{display:contents;}
+  .dr-top .field,.dr-bot .field{margin:0;}
+}
+.btn-add{display:flex;align-items:center;gap:8px;padding:14px 20px;background:rgba(6,214,245,.05);border:1px dashed rgba(6,214,245,.2);border-radius:12px;color:var(--cyan);font-size:14px;font-family:'DM Sans',sans-serif;width:100%;justify-content:center;margin-top:4px;transition:background .2s;touch-action:manipulation;}
+.btn-add:active{background:rgba(6,214,245,.12);}
+.btn-calc{display:flex;align-items:center;justify-content:center;gap:9px;padding:15px 28px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:40px;color:#04040a;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;transition:all .2s;letter-spacing:.02em;touch-action:manipulation;width:100%;}
+@media(min-width:440px){.btn-calc{width:auto;}}
+.btn-calc:active{transform:scale(.97);}
+.btn-outline{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;background:transparent;border:1px solid var(--border2);border-radius:40px;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:14px;transition:all .2s;touch-action:manipulation;}
+.btn-outline:active{border-color:rgba(240,180,41,.3);color:var(--gold);}
+.flex-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.result-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 16px;margin-bottom:12px;}
+@media(min-width:600px){.result-card{padding:22px 26px;}}
+.result-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--text3);margin-bottom:5px;}
+.result-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,8vw,50px);line-height:1;}
+.result-sub{font-size:11px;color:var(--text2);margin-top:4px;}
+.prog-bar{height:5px;border-radius:3px;background:rgba(255,255,255,.07);overflow:hidden;margin:6px 0;}
+.prog-fill{height:100%;border-radius:3px;transition:width .8s cubic-bezier(.4,0,.2,1);}
+.dres-row{display:flex;align-items:flex-start;gap:9px;padding:12px 13px;border-radius:11px;background:rgba(255,255,255,.025);border:1px solid var(--border);margin-bottom:8px;}
+.dres-rank{font-family:'Bebas Neue',sans-serif;font-size:24px;line-height:1;min-width:22px;flex-shrink:0;}
+.dres-name{flex:1;min-width:0;}
+.dres-n{font-size:13px;font-weight:500;}
+.dres-note{font-size:10px;color:var(--text3);margin-top:1px;font-family:'JetBrains Mono',monospace;}
+.dres-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0;}
+.dres-amt{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;white-space:nowrap;}
+.badge{font-family:'JetBrains Mono',monospace;font-size:8px;padding:2px 7px;border-radius:3px;letter-spacing:.07em;font-weight:500;white-space:nowrap;}
+.badge-red{background:rgba(255,77,109,.12);color:var(--red);}
+.badge-orange{background:rgba(255,124,42,.12);color:var(--orange);}
+.badge-green{background:rgba(46,204,138,.12);color:var(--green);}
+.badge-gold{background:rgba(240,180,41,.12);color:var(--gold);}
+.badge-cyan{background:rgba(6,214,245,.12);color:var(--cyan);}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.mtbl{width:100%;border-collapse:collapse;font-size:12px;min-width:320px;}
+.mtbl th{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.08em;color:var(--text3);padding:7px 10px;text-align:left;border-bottom:1px solid var(--border);}
+.mtbl td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.03);color:var(--text2);}
+.mtbl td:first-child{font-family:'JetBrains Mono',monospace;color:var(--text3);font-size:11px;}
+.mtbl td.pos{color:var(--green);}
+.mtbl td.neg{color:var(--red);}
+.mtbl td.main{color:var(--text);font-weight:500;}
+.tl{padding-left:22px;position:relative;}
+.tl::before{content:'';position:absolute;left:5px;top:7px;bottom:7px;width:1px;background:linear-gradient(var(--gold),transparent);}
+.tl-item{position:relative;padding-bottom:18px;}
+.tl-item:last-child{padding-bottom:0;}
+.tl-item::before{content:'';position:absolute;left:-18px;top:6px;width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 7px rgba(240,180,41,.5);}
+.tl-month{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.08em;margin-bottom:2px;}
+.tl-text{font-size:12px;color:var(--text2);line-height:1.5;}
+.callout{border-radius:12px;padding:13px 15px;border-left:3px solid;font-size:13px;line-height:1.6;margin-bottom:10px;}
+.callout-gold{border-color:var(--gold);background:rgba(240,180,41,.04);color:var(--text2);}
+.callout-green{border-color:var(--green);background:rgba(46,204,138,.04);color:var(--text2);}
+.callout-red{border-color:var(--red);background:rgba(255,77,109,.04);color:var(--text2);}
+.callout-cyan{border-color:var(--cyan);background:rgba(6,214,245,.04);color:var(--text2);}
+.warn-item{display:flex;align-items:flex-start;gap:10px;padding:12px 13px;background:rgba(255,77,109,.05);border:1px solid rgba(255,77,109,.15);border-radius:10px;font-size:12px;color:var(--text2);margin-bottom:8px;line-height:1.5;}
+.strat-tabs{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+@media(min-width:500px){.strat-tabs{flex-direction:row;}}
+.strat-tab{padding:10px 14px;border-radius:10px;border:1px solid var(--border);font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:.05em;color:var(--text3);background:transparent;transition:all .2s;text-align:left;touch-action:manipulation;line-height:1.4;}
+.strat-tab.active{border-color:rgba(240,180,41,.4);color:var(--gold);background:rgba(240,180,41,.08);}
+.inc-preview{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap;}
+.inc-chip{font-family:'JetBrains Mono',monospace;font-size:10px;padding:5px 11px;border-radius:6px;border:1px solid var(--border);color:var(--text2);}
+.inc-chip span{color:var(--green);margin-left:3px;}
+.card-sub{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--text2);margin-bottom:14px;letter-spacing:.05em;}
+.mt12{margin-top:12px;}.mt16{margin-top:16px;}.mt24{margin-top:24px;}.mt28{margin-top:28px;}
+#results{display:none;}
+footer{padding:36px 14px;border-top:1px solid var(--border);text-align:center;}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.1em;background:linear-gradient(90deg,var(--gold),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:5px;}
+.footer-copy{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--text3);letter-spacing:.07em;}
+.debt-col-labels{display:none;}
+@media(min-width:620px){
+  .debt-col-labels{display:grid;grid-template-columns:1fr 130px 110px 38px;gap:8px;padding:0 14px 6px;}
+  .debt-col-labels span{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.08em;color:var(--text3);}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div><div id="cur2"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">PRODUCTDROP.MN</div>
+    <nav class="nav-links">
+      <a class="nav-link on" href="#income">ОРЛОГО</a>
+      <a class="nav-link" href="#expense">ЗАРДАЛ</a>
+      <a class="nav-link" href="#debts">ЗЭЭЛ</a>
+      <a class="nav-link" href="#results">ҮР ДҮН</a>
+    </nav>
+    <div class="nav-badge">v1.0</div>
+  </div>
+</nav>
+
+<div class="hero" id="hero-el">
+  <div class="orb orb-g"></div><div class="orb orb-c"></div><div class="grid-bg"></div>
+  <div class="wrap" style="position:relative;z-index:1;">
+    <div class="ctag">PERSONAL FINANCE TOOL</div>
+    <h1 class="hero-title">ЗЭЭЛИЙН<br><span class="grad-text">ТООЦООЛУУР</span></h1>
+    <p class="hero-sub">Орлого, зардал, зээлээ оруулаад — хамгийн хурдан гарах замаа ол.</p>
+    <div class="flex-row" style="gap:10px;">
+      <button class="btn-calc" onclick="calculate()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>ТООЦООЛ
+      </button>
+      <button class="btn-outline" onclick="resetAll()" style="width:auto;">Цэвэрлэх</button>
+    </div>
+    <div class="stat-row">
+      <div class="stat-item"><div class="stat-n" id="s-total" style="color:var(--red);">0₮</div><div class="stat-l">НИЙТ ӨР</div></div>
+      <div class="stat-item"><div class="stat-n" id="s-income" style="color:var(--green);">0₮</div><div class="stat-l">ОРЛОГО</div></div>
+      <div class="stat-item"><div class="stat-n" id="s-free" style="color:var(--cyan);">0₮</div><div class="stat-l">БОЛОМЖТОЙ</div></div>
+      <div class="stat-item"><div class="stat-n" id="s-months" style="color:var(--gold);">—</div><div class="stat-l">ДУУСАХ</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 01 ОРЛОГО -->
+<section class="sec" id="income">
+  <div class="wrap">
+    <div class="sec-label"><div class="sec-num">01 /</div><h2 class="sec-title" style="color:var(--green);">ОРЛОГО</h2><div class="sec-line"></div></div>
+    <div class="grid3">
+      <div class="card">
+        <div class="card-top-bar" style="background:linear-gradient(90deg,var(--green),var(--cyan));"></div>
+        <div class="ctag" style="background:rgba(46,204,138,.1);color:var(--green);">ҮНДСЭН</div>
+        <div class="field"><label>СУУРЬ ЦАЛИН</label><div class="ip"><span>₮</span><input type="number" id="i-salary" inputmode="numeric" value="2200000" oninput="liveUpdate()"></div></div>
+        <div class="slider-wrap"><div class="slider-lbl"><span>ЦАЛИН</span><span id="sl-salary-out">2,200,000₮</span></div><input type="range" id="sl-salary" min="500000" max="10000000" step="50000" value="2200000" oninput="syncSl('salary',this.value)"></div>
+      </div>
+      <div class="card">
+        <div class="card-top-bar" style="background:linear-gradient(90deg,var(--gold),var(--orange));"></div>
+        <div class="ctag" style="background:rgba(240,180,41,.1);color:var(--gold);">БОНУС</div>
+        <div class="field"><label>САРЫН БОНУС</label><div class="ip"><span>₮</span><input type="number" id="i-bonus" inputmode="numeric" value="300000" oninput="liveUpdate()"></div></div>
+        <div class="slider-wrap"><div class="slider-lbl"><span>БОНУС</span><span id="sl-bonus-out">300,000₮</span></div><input type="range" id="sl-bonus" min="0" max="3000000" step="50000" value="300000" oninput="syncSl('bonus',this.value)"></div>
+      </div>
+      <div class="card">
+        <div class="card-top-bar" style="background:linear-gradient(90deg,var(--purple),var(--cyan));"></div>
+        <div class="ctag" style="background:rgba(157,111,247,.1);color:var(--purple);">НЭМЭЛТ</div>
+        <div class="field"><label>SIDE HUSTLE</label><div class="ip"><span>₮</span><input type="number" id="i-side" inputmode="numeric" value="500000" oninput="liveUpdate()"></div></div>
+        <div class="slider-wrap"><div class="slider-lbl"><span>НЭМЭЛТ</span><span id="sl-side-out">500,000₮</span></div><input type="range" id="sl-side" min="0" max="3000000" step="50000" value="500000" oninput="syncSl('side',this.value)"></div>
+      </div>
+    </div>
+    <div class="inc-preview">
+      <div class="inc-chip">ЦАЛИН <span id="pr-s">2,200,000₮</span></div>
+      <div class="inc-chip">+ БОНУС <span id="pr-b">300,000₮</span></div>
+      <div class="inc-chip">+ НЭМЭЛТ <span id="pr-si">500,000₮</span></div>
+      <div class="inc-chip" style="border-color:rgba(46,204,138,.3);">= НИЙТ <span id="pr-t">3,000,000₮</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 ЗАРДАЛ -->
+<section class="sec" id="expense">
+  <div class="wrap">
+    <div class="sec-label"><div class="sec-num">02 /</div><h2 class="sec-title" style="color:var(--cyan);">ЗАРДАЛ</h2><div class="sec-line"></div></div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-top-bar" style="background:linear-gradient(90deg,var(--cyan),var(--purple));"></div>
+        <div class="card-sub">ТОГТМОЛ ЗАРДАЛ</div>
+        <div class="field"><label>ХООЛ / АМЬ ЗУУЛГА</label><div class="ip"><span>₮</span><input type="number" id="e-food" inputmode="numeric" value="300000" oninput="liveUpdate()"></div></div>
+        <div class="field"><label>ОРОН СУУЦ / ТҮРЭЭС</label><div class="ip"><span>₮</span><input type="number" id="e-rent" inputmode="numeric" value="200000" oninput="liveUpdate()"></div></div>
+        <div class="field"><label>ТЭЭВЭР</label><div class="ip"><span>₮</span><input type="number" id="e-trans" inputmode="numeric" value="100000" oninput="liveUpdate()"></div></div>
+        <div class="field" style="margin-bottom:0;"><label>УТАС / ИНТЕРНЭТ</label><div class="ip"><span>₮</span><input type="number" id="e-comm" inputmode="numeric" value="50000" oninput="liveUpdate()"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-top-bar" style="background:linear-gradient(90deg,var(--purple),var(--gold));"></div>
+        <div class="card-sub">БУСАД ЗАРДАЛ</div>
+        <div class="field"><label>ЭРҮҮЛ МЭНД</label><div class="ip"><span>₮</span><input type="number" id="e-health" inputmode="numeric" value="30000" oninput="liveUpdate()"></div></div>
+        <div class="field"><label>ХУВЦАС / ГООЗОЛ</label><div class="ip"><span>₮</span><input type="number" id="e-clothes" inputmode="numeric" value="50000" oninput="liveUpdate()"></div></div>
+        <div class="field"><label>ЗУГАА / ЦАЙНЫ ГАЗАР</label><div class="ip"><span>₮</span><input type="number" id="e-fun" inputmode="numeric" value="80000" oninput="liveUpdate()"></div></div>
+        <div class="field" style="margin-bottom:0;"><label>БУСАД</label><div class="ip"><span>₮</span><input type="number" id="e-misc" inputmode="numeric" value="50000" oninput="liveUpdate()"></div></div>
+      </div>
+    </div>
+    <div class="card mt12" style="background:rgba(6,214,245,.03);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:8px;">
+        <div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.08em;margin-bottom:2px;">НИЙТ ЗАРДАЛ</div><div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,7vw,42px);color:var(--cyan);" id="total-expense">860,000₮</div></div>
+        <div style="text-align:right;"><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.08em;margin-bottom:2px;">ОРЛОГЫН</div><div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,7vw,42px);" id="expense-pct">29%</div></div>
+      </div>
+      <div class="prog-bar" style="margin-top:10px;"><div class="prog-fill" id="expense-prog" style="width:29%;background:linear-gradient(90deg,var(--green),var(--cyan));"></div></div>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px;" id="expense-msg">Орлогын 29% зардал — зохистой</div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 ЗЭЭЛ -->
+<section class="sec" id="debts">
+  <div class="wrap">
+    <div class="sec-label"><div class="sec-num">03 /</div><h2 class="sec-title" style="color:var(--red);">ЗЭЭЛҮҮД</h2><div class="sec-line"></div></div>
+    <div class="callout callout-cyan" style="margin-bottom:18px;font-size:12px;">
+      Зээл бүрийн нэр, үлдэгдэл, жилийн хүү (%) оруулна. Хүүгүй зээлд <strong style="color:var(--cyan);">0</strong> гэнэ.
+    </div>
+    <div class="debt-col-labels"><span>ЗЭЭЛИЙН НЭР</span><span>ҮЛДЭГДЭЛ (₮)</span><span>ЖИЛ. ХҮҮ (%)</span><span></span></div>
+    <div id="debt-list"></div>
+    <button class="btn-add" onclick="addDebt()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>ЗЭЭЛ НЭМЭХ
+    </button>
+    <div class="mt24">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.08em;margin-bottom:9px;">СТРАТЕГИ СОНГОХ</div>
+      <div class="strat-tabs">
+        <button class="strat-tab active" id="tab-av" onclick="setSt('avalanche')">AVALANCHE — ӨНДӨР ХҮҮ ЭХЭЛНЭ</button>
+        <button class="strat-tab" id="tab-sn" onclick="setSt('snowball')">SNOWBALL — БАГА ДҮН ЭХЭЛНЭ</button>
+      </div>
+      <div class="callout callout-gold" id="strat-desc" style="font-size:12px;"><strong style="color:var(--gold);">Avalanche:</strong> Өндөр хүүтэй зээлд нэмэлт мөнгийг нэмж тавина. Хүүний зардлыг хамгийн их бууруулна.</div>
+    </div>
+    <div class="mt24"><button class="btn-calc" onclick="calculate()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>ДҮНГ ТООЦООЛ</button></div>
+  </div>
+</section>
+
+<!-- 04 ҮР ДҮН -->
+<section class="sec" id="results" style="display:none;">
+  <div class="wrap">
+    <div class="sec-label"><div class="sec-num">04 /</div><h2 class="sec-title" style="background:linear-gradient(135deg,var(--gold),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">ҮР ДҮН</h2><div class="sec-line"></div></div>
+    <div class="grid3">
+      <div class="result-card"><div class="card-top-bar" style="background:var(--red);"></div><div class="result-label">НИЙТ ҮЛДЭГДЭЛ</div><div class="result-big" id="r-total" style="color:var(--red);">—</div><div class="result-sub" id="r-total-sub"></div></div>
+      <div class="result-card"><div class="card-top-bar" style="background:var(--cyan);"></div><div class="result-label">САРЫН БОЛОМЖТОЙ</div><div class="result-big" id="r-avail" style="color:var(--cyan);">—</div><div class="result-sub" id="r-avail-sub"></div></div>
+      <div class="result-card"><div class="card-top-bar" style="background:var(--gold);"></div><div class="result-label">ДУУСАХ ХУГАЦАА</div><div class="result-big" id="r-months" style="color:var(--gold);">—</div><div class="result-sub" id="r-months-sub"></div></div>
+    </div>
+    <div class="grid2 mt12">
+      <div class="result-card"><div class="result-label">НИЙТ ХҮҮНИЙ ЗАРДАЛ</div><div class="result-big" id="r-interest" style="font-size:clamp(26px,6vw,40px);color:var(--orange);">—</div></div>
+      <div class="result-card"><div class="result-label">ХЭМНЭЛТ</div><div class="result-big" id="r-save" style="font-size:clamp(26px,6vw,40px);color:var(--green);">—</div></div>
+    </div>
+    <div class="mt28"><div class="sec-label" style="margin-bottom:14px;"><div class="sec-num">→</div><h3 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(20px,5vw,30px);letter-spacing:.05em;">ТӨЛБӨРИЙН ДАРААЛАЛ</h3><div class="sec-line"></div></div><div id="r-debt-list"></div></div>
+    <div class="mt28"><div class="sec-label" style="margin-bottom:14px;"><div class="sec-num">→</div><h3 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(20px,5vw,30px);letter-spacing:.05em;">САРЫН ТӨСӨВ</h3><div class="sec-line"></div></div><div class="card"><div class="card-top-bar" style="background:linear-gradient(90deg,var(--green),var(--cyan));"></div><div class="table-scroll"><table class="mtbl"><thead><tr><th>ЗҮЙЛ</th><th>ДҮН</th><th>ТАЙЛБАР</th></tr></thead><tbody id="budget-tb"></tbody></table></div></div></div>
+    <div class="mt28"><div class="sec-label" style="margin-bottom:14px;"><div class="sec-num">→</div><h3 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(20px,5vw,30px);letter-spacing:.05em;">ЦАГИЙН ОС</h3><div class="sec-line"></div></div><div class="card"><div class="tl" id="r-tl"></div></div></div>
+    <div class="mt28"><div class="sec-label" style="margin-bottom:14px;"><div class="sec-num">→</div><h3 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(20px,5vw,30px);letter-spacing:.05em;">ЗӨВЛӨМЖ</h3><div class="sec-line"></div></div><div id="r-tips"></div></div>
+    <div id="r-warns" class="mt12"></div>
+  </div>
+</section>
+
+<footer><div class="wrap" style="padding-top:0;"><div class="footer-logo">PRODUCTDROP.MN</div><div class="footer-copy">© 2025 PRODUCTDROP.MN — ЗЭЭЛИЙН ТООЦООЛУУР</div></div></footer>
+
+<script>
+const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
+if(window.matchMedia('(pointer:fine)').matches){
+  cur.style.display='block';cur2.style.display='block';
+  document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';setTimeout(()=>{cur2.style.left=e.clientX+'px';cur2.style.top=e.clientY+'px';},60);});
+}
+const obs=new IntersectionObserver(e=>e.forEach(x=>x.isIntersecting&&x.target.classList.add('vis')),{threshold:0.04});
+document.querySelectorAll('.sec').forEach(s=>obs.observe(s));
+setTimeout(()=>document.getElementById('hero-el').classList.add('vis'),80);
+
+let strategy='avalanche';
+function setSt(s){
+  strategy=s;
+  document.getElementById('tab-av').classList.toggle('active',s==='avalanche');
+  document.getElementById('tab-sn').classList.toggle('active',s==='snowball');
+  document.getElementById('strat-desc').innerHTML=s==='avalanche'
+    ?'<strong style="color:var(--gold);">Avalanche:</strong> Өндөр хүүтэй зээлд нэмэлт мөнгийг нэмж тавина. Хүүний зардлыг хамгийн их бууруулна.'
+    :'<strong style="color:var(--cyan);">Snowball:</strong> Бага үлдэгдэлтэй зээлийг эхэлж дуусгана. Хурдан амжилт мэдрэгддэг.';
+}
+
+let debts=[
+  {name:'KhanBank',amount:4400000,rate:15},
+  {name:'Numur APP',amount:820000,rate:36},
+  {name:'Pocket APP',amount:110000,rate:36},
+  {name:'Mcredit',amount:690000,rate:30},
+  {name:'Pocket 3 Leasing',amount:2400000,rate:48},
+  {name:'Storepay',amount:1150000,rate:0},
+  {name:'Эгч',amount:500000,rate:0},
+  {name:'Торгууль',amount:450000,rate:0},
+];
+
+function renderDebts(){
+  document.getElementById('debt-list').innerHTML=debts.map((d,i)=>{
+    const cls=d.rate>30?'urgent':d.rate>0?'high':'ok';
+    return `<div class="debt-row ${cls}" id="dr${i}">
+      <div class="dr-top">
+        <div class="field" style="margin:0;flex:1;"><input type="text" value="${d.name}" placeholder="Зээлийн нэр" oninput="debts[${i}].name=this.value" style="font-size:15px;"></div>
+        <button class="btn-del" onclick="removeDebt(${i})">×</button>
+      </div>
+      <div class="dr-bot">
+        <div class="field" style="margin:0;">
+          <label>ҮЛДЭГДЭЛ</label>
+          <div class="ip"><span>₮</span><input type="number" inputmode="numeric" value="${d.amount}" placeholder="0" oninput="debts[${i}].amount=+this.value||0;updRow(${i});liveUpdate()"></div>
+        </div>
+        <div class="field" style="margin:0;">
+          <label>ЖИЛ. ХҮҮ %</label>
+          <div class="ip"><span>%</span><input type="number" inputmode="decimal" value="${d.rate}" placeholder="0" min="0" max="300" step="0.5" oninput="debts[${i}].rate=+this.value||0;updRow(${i});liveUpdate()"></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  liveUpdate();
+}
+
+function updRow(i){
+  const r=document.getElementById('dr'+i);
+  if(r) r.className='debt-row '+(debts[i].rate>30?'urgent':debts[i].rate>0?'high':'ok');
+}
+function addDebt(){debts.push({name:'',amount:0,rate:0});renderDebts();setTimeout(()=>{const rows=document.querySelectorAll('.debt-row');const last=rows[rows.length-1];if(last)last.querySelector('input[type=text]')?.focus();},60);}
+function removeDebt(i){debts.splice(i,1);renderDebts();}
+
+function fmt(n){return Math.round(n).toLocaleString('mn-MN')+'₮';}
+function gI(){return(+document.getElementById('i-salary').value||0)+(+document.getElementById('i-bonus').value||0)+(+document.getElementById('i-side').value||0);}
+function gE(){return(+document.getElementById('e-food').value||0)+(+document.getElementById('e-rent').value||0)+(+document.getElementById('e-trans').value||0)+(+document.getElementById('e-comm').value||0)+(+document.getElementById('e-health').value||0)+(+document.getElementById('e-clothes').value||0)+(+document.getElementById('e-fun').value||0)+(+document.getElementById('e-misc').value||0);}
+
+function syncSl(k,v){
+  v=+v;document.getElementById('i-'+k).value=v;
+  document.getElementById('sl-'+k+'-out').textContent=fmt(v);
+  document.getElementById('sl-'+k).value=v;liveUpdate();
+}
+
+function liveUpdate(){
+  const income=gI(),expense=gE();
+  const total=debts.reduce((s,d)=>s+(+d.amount||0),0);
+  const avail=Math.max(0,income-expense);
+  const months=avail>0&&total>0?Math.ceil(total/avail):null;
+  ['salary','bonus','side'].forEach(k=>{const v=+document.getElementById('i-'+k).value||0;document.getElementById('sl-'+k).value=v;document.getElementById('sl-'+k+'-out').textContent=fmt(v);});
+  document.getElementById('pr-s').textContent=fmt(+document.getElementById('i-salary').value||0);
+  document.getElementById('pr-b').textContent=fmt(+document.getElementById('i-bonus').value||0);
+  document.getElementById('pr-si').textContent=fmt(+document.getElementById('i-side').value||0);
+  document.getElementById('pr-t').textContent=fmt(income);
+  const ep=income>0?Math.round(expense/income*100):0;
+  document.getElementById('total-expense').textContent=fmt(expense);
+  document.getElementById('expense-pct').textContent=ep+'%';
+  document.getElementById('expense-pct').style.color=ep>70?'var(--red)':ep>50?'var(--orange)':'var(--green)';
+  const pg=document.getElementById('expense-prog');
+  pg.style.width=Math.min(100,ep)+'%';
+  pg.style.background=ep>70?'linear-gradient(90deg,var(--orange),var(--red))':ep>50?'linear-gradient(90deg,var(--gold),var(--orange))':'linear-gradient(90deg,var(--green),var(--cyan))';
+  document.getElementById('expense-msg').textContent=ep>70?`Орлогын ${ep}% — хэт өндөр`:ep>50?`Орлогын ${ep}% — анхааруулга`:`Орлогын ${ep}% — зохистой`;
+  const sh=v=>v>=1000000?(v/1000000).toFixed(1)+'M₮':fmt(v);
+  document.getElementById('s-total').textContent=sh(total);
+  document.getElementById('s-income').textContent=sh(income);
+  const fc=document.getElementById('s-free');fc.textContent=avail>=0?sh(avail):'0₮';
+  fc.style.color=avail<200000?'var(--red)':avail<500000?'var(--orange)':'var(--cyan)';
+  document.getElementById('s-months').textContent=months?months+'с':'—';
+}
+
+function calculate(){
+  const income=gI(),expense=gE(),avail=income-expense;
+  if(avail<=0){alert('Зардал орлогоос их байна. Зардлаа бага зэрэг бууруулна уу.');return;}
+  const valid=debts.filter(d=>d.amount>0);
+  if(!valid.length){alert('Зээл оруулна уу.');return;}
+  let sorted=[...valid];
+  if(strategy==='avalanche')sorted.sort((a,b)=>b.rate-a.rate);
+  else sorted.sort((a,b)=>a.amount-b.amount);
+  const minPay=sorted.map(d=>Math.max(30000,d.amount*0.03));
+  const totalMin=minPay.reduce((s,v)=>s+v,0);
+  const extra=Math.max(0,avail-totalMin);
+  let bal=sorted.map(d=>d.amount);
+  let totalInterest=0,month=0;
+  const done=sorted.map(()=>null);
+  while(bal.some(b=>b>1)&&month<360){
+    month++;
+    for(let i=0;i<sorted.length;i++){if(bal[i]>0){const r=sorted[i].rate/100/12;totalInterest+=bal[i]*r;bal[i]+=bal[i]*r;}}
+    for(let i=0;i<sorted.length;i++){if(bal[i]>0)bal[i]=Math.max(0,bal[i]-minPay[i]);}
+    let rem=extra;
+    for(let i=0;i<sorted.length;i++){if(bal[i]>0&&rem>0){const p=Math.min(rem,bal[i]);bal[i]-=p;rem-=p;}}
+    for(let i=0;i<sorted.length;i++){if(bal[i]<=1&&done[i]===null)done[i]=month;}
+  }
+  const td=valid.reduce((s,d)=>s+d.amount,0);
+  document.getElementById('r-total').textContent=td>=1000000?(td/1000000).toFixed(2)+'M₮':fmt(td);
+  document.getElementById('r-total-sub').textContent=valid.length+' зээл';
+  document.getElementById('r-avail').textContent=fmt(avail);
+  document.getElementById('r-avail-sub').textContent='Орлого '+fmt(income)+' − Зардал '+fmt(expense);
+  document.getElementById('r-months').textContent=month+'с';
+  document.getElementById('r-months-sub').textContent=Math.ceil(month/12)+' жил '+month%12+' сар';
+  document.getElementById('r-interest').textContent=fmt(totalInterest);
+  document.getElementById('r-save').textContent='~'+fmt(totalInterest*0.11);
+  document.getElementById('r-debt-list').innerHTML=sorted.map((d,i)=>{
+    const rc=d.rate>30?'var(--red)':d.rate>15?'var(--orange)':d.rate===0?'var(--green)':'var(--gold)';
+    const bc=d.rate>30?'badge-red':d.rate>15?'badge-orange':d.rate===0?'badge-green':'badge-gold';
+    const bt=d.rate>30?'ЯАРАЛТАЙ':d.rate>15?'ӨНДӨР ХҮҮ':d.rate===0?'ХҮҮГҮЙ':'ЖИГД';
+    return `<div class="dres-row"><div class="dres-rank" style="color:${rc};">${i+1}</div><div class="dres-name"><div class="dres-n">${d.name}</div><div class="dres-note">${d.rate>0?'Жилийн '+d.rate+'%':'Хүүгүй'} · ${done[i]?done[i]+'р сард дуусна':'—'}</div><div class="prog-bar"><div class="prog-fill" style="width:0%;background:${rc};"></div></div></div><div class="dres-right"><span class="badge ${bc}">${bt}</span><div class="dres-amt">${fmt(d.amount)}</div></div></div>`;
+  }).join('');
+  const sal=+document.getElementById('i-salary').value||0,bon=+document.getElementById('i-bonus').value||0,sid=+document.getElementById('i-side').value||0;
+  document.getElementById('budget-tb').innerHTML=`<tr><td>Суурь цалин</td><td class="pos main">+${fmt(sal)}</td><td>Тогтмол</td></tr><tr><td>Бонус</td><td class="pos main">+${fmt(bon)}</td><td>Дундаж</td></tr><tr><td>Side hustle</td><td class="pos main">+${fmt(sid)}</td><td>Нэмэлт</td></tr><tr><td>Зардал</td><td class="neg main">−${fmt(gE())}</td><td>Тогтмол</td></tr><tr style="border-top:1px solid var(--border2);"><td style="color:var(--text);font-weight:600;">Зээлд боломжтой</td><td style="color:var(--cyan);font-weight:600;">${fmt(avail)}</td><td>Зарцуулна</td></tr><tr><td>Доод төлбөрүүд</td><td class="neg main">−${fmt(totalMin)}</td><td>Минимум</td></tr><tr><td style="color:var(--gold);font-weight:500;">Нэмэлт</td><td style="color:var(--gold);font-weight:600;">+${fmt(extra)}</td><td>${sorted[0]?.name||'—'} руу</td></tr>`;
+  document.getElementById('r-tl').innerHTML=sorted.map((d,i)=>{const m=done[i];if(!m)return'';return`<div class="tl-item"><div class="tl-month">${m}Р САР · ${Math.ceil(m/12)}Р ЖИЛ</div><div class="tl-text"><strong style="color:var(--text);">${d.name}</strong> — ${fmt(d.amount)} дуусна${d.rate>0?' ('+d.rate+'% хүүтэй)':''}</div></div>`;}).join('')+`<div class="tl-item"><div class="tl-month" style="color:var(--green);">БҮГД ДУУСНА</div><div class="tl-text" style="color:var(--green);font-weight:500;">${month} сарын дараа — БҮРЭН ЧӨЛӨӨ</div></div>`;
+  const hR=sorted.filter(d=>d.rate>24),nI=sorted.filter(d=>d.rate===0);
+  document.getElementById('r-tips').innerHTML=[
+    `<div class="callout callout-gold"><strong style="color:var(--gold);">Нэмэлт орлогын дүрэм:</strong> Бонус, side hustle ирэх бүрт 80%-ийг шууд <strong style="color:var(--text);">${sorted[0]?.name||'эхний зээл'}</strong> рүү хий.</div>`,
+    hR.length?`<div class="callout callout-red"><strong style="color:var(--red);">Өндөр хүүтэй:</strong> ${hR.map(d=>d.name+' ('+d.rate+'%)').join(', ')} — яаралтай дуусга.</div>`:'',
+    nI.length?`<div class="callout callout-green"><strong style="color:var(--green);">Хүүгүй:</strong> ${nI.map(d=>d.name).join(', ')} — харилцааг хадгал.</div>`:'',
+    `<div class="callout callout-cyan"><strong style="color:var(--cyan);">Шинэ зээл авахгүй байх</strong> — одоогийн зээлүүд дуустал.</div>`,
+  ].filter(Boolean).join('');
+  const w=[];
+  if(avail<300000)w.push('Боломжтой мөнгө маш бага ('+fmt(avail)+'). Зардлаа бууруулна уу.');
+  if(sorted.some(d=>d.rate>48))w.push('48%-иас дээш хүүтэй зээл байна — нэн яаралтай дуусгах шаардлагатай.');
+  if(month>36)w.push(month+'с ('+Math.ceil(month/12)+' жил) дуусна. Нэмэлт орлого нэмвэл хурдасна.');
+  document.getElementById('r-warns').innerHTML=w.map(t=>`<div class="warn-item"><div>⚠</div><div>${t}</div></div>`).join('');
+  const res=document.getElementById('results');
+  res.style.display='block';
+  setTimeout(()=>{res.classList.add('vis');obs.observe(res);res.scrollIntoView({behavior:'smooth',block:'start'});},80);
+}
+
+function resetAll(){
+  if(!confirm('Бүх өгөгдлийг цэвэрлэх үү?'))return;
+  ['i-salary','i-bonus','i-side','e-food','e-rent','e-trans','e-comm','e-health','e-clothes','e-fun','e-misc'].forEach(id=>document.getElementById(id).value=0);
+  debts=[{name:'',amount:0,rate:0}];renderDebts();
+  document.getElementById('results').style.display='none';liveUpdate();
+}
+
+renderDebts();liveUpdate();
+</script>
+</body>
+</html>
