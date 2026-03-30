@@ -1,0 +1,2981 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>ProductDrop.MN — Үнэгүй каталог (25 бараа)</title>
+<meta name="description" content="Монголын #1 дропшиппинг бүтээгдэхүүн судалгааны платформ. Борлуулалт сайтай бүтээгдэхүүн олж, ашгаа тооцоол.">
+<link rel="icon" type="image/png" href="https://res.cloudinary.com/di0nven1w/image/upload/v1774793918/favicon_djarfu.png">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://productdrop.mn/">
+<meta property="og:title" content="ProductDrop.MN — Үнэгүй каталог (25 бараа)">
+<meta property="og:description" content="Монголын #1 дропшиппинг бүтээгдэхүүн судалгааны платформ. Борлуулалт сайтай бүтээгдэхүүн олж, ашгаа тооцоол.">
+<meta property="og:image" content="https://res.cloudinary.com/di0nven1w/image/upload/v1774493447/og_czmbkm.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="mn_MN">
+<meta property="og:site_name" content="ProductDrop.MN">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ProductDrop.MN — Үнэгүй каталог (25 бараа)">
+<meta name="twitter:description" content="Монголын #1 дропшиппинг бүтээгдэхүүн судалгааны платформ. Борлуулалт сайтай бүтээгдэхүүн олж, ашгаа тооцоол.">
+<meta name="twitter:image" content="https://res.cloudinary.com/di0nven1w/image/upload/v1774493447/og_czmbkm.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --sidebar-bg:#FFFFFF;--sidebar-w:200px;
+  --bg:#F6F7F9;--white:#FFFFFF;--border:#E4E8EF;--border2:#CDD3DC;
+  --text:#0D1117;--muted:#5A6478;--muted2:#9AA3B2;
+  --accent:#16a34a;--accent-bg:#f0fdf4;--accent-border:rgba(22,163,74,.2);
+  --blue:#2563eb;--blue-bg:#eff6ff;
+  --orange:#ea580c;--red:#dc2626;
+  --shadow:0 1px 4px rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.06);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.1);
+  --countdown-h:52px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font-size:14px;-webkit-font-smoothing:antialiased;overflow-x:hidden;display:flex;flex-direction:column;min-height:100vh}
+body.locked{overflow:hidden}
+
+/* LOGIN GATE */
+#login-gate{position:fixed;inset:0;background:#fff;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+@keyframes lg-in{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+.lg-box{width:min(420px,100%);text-align:center;animation:lg-in .45s cubic-bezier(.34,1.2,.64,1)}
+.lg-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:32px}
+.lg-logo-icon{width:40px;height:40px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff}
+.lg-logo-text{font-family:'DM Mono',monospace;font-weight:500;font-size:16px;color:var(--text)}
+.lg-logo-text span{color:var(--accent)}
+.lg-title{font-size:22px;font-weight:800;color:var(--text);margin-bottom:6px}
+.lg-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+.lg-form{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:28px;box-shadow:0 8px 40px rgba(0,0,0,.08)}
+.lg-field{margin-bottom:14px;text-align:left}
+.lg-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:6px;display:block}
+.lg-inp{width:100%;padding:11px 14px;border:1.5px solid var(--border2);border-radius:10px;font-size:14px;font-family:'Outfit',sans-serif;outline:none;color:var(--text);background:var(--white);transition:border .15s}
+.lg-inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.lg-btn{width:100%;padding:13px;background:var(--accent);border:none;border-radius:10px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;margin-top:6px}
+.lg-btn:hover{background:#15803d;transform:translateY(-1px)}
+.lg-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.lg-err{display:none;margin-top:12px;font-size:12px;color:var(--red);background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px 14px;text-align:center}
+.lg-err.show{display:block}
+.lg-loading{display:none;margin-top:12px;font-size:12px;color:var(--muted);text-align:center}
+.lg-loading.show{display:block}
+.lg-footer{margin-top:16px;font-size:11px;color:var(--muted2)}
+
+/* COUNTDOWN BANNER */
+#countdown-banner{display:none;background:linear-gradient(135deg,#0D1117 0%,#1a2332 100%);color:#fff;height:var(--countdown-h);align-items:center;justify-content:space-between;padding:0 20px;gap:12px;flex-shrink:0;position:sticky;top:0;z-index:60;border-bottom:1px solid rgba(255,255,255,.08)}
+#countdown-banner.show{display:flex}
+.cd-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.cd-icon{font-size:18px;flex-shrink:0}
+.cd-text{font-size:12px;font-weight:500;color:rgba(255,255,255,.8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cd-timer{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.cd-seg{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:4px 8px;text-align:center;min-width:42px}
+.cd-num{font-size:15px;font-weight:800;font-family:'DM Mono',monospace;color:#fff;display:block;line-height:1}
+.cd-lbl{font-size:8px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.8px;display:block;margin-top:2px}
+.cd-sep{font-size:14px;font-weight:700;color:rgba(255,255,255,.3)}
+.cd-cta{flex-shrink:0;padding:7px 16px;background:var(--accent);border:none;border-radius:8px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.cd-cta:hover{background:#15803d;transform:translateY(-1px)}
+.cd-expired{background:linear-gradient(135deg,#7f1d1d 0%,#991b1b 100%)}
+.cd-expired .cd-text{color:rgba(255,255,255,.9);font-weight:600}
+
+/* SESSION EXPIRED OVERLAY */
+#session-expired{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9998;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
+#session-expired.show{display:flex}
+.se-box{background:#fff;border-radius:20px;padding:40px 36px;text-align:center;max-width:380px;width:100%;box-shadow:0 24px 80px rgba(0,0,0,.25)}
+.se-icon{font-size:52px;margin-bottom:16px}
+.se-title{font-size:20px;font-weight:800;color:var(--text);margin-bottom:8px}
+.se-desc{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:24px}
+.se-btn{display:block;width:100%;padding:13px;background:var(--accent);border:none;border-radius:10px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;margin-bottom:10px}
+.se-btn:hover{background:#15803d}
+.se-btn-pro{display:block;width:100%;padding:13px;background:#0D1117;border:none;border-radius:10px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;text-decoration:none;text-align:center}
+.se-btn-pro:hover{background:#1a2332}
+
+/* LAYOUT WRAPPER */
+.app-layout{display:flex;flex:1;min-height:0}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);background:var(--white);height:100vh;position:sticky;top:0;display:flex;flex-direction:column;flex-shrink:0;border-right:1px solid var(--border);overflow-y:auto;overflow-x:hidden;z-index:50;transition:width .22s cubic-bezier(.4,0,.2,1)}
+.sidebar.collapsed{width:52px}
+.sidebar.collapsed .sidebar-logo-text,
+.sidebar.collapsed .sidebar-section-lbl,
+.sidebar.collapsed .sidebar-item span:not(.sidebar-item-icon),
+.sidebar.collapsed .sidebar-user-info{display:none}
+.sidebar.collapsed .sidebar-item{justify-content:center;padding:8px 0}
+.sidebar.collapsed .sidebar-item-icon{width:auto;font-size:16px}
+.sidebar.collapsed .sidebar-logo{justify-content:center;padding:10px 0;flex-direction:column;gap:6px;min-height:auto;border-bottom:1px solid var(--border)}
+.sidebar.collapsed .sidebar-bottom{padding:10px 0;display:flex;justify-content:center}
+.sidebar.collapsed .sidebar-user{justify-content:center}
+.sidebar-toggle{width:24px;height:24px;background:#F0F2F5;border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);flex-shrink:0;transition:all .18s;margin-left:auto}
+.sidebar-toggle svg{width:13px;height:13px;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.sidebar-toggle:hover{background:var(--border);color:var(--text)}
+.sidebar.collapsed .sidebar-toggle{margin-left:0;margin-top:8px}
+.sidebar.collapsed .sidebar-toggle svg{transform:rotate(180deg)}
+.sidebar-logo{padding:12px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);min-height:52px}
+.sidebar-logo-icon{width:28px;height:28px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+.sidebar-logo-text{font-family:'DM Mono',monospace;font-weight:500;font-size:13px;color:var(--text);letter-spacing:-.3px;white-space:nowrap}
+.sidebar-logo-text span{color:var(--accent)}
+.sidebar-section{padding:12px 0 4px}
+.sidebar-section-lbl{padding:4px 16px 6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted2)}
+.sidebar-item{display:flex;align-items:center;gap:8px;padding:7px 16px;font-size:12px;color:var(--muted);cursor:pointer;transition:all .12s;border-left:2px solid transparent;user-select:none;border-radius:0}
+.sidebar-item:hover{color:var(--text);background:#F6F7F9}
+.sidebar-item.active{color:var(--accent);background:var(--accent-bg);border-left-color:var(--accent)}
+.sidebar-item-icon{font-size:14px;width:16px;text-align:center;flex-shrink:0}
+.sidebar-bottom{margin-top:auto;border-top:1px solid var(--border);padding:12px 16px}
+.sidebar-user{display:flex;align-items:center;gap:10px}
+.sidebar-avatar{width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.sidebar-user-info{flex:1;min-width:0}
+.sidebar-user-name{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar-user-plan{font-size:10px;color:var(--accent);margin-top:1px;font-weight:600}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+
+/* TOPBAR */
+.topbar{background:var(--white);border-bottom:1px solid var(--border);height:52px;display:flex;align-items:center;padding:0 24px;gap:12px;position:sticky;top:0;z-index:40;box-shadow:var(--shadow)}
+.topbar-title{font-size:15px;font-weight:700;color:var(--text);flex:1;min-width:0}
+.topbar-badge{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace}
+.topbar-back{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;cursor:pointer;padding:6px 12px;border:1px solid var(--border);border-radius:8px;background:var(--white);transition:all .15s;text-decoration:none}
+.topbar-back:hover{border-color:var(--accent);color:var(--accent)}
+
+/* TOOLBAR */
+.toolbar{background:var(--white);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;flex-direction:column;gap:8px;align-items:stretch}
+.search-wrap{position:relative;flex:1;min-width:0;max-width:100%}
+.search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted2);pointer-events:none}
+.search-inp{width:100%;padding:7px 12px 7px 32px;border:1px solid var(--border2);border-radius:8px;font-size:13px;font-family:'Outfit',sans-serif;outline:none;background:var(--white);color:var(--text)}
+.search-inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.filters{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;align-items:center;padding-bottom:2px}
+.filters::-webkit-scrollbar{display:none}
+.fb{padding:5px 12px;border:1px solid var(--border2);border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;background:var(--white);color:var(--muted);transition:all .15s;white-space:nowrap;font-family:'Outfit',sans-serif;flex-shrink:0}
+.fb:hover{border-color:var(--accent);color:var(--accent)}
+.fb.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.sort-sel{padding:5px 10px;border:1px solid var(--border2);border-radius:20px;font-size:12px;font-family:'Outfit',sans-serif;outline:none;cursor:pointer;background:var(--white);color:var(--muted);font-weight:500;flex-shrink:0;white-space:nowrap;min-width:0}
+.result-info{display:none}
+.toolbar-row1{display:flex;gap:8px;align-items:center}
+
+/* GRID */
+.grid-wrap{padding:20px 24px;flex:1}
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;transition:all .18s;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.card:hover{border-color:var(--accent);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.card.hidden{display:none}
+.card-img{aspect-ratio:1/1;background:linear-gradient(135deg,#f0fdf4,#dcfce7);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.card-emoji{font-size:40px;opacity:.8}
+.cat-badge{position:absolute;top:8px;left:8px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:8px;text-transform:uppercase;letter-spacing:.5px}
+.cat-beauty{background:#fce7f3;color:#be185d}.cat-goods{background:#dbeafe;color:#1d4ed8}
+.cat-health{background:#dcfce7;color:#15803d}.cat-home{background:#fef3c7;color:#b45309}.cat-kids{background:#ede9fe;color:#6d28d9}
+.mg-badge{position:absolute;top:8px;right:8px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;background:rgba(0,0,0,.55);color:#fff}
+.card-body{padding:11px 12px;flex:1;display:flex;flex-direction:column;gap:5px}
+.card-name{font-weight:600;font-size:12px;line-height:1.4;color:var(--text);min-height:30px}
+.card-prices{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--bg);border-radius:10px;padding:8px}
+.card-price-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted2)}
+.card-price-val{font-size:13px;font-weight:700}
+.card-price-val.cost{color:var(--blue)}.card-price-val.sell{color:var(--accent)}
+.card-profit{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;background:var(--accent-bg);border-radius:10px;margin-top:2px;border:1px solid var(--accent-border)}
+.card-profit-lbl{font-size:10px;color:var(--accent);font-weight:500}
+.card-profit-val{font-size:12px;font-weight:700;color:var(--accent)}
+.card-btn{margin:0 12px 11px;padding:8px;border:1px solid var(--border2);border-radius:12px;background:transparent;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;width:calc(100% - 24px);display:flex;align-items:center;justify-content:center;gap:4px;font-family:'Outfit',sans-serif}
+.card:hover .card-btn{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* PANEL OVERLAY */
+#panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+#panel-overlay.open{display:flex}
+#panel-overlay{overscroll-behavior:contain}
+.panel{overscroll-behavior:contain;overflow-x:hidden;touch-action:pan-y}
+.panel{background:var(--white);width:min(900px,100%);min-height:auto;position:relative;box-shadow:0 24px 80px rgba(0,0,0,.2);border-radius:16px;margin:auto;overflow:hidden}
+@media(max-width:768px){
+  #panel-overlay{align-items:flex-start;padding:0}
+  .panel{width:100%;border-radius:0;min-height:100dvh;margin:0;overflow:visible}
+}
+.panel-close{position:sticky;top:10px;float:right;margin:10px 10px -42px 0;width:32px;height:32px;border-radius:50%;background:var(--white);border:1px solid var(--border2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;z-index:210;box-shadow:var(--shadow);color:var(--muted)}
+.panel-close:hover{background:var(--bg);color:var(--text)}
+/* single column panel layout */
+.panel-body{display:flex;flex-direction:column}
+.panel-col{display:flex;flex-direction:column}
+.panel-col:first-child{border-right:none}
+
+/* PANEL SECTIONS */
+.p-hero{padding:20px;border-bottom:1px solid var(--border)}
+.p-hero-img{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,var(--accent-bg),#dcfce7);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:72px;margin-bottom:16px}
+.p-hero-cat{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+.p-hero-name{font-size:22px;font-weight:800;line-height:1.3;margin-bottom:12px;color:var(--text)}
+.p-hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px}
+.p-stat{background:var(--white);padding:12px;text-align:center}
+.p-stat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted2);margin-bottom:4px}
+.p-stat-val{font-size:18px;font-weight:800;color:var(--text)}
+.p-stat-val.blue{color:var(--blue)}.p-stat-val.green{color:var(--accent)}.p-stat-val.orange{color:var(--orange)}
+.p-links{padding:10px 20px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap}
+.p-link{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border:1px solid var(--border2);border-radius:6px;font-size:11px;font-weight:600;text-decoration:none;color:var(--muted);background:var(--white);transition:all .15s;cursor:pointer}
+.p-link:hover{border-color:var(--blue);color:var(--blue)}
+.p-link.ali{color:#ff6b35;border-color:rgba(255,107,53,.3)}.p-link.tao{color:#e0321c;border-color:rgba(224,50,28,.3)}.p-link.fb{color:var(--blue);border-color:rgba(37,99,235,.3)}
+
+.p-section{padding:20px;border-bottom:1px solid var(--border)}
+.p-sec-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.p-sec-num{font-size:9px;background:var(--bg);border-radius:4px;padding:1px 5px;color:var(--muted);border:1px solid var(--border)}
+
+/* SUPPLIER */
+.supp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.supp-card{border:1.5px solid var(--border);border-radius:14px;padding:14px;position:relative}
+.supp-card.selected{border-color:var(--accent);background:var(--accent-bg)}
+.supp-badge{position:absolute;top:-10px;left:14px;background:var(--accent);color:#fff;font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 8px;border-radius:4px}
+.supp-name{font-weight:700;font-size:13px;margin-bottom:10px;color:var(--text)}
+.supp-platform{font-size:10px;color:var(--muted);margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.supp-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;font-size:11px}
+.supp-k{color:var(--muted)}.supp-v{font-weight:600;color:var(--text)}
+.supp-v.blue{color:var(--blue)}.supp-v.red{color:var(--red)}
+.supp-note{margin-top:12px;font-size:11px;color:#92400e;background:#fffbeb;border:1px solid #fed7aa;border-radius:12px;padding:8px;line-height:1.6}
+.supp-disclaimer{margin-top:8px;font-size:10px;color:var(--muted2);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px;line-height:1.6}
+
+/* CALC */
+.calc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.calc-field{display:flex;flex-direction:column;gap:4px}
+.calc-label{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:600}
+.calc-inp{border:1.5px solid var(--border2);border-radius:8px;padding:8px 10px;font-size:14px;font-weight:600;font-family:'Outfit',sans-serif;outline:none;color:var(--text);background:var(--white)}
+.calc-inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.calc-result{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px}
+.calc-r-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:12px;border-bottom:1px solid var(--border)}
+.calc-r-row:last-child{border-bottom:none;padding-top:10px;margin-top:4px}
+.calc-r-key{color:var(--muted)}
+.calc-r-val{font-weight:700;font-size:14px;color:var(--text)}
+.calc-r-val.green{color:var(--accent)}.calc-r-val.orange{color:var(--orange)}
+
+/* DEMAND */
+.demand-chart{background:var(--white);border-radius:12px;padding:0;height:160px;position:relative;overflow:hidden;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.demand-chart svg{width:100%;height:100%;display:block}
+.demand-meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.sat-badge{font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px}
+.sat-low{background:#dcfce7;color:#15803d}.sat-mid{background:#fef3c7;color:#b45309}.sat-high{background:#fee2e2;color:#dc2626}
+
+/* SATURATION GAUGE */
+.gauge-outer{position:relative;width:180px;height:100px;flex-shrink:0}
+.gauge-svg{width:100%;height:100%;overflow:visible;display:block}
+.gauge-lbl{font-size:12px;font-weight:700;margin-top:6px;letter-spacing:.2px;text-align:center;padding:4px 14px;border-radius:20px;display:inline-block}
+.sat-lbl-low{color:#15803d;background:#dcfce7}.sat-lbl-mid{color:#b45309;background:#fef3c7}.sat-lbl-high{color:#dc2626;background:#fee2e2}
+/* gauge container card */
+.gauge-card{display:flex;flex-direction:column;align-items:center;padding:20px 16px 20px;border-top:1px solid var(--border);background:var(--white)}
+/* demand+gauge wrapper — stacked vertically */
+.demand-gauge-wrap{display:flex;flex-direction:column;gap:12px}
+
+/* TOPBAR USER DROPDOWN */
+.tb-actions{display:flex;align-items:center;gap:6px;margin-left:auto;flex-shrink:0}
+.tb-icon-btn{width:34px;height:34px;border:1px solid var(--border);border-radius:8px;background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);transition:all .15s}
+.tb-icon-btn:hover{border-color:var(--accent);color:var(--accent)}
+.tb-user-wrap{position:relative}
+.tb-avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:13px;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;box-shadow:0 0 0 2px transparent}
+.tb-avatar:hover{box-shadow:0 0 0 2px var(--accent-border)}
+.tb-dropdown{position:absolute;top:calc(100% + 8px);right:0;width:220px;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.12);z-index:1000;display:none;overflow:hidden;animation:dd-in .15s ease}
+.tb-dropdown.open{display:block}
+@keyframes dd-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.tb-dd-header{display:flex;align-items:center;gap:10px;padding:14px 14px 12px}
+.tb-dd-avatar{width:36px;height:36px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
+.tb-dd-name{font-size:13px;font-weight:700;color:var(--text)}
+.tb-dd-plan{font-size:10px;color:var(--accent);font-weight:600;margin-top:2px}
+.tb-dd-divider{height:1px;background:var(--border);margin:2px 0}
+.tb-dd-item{display:flex;align-items:center;gap:9px;width:100%;padding:9px 14px;background:none;border:none;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;font-family:'Outfit',sans-serif;text-align:left;transition:all .12s}
+.tb-dd-item:hover{background:var(--bg);color:var(--text)}
+.tb-dd-logout{color:#dc2626}
+.tb-dd-logout:hover{background:#fef2f2;color:#dc2626}
+
+/* USER MODAL (Settings + Subscription) */
+.um-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:700;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
+.um-modal.open{display:flex}
+.um-box{background:#fff;border-radius:16px;width:min(560px,100%);max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.18);animation:cf-in .22s cubic-bezier(.34,1.2,.64,1)}
+.um-topbar{display:flex;align-items:center;padding:0 6px 0 4px;border-bottom:1px solid var(--border);gap:0}
+.um-tab{padding:14px 18px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;background:none;border-left:none;border-right:none;border-top:none;font-family:'Outfit',sans-serif;white-space:nowrap}
+.um-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.um-tab:hover:not(.active){color:var(--text)}
+.um-close{margin-left:auto;width:28px;height:28px;background:var(--bg);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:var(--muted);flex-shrink:0;transition:all .15s}
+.um-close:hover{background:var(--border);color:var(--text)}
+.um-pane{display:none;padding:24px}
+.um-pane.active{display:block}
+
+/* Settings pane */
+.um-section-title{font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px}
+.um-section-sub{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.6}
+.um-field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.um-field{display:flex;flex-direction:column;gap:5px}
+.um-field.full{grid-column:1/-1}
+.um-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+.um-inp{border:1.5px solid var(--border2);border-radius:8px;padding:9px 12px;font-size:13px;font-weight:500;font-family:'Outfit',sans-serif;outline:none;color:var(--text);background:#fff;transition:border .15s}
+.um-inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.um-inp:disabled{background:var(--bg);color:var(--muted);cursor:not-allowed}
+.um-inp-row{display:flex;gap:8px}
+.um-inp-row .um-inp{flex:1}
+.um-change-btn{padding:9px 14px;border:1.5px solid var(--border2);border-radius:8px;font-size:12px;font-weight:600;background:#fff;color:var(--muted);cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap;transition:all .15s}
+.um-change-btn:hover{border-color:var(--accent);color:var(--accent)}
+.um-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;margin-bottom:14px}
+.um-toggle-info{font-size:12px;color:var(--text);font-weight:500}
+.um-toggle-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.um-toggle{width:40px;height:22px;background:var(--accent);border-radius:20px;position:relative;cursor:pointer;flex-shrink:0;border:none;transition:background .2s}
+.um-toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.um-toggle.off{background:var(--border2)}
+.um-toggle.off::after{transform:translateX(0)}
+.um-toggle:not(.off)::after{transform:translateX(18px)}
+.um-save-btn{width:100%;padding:11px;background:var(--accent);border:none;border-radius:10px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;margin-top:6px}
+.um-save-btn:hover{background:#15803d;transform:translateY(-1px)}
+.um-saved{display:none;text-align:center;font-size:12px;color:var(--accent);font-weight:600;margin-top:8px}
+
+/* Subscription pane */
+.um-plan-card{border:1.5px solid var(--accent-border);border-radius:12px;padding:20px;background:var(--accent-bg);margin-bottom:16px}
+.um-plan-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.um-plan-name{font-size:15px;font-weight:800;color:var(--text)}
+.um-plan-price{font-size:13px;font-weight:600;color:var(--accent);margin-top:3px}
+.um-plan-badge{background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.5px}
+.um-plan-desc{font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:14px}
+.um-plan-trial{background:#fff;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text);line-height:1.7;margin-bottom:14px}
+.um-plan-trial strong{color:var(--accent)}
+.um-plan-features{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
+.um-plan-feat{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text)}
+.um-feat-check{width:18px;height:18px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:9px;color:#fff}
+.um-cancel-btn{width:100%;padding:10px;border:1.5px solid #fca5a5;border-radius:8px;background:#fff;font-size:12px;font-weight:600;color:#dc2626;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s}
+.um-cancel-btn:hover{background:#fef2f2;border-color:#dc2626}
+.um-billing-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.um-billing-row:last-child{border-bottom:none}
+.um-billing-k{color:var(--muted)}
+.um-billing-v{font-weight:600;color:var(--text)}
+.cf-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:600;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)}
+.cf-modal.open{display:flex}
+.cf-box{background:#fff;border-radius:18px;max-width:440px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.18);overflow:hidden;animation:cf-in .25s cubic-bezier(.34,1.2,.64,1)}
+@keyframes cf-in{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:none}}
+.cf-header{padding:20px 24px 0;display:flex;justify-content:space-between;align-items:flex-start}
+.cf-header-title{font-size:16px;font-weight:800;color:var(--text)}
+.cf-header-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.cf-close{background:var(--bg);border:1px solid var(--border);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--muted);flex-shrink:0;transition:all .15s}
+.cf-close:hover{background:var(--border);color:var(--text)}
+.cf-body{padding:20px 24px 24px;display:flex;flex-direction:column;gap:14px}
+.cf-stars{display:flex;gap:6px;justify-content:center;margin:4px 0}
+.cf-star{font-size:28px;cursor:pointer;opacity:.3;transition:all .15s;filter:grayscale(1)}
+.cf-star.active,.cf-star:hover{opacity:1;filter:none;transform:scale(1.15)}
+.cf-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:4px}
+.cf-inp{width:100%;border:1.5px solid var(--border2);border-radius:10px;padding:9px 12px;font-size:13px;font-family:'Outfit',sans-serif;outline:none;color:var(--text);background:#fff;transition:border .15s}
+.cf-inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.cf-textarea{resize:vertical;min-height:90px;line-height:1.6}
+.cf-type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.cf-type-btn{padding:7px 4px;border:1.5px solid var(--border);border-radius:8px;font-size:11px;font-weight:600;text-align:center;cursor:pointer;color:var(--muted);background:#fff;transition:all .15s;font-family:'Outfit',sans-serif}
+.cf-type-btn:hover{border-color:var(--accent);color:var(--accent)}
+.cf-type-btn.sel{border-color:var(--accent);background:var(--accent-bg);color:var(--accent)}
+.cf-submit{width:100%;padding:12px;background:var(--accent);border:none;border-radius:10px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.cf-submit:hover{background:#15803d;transform:translateY(-1px)}
+.cf-submit:disabled{opacity:.5;cursor:default;transform:none}
+.cf-success{text-align:center;padding:16px 0 8px}
+.cf-success-icon{font-size:44px;margin-bottom:12px}
+.cf-success-title{font-size:16px;font-weight:800;color:var(--text);margin-bottom:6px}
+.cf-success-desc{font-size:12px;color:var(--muted);line-height:1.7}
+
+/* PRODUCT IMAGE GALLERY */
+.img-gallery{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;border-radius:12px;background:#f1f5f9;margin-bottom:12px}
+.img-gallery img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .4s;opacity:0}
+.img-gallery img.active{opacity:1}
+.img-gallery-emoji{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:72px}
+.img-edit-btn{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;backdrop-filter:blur(4px);transition:all .15s;display:flex;align-items:center;gap:5px;z-index:5}
+.img-edit-btn:hover{background:rgba(0,0,0,.85)}
+.img-edit-input{display:none}
+.img-dots{display:flex;gap:6px;justify-content:center;margin-bottom:12px}
+.img-dot{width:7px;height:7px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .2s}
+.img-dot.active{background:var(--accent)}
+
+/* SOCIAL */
+.social-tags{display:flex;flex-wrap:wrap;gap:6px}
+.social-tag{padding:5px 12px;background:var(--bg);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--muted);font-weight:500;cursor:pointer;transition:all .15s}
+.social-tag:hover{background:var(--accent-bg);border-color:var(--accent-border);color:var(--accent)}
+
+/* CONTENT SCRIPT */
+.script-box{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:16px;font-size:13px;line-height:1.8;color:var(--text);white-space:pre-wrap;font-family:'Outfit',sans-serif}
+.script-section{margin-bottom:10px}
+.script-section strong{color:var(--text);font-size:12px}
+.script-hook{background:#fef9c3;border:1px solid #fde047;border-radius:8px;padding:10px 14px;margin-bottom:8px;font-size:13px;font-weight:600;color:#713f12}
+.script-story{background:var(--blue-bg);border:1px solid rgba(37,99,235,.15);border-radius:8px;padding:10px 14px;margin-bottom:8px;font-size:13px;color:#1e40af}
+.script-cta{background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:8px;padding:10px 14px;margin-bottom:8px;font-size:13px;font-weight:600;color:#14532d}
+.script-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.script-tag{font-size:10px;padding:3px 8px;border-radius:4px;background:var(--bg);border:1px solid var(--border);color:var(--muted);font-weight:600}
+.copy-btn{width:100%;margin-top:10px;padding:8px;border:1.5px solid var(--accent-border);border-radius:8px;background:var(--accent-bg);color:var(--accent);font-size:11px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s}
+.copy-btn:hover{background:var(--accent);color:#fff}
+/* AI SCRIPT UI */
+.ai-gen-btn{width:100%;padding:11px;background:var(--accent);border:none;border-radius:10px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:12px}
+.ai-gen-btn:hover{background:#15803d;transform:translateY(-1px)}
+.ai-gen-btn:disabled{opacity:.5;cursor:default;transform:none;background:var(--muted2)}
+.ai-gen-btn.loading{background:var(--bg);border:1.5px solid var(--border);color:var(--muted)}
+.script-hook-box{background:#fef9c3;border:1.5px solid #fde047;border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:13px;font-weight:700;color:#713f12;line-height:1.6}
+.script-hook-lbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#a16207;margin-bottom:4px}
+.script-body-box{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:14px;font-size:13px;line-height:1.9;color:var(--text);white-space:pre-wrap;font-family:'Outfit',sans-serif;margin-bottom:8px}
+.script-empty{display:flex;align-items:center;justify-content:center;color:var(--muted2);font-style:italic;padding:24px;font-size:12px;background:var(--bg);border:1.5px dashed var(--border);border-radius:10px;margin-bottom:8px;text-align:center}
+.loading-dots{display:inline-flex;gap:4px;align-items:center}
+.loading-dots span{width:6px;height:6px;background:var(--muted);border-radius:50%;animation:dbounce .8s infinite}
+.loading-dots span:nth-child(2){animation-delay:.15s}
+.loading-dots span:nth-child(3){animation-delay:.3s}
+@keyframes dbounce{0%,80%,100%{transform:translateY(0);opacity:.3}40%{transform:translateY(-5px);opacity:1}}
+.script-saved{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--accent);font-weight:700;padding:2px 8px;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:4px;margin-left:6px}
+
+/* BEST SELLER MODAL in panel */
+.bs-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;padding:16px}
+.bs-modal.open{display:flex}
+.bs-box{background:#fff;border-radius:16px;max-width:520px;width:100%;box-shadow:var(--shadow-lg);overflow:hidden}
+.bs-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.bs-body{padding:20px 24px;max-height:60vh;overflow-y:auto}
+.bs-item{display:flex;align-items:flex-start;gap:12px;padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;cursor:pointer;text-decoration:none;transition:all .15s}
+.bs-item:hover{border-color:var(--accent);background:var(--accent-bg)}
+.bs-num{font-size:12px;font-weight:800;color:var(--accent);width:20px;flex-shrink:0;padding-top:1px}
+.bs-info h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.bs-info p{font-size:11px;color:var(--muted)}
+
+/* TARGET FIELDS */
+.target-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.target-field{display:flex;flex-direction:column;gap:4px}
+.target-sel{border:1.5px solid var(--border2);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:600;font-family:'Outfit',sans-serif;outline:none;color:var(--text);background:#fff;cursor:pointer}
+.target-sel:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.target-badge-row{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.target-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid var(--border)}
+.target-badge.gender-m{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
+.target-badge.gender-f{background:#fdf2f8;color:#9d174d;border-color:#fbcfe8}
+.target-badge.gender-all{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
+.target-badge.age{background:#fff7ed;color:#c2410c;border-color:#fed7aa}
+
+/* MOBILE */
+.sidebar-overlay{display:none}
+.mobile-menu-btn{display:none;background:none;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:16px}
+
+@media(max-width:768px){
+  .sidebar{position:fixed;transform:translateX(-100%);transition:transform .25s;height:100vh;z-index:50}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-overlay{display:block;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:49;display:none}
+  .sidebar-overlay.open{display:block}
+  .mobile-menu-btn{display:flex;align-items:center}
+  .prod-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .grid-wrap{padding:12px}
+  .card-name{font-size:11px;min-height:26px}
+  .card-prices{padding:6px}
+  .card-price-val{font-size:12px}
+  .card-btn{padding:7px;font-size:10px;margin:0 8px 8px;width:calc(100% - 16px)}
+  .panel{width:100vw;border-radius:0;min-height:100dvh;margin:0}
+  #panel-overlay{align-items:flex-start;padding:0}
+  .panel-close{top:8px;margin:8px 8px -40px 0;width:34px;height:34px;font-size:18px;z-index:220}
+  .p-hero{padding:14px}
+  .p-hero-img{aspect-ratio:4/3;margin-bottom:12px}
+  .p-hero-name{font-size:18px}
+  .p-hero-stats{grid-template-columns:repeat(3,1fr)}
+  .p-stat-val{font-size:15px}
+  .p-stat{padding:9px 6px}
+  .p-stat-lbl{font-size:9px}
+  .p-links{padding:8px 14px;gap:6px}
+  .p-link{padding:5px 9px;font-size:10px}
+  .p-section{padding:14px}
+  .supp-grid{grid-template-columns:1fr}
+  .calc-grid{grid-template-columns:1fr 1fr}
+  .calc-inp{font-size:13px;padding:7px 8px}
+  .topbar{padding:0 10px;height:48px;gap:6px}
+  .topbar-title{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
+  .topbar-badge{padding:3px 7px;font-size:10px;white-space:nowrap}
+  .tb-icon-btn{width:30px;height:30px}
+  .tb-avatar{width:30px;height:30px;font-size:11px}
+  #dm-toggle{width:30px;height:30px}
+  .tb-actions{gap:3px;flex-shrink:0}
+  .toolbar{padding:8px 12px;gap:8px;flex-direction:column;align-items:stretch}
+  .toolbar-row1{display:flex;gap:8px;align-items:center}
+  .search-wrap{flex:1;min-width:0;max-width:none}
+  .sort-sel{flex-shrink:0;max-width:130px;font-size:11px;padding:5px 6px}
+  .filters{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:6px;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .filters::-webkit-scrollbar{display:none}
+  .fb{flex-shrink:0;padding:5px 10px;font-size:11px}
+  .result-info{display:none}
+  .target-grid{grid-template-columns:1fr 1fr}
+  .img-gallery{aspect-ratio:4/3}
+}
+@media(max-width:400px){
+  .prod-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .grid-wrap{padding:8px}
+  .topbar-title{max-width:90px}
+  .topbar-badge{display:none}
+  .card-name{font-size:10px}
+  .card-price-val{font-size:11px}
+}
+
+/* PROFIT CALC MODAL */
+.pc-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;padding:16px}
+.pc-modal.open{display:flex}
+.pc-box{background:#fff;border-radius:16px;max-width:480px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,.15);overflow:hidden}
+.pc-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.pc-body{padding:20px 24px}
+.pc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.pc-field{display:flex;flex-direction:column;gap:5px}
+.pc-label{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700}
+.pc-inp{border:1.5px solid var(--border2);border-radius:8px;padding:9px 11px;font-size:15px;font-weight:700;font-family:'Outfit',sans-serif;outline:none;color:var(--text);background:#fff}
+.pc-inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.pc-result{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:4px}
+.pc-r-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px;border-bottom:1px solid var(--border)}
+.pc-r-row:last-child{border-bottom:none;padding-top:10px;margin-top:4px}
+.pc-r-key{color:var(--muted)}
+.pc-r-val{font-weight:800;font-size:15px}
+.pc-r-val.green{color:var(--accent)}.pc-r-val.red{color:#dc2626}.pc-r-val.blue{color:var(--blue)}.pc-r-val.orange{color:var(--orange)}
+.pc-reset{margin-top:12px;width:100%;padding:9px;border:1.5px solid var(--border2);border-radius:8px;background:#fff;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s}
+.pc-reset:hover{border-color:var(--accent);color:var(--accent)}
+/* COMING SOON MODAL */
+.cs-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;padding:16px}
+.cs-modal.open{display:flex}
+.cs-box{background:#fff;border-radius:16px;max-width:420px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,.15);overflow:hidden}
+.cs-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.cs-body{padding:32px 24px;text-align:center}
+.cs-icon{font-size:48px;margin-bottom:16px}
+.cs-title{font-size:20px;font-weight:800;color:var(--text);margin-bottom:8px}
+.cs-desc{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:20px}
+.cs-badge{display:inline-flex;align-items:center;gap:6px;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:20px;padding:6px 16px;font-size:12px;font-weight:700;color:var(--accent)}
+
+/* Dark mode toggle button */
+
+
+
+
+/* ── DARK MODE FULL ──────────────────────────────────────── */
+[data-theme="dark"] {
+  --sidebar-bg:#1A1D23;--bg:#0F1117;--white:#1E2028;
+  --border:#2E3140;--border2:#3A3D4E;
+  --text:#E8E6E1;--muted:#8B8680;--muted2:#5A5750;
+  --accent-bg:rgba(22,163,74,.12);--accent-border:rgba(22,163,74,.25);
+  --blue-bg:rgba(37,99,235,.12);
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 12px rgba(0,0,0,.4);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.5);
+  --card-bg:#1E2028;--input-bg:#252830;--hover-bg:#252830;
+}
+[data-theme="dark"] body,
+[data-theme="dark"] #login-gate { background:var(--bg); color:var(--text); }
+[data-theme="dark"] .sidebar { background:var(--sidebar-bg); border-color:var(--border); }
+[data-theme="dark"] .topbar,
+[data-theme="dark"] .toolbar { background:var(--white); border-color:var(--border); }
+[data-theme="dark"] .card,
+[data-theme="dark"] .panel,
+[data-theme="dark"] .lg-form,
+[data-theme="dark"] .tb-dropdown,
+[data-theme="dark"] .cf-box,
+[data-theme="dark"] .se-box { background:var(--white); border-color:var(--border); }
+[data-theme="dark"] .search-inp,
+[data-theme="dark"] .calc-inp,
+[data-theme="dark"] .sort-sel,
+[data-theme="dark"] .lg-inp,
+[data-theme="dark"] .um-inp,
+[data-theme="dark"] .cf-inp,
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea { background:#252830 !important; color:var(--text) !important; border-color:var(--border2) !important; }
+[data-theme="dark"] .fb { background:#252830; color:var(--muted); border-color:var(--border2); }
+[data-theme="dark"] .fb.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+[data-theme="dark"] .card-img { background:linear-gradient(135deg,#1a2d1a,#152815); }
+[data-theme="dark"] .card-prices,
+[data-theme="dark"] .calc-result,
+[data-theme="dark"] .p-stat { background:#252830; }
+[data-theme="dark"] .tb-icon-btn,
+[data-theme="dark"] #dm-toggle { background:var(--white); border-color:var(--border); }
+[data-theme="dark"] .p-link { background:var(--white); border-color:var(--border); color:var(--muted); }
+[data-theme="dark"] .card-btn { border-color:var(--border2); color:var(--muted); }
+[data-theme="dark"] .supp-card { border-color:var(--border); }
+[data-theme="dark"] .um-modal>div,
+[data-theme="dark"] .cs-modal>div { background:var(--white); border-color:var(--border); }
+[data-theme="dark"] .um-modal,
+[data-theme="dark"] .cs-modal,
+[data-theme="dark"] .cf-modal,
+[data-theme="dark"] #panel-overlay { background:rgba(0,0,0,.7); }
+[data-theme="dark"] .sidebar-item:hover { background:rgba(255,255,255,.05); }
+[data-theme="dark"] .sidebar-item.active { background:var(--accent-bg); }
+[data-theme="dark"] .ac-lesson { border-color:var(--border); }
+[data-theme="dark"] .ac-thumb { background:#252830; }
+[data-theme="dark"] .demand-chart { border-color:var(--border); background:var(--white); }
+[data-theme="dark"] .gauge-card { background:var(--white); border-color:var(--border); }
+
+/* Dark mode toggle button */
+
+[data-theme="dark"] #panel-overlay .panel,
+[data-theme="dark"] .panel-col,
+[data-theme="dark"] .p-hero,
+[data-theme="dark"] .p-links,
+[data-theme="dark"] .p-section,
+[data-theme="dark"] .p-stat,
+[data-theme="dark"] .gauge-card,
+[data-theme="dark"] .demand-chart,
+[data-theme="dark"] .supp-card,
+[data-theme="dark"] .supp-note,
+[data-theme="dark"] .calc-result,
+[data-theme="dark"] .calc-field,
+[data-theme="dark"] .ac-lesson,
+[data-theme="dark"] .hook-box,
+[data-theme="dark"] .script-box,
+[data-theme="dark"] .target-chip,
+[data-theme="dark"] .tag { background:var(--white) !important; border-color:var(--border) !important; color:var(--text) !important; }
+[data-theme="dark"] .p-stat-lbl,
+[data-theme="dark"] .p-sec-lbl,
+[data-theme="dark"] .supp-k,
+[data-theme="dark"] .ac-lesson-num,
+[data-theme="dark"] .ac-lesson-desc { color:var(--muted) !important; }
+[data-theme="dark"] .supp-card.selected { background:var(--accent-bg) !important; border-color:var(--accent) !important; }
+[data-theme="dark"] .supp-note { background:#2a2000 !important; border-color:#5a4000 !important; color:#fbbf24 !important; }
+[data-theme="dark"] .supp-disclaimer { background:#252830 !important; border-color:var(--border2) !important; }
+[data-theme="dark"] .card-profit { background:var(--accent-bg) !important; }
+[data-theme="dark"] .hook-box { background:#1a2d1a !important; border-color:rgba(22,163,74,.3) !important; }
+[data-theme="dark"] .p-hero-img { background:linear-gradient(135deg,#1a2d1a,#152815) !important; }
+[data-theme="dark"] .demand-chart svg text { fill:var(--muted) !important; }
+[data-theme="dark"] .gauge-svg text { fill:var(--text) !important; }
+[data-theme="dark"] .calc-r-row { border-color:var(--border) !important; }
+[data-theme="dark"] .bs-box,
+[data-theme="dark"] .bs-modal .bs-box { background:var(--white) !important; }
+
+
+/* ── DARK MODE PANEL INTERNALS ──────────────────────────── */
+[data-theme="dark"] .demand-chart { background:#1E2028 !important; border-color:var(--border) !important; }
+[data-theme="dark"] .gauge-card { background:#1E2028 !important; border-color:var(--border) !important; }
+[data-theme="dark"] .script-hook-box { background:#2a2000 !important; border-color:#5a4000 !important; color:#fbbf24 !important; }
+[data-theme="dark"] .script-box { background:#252830 !important; color:var(--text) !important; }
+[data-theme="dark"] .p-section { background:var(--white); }
+[data-theme="dark"] .p-hero { background:var(--white); }
+[data-theme="dark"] .panel-close { background:var(--white) !important; border-color:var(--border) !important; color:var(--muted) !important; }
+[data-theme="dark"] .demand-chart svg text,
+[data-theme="dark"] .demand-chart svg line { stroke:var(--border) !important; }
+[data-theme="dark"] .gauge-svg text { fill:var(--text) !important; }
+[data-theme="dark"] .gauge-lbl { background:var(--white) !important; }
+
+#dm-toggle{width:34px;height:34px;border:1px solid var(--border);border-radius:8px;background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);transition:all .15s;flex-shrink:0}
+#dm-toggle:hover{border-color:var(--accent);color:var(--accent)}
+
+
+/* ── MOBILE SCROLL & TOUCH FIX ── */
+@media(max-width:768px){
+  html,body{
+    overflow-x:hidden;
+    max-width:100vw;
+    touch-action:pan-y;
+  }
+  .main{overflow-x:hidden;max-width:100vw}
+  .prod-grid{max-width:100%;overflow:hidden}
+  .p-links{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .p-links::-webkit-scrollbar{display:none}
+  .social-tags{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px}
+  .social-tags::-webkit-scrollbar{display:none}
+  .target-badge-row{overflow-x:hidden}
+  .panel-body{overflow-x:hidden}
+  .p-section{overflow-x:hidden}
+  .script-hook-box,.script-body-box,.script-empty{word-break:break-word;overflow-wrap:break-word}
+  .calc-grid{grid-template-columns:1fr 1fr}
+  .supp-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN GATE -->
+<div id="login-gate">
+  <div class="lg-box">
+    <div class="lg-logo">
+      <div class="lg-logo-icon">P</div>
+      <div class="lg-logo-text">PRODUCT<span>DROP</span>.MN</div>
+    </div>
+    <div class="lg-title">Нэвтрэх</div>
+    <div class="lg-sub">Каталогт хандахын тулд нэвтрэлтийн мэдээллээ оруулна уу</div>
+    <div class="lg-form">
+      <div class="lg-field">
+        <label class="lg-label">Нэвтрэх нэр</label>
+        <input class="lg-inp" id="lg-username" type="text" placeholder="Нэвтрэх нэр..." autocomplete="username">
+      </div>
+      <div class="lg-field">
+        <label class="lg-label">Нууц үг</label>
+        <input class="lg-inp" id="lg-password" type="password" placeholder="Нууц үг..." autocomplete="current-password">
+      </div>
+      <button class="lg-btn" id="lg-submit" onclick="doLogin()">Нэвтрэх →</button>
+      <div class="lg-err" id="lg-err">Нэвтрэх нэр эсвэл нууц үг буруу байна</div>
+      <div class="lg-loading" id="lg-loading">⏳ Шалгаж байна...</div>
+    </div>
+    <div class="lg-footer">© 2026 ProductDrop.MN · Зөвхөн гишүүдэд зориулсан</div>
+  </div>
+</div>
+
+<!-- COUNTDOWN BANNER -->
+<div id="countdown-banner">
+  <div class="cd-left">
+    <span class="cd-icon">⏱</span>
+    <span class="cd-text">Үнэгүй хандалт дуусахад:</span>
+  </div>
+  <div class="cd-timer">
+    <div class="cd-seg"><span class="cd-num" id="cd-h">00</span><span class="cd-lbl">цаг</span></div>
+    <span class="cd-sep">:</span>
+    <div class="cd-seg"><span class="cd-num" id="cd-m">00</span><span class="cd-lbl">мин</span></div>
+    <span class="cd-sep">:</span>
+    <div class="cd-seg"><span class="cd-num" id="cd-s">00</span><span class="cd-lbl">сек</span></div>
+  </div>
+  <a href="landing.html" class="cd-cta">🚀 Pro авах</a>
+</div>
+
+<!-- SESSION EXPIRED OVERLAY -->
+<div id="session-expired">
+  <div class="se-box">
+    <div class="se-icon">🔒</div>
+    <div class="se-title">Хандалтын хугацаа дууслаа</div>
+    <div class="se-desc">Таны 24 цагийн үнэгүй хандалт дууслаа.<br>Дахин нэвтрэх эсвэл Pro багц авч тасралтгүй хэрэглэх боломжтой.</div>
+    <button class="se-btn" onclick="doLogout()">🔄 Дахин нэвтрэх</button>
+    <a href="landing.html" class="se-btn-pro">🚀 Pro багц авах — ₮49,900/сар</a>
+  </div>
+</div>
+
+<!-- SIDEBAR OVERLAY (mobile) -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<!-- BEST SELLER MODAL -->
+<div class="bs-modal" id="bs-modal">
+  <div class="bs-box">
+    <div class="bs-header">
+      <div><div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:2px">Дропшиппинг каталог</div><h3 style="font-size:16px;font-weight:800">🌍 Дэлхийн Best Seller</h3></div>
+      <button style="background:none;border:1px solid var(--border);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:14px" onclick="document.getElementById('bs-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="bs-body" style="padding:40px 24px;text-align:center">
+      <div style="font-size:52px;margin-bottom:16px">🌍</div>
+      <h3 style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:10px">Дропшиппинг бараанууд</h3>
+      <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:24px">Дэлхийн хамгийн их зарагддаг дропшиппинг бараануудын<br>жагсаалтыг тун удахгүй энд нэмнэ.</p>
+      <div style="display:inline-flex;align-items:center;gap:6px;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:20px;padding:8px 20px;font-size:12px;font-weight:700;color:var(--accent);margin-bottom:24px">
+        ⏳ Тун удахгүй...
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:12px;color:var(--muted);text-align:left;line-height:1.8">
+        📦 Шилдэг дропшиппинг бараанууд<br>
+        💰 Ашгийн margin шинжилгээтэй<br>
+        🔗 Alibaba нийлүүлэгчийн холбоостой<br>
+        📊 Борлуулалтын статистиктай
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFIT CALCULATOR MODAL -->
+<div class="pc-modal" id="pc-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="pc-box">
+    <div class="pc-header">
+      <div>
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:2px">Хэрэгсэл</div>
+        <h3 style="font-size:16px;font-weight:800">💰 Ашгийн тооцоолуур</h3>
+      </div>
+      <button style="background:none;border:1px solid var(--border);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:14px" onclick="document.getElementById('pc-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="pc-body">
+      <div class="pc-grid">
+        <div class="pc-field">
+          <label class="pc-label">Бараа өртөг ₮</label>
+          <input class="pc-inp" id="pc-cost" type="number" placeholder="0" oninput="calcPC()">
+        </div>
+        <div class="pc-field">
+          <label class="pc-label">Зарах үнэ ₮</label>
+          <input class="pc-inp" id="pc-price" type="number" placeholder="0" oninput="calcPC()">
+        </div>
+        <div class="pc-field">
+          <label class="pc-label">Хүргэлт ₮</label>
+          <input class="pc-inp" id="pc-ship" type="number" value="4000" oninput="calcPC()">
+        </div>
+        <div class="pc-field">
+          <label class="pc-label">Тоо ширхэг</label>
+          <input class="pc-inp" id="pc-qty" type="number" value="30" oninput="calcPC()">
+        </div>
+        <div class="pc-field" style="grid-column:1/-1">
+          <label class="pc-label">Бусад зардал ₮ (зар сурталчилгаа гэх мэт)</label>
+          <input class="pc-inp" id="pc-other" type="number" value="25000" oninput="calcPC()">
+        </div>
+      </div>
+      <div class="pc-result" id="pc-result">
+        <div style="text-align:center;color:var(--muted2);font-size:12px;padding:12px 0">Дээрх талбаруудыг бөглөнө үү</div>
+      </div>
+      <button class="pc-reset" onclick="resetPC()">🔄 Шинэчлэх</button>
+    </div>
+  </div>
+</div>
+
+<!-- LESSONS MODAL -->
+<div class="cs-modal" id="lessons-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="cs-box">
+    <div class="cs-header">
+      <div>
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:2px">Боловсрол</div>
+        <h3 style="font-size:16px;font-weight:800">🎓 Хичээл</h3>
+      </div>
+      <button style="background:none;border:1px solid var(--border);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:14px" onclick="document.getElementById('lessons-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="cs-body">
+      <div class="cs-icon">🎬</div>
+      <div class="cs-title">Дропшиппинг хичээлүүд</div>
+      <div class="cs-desc">
+        Дропшиппинг эхлэх, бараа сонгох, зар тавих,<br>
+        захиалга боловсруулах — бүх алхмыг<br>
+        бичлэгээр тайлбарласан хичээлүүд тун удахгүй орно.
+      </div>
+      <div class="cs-badge">⏳ Тун удахгүй...</div>
+      <div style="margin-top:20px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:12px;color:var(--muted);text-align:left;line-height:1.9">
+        📌 Дропшиппинг гэж юу вэ?<br>
+        🔍 Бараа хэрхэн сонгох вэ?<br>
+        📱 Facebook & TikTok зар хэрхэн тавих вэ?<br>
+        💬 Захиалга хэрхэн боловсруулах вэ?<br>
+        🚚 Хүргэлтийн систем яаж ажилладаг вэ?
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- USER MODAL (Settings + Subscription) -->
+<div class="um-modal" id="um-modal" onclick="if(event.target===this)closeUserModal()">
+  <div class="um-box">
+    <!-- Tab bar -->
+    <div class="um-topbar">
+      <button class="um-tab active" id="um-tab-settings" onclick="switchUMTab('settings')">⚙️ Тохиргоо</button>
+      <button class="um-tab" id="um-tab-subscription" onclick="switchUMTab('subscription')">💳 Захиалга</button>
+      <button class="um-close" onclick="closeUserModal()">✕</button>
+    </div>
+
+    <!-- SETTINGS PANE -->
+    <div class="um-pane active" id="um-pane-settings">
+      <div class="um-section-title">Тохиргоо</div>
+      <div class="um-section-sub">Хэрэглэгчийн мэдээлэл болон тохиргоогоо удирдах.</div>
+
+      <div class="um-field-row">
+        <div class="um-field">
+          <div class="um-label">Нэр</div>
+          <input class="um-inp" type="text" placeholder="Таны нэр" value="Тамир">
+        </div>
+        <div class="um-field">
+          <div class="um-label">Овог</div>
+          <input class="um-inp" type="text" placeholder="Овог" value="Б">
+        </div>
+      </div>
+
+      <div class="um-field-row">
+        <div class="um-field full">
+          <div class="um-label">И-мэйл</div>
+          <div class="um-inp-row">
+            <input class="um-inp" type="email" value="tamir@example.mn" disabled id="um-email-inp">
+            <button class="um-change-btn" onclick="toggleEmailEdit()">Өөрчлөх</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="um-field-row">
+        <div class="um-field full">
+          <div class="um-label">Нууц үг</div>
+          <div class="um-inp-row">
+            <input class="um-inp" type="password" value="••••••••" disabled>
+            <button class="um-change-btn" onclick="alert('Нууц үг солих холбоосыг и-мэйлд илгээлээ!')">Өөрчлөх</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:6px">
+        <div class="um-label" style="margin-bottom:10px">Тохиргоо</div>
+        <div class="um-toggle-row">
+          <div>
+            <div class="um-toggle-info">Захиалгын мэдэгдэл</div>
+            <div class="um-toggle-sub">Шинэ бараа нэмэгдэхэд и-мэйлээр мэдэгдэх</div>
+          </div>
+          <button class="um-toggle" onclick="this.classList.toggle('off')"></button>
+        </div>
+        <div class="um-toggle-row">
+          <div>
+            <div class="um-toggle-info">Маркетингийн мэйл</div>
+            <div class="um-toggle-sub">Зөвлөмж, заль мэх, шинэчлэл хүлээн авах</div>
+          </div>
+          <button class="um-toggle off" onclick="this.classList.toggle('off')"></button>
+        </div>
+      </div>
+
+      <button class="um-save-btn" onclick="saveSettings()">Хадгалах</button>
+      <div class="um-saved" id="um-saved">✅ Амжилттай хадгалагдлаа!</div>
+    </div>
+
+    <!-- SUBSCRIPTION PANE -->
+    <div class="um-pane" id="um-pane-subscription">
+      <div class="um-section-title">Захиалга</div>
+      <div class="um-section-sub">Одоогийн идэвхтэй захиалгын мэдээлэл. Асуулт байвал <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="30434540405f42447040425f5445534454425f401e5d5e">[email&#160;protected]</a></strong> хаягаар холбогдоно уу.</div>
+
+      <div class="um-plan-card">
+        <div class="um-plan-header">
+          <div>
+            <div class="um-plan-name">ProductDrop Үнэгүй</div>
+            <div class="um-plan-price">₮0 / сар</div>
+          </div>
+          <span class="um-plan-badge" style="background:#e0f2fe;color:#0369a1">🆓 ИДЭВХТЭЙ</span>
+        </div>
+
+        <div class="um-plan-features">
+          <div class="um-plan-feat"><span class="um-feat-check">✓</span>25 бараа каталог</div>
+          <div class="um-plan-feat"><span class="um-feat-check">✓</span>Ашгийн тооцоолуур & зардлын шинжилгээ</div>
+          <div class="um-plan-feat"><span class="um-feat-check">✓</span>Supplier линк (Alibaba, Taobao)</div>
+          <div class="um-plan-feat"><span class="um-feat-check" style="color:var(--muted2)">—</span><span style="color:var(--muted2)">Эрэлтийн шинжилгээ (Pro)</span></div>
+          <div class="um-plan-feat"><span class="um-feat-check" style="color:var(--muted2)">—</span><span style="color:var(--muted2)">Social targeting (Pro)</span></div>
+          <div class="um-plan-feat"><span class="um-feat-check" style="color:var(--muted2)">—</span><span style="color:var(--muted2)">Content Script (Pro)</span></div>
+        </div>
+
+        <a href="landing.html" style="display:block;width:100%;margin-top:16px;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;text-align:center;text-decoration:none">🚀 Pro багц авах — ₮49,900/сар</a>
+      </div>
+
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:10px">Төлбөрийн мэдээлэл</div>
+        <div class="um-billing-row"><span class="um-billing-k">Төлбөрийн хэлбэр</span><span class="um-billing-v">💳 •••• •••• •••• 4242</span></div>
+        <div class="um-billing-row"><span class="um-billing-k">Дараагийн төлбөр</span><span class="um-billing-v">2026 оны 4-р сарын 29</span></div>
+        <div class="um-billing-row"><span class="um-billing-k">Захиалгын огноо</span><span class="um-billing-v">2026 оны 3-р сарын 29</span></div>
+        <div class="um-billing-row"><span class="um-billing-k">Нийт төлсөн</span><span class="um-billing-v" style="color:var(--accent)">₮0 (туршилт)</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CLIENT FEEDBACK MODAL -->
+<div class="cf-modal" id="cf-modal" onclick="if(event.target===this)closeFeedback()">
+  <div class="cf-box">
+    <div class="cf-header">
+      <div>
+        <div class="cf-header-title">💬 Санал хүсэлт</div>
+        <div class="cf-header-sub">Таны санал бидэнд маш чухал</div>
+      </div>
+      <button class="cf-close" onclick="closeFeedback()">✕</button>
+    </div>
+    <div class="cf-body" id="cf-body">
+      <!-- Star rating -->
+      <div>
+        <div class="cf-label">Үнэлгээ өгнө үү</div>
+        <div class="cf-stars" id="cf-stars">
+          <span class="cf-star" data-v="1" onclick="setStars(1)">⭐</span>
+          <span class="cf-star" data-v="2" onclick="setStars(2)">⭐</span>
+          <span class="cf-star" data-v="3" onclick="setStars(3)">⭐</span>
+          <span class="cf-star" data-v="4" onclick="setStars(4)">⭐</span>
+          <span class="cf-star" data-v="5" onclick="setStars(5)">⭐</span>
+        </div>
+      </div>
+      <!-- Feedback type -->
+      <div>
+        <div class="cf-label">Санал хүсэлтийн төрөл</div>
+        <div class="cf-type-grid">
+          <button class="cf-type-btn" onclick="setCFType(this)">💡 Санал</button>
+          <button class="cf-type-btn" onclick="setCFType(this)">🐛 Алдаа</button>
+          <button class="cf-type-btn" onclick="setCFType(this)">🙌 Магтаал</button>
+          <button class="cf-type-btn" onclick="setCFType(this)">❓ Асуулт</button>
+          <button class="cf-type-btn" onclick="setCFType(this)">📊 Бараа нэмэх</button>
+          <button class="cf-type-btn" onclick="setCFType(this)">🔧 Бусад</button>
+        </div>
+      </div>
+      <!-- Name optional -->
+      <div>
+        <div class="cf-label">Нэр <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted2)">(заавал биш)</span></div>
+        <input class="cf-inp" id="cf-name" type="text" placeholder="Таны нэр...">
+      </div>
+      <!-- Message -->
+      <div>
+        <div class="cf-label">Санал хүсэлт</div>
+        <textarea class="cf-inp cf-textarea" id="cf-msg" placeholder="ProductDrop-ийг сайжруулах санал, шүүмж, мэдээллийг энд бичнэ үү..."></textarea>
+      </div>
+      <button class="cf-submit" id="cf-submit-btn" onclick="submitFeedback()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Илгээх
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="app-layout">
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon">P</div>
+    <div class="sidebar-logo-text">PRODUCT<span>DROP</span></div>
+    <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebarCollapse()" title="Цэс нуух/нээх">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+  </div>
+  
+  <div class="sidebar-section">
+    <div class="sidebar-section-lbl">Судалгаа</div>
+    <div class="sidebar-item active" onclick="setNav(this,'all')" title="Каталог"><span class="sidebar-item-icon">📦</span><span>Каталог</span></div>
+    <div class="sidebar-item" onclick="setNav(this,'Beauty')" title="Beauty"><span class="sidebar-item-icon">💄</span><span>Beauty</span></div>
+    <div class="sidebar-item" onclick="setNav(this,'Health')" title="Health"><span class="sidebar-item-icon">🏃</span><span>Health</span></div>
+    <div class="sidebar-item" onclick="setNav(this,'Home')" title="Home"><span class="sidebar-item-icon">🏠</span><span>Home</span></div>
+    <div class="sidebar-item" onclick="setNav(this,'Goods')" title="Goods"><span class="sidebar-item-icon">📦</span><span>Goods</span></div>
+    <div class="sidebar-item" onclick="setNav(this,'Kids')" title="Kids"><span class="sidebar-item-icon">👶</span><span>Kids</span></div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-lbl">Хэрэгсэл</div>
+    <div class="sidebar-item" onclick="openPCModal()" title="Ашгийн тооцоолол"><span class="sidebar-item-icon">💰</span><span>Ашгийн тооцоолол</span></div>
+    <div class="sidebar-item" onclick="document.getElementById('bs-modal').classList.add('open')" title="Best Seller"><span class="sidebar-item-icon">🌍</span><span>Дэлхийн Best Seller</span></div>
+    <div class="sidebar-item" onclick="document.getElementById('lessons-modal').classList.add('open')" title="Хичээл"><span class="sidebar-item-icon">🎓</span><span>Хичээл</span></div>
+  </div>
+  
+  <div class="sidebar-section">
+    <div class="sidebar-section-lbl">Холбоос</div>
+    <div class="sidebar-item" onclick="window.location='landing.html'" title="Нүүр хуудас"><span class="sidebar-item-icon">🏠</span><span>Нүүр хуудас</span></div>
+    <div class="sidebar-item" onclick="openFeedback()" title="Санал хүсэлт"><span class="sidebar-item-icon">💬</span><span>Санал хүсэлт</span></div>
+  </div>
+  
+  <div class="sidebar-bottom">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar">Т</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name">Таны данс</div>
+        <div class="sidebar-user-plan">🆓 Үнэгүй план</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+    <div class="topbar-title">🛒 Үнэгүй каталог</div>
+    <span class="topbar-badge" id="nav-count">25 бараа</span>
+
+    <!-- Topbar right actions -->
+    <div class="tb-actions">
+      <button class="tb-icon-btn" title="Мэдэгдэл" onclick="alert('Мэдэгдэл байхгүй байна.')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+      <button id="dm-toggle" onclick="toggleDarkMode()" title="Dark mode"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+      <div class="tb-user-wrap" id="tb-user-wrap">
+        <button class="tb-avatar" onclick="toggleUserMenu()" title="Хэрэглэгч">Т</button>
+        <div class="tb-dropdown" id="tb-dropdown">
+          <div class="tb-dd-header">
+            <div class="tb-dd-avatar">Т</div>
+            <div>
+              <div class="tb-dd-name">Таны данс</div>
+              <div class="tb-dd-plan">🆓 Үнэгүй план</div>
+            </div>
+          </div>
+          <div class="tb-dd-divider"></div>
+          <button class="tb-dd-item" onclick="openUserModal('settings')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Тохиргоо
+          </button>
+          <button class="tb-dd-item" onclick="openUserModal('subscription')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            Захиалга
+          </button>
+          <button class="tb-dd-item" onclick="openFeedback()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Санал хүсэлт
+          </button>
+          <div class="tb-dd-divider"></div>
+          <button class="tb-dd-item tb-dd-logout" onclick="sidebarLogout()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Гарах
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="toolbar-row1">
+    <div class="search-wrap">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="search-inp" id="search" type="text" placeholder="Бараа хайх...">
+    </div>
+    </div>
+    <div class="filters">
+    <select class="sort-sel" id="sort-sel" onchange="renderGrid()">
+      <option value="default">↕ Эрэмбэ</option>
+      <option value="profit-desc">Ашиг ↓</option>
+      <option value="profit-asc">Ашиг ↑</option>
+      <option value="mg-desc">Ашиг % ↓</option>
+      <option value="price-asc">Үнэ ↑</option>
+      <option value="price-desc">Үнэ ↓</option>
+    </select>
+      <button class="fb active" data-cat="all">Бүгд</button>
+      <button class="fb" data-cat="Beauty">💄 Beauty</button>
+      <button class="fb" data-cat="Goods">📦 Goods</button>
+      <button class="fb" data-cat="Health">🏃 Health</button>
+      <button class="fb" data-cat="Home">🏠 Home</button>
+      <button class="fb" data-cat="Kids">👶 Kids</button>
+    </div>
+    <span class="result-info" id="result-info"></span>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid-wrap">
+    <div class="prod-grid" id="grid"></div>
+  </div>
+</div>
+
+<!-- PANEL OVERLAY -->
+<div id="panel-overlay" onclick="handlePanelOverlay(event)">
+  <div class="panel" id="panel">
+    <button class="panel-close" onclick="closePanel()">✕</button>
+
+    <div class="p-hero">
+      <div class="img-gallery" id="p-img-gallery">
+        <div class="img-gallery-emoji" id="p-img-emoji"></div>
+        <button class="img-edit-btn" onclick="document.getElementById('img-file-input').click()">✏️ Зураг солих</button>
+        <input type="file" id="img-file-input" class="img-edit-input" accept="image/*" onchange="replaceGalleryImages(this)">
+      </div>
+      <div class="img-dots" id="p-img-dots"></div>
+      <div id="p-cat"></div>
+      <div class="p-hero-name" id="p-name"></div>
+      <div class="p-hero-stats" id="p-stats"></div>
+    </div>
+    <div class="p-links" id="p-links"></div>
+
+    <div class="panel-body">
+      <!-- LEFT COL -->
+      <div class="panel-col">
+        <!-- SUPPLIER -->
+        <div class="p-section">
+          <div class="p-sec-lbl">📦 Supplier мэдээлэл <span class="p-sec-num" id="supp-num"></span></div>
+          <div class="supp-grid" id="supp-grid"></div>
+          <div class="supp-note" id="supp-note"></div>
+          <div class="supp-disclaimer">⚠️ <b>Анхаар:</b> ProductDrop нь зөвхөн судалгааны платформ. Бараа захиалахдаа Alibaba.com эсвэл Taobao.com дээр шууд нэвтэрч, тэнд дэх нийлүүлэгчтэй харилцаарай.</div>
+        </div>
+
+        <!-- PROFIT CALC -->
+        <div class="p-section" id="calc-section">
+          <div class="p-sec-lbl">💰 Ашгийн тооцоолуур</div>
+          <div class="calc-grid">
+            <div class="calc-field"><label class="calc-label">Зарах үнэ ₮</label><input class="calc-inp" id="c-price" type="text" inputmode="numeric" placeholder="0" oninput="fmtInp(this);calcProfit()"></div>
+            <div class="calc-field"><label class="calc-label">Тоо ширхэг</label><input class="calc-inp" id="c-qty" type="text" inputmode="numeric" value="30" oninput="fmtInp(this);calcProfit()"></div>
+            <div class="calc-field"><label class="calc-label">Авах үнэ ₮</label><input class="calc-inp" id="c-cost" type="text" inputmode="numeric" placeholder="0" oninput="fmtInp(this);calcProfit()"></div>
+            <div class="calc-field"><label class="calc-label">Хүргэлт & карго ₮</label><input class="calc-inp" id="c-ship" type="text" inputmode="numeric" value="4,000" oninput="fmtInp(this);calcProfit()"></div>
+            <div class="calc-field"><label class="calc-label">Маркетинг ₮</label><input class="calc-inp" id="c-mkt" type="text" inputmode="numeric" value="0" oninput="fmtInp(this);calcProfit()"></div>
+            <div class="calc-field"><label class="calc-label">Бусад зардал ₮</label><input class="calc-inp" id="c-other" type="text" inputmode="numeric" value="2,000" oninput="fmtInp(this);calcProfit()"></div>
+          </div>
+          <!-- Target Section -->
+          <div style="border-top:1px solid var(--border);margin-bottom:12px;padding-top:12px">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:8px">🎯 Зорилтот хэрэглэгч</div>
+            <div class="target-grid">
+              <div class="target-field">
+                <label class="calc-label">Хүйс</label>
+                <select class="target-sel" id="c-gender" onchange="updateTargetBadges()">
+                  <option value="all">👥 Бүгд</option>
+                  <option value="female">👩 Эмэгтэй</option>
+                  <option value="male">👨 Эрэгтэй</option>
+                </select>
+              </div>
+              <div class="target-field">
+                <label class="calc-label">Age Target</label>
+                <select class="target-sel" id="c-age" onchange="updateTargetBadges()">
+                  <option value="all">Бүх нас</option>
+                  <option value="13-17">13–17 нас</option>
+                  <option value="18-24">18–24 нас</option>
+                  <option value="25-34">25–34 нас</option>
+                  <option value="35-44">35–44 нас</option>
+                  <option value="45-54">45–54 нас</option>
+                  <option value="55+">55+ нас</option>
+                </select>
+              </div>
+            </div>
+            <div class="target-badge-row" id="c-target-badges"></div>
+          </div>
+          <div class="calc-result" id="calc-result"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT COL — locked for free plan -->
+      <div class="panel-col">
+        <!-- LOCKED: DEMAND -->
+        <div class="p-section" style="position:relative">
+          <div class="p-sec-lbl">📈 Эрэлт & Өрсөлдөөн</div>
+          <div style="background:var(--bg);border:1.5px dashed var(--border2);border-radius:12px;padding:28px 20px;text-align:center">
+            <div style="font-size:28px;margin-bottom:10px;filter:grayscale(1);opacity:.4">📈</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px">Эрэлтийн шинжилгээ</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:14px">Сезоны эрэлт, өрсөлдөөний gauge —<br>Pro багцад нээлттэй.</div>
+            <a href="landing.html" style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:var(--accent);color:#fff;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none">🚀 Pro авах</a>
+          </div>
+        </div>
+
+        <!-- LOCKED: SOCIAL -->
+        <div class="p-section">
+          <div class="p-sec-lbl">📱 Зорилтот хэрэглэгч</div>
+          <div style="background:var(--bg);border:1.5px dashed var(--border2);border-radius:12px;padding:28px 20px;text-align:center">
+            <div style="font-size:28px;margin-bottom:10px;filter:grayscale(1);opacity:.4">👥</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px">Social Targeting</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:14px">FB/IG зорилтот нас, хүйс, сонирхол —<br>Pro багцад нээлттэй.</div>
+            <a href="landing.html" style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:var(--accent);color:#fff;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none">🚀 Pro авах</a>
+          </div>
+        </div>
+
+        <!-- LOCKED: CONTENT SCRIPT -->
+        <div class="p-section">
+          <div class="p-sec-lbl">✍️ Контент Script</div>
+          <div style="background:var(--bg);border:1.5px dashed var(--border2);border-radius:12px;padding:28px 20px;text-align:center">
+            <div style="font-size:28px;margin-bottom:10px;filter:grayscale(1);opacity:.4">✍️</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px">Hook + BOFU Script</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:14px">Бараа бүрт тохирсон Reel/Shorts script —<br>Pro багцад нээлттэй.</div>
+            <a href="landing.html" style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:var(--accent);color:#fff;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none">🚀 Pro авах</a>
+          </div>
+          <!-- hidden placeholders so JS doesn't throw errors -->
+          <div id="ai-hook-box" style="display:none"><div id="ai-hook-text"></div></div>
+          <div id="ai-script-body" style="display:none"></div>
+          <div id="ai-script-actions" style="display:none"><button id="ai-copy-btn"></button></div>
+        </div>
+      </div><!-- end right panel-col -->
+    </div><!-- end panel-body -->
+  </div><!-- end panel -->
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">
+
+</script><script>
+/* ── DARK MODE ────────────────────────────────────────────── */
+(function(){
+  var DM_KEY = 'pd_dark_mode';
+  var html   = document.documentElement;
+
+  function applyTheme(dark) {
+    if (dark) { html.setAttribute('data-theme','dark'); }
+    else       { html.removeAttribute('data-theme'); }
+    var btn = document.getElementById('dm-toggle');
+    if (btn) btn.innerHTML = dark
+      ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
+      : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  }
+
+  window.toggleDarkMode = function() {
+    var isDark = html.getAttribute('data-theme') !== 'dark';
+    localStorage.setItem(DM_KEY, isDark ? '1' : '0');
+    applyTheme(isDark);
+  };
+
+  // Apply before DOM paint to avoid flash
+  var saved = localStorage.getItem(DM_KEY);
+  applyTheme(saved !== null ? saved === '1' : true);
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var s = localStorage.getItem(DM_KEY);
+    applyTheme(s !== null ? s === '1' : true);
+  });
+})();
+</script>
+<script>
+/* ══════════════════════════════════════════════
+   SESSION GATE — 12 цагийн хатуу хязгаар
+   Refresh хийсэн ч цаг дахин тооцогдохгүй.
+   localStorage-д loginTime хадгалдаг тул
+   tab/browser хаагаад нээхэд ч ажилладаг.
+   ══════════════════════════════════════════════ */
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyd3iPFcE8EhSd-fgpDotiDc1TonWUqAUxBVQVDLWcjbqR97OI2tUEsGTuJngVp7g8s/exec';
+const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 цаг ms
+const LS_TIME  = 'pd_login_time';
+const LS_TOKEN = 'pd_session_token';
+const LS_USER  = 'pd_user_name';
+const SALT = 'PD2026MN';
+
+let _sessionTimer = null;
+let _countdownInterval = null;
+
+/* ── Token шалгах (client-side: checksum + expiry) ── */
+function verifyToken(token) {
+  if (!token || !token.startsWith('PD-')) return null;
+  try {
+    const parts = token.trim().toUpperCase().split('-');
+    // Шинэ формат: PD-{PCODE}{UID}-{exB36}-{CK}  (4 хэсэг)
+    if (parts.length < 4) return null;
+    const ckStr  = parts[parts.length - 1];
+    const exB36  = parts[parts.length - 2];
+    const expiry = parseInt(exB36, 36);
+    if (isNaN(expiry) || expiry < Date.now()) return null;
+
+    // Plan code + UID
+    const pcodeUid = parts[1];
+    const pcode    = pcodeUid[0]; // L / P / B
+    const uid      = pcodeUid.slice(1);
+    const PLAN_MAP = {L:'lite', P:'pro', B:'business'};
+    const plan     = PLAN_MAP[pcode];
+    if (!plan) return null;
+
+    // Checksum шалгах
+    const raw = uid + exB36 + SALT + plan;
+    let ck = 0;
+    for (let i = 0; i < raw.length; i++) ck = (ck * 31 + raw.charCodeAt(i)) & 0xFFFFFF;
+    const expectedCk = ck.toString(36).toUpperCase().padStart(5, '0');
+    if (expectedCk !== ckStr) return null;
+
+    return { uid, plan, expiry };
+  } catch(e) { return null; }
+}
+
+/* ── Session амьд эсэхийг шалгах ── */
+function checkSession() {
+  const loginTime = parseInt(localStorage.getItem(LS_TIME) || '0');
+  const token     = localStorage.getItem(LS_TOKEN);
+  if (!loginTime || !token) return false;
+  // Token-н хугацаа шалгах
+  const tokenInfo = verifyToken(token);
+  if (!tokenInfo) return false;
+  // 24 цагийн хязгаар — loginTime-аас тооцно
+  const elapsed = Date.now() - loginTime;
+  if (elapsed >= SESSION_DURATION) return false;
+  return true;
+}
+
+/* ── Session дуусах үед ── */
+function expireSession() {
+  clearInterval(_countdownInterval);
+  clearTimeout(_sessionTimer);
+  document.getElementById('session-expired').classList.add('show');
+  document.body.classList.add('locked');
+  // Countdown banner-г expired болгох
+  const banner = document.getElementById('countdown-banner');
+  if (banner) {
+    banner.classList.add('cd-expired');
+    banner.querySelector('.cd-text').textContent = '⛔ Хандалтын хугацаа дууслаа — Pro авна уу';
+    banner.querySelector('.cd-timer').style.display = 'none';
+  }
+}
+
+/* ── Countdown timer ── */
+function startCountdown() {
+  const loginTime = parseInt(localStorage.getItem(LS_TIME) || '0');
+  const banner = document.getElementById('countdown-banner');
+  if (banner) banner.classList.add('show');
+
+  function tick() {
+    const elapsed  = Date.now() - loginTime;
+    const remaining = SESSION_DURATION - elapsed;
+    if (remaining <= 0) { expireSession(); return; }
+
+    const h = Math.floor(remaining / 3600000);
+    const m = Math.floor((remaining % 3600000) / 60000);
+    const s = Math.floor((remaining % 60000) / 1000);
+
+    const pad = n => String(n).padStart(2, '0');
+    const hEl = document.getElementById('cd-h');
+    const mEl = document.getElementById('cd-m');
+    const sEl = document.getElementById('cd-s');
+    if (hEl) hEl.textContent = pad(h);
+    if (mEl) mEl.textContent = pad(m);
+    if (sEl) sEl.textContent = pad(s);
+
+    // Сүүлийн 1 цагт улаан болгох
+    if (remaining < 3600000) {
+      banner.style.background = 'linear-gradient(135deg,#7f1d1d 0%,#991b1b 100%)';
+    }
+    // Сүүлийн 10 минутад анхааруулах
+    if (remaining < 600000 && remaining > 599000) {
+      banner.querySelector('.cd-text').textContent = '⚠️ 10 минут үлдлээ! Pro авч тасралтгүй хэрэглэ:';
+    }
+  }
+
+  tick();
+  _countdownInterval = setInterval(tick, 1000);
+
+  // Яг дуусах үед expire хийх
+  const loginTime2 = parseInt(localStorage.getItem(LS_TIME) || '0');
+  const msLeft = SESSION_DURATION - (Date.now() - loginTime2);
+  _sessionTimer = setTimeout(expireSession, Math.max(0, msLeft));
+}
+
+/* ── Нэвтрэх ── */
+async function doLogin() {
+  const username = (document.getElementById('lg-username').value || '').trim();
+  const password = (document.getElementById('lg-password').value || '').trim();
+  const errEl    = document.getElementById('lg-err');
+  const loadEl   = document.getElementById('lg-loading');
+  const btnEl    = document.getElementById('lg-submit');
+
+  errEl.classList.remove('show');
+  if (!username || !password) {
+    errEl.textContent = 'Нэвтрэх нэр болон нууц үгийг оруулна уу';
+    errEl.classList.add('show'); return;
+  }
+
+  // Client-side token шалгах
+  const tokenInfo = verifyToken(password);
+  if (!tokenInfo) {
+    errEl.textContent = 'Нууц үг буруу эсвэл хугацаа нь дууссан байна';
+    errEl.classList.add('show'); return;
+  }
+
+  btnEl.disabled = true;
+  loadEl.classList.add('show');
+
+  // GAS-т шалгах (онлайн шалгалт)
+  try {
+    const controller = new AbortController();
+    const timeoutId  = setTimeout(() => controller.abort(), 6000); // 6 секунд timeout
+    const res  = await fetch(GAS_URL + '?action=verify&pw=' + encodeURIComponent(password) + '&name=' + encodeURIComponent(username), { signal: controller.signal });
+    clearTimeout(timeoutId);
+    const data = await res.json();
+    if (data.valid === false) {
+      // GAS тодорхой "хүчингүй" гэж хариулсан үед л буцаана
+      errEl.textContent = data.message || 'Нэвтрэх нэр эсвэл нууц үг буруу байна';
+      errEl.classList.add('show');
+      btnEl.disabled = false; loadEl.classList.remove('show'); return;
+    }
+    // data.valid === true эсвэл бусад → орох зөвшөөрөл
+  } catch(e) {
+    // GAS офлайн / timeout / CORS → client-side шалгалт (token + expiry) -аар орох
+    console.warn('GAS offline or timeout, using client-side verify:', e.message || e);
+  }
+
+  // Session хадгалах — loginTime нэг удаа л тавигдана
+  const now = Date.now().toString();
+  localStorage.setItem(LS_TIME,  now);
+  localStorage.setItem(LS_TOKEN, password);
+  localStorage.setItem(LS_USER,  username);
+
+  // UI шилжих
+  document.getElementById('login-gate').style.display = 'none';
+  loadEl.classList.remove('show');
+  btnEl.disabled = false;
+
+  // Username харуулах
+  updateUserDisplay(username);
+  startCountdown();
+}
+
+/* ── Гарах ── */
+function doLogout() {
+  localStorage.removeItem(LS_TIME);
+  localStorage.removeItem(LS_TOKEN);
+  localStorage.removeItem(LS_USER);
+  clearInterval(_countdownInterval);
+  clearTimeout(_sessionTimer);
+  // Landing руу буцна — Pro авах боломжтой
+  window.location.href = 'landing.html';
+}
+
+/* ── Хэрэглэгчийн нэр харуулах ── */
+function updateUserDisplay(name) {
+  const initial = (name || 'U').charAt(0).toUpperCase();
+  document.querySelectorAll('.sidebar-avatar, .tb-avatar, .tb-dd-avatar').forEach(el => {
+    if (el.tagName === 'BUTTON' || el.classList.contains('tb-avatar')) {
+      el.textContent = initial;
+    } else {
+      el.textContent = initial;
+    }
+  });
+  const nameEl = document.querySelector('.sidebar-user-name');
+  const ddName = document.querySelector('.tb-dd-name');
+  if (nameEl) nameEl.textContent = name;
+  if (ddName) ddName.textContent = name;
+}
+
+/* ── Enter key ── */
+document.addEventListener('DOMContentLoaded', () => {
+  // LITE НЭЭЛТТЭЙ ХАНДАЛТ — нэвтрэлгүй шууд орно, 24 цагийн limit хэвээр
+  const ssName = sessionStorage.getItem('pd_name');
+  const displayName = ssName || 'Зочин';
+
+  // sessionStorage цэвэрлэх
+  sessionStorage.removeItem('pd_token');
+  sessionStorage.removeItem('pd_name');
+  sessionStorage.removeItem('pd_login_time');
+  sessionStorage.removeItem('pd_plan');
+
+  // Login gate нуух
+  const gate = document.getElementById('login-gate');
+  if (gate) gate.style.display = 'none';
+
+  // Нэр харуулах
+  updateUserDisplay(displayName);
+
+  // 24 цагийн хязгаар — эхний орсон цагийг хадгална, буцаж ороход үргэлжилнэ
+  if (!localStorage.getItem(LS_TIME)) {
+    localStorage.setItem(LS_TIME, Date.now().toString());
+  }
+  startCountdown();
+});
+
+/* ── Sidebar logout button ── */
+function sidebarLogout() {
+  if (confirm('Гарахдаа итгэлтэй байна уу?')) doLogout();
+}
+
+const PRODUCTS = [{"n":"Aeroponic Tower Garden","mc":"Home","sc":"Home","cN":105000,"pN":216636,"tcN":119150,"npN":97486,"mg":45,"sh":10000,"aliUrl":"https://www.alibaba.com/product-detail/TSP-L5-20P-High-Quality-PP_1601572286304.html?spm=a2700.galleryofferlist.normal_offer.d_image.732613a0dhpLKF","targetMg":45,"aiReason":"Ерөнхий бараа — дундаж margin, 45%","hook":"Хүнсний дэлгүүрт ногоо авдаг мөнгөө хэмнэхийг бодсон ч байрны зай хүрэхгүй гэж үзсэн үү?","script":"Аэропоник систем нь шороогүй, тосгоногүй — агаарт ус шүршдэг аргаар ургуулна.\n\nНэг Aeroponic Tower дотор 25-30 ногоо нэгэн зэрэг ургадаг.\n\n✅ Хөрсний ногоонд орох цаг 3 дахин хурдан\n✅ Ус хэрэглэлт 90% бага — усалгааны тогтолцоо давтагдана\n✅ Балкон, гал тогоонд хоёуланд багтана\n\n₮42.745\n\n\"Ногоогоо өөрөө ургуулмаар байна\" гэж DM илгээгээрэй."},{"n":"Stress Ball Set Squeeze","mc":"Health","sc":"Mental Health","cN":3500,"pN":13827,"tcN":7605,"npN":6222,"mg":45,"sh":3000,"aliUrl":"https://www.alibaba.com/product-detail/Custom-Silicone-Push-Bubble-Toy-3D_1601681732247.html?spm=a2700.galleryofferlist.topad_classic.d_image.3f4a13a0nLofy2&priceId=bbcad765884046f5a3ddb52e2b83b27f","targetMg":45,"aiReason":"Ерөнхий бараа — дундаж margin, 45%","hook":"Zoom-ын дараа толгойд тань хуримтлагдсан дарамтыг юу арилгадаг вэ?","script":"Стрессийн үед гар нь тогтохгүй байдаг нь биеийн байгалийн хариу үйлдэл.\n\nЭнэ 3 хэлбэрийн set нь стрессийн хамгийн хурдан буулгагч.\n\n✅ 3 ширхэг, 3 бүтэц — хөнгөн, дунд, хатуу\n✅ Ширээн дэрлэгч, чанамал аяга хажууд хавсарна\n✅ Хувийн сэтгэлзүйчид ч зөвлөдөг\n\n₮28.193\n\n\"Stress ball set авмаар\" гэж DM бичнэ үү."},{"n":"Sand Art Bottle Kit","mc":"Kids","sc":"Kids","cN":7700,"pN":23511,"tcN":12931,"npN":10580,"mg":45,"sh":4000,"aliUrl":"https://www.alibaba.com/product-detail/2026-Christmas-Theme-3D-Art-Clay_1601636671121.html?spm=a2700.galleryofferlist.normal_offer.d_image.406913a04KzXmc&priceId=926a50ac2462448e9835b49d625f48d1","targetMg":45,"aiReason":"Ерөнхий бараа — дундаж margin, 45%","hook":"Хүүхдэд ямар бэлэг өгөх вэ гэж санаа зовдог уу?","script":"Өнгийн элсийг давхарлаж, давтагдашгүй зурааслал хийдэг хүүхдийн дуртай урлаг.\n\n✅ 6 өнгийн элс + 3 дүрсийн лонх\n✅ 6-12 насны хүүхэд — дэлгэцгүй, бүтээлч цаг\n✅ Дуусгасан ажил нь гэрийн чимэглэл болно\n\n₮49.113\n\n\"Sand art kit авмаар\" гэж DM бичнэ үү."},{"n":"Silicone Bib Catchall Pocket","mc":"Kids","sc":"Feeding","cN":10500,"pN":35144,"tcN":15815,"npN":19329,"mg":55,"sh":4000,"aliUrl":"https://www.alibaba.com/product-detail/Wholesale-Child-Kids-Tableware-Snack-Sippy_1600522690484.html?spm=a2700.galleryofferlist.normal_offer.d_image.482f13a0EutT0h&priceId=7129d81b4a8e4fce97bb739d05e78c25","targetMg":55,"aiReason":"Хүүхдийн бараа — аюулгүй байдал чухал, 55%","hook":"Хооллолтын дараа хувцасны угаалга гарын тоонд ороод ирдэг уу?","script":"Гинжний доорх хошуу нь хоолны тэр унадгийг барьдаг — 80% цэвэр байдал.\n\n✅ BPA-гүй силикон — авцалдаж болно\n✅ 10 секундэд угаана — хэт зөөлөн гадаргуу\n✅ 4 мас — нэг нагло олон жил\n\n₮42.240\n\n\"Нагло авмаар\" гэж DM илгээнэ үү."},{"n":"Willow Bark Toner","mc":"Beauty","sc":"Skincare Tools","cN":15470,"pN":57721,"tcN":21934,"npN":35787,"mg":62,"sh":5000,"aliUrl":"https://www.alibaba.com/product-detail/Premium-Wrinkle-Lifting-Youth-Toner-Hydrating_1601686268234.html?spm=a2700.galleryofferlist.normal_offer.d_title.8c5113a0F3LOup&priceId=486e2cda2b2c4435b032c4bb36a62028","targetMg":62,"aiReason":"Гоо сайхан — брэнд үнэ цэнэ өндөр, 62%","hook":"Acne-д зориулсан тонер хайж байна уу — химийн биш, ургамлын аргаар?","script":"Бургасны хальс нь байгалийн салицилийн хүчил — нүхийг цэвэрлэж, улайлтыг намдаана.\n\n✅ Спирт байхгүй — хуурай арьсыг ч бугшуулахгүй\n✅ Нүхний нарийсал 4 долоо хоногт мэдрэгдэнэ\n✅ 150ml — 3 сарын хэрэглэлт\n\n₮51.105\n\n\"Willow toner авмаар\" гэж DM бичнэ үү."},{"n":"Gravity Blanket Weighted","mc":"Health","sc":"Sleep","cN":35000,"pN":93444,"tcN":42050,"npN":51394,"mg":55,"sh":5000,"aliUrl":"https://www.alibaba.com/product-detail/Breathable-Weighted-Blanket-With-Premium-Glass_1601675223369.html?spm=a2700.galleryofferlist.normal_offer.d_image.4edf13a0ebhNG1&priceId=f24f3da69751490f987dd43835a140ac","targetMg":55,"aiReason":"Интерьер чимэглэл — өвөрмөц бараа, 55%","hook":"Орондоо ороод тархи тань унтахгүйгээр нь бодолд автдаг уу?","script":"Жинтэй хөнжил нь биеийн хэлбэрт 10% жингийн дарагдал нь автономын мэдрэлийн тогтолцоог тайвшруулдаг — шинжлэх ухааны нотолгоотой.\n\n✅ 7 кг жингийн хөнжил — 60-80 кг биеийн жинтэй хүнд\n✅ Хос давхар бүрхүүл — зун нь хөнгөн, өвөл нь бүлээн тал\n✅ Эхний шөнөөс нойр сайжирч мэдрэгдэнэ\n\n₮93.444\n\n\"Weighted blanket авмаар\" гэж DM илгээнэ үү."},{"n":"Tanning Mousse Self-Tan","mc":"Beauty","sc":"Beauty","cN":28000,"pN":91684,"tcN":34840,"npN":56844,"mg":62,"sh":5000,"aliUrl":"https://www.alibaba.com/product-detail/Wholesale-Private-Label-Dark-Tanning-Gel_1601568907243.html?spm=a2700.image-text-search.normal_offer.d_image.17ea67afFBEKh8&priceId=ddcf9d90bf45495d9ff2e09a2e82c044","targetMg":62,"aiReason":"Гоо сайхан — брэнд үнэ цэнэ өндөр, 62%","hook":"Нарнаас ч хамаатай биш, арьсны байгалийн гялааг гаргах арга байна.","script":"DHA-н суурьтай мусс нь аминхүчилтэй харилцан үйлчилж — 4-6 цагт гоё бор зангиа гаргана.\n\n✅ Хуурай арьсанд ч жигд тарана\n✅ Арилах горим харанхай хэсэгт — хаана байгааг харна\n✅ Нарны тусгалын хор хөнөөл байхгүй\n\n₮91.684\n\n\"Self-tan авмаар\" гэж DM илгээнэ үү."},{"n":"Paper Shredder Micro Cut","mc":"Home","sc":"Office","cN":105000,"pN":216636,"tcN":119150,"npN":97486,"mg":45,"sh":10000,"aliUrl":"https://www.alibaba.com/product-detail/10-Sheet-Cross-Cut-Paper-CD_1600400367031.html?spm=a2700.galleryofferlist.topad_classic.d_image.53ca13a0oZ84pY&priceId=0b78147a3e274cc596aa9cd759e2eb13","targetMg":45,"aiReason":"Ерөнхий бараа — дундаж margin, 45%","hook":"Хуучин данс, гэрээ, нууц баримтыг хэрхэн устгадаг вэ — хуулж хаях уу?","script":"Хуулж хаясан баримт уншигдана — мэдэгллийн нууцлал алдагдаж болно.\n\nМикро зүсэлт нь нэг хэсгийг 2000 хэсэгт хуваадаг — сэргээн авч чадахгүй.\n\n✅ 8 хуудас нэгэн зэрэг — зүсэгч суваг гацахгүй\n✅ CD, кредит карт, хавчаартай хуудас ч орно\n✅ 20 минут тасралтгүй ажилладаг\n\n₮183.864\n\n\"Шредер авмаар байна\" гэж DM илгээнэ үү."},{"n":"Trekking Pole Collapsible","mc":"Goods","sc":"Outdoor","cN":20400,"pN":60027,"tcN":27012,"npN":33015,"mg":55,"sh":5000,"aliUrl":"https://www.alibaba.com/product-detail/Outdoor-Ultralight-Mountain-Telescopic-Walking-Sticks_1600677805085.html?spm=a2700.galleryofferlist.normal_offer.d_image.361d13a0U2OjSh&priceId=e8af7b47e19f4d3991e01f18c3379c6d","targetMg":55,"aiReason":"Хүүхдийн бараа — аюулгүй байдал чухал, 55%","hook":"Уул аяллын үед өвдөгт буух дарагдал нь та мэдэхгүйгээр 80% нэмэгддэг.","script":"Карбон матерейлаар хийсэн таяг нь уруудахдаа биеийн жингийн 25%-ийг гар руу шилжүүлдэг.\n\n✅ 3 хэсэгт задрана — цүнхийн доорх хэсэгт байрлана\n✅ 120 кг жин тэсвэрлэнэ\n✅ 4 улиралын хуурай, цас — ижил нарийн тэнцэл\n\n₮60.027\n\n\"Trekking pole авмаар\" гэж DM илгээнэ үү."},{"n":"Wound Closure Strips Steri","mc":"Health","sc":"First Aid","cN":3500,"pN":13827,"tcN":7605,"npN":6222,"mg":45,"sh":3000,"aliUrl":"https://www.alibaba.com/product-detail/Bidirectional-Wound-Closure-Device-Zip-Stitch_1601576471689.html?spm=a2700.galleryofferlist.normal_offer.d_image.835113a0rMickD&priceId=36ee6f3196d14e6baa785a83dc34e1f4","targetMg":45,"aiReason":"Ерөнхий бараа — дундаж margin, 45%","hook":"Эмнэлгийн хоёр стежих зохистой шарх — гэртэй хаадаг боломж байна.","script":"Steri-strip нь эмнэлэгт хэрэглэдэг нийлэгдэх хашир хавтас — стежихээс бага гэмтэлтэй.\n\n✅ 2.5 кг хүчтэй наалт — арьсны хамт хөдлөхгүй\n✅ Цусны тасралтыг хурдан зогсооно\n✅ Айман хушуунд, гарын шархад — гэрийн аптект заавал\n\n₮13.827\n\n\"Wound strips авмаар\" гэж DM бичнэ үү."},{"n":"EMS Body Slimming Pad","mc":"Beauty","sc":"Beauty","cN":7000,"pN":29500,"tcN":11210,"npN":18290,"mg":62,"sh":3000,"aliUrl":"https://www.alibaba.com/product-detail/20Pcs-Disposable-Anti-Chafing-Thigh-Pads_1601726499760.html?spm=a2700.galleryofferlist.normal_offer.d_image.371213a0e6CQIC&priceId=80e419acc0f34e2daf8669319fe82c40","targetMg":62,"aiReason":"Гоо сайхан — брэнд үнэ цэнэ өндөр, 62%","hook":"Дасгалгүй ч булчинг хэлбэрэжүүлнэ гэдэгт итгэж байна уу?","script":"EMS нь цагт 2000 булчингийн агшилт хийдэг — дасгалын 3 цагийн үр дүнтэй дүйцдэг.\n\n✅ 6 талбарт нэгэн зэрэг — хэвлий, гуя, мөр\n✅ 10 горим, 20 хүч — аажуу эхлэж нэмнэ\n✅ Ухаалаг батарей — 1 цаг тасралтгүй\n\n₮29.500\n\n\"EMS pad авмаар\" гэж DM илгээнэ үү."},{"n":"Infant Gas Relief Drops","mc":"Kids","sc":"Baby","cN":3500,"pN":16900,"tcN":7605,"npN":9295,"mg":55,"sh":3000,"aliUrl":"https://www.alibaba.com/product-detail/Thailand-Poy-Sian-Mint-Nasal-Inhaler_1600780399098.html?spm=a2700.galleryofferlist.normal_offer.d_image.496013a0HJLVKE&priceId=dbaab59c5c924ecf96d45504fb8f6dc8","targetMg":55,"aiReason":"Хүүхдийн бараа — аюулгүй байдал чухал, 55%","hook":"Гэдэсний хийнээс болоотой уйлаа нь ялгах дараагийн алхам нь юу вэ?","script":"Simethicone нь хиймэл мэтгэлцэгч — хийн бөмбөлгүүдийг нэгтгэж гаргадаг.\n\n✅ Хоол уусган болоод өгнө — 5-10 минутад хэрэгжинэ\n✅ 0 сараас — шинэ төрсөнд\n✅ Чихэр, спирт, парабен байхгүй\n\n₮16.900\n\n\"Gas drops авмаар\" гэж DM бичнэ үү."},{"n":"Resistance Band Hip Circle","mc":"Health","sc":"Health","cN":17000,"pN":42745,"tcN":23510,"npN":19235,"mg":45,"sh":5000,"aliUrl":"https://www.alibaba.com/product-detail/Women-Non-Slip-Yoga-Resistance-Band_1601712853745.html?spm=a2700.galleryofferlist.normal_offer.d_image.736113a0NCgCdu&priceId=b7f314f86cbc4246a97c8c50c4c20db6","targetMg":45,"aiReason":"Ерөнхий бараа — дундаж margin, 45%","hook":"Squats хийхэд өвдөг дотогш нугардаг уу — хип хэсгийн дасгал дутагдаж байна.","script":"Hip abductor — тахимын гаднах булчин нь squats-ийн хамгийн чухал туслагч.\n\n✅ Силикон доторлогоо — өвдгийн дор гулсахгүй\n✅ 3 хэмжээний эсэргүүцэл — 10 кг хүртэл\n✅ Squats, lunges, clam shell — 20+ дасгалд хэрэглэнэ\n\n₮42.745\n\n\"Hip band авмаар\" гэж DM илгээнэ үү."},{"n":"Vacuum Wine Preserver","mc":"Home","sc":"Home","cN":7000,"pN":19328,"tcN":11210,"npN":8118,"mg":42,"sh":3000,"aliUrl":"https://www.alibaba.com/product-detail/Wholesale-Food-Grade-Stainless-Steel-Wine_1601205903624.html?spm=a2700.galleryofferlist.topad_classic.d_image.577f13a0Vpu49w&priceId=eb5375a0bbe84496a6d08c50969d2ff3","targetMg":42,"aiReason":"Гэр ахуйн техник — хэрэгцээт бараа, 42%","hook":"₮40,000-ийн дарс нэгийн дараа хайлж — яах вэ?","script":"Нэг аягаанаас илүүгүй уусан, гэтэл лонх нь дуусаагүй тохиолдол танид ч болдог байх.\n\nВакуум таг агаарыг бүрэн сорж гаргадаг — исэлдэлт зогсдог.\n\n✅ 5-7 хоног ижил амтаар хадгалдаг\n✅ 5 секунд — нэг шахалт л хийнэ\n✅ Аливаа лонхны амсарт тохирно\n\n₮19.328\n\n\"Дарсны таг авмаар байна\" гэж DM бичнэ үү."},{"n":"Duvet Clips Holder Set","mc":"Home","sc":"Home","cN":24480,"pN":82142,"tcN":31214,"npN":50928,"mg":62,"sh":5000,"aliUrl":"https://www.alibaba.com/product-detail/8Pcs-Set-Strong-Colorful-Sewing-Clips_62171465422.html?spm=a2700.galleryofferlist.normal_offer.d_title.3bd213a0Ru9vSr&priceId=3c41b02ba5bf46c2be2fea775a56f40d","targetMg":62,"aiReason":"Гоо сайхан — брэнд үнэ цэнэ өндөр, 62%","hook":"Хөнжлийн гадуур хайрцаг нь дотроос нь хөдлөөд чихдэг уу?","script":"Шөнийн дунд сэрж, хөнжлийн дотоод нь нэг талд цугларчихсан байх нь мэдэгдэхүйц тааруу.\n\n8 ширхэг клип — 4 булан бүр нь тусдаа бэхлэгддэг.\n\n✅ Угаалтанд тэсдэг — хөнжилтэй хамт угаана\n✅ Хэдэн минутад суурилуулна\n✅ Ямар ч хөнжлийн нягтралтай нийцнэ\n\n₮82.142\n\n\"Clip set авмаар байна\" гэж DM бичнэ үү."},{"n":"Breathing Exercise Device","mc":"Health","sc":"Mental Health","cN":24500,"pN":56791,"tcN":31235,"npN":25556,"mg":45,"sh":5000,"aliUrl":"https://www.alibaba.com/product-detail/OEM-Custom-Adjustable-Resistance-Breathing-Dumbbells_1601675605136.html?spm=a2700.galleryofferlist.topad_classic.d_image.706c13a0HJy9vP&priceId=c358e81cdcd84a85b597e83dbaafcacc","targetMg":45,"aiReason":"Ерөнхий бараа — дундаж margin, 45%","hook":"Стрессийн үед \"гүнзгий ам\" гэж хэлдэг ч зөв хийж чаддаг уу?","script":"Зөв амьсгалах нь 4 секунд орж — 4 барих — 4 гаргах. Энэ хэрэгсэл тэр хэмнэлийг заадаг.\n\n✅ 3 эсэргүүцлийн түвшин — уушгийн хүч нэмнэ\n✅ 5 мин/өдрийн дасгал — стресс бага болдог\n✅ Дуу шуугиангүй — офист ч хэрэглэнэ\n\n₮56.791\n\n\"Breathing device авмаар\" гэж DM бичнэ үү."},{"n":"Printer Ink Refill Kit","mc":"Home","sc":"Home","cN":3500,"pN":13827,"tcN":7605,"npN":6222,"mg":45,"sh":3000,"aliUrl":"https://www.alibaba.com/product-detail/INK-TANK-100ML-High-Quality-Universal_1601033855276.html?spm=a2700.galleryofferlist.topad_classic.d_image.aba113a0Ace93O&priceId=be87df3ed4d94b3daebb42610cff8914","targetMg":45,"aiReason":"Ерөнхий бараа — дундаж margin, 45%","hook":"Принтерийн картридж дуусах болгонд шинийг авахад мөнгөөр гарч байдаг уу?","script":"Нэг картридж ₮30,000-60,000 хооронд — жилд хэдийг зарцуулдаг вэ?\n\nЭнэ иж бүрдэл нэг картриджийг 8-10 удаа дахин цэнэглэнэ.\n\n✅ HP, Canon, Epson — ихэнх загварт тохирно\n✅ Алдаагүй хийх дэлгэрэнгүй заавар орно\n✅ Хэвлэлтийн чанар ялгаагүй хэвээр\n\n₮13.827\n\n\"Ink refill kit авмаар\" гэж DM бичнэ үү."},{"n":"Caffeine Hair Tonic","mc":"Beauty","sc":"Hair","cN":11200,"pN":43516,"tcN":16536,"npN":26980,"mg":62,"sh":4000,"aliUrl":"https://www.alibaba.com/product-detail/Private-Label-100-Natural-Organic-Biotin_1600854661578.html?spm=a2700.galleryofferlist.normal_offer.d_image.47ba13a0ps6D74&priceId=20f14468cb61440295c365031b7d5915","targetMg":62,"aiReason":"Гоо сайхан — брэнд үнэ цэнэ өндөр, 62%","hook":"Шампунийг 2 минутад угааж — кофеин 2 мин дотор үсний уутанд хүрдэг үү? — Хүрдэггүй.","script":"Угааж болдоггүй тоник нь кофеинийг үсний уутанд 24 цагийн турш хонуулдаг.\n\n✅ Массаж хийж тогтооно — 3-4 мин\n✅ Биотин нэмэлттэй — үсний уут бэхждэг\n✅ 60 хоногт үсний унах тоо 30-50% буурдаг\n\n₮43.516\n\n\"Hair tonic авмаар\" гэж DM бичнэ үү."},{"n":"Smart Pet Feeder Camera","mc":"Home","sc":"Smart Home","cN":105000,"pN":183308,"tcN":119150,"npN":64158,"mg":35,"sh":10000,"aliUrl":"https://www.alibaba.com/product-detail/Automatic-Water-and-Food-Integration-Pet_1601279498687.html?spm=a2700.galleryofferlist.normal_offer.d_image.791913a0xWa4HB&priceId=6263a3a7fc6543ada2c50d413b622061","targetMg":35,"aiReason":"Камер/дрон — техникийн бараа, 35%","hook":"Ажил дээр байхдаа тэжээвэр амьтандаа хоол өгөх хүн алга болдог уу?","script":"Хожимдвол хоол нь дуусаад хүлээх, хэт орой өгвөл хоногийн цаг алдагдах — энэ давтагддаг.\n\nУтасны аппаар хоол өгөх цагийг тохируулаад, хаанаас ч харж болно.\n\n✅ HD камера + 2 талын яриа — тэжээвэртэйгээ \"уулзана\"\n✅ 6L багтаамж — 2 долоо хоног хангалттай\n✅ WiFi-р холбогдоно — суурилуулалт хялбар\n\n₮183.308\n\n\"Pet feeder авмаар байна\" гэж DM бичнэ үү."},{"n":"Climbing Finger Trainer","mc":"Goods","sc":"Sports","cN":7000,"pN":22420,"tcN":11210,"npN":11210,"mg":50,"sh":3000,"aliUrl":"https://www.alibaba.com/product-detail/Grip-Strength-Trainer-with-Hand-Grip_1601209179079.html?spm=a2700.galleryofferlist.normal_offer.d_image.305213a0veddbT&priceId=777ae9fa8e3a4fde86c7659df0b8d11b","targetMg":50,"aiReason":"Спорт — идэвхтэй хэрэглэгч, 50%","hook":"Хадан авиралтын нийтлэг гэмтэл нь хуруу — бэлтгэл хангалтгүйгээс.","script":"Тус тусдаа хавчааган 5 хуруу нь хэмжээллэх чадвар нь асуудлыг барьж чадна.\n\n✅ 3 янзын эсэргүүцэлийн spring — 10, 15, 20 фунт\n✅ Ширээний дэрлэгч дор хийнэ — яаж ч байсан хэрэглэнэ\n✅ Гитарч, пианист, архивч — бүх хуруун ажил\n\n₮22.420\n\n\"Finger trainer авмаар\" гэж DM бичнэ үү."},{"n":"Plantar Fasciitis Night Splint","mc":"Health","sc":"Health","cN":7000,"pN":20382,"tcN":11210,"npN":9172,"mg":45,"sh":3000,"aliUrl":"https://www.alibaba.com/product-detail/Elastic-Ankle-Guard-Adjustable-Foot-Brace_1600465597462.html?spm=a2700.galleryofferlist.normal_offer.d_image.24df13a0HZInYD&priceId=5eee08b50e844466a32085ac43e5b9c8","targetMg":45,"aiReason":"Ерөнхий бараа — дундаж margin, 45%","hook":"Өглөө орноосоо үсрэхэд өсгийнд тань галдуулах мэт өвдөлт болдог уу?","script":"Энэ нь plantar fasciitis-ийн хамгийн нийтлэг шинж — шөнийн туршид хөл нь хугарч байхаас болдог.\n\nSplint нь тааны хөлийг 90°-д тогтоож, тэнийлгэж байна.\n\n✅ 2 долоо хоногт өвдөлт 60% буурдаг судалгаатай\n✅ Хэмжээ тохируулах боломжтой — хялбар\n✅ Эмч нарын зөвлөдөг консерватив эмчилгээ\n\n₮20.382\n\n\"Night splint авмаар\" гэж DM бичнэ үү."},{"n":"Clip-On Book Light LED","mc":"Home","sc":"Home","cN":3500,"pN":20013,"tcN":7605,"npN":12408,"mg":62,"sh":3000,"aliUrl":"https://www.alibaba.com/product-detail/Flexible-PVC-Computer-LED-Clip-Light_1601709130460.html?spm=a2700.galleryofferlist.normal_offer.d_image.372813a0OyoD0C&priceId=45922f1d13d74c34ae5bc57eef77e31d","targetMg":62,"aiReason":"Гоо сайхан — брэнд үнэ цэнэ өндөр, 62%","hook":"Унших дуртай ч орондоо гэрэл асаахад хамаарагч нь бухимддаг уу?","script":"Номны хавтас дээр хавчуулаад тань хэрэгтэй газарт л гэрэлтүүлнэ — өрөөний гэрэл хэрэггүй.\n\n3 гэрлийн хэмжээ — нүдэнд тааламжтай дулаан гэрлээс тод цагаан хүртэл.\n\n✅ USB цэнэглэгч — батарей биш, 4 цаг тасралтгүй\n✅ 45° тохируулах — нүдэнд харагдахгүй газраас гэрэлтүүлнэ\n✅ Ном, ipad, журналд хоёуланд хавчина\n\n₮20.013\n\n\"Уншлагын гэрэл авмаар\" гэж DM илгээнэ үү."},{"n":"Camping Hammock Ultralight","mc":"Goods","sc":"Outdoor","cN":31500,"pN":76890,"tcN":38445,"npN":38445,"mg":50,"sh":5000,"aliUrl":"https://www.alibaba.com/product-detail/Sunshade-Hammock-Rain-Fly-Camping-Tarp_1600560052212.html?spm=a2700.galleryofferlist.normal_offer.d_image.33d713a0Sx3ruP&priceId=5bcaf298ff394123be6ff34929e292ea","targetMg":50,"aiReason":"Спорт — идэвхтэй хэрэглэгч, 50%","hook":"Аяллын майхан нь 3 кг — нэг майхны оронд hammock нь 300гр.","script":"Ripstop nylon нь 150 кг жинг тэсвэрлэж — хоёр модны хооронд 2 минутад байрлана.\n\n✅ 290 см урт — 190 см хүнд хангалттай\n✅ Нийлүүлэх уяа дагалдана — ямар ч мод\n✅ Москитний тор нэмэлт бий — хана дор ч тохромжтой\n\n₮76.890\n\n\"Hammock авмаар\" гэж DM илгээнэ үү."},{"n":"Glutamine Recovery Powder","mc":"Health","sc":"Health","cN":14000,"pN":51105,"tcN":19420,"npN":31685,"mg":62,"sh":4000,"aliUrl":"https://www.alibaba.com/product-detail/L-Glutamine-Powder-For-Muscle-Repair_1601722195978.html?spm=a2700.galleryofferlist.normal_offer.d_image.736c13a0uwloHc&priceId=6aa0f385884a4e5b845c2e9d6d48bbc1","targetMg":62,"aiReason":"Гоо сайхан — брэнд үнэ цэнэ өндөр, 62%","hook":"Дасгалын дараа маргааш нь биеийн хатуурал тань 2 хоног тааруулдаг уу?","script":"L-Glutamine нь булчингийн нотолгоотой сэргэгч.\n\nДасгалын дараа 5г уухад харьцуулбал сэргэлт 30-40% хурдасдаг.\n\n✅ Дархлааны тогтолцооны тулгуур — өвчлөхийг багасгана\n✅ Амт нэмэлтгүй — протейны бадам уусгамал, усанд хийнэ\n✅ 60 хоногийн хэрэглэлтийн хэмжээ\n\n₮51.105\n\n\"Glutamine авмаар\" гэж DM бичнэ үү."},{"n":"Corn Dog Maker","mc":"Home","sc":"Home","cN":17500,"pN":51117,"tcN":24025,"npN":27092,"mg":53,"sh":5000,"aliUrl":"https://www.alibaba.com/product-detail/Electric-Hot-New-Automatic-Non-stick_1600955246059.html?spm=a2700.galleryofferlist.topad_classic.d_image.6ec913a0QBujRP&priceId=a72f6dc208f4468eaf090b085b6e4182","targetMg":53,"aiReason":"Pet бараа — хайрын бараа, өндөр margin, 53%","hook":"Кафед ₮12,000 өгдөг corn dog-ийг гэртээ ₮2,000-д хийж болно.","script":"7 ширхэгийг нэгэн зэрэг, 8-10 минутад болгоно. Тос ч ашиглахгүй.\n\nГурил, жигнэх бодис, сүү, өндөг — гэрийн найрлагаар хийнэ.\n\n✅ Хүүхэдтэй хамт хийх хамгийн хөгжилтэй хоол\n✅ Жигд халах таваг — гадуур нь зулгаадаг, дотор нь зөөлөн\n✅ Угааж хялбар — тоснгүй гадаргуу\n\n₮51.117\n\n\"Corn dog maker авмаар\" гэж DM илгээнэ үү."}];
+
+
+// ── SEASONAL DATA: 12 months, index 0=Jan
+const SEASONAL = {
+  'Mental Health':[70,65,60,60,55,50,55,65,70,75,80,75],
+  'Sleep':        [65,60,55,55,55,50,55,60,70,80,85,80],
+  'Fitness':      [100,90,70,65,60,55,60,65,70,75,80,85],
+  'Recovery':     [75,70,65,65,70,75,80,85,85,75,70,65],
+  'Nutrition':    [85,80,70,65,60,55,60,65,70,75,80,85],
+  'Women':        [65,65,70,75,80,75,70,70,75,75,70,65],
+  'Men':          [75,70,65,60,60,55,60,65,70,75,80,75],
+  'First Aid':    [60,60,60,65,70,75,75,70,65,60,60,65],
+  'Skincare Tools':[70,70,80,85,85,75,70,75,80,80,75,70],
+  'Hair':         [65,65,70,80,85,80,70,65,70,75,75,70],
+  'Makeup':       [70,70,75,80,85,80,75,75,80,80,85,90],
+  'Nails':        [60,65,75,80,85,80,75,75,80,80,85,85],
+  'Body':         [60,65,75,80,85,90,90,85,75,70,65,60],
+  'Tools':        [70,70,75,80,80,75,70,70,75,80,80,75],
+  'Kitchen':      [80,75,70,65,65,70,75,80,75,75,80,90],
+  'Bedroom':      [75,70,65,60,60,60,65,75,80,85,85,85],
+  'Bathroom':     [65,65,70,80,80,75,70,65,65,70,75,75],
+  'Organization': [80,75,70,65,60,60,65,75,80,80,80,80],
+  'Smart Home':   [70,65,65,65,65,65,65,65,70,75,80,85],
+  'Office':       [80,80,75,70,65,60,60,70,85,85,80,75],
+  'Living Room':  [65,60,60,65,70,70,65,65,70,75,80,85],
+  'Cleaning':     [70,70,80,90,85,75,70,70,75,80,85,80],
+  'Electronics':  [75,70,65,65,65,65,65,70,75,80,85,95],
+  'Outdoor':      [50,55,65,75,85,90,90,85,75,65,55,50],
+  'Sports':       [55,60,70,80,90,90,85,80,70,65,60,55],
+  'Travel':       [50,55,60,75,85,90,85,80,70,60,55,55],
+  'Car':          [60,60,65,70,75,75,70,70,70,65,65,65],
+  'Pet':          [65,65,65,70,75,80,80,75,70,65,65,65],
+  'Fashion':      [70,70,75,80,80,75,70,70,75,80,80,85],
+  'Hobby':        [65,65,70,75,75,70,70,75,80,80,80,80],
+  'Baby':         [70,65,65,70,70,65,65,70,75,80,85,85],
+  'Feeding':      [70,65,65,70,70,65,65,70,75,80,85,85],
+  'Safety':       [70,70,70,70,70,70,70,70,70,75,80,80],
+  'Learning':     [80,75,70,65,60,55,55,65,85,80,80,80],
+  'Creative':     [70,65,65,65,65,65,65,70,75,80,85,85],
+  'Outdoor Play': [50,50,60,70,80,90,90,85,70,60,50,50],
+  'Bath':         [65,65,65,65,65,65,65,65,65,65,65,65],
+  'Teen':         [65,65,65,65,65,65,65,70,85,80,75,70],
+  'Health':       [75,70,65,65,65,65,65,70,75,80,80,75],
+  'Home':         [70,65,65,70,70,70,70,70,75,80,80,80],
+  'Goods':        [70,65,65,65,70,70,70,70,70,75,80,85],
+  'Kids':         [70,65,65,65,65,65,65,70,75,80,85,85],
+  'Beauty':       [70,70,75,80,80,75,70,70,75,80,80,85],
+};
+const MN_MONTHS=['1-р','2-р','3-р','4-р','5-р','6-р','7-р','8-р','9-р','10-р','11-р','12-р'];
+
+// ── CLOUDINARY config
+const CLOUD_NAME = 'di0nven1w';
+
+// idx = 1|2|3 — барааны зургийн дугаар
+function cloudinaryUrl(category, productName, idx){
+  const cat = category.toLowerCase();
+  const pub = productName.replace(/ /g,'_');
+  const suffix = idx ? `_${idx}` : '_1';
+  return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto,c_fill/${cat}/${pub}${suffix}`;
+}
+
+const CAT_FALLBACK = {
+  Beauty:['https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&h=450&fit=crop&auto=format','https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&h=450&fit=crop&auto=format','https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&h=450&fit=crop&auto=format'],
+  Health:['https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&h=450&fit=crop&auto=format','https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&h=450&fit=crop&auto=format','https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&h=450&fit=crop&auto=format'],
+  Home:['https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=450&fit=crop&auto=format','https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=450&fit=crop&auto=format','https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=450&fit=crop&auto=format'],
+  Goods:['https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=800&h=450&fit=crop&auto=format','https://images.unsplash.com/photo-1498049794561-7780e7231661?w=800&h=450&fit=crop&auto=format','https://images.unsplash.com/photo-1553603227-2d91a3a8d4a0?w=800&h=450&fit=crop&auto=format'],
+  Kids:['https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=800&h=450&fit=crop&auto=format','https://images.unsplash.com/photo-1471286174890-9c112ac6476f?w=800&h=450&fit=crop&auto=format','https://images.unsplash.com/photo-1587654780291-39c9404d58be?w=800&h=450&fit=crop&auto=format'],
+};
+
+// Cloudinary-с 1 зураг авна, байхгүй бол category fallback
+function getProductImgs(p){
+  return [
+    cloudinaryUrl(p.mc, p.n, 1),
+  ];
+}
+
+function getCatFallback(p){
+  const fb = CAT_FALLBACK[p.mc] || [];
+  const offset = p.n.charCodeAt(0) % (fb.length||1);
+  return [fb[offset]].filter(Boolean);
+}
+function switchImg(idx){
+  const gallery=document.getElementById('p-img-gallery');
+  const imgs=gallery.querySelectorAll('img');
+  const dots=document.getElementById('p-img-dots').querySelectorAll('.img-dot');
+  imgs.forEach((img,i)=>img.classList.toggle('active',i===idx));
+  dots.forEach((d,i)=>d.classList.toggle('active',i===idx));
+  window._galleryIdx=idx;
+}
+
+// Auto-advance gallery every 3s
+setInterval(()=>{
+  const gallery=document.getElementById('p-img-gallery');
+  if(!gallery) return;
+  const imgs=gallery.querySelectorAll('img');
+  if(imgs.length<2) return;
+  const next=((window._galleryIdx||0)+1)%imgs.length;
+  switchImg(next);
+},3000);
+
+const SOCIAL_KW = {
+  Beauty:['20–35 настай эмэгтэй','Арьсны асуудалтай','K-Beauty сонирхогч','Гоо сайхан бүтээгдэхүүн хайдаг','Нүүр будагч','Гэртээ арьс засалт хийдэг','Өөрийгөө засдаг эмэгтэй','Үсний асуудалтай'],
+  Goods:['25–45 настай эрэгтэй','Технологи сонирхогч','Гадаа аялагч','Шинэ бүтээгдэхүүн хайдаг','Онлайн худалдааны идэвхтэй хэрэглэгч','Гар урлал хийдэг','Авто машинтай'],
+  Health:['Биеийн тамирчин','Эрүүл хооллогч','Жин хасахыг хүсдэг','Гэртээ дасгал хийдэг','Нойрны асуудалтай','Стрессийн эсрэг арга хайдаг','30–50 настай','Эмэгтэй эрүүл мэнд'],
+  Home:['Гэр бүлтэй хүн','Гэр орноо тохижуулдаг','Цэгцтэй байдалд дуртай','Шинэ байшинтай','Гэрийн техник хайдаг','Ухаалаг гэр сонирхогч','Гэрийн зохион байгуулалт хийдэг'],
+  Kids:['Эцэг эх','0–5 насны хүүхэдтэй','Жирэмсэн эмэгтэй','Хүүхдийн боловсролд анхаардаг','Шинэ эцэг эх','Хүүхдийн аюулгүй байдалд санаа тавьдаг','Ээж блогер'],
+};
+
+const CAT_EMOJI={Beauty:'💄',Goods:'📦',Health:'🏃',Home:'🏠',Kids:'👶'};
+const CAT_COLORS={Beauty:'cat-beauty',Goods:'cat-goods',Health:'cat-health',Home:'cat-home',Kids:'cat-kids'};
+
+let currentCat='all';
+let currentSearch='';
+let activeProduct=null;
+
+function fmtN(n){return '₮'+Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',')}
+function fmtInp(el){const pos=el.selectionStart;const raw=el.value.replace(/[^\d]/g,'');const fmt=raw?Number(raw).toLocaleString():'';el.value=fmt;}
+function getInpVal(id){return parseInt((document.getElementById(id).value||'0').replace(/[^\d]/g,''))||0;}
+
+function replaceGalleryImages(input){
+  const file=input.files[0];
+  if(!file) return;
+  const gallery=document.getElementById('p-img-gallery');
+  const emojiEl=document.getElementById('p-img-emoji');
+  gallery.querySelectorAll('img').forEach(el=>el.remove());
+  emojiEl.style.display='none';
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=document.createElement('img');
+    img.src=e.target.result;
+    img.className='active';
+    gallery.appendChild(img);
+    document.getElementById('p-img-dots').style.display='none';
+    window._galleryImgs=[e.target.result]; window._galleryIdx=0;
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+
+let aiScripts = {};
+
+function getProductScript(p) {
+  // Pro-аас import хийсэн script байвал шууд ашиглана
+  if (p.hook && p.script) return { hook: p.hook, script: p.script };
+
+  const n = p.n.toLowerCase();
+  const sc = (p.sc || '').toLowerCase();
+  const mc = (p.mc || '').toLowerCase();
+  const price = fmtN(p.pN);
+  const name = p.n;
+
+  // ---- HEALTH ----
+  if (sc.includes('mental health') || n.includes('stress') || n.includes('anxiety') || n.includes('mindful') || n.includes('meditation') || n.includes('gratitude') || n.includes('fidget') || n.includes('sensory')) {
+    return {
+      hook: `Өдөр бүр stress, санаа зовнил дотроо хуримтлагдаад амьдрал хүнд санагдаж байна уу?`,
+      script: `Ажил, хүүхэд, амьдрал — бүх юм нэгэн зэрэг дарагддаг. Тэгээд тайвширч чадахгүй, унтаж чадахгүй, бодлоо цуглуулж чадахгүй.
+
+Танд зориулж ${name} гарсан байна.
+
+✅ Гараа хөдөлгөөд тархиа тайвшруулна
+✅ Ямар ч цагт, ямар ч газар ашиглана
+✅ Химийн бодис, эм тариагүй — 100% байгалийн арга
+
+Одоо стокт байгаа — ${price}
+
+"${name.split(' ')[0]} авмаар байна" гэж DM илгээнэ үү — өнөөдөр хүргэнэ.`
+    };
+  }
+
+  if (sc.includes('sleep') || n.includes('sleep') || n.includes('weighted') || n.includes('pillow') || n.includes('melatonin') || n.includes('lavender') || n.includes('white noise') || n.includes('eye mask') || n.includes('blackout')) {
+    return {
+      hook: `Орондоо орчихоод хэдэн цаг нүд нь ирэхгүй, эргэлдэж хэвтдэг хүнд?`,
+      script: `Унтаж чадахгүй шөнө — маргааш нь нь ядарсан, бухимдсан, анхааралгүй өнгөрдөг. Энэ тойрог тасардаггүй.
+
+${name} — унтахыг тань хялбар болгоно.
+
+✅ Нойрны чанарыг мэдэгдэхүйц сайжруулна
+✅ Байгалийн найрлага, аюулгүй
+✅ Эхний шөнөөс л үр дүн мэдрэгдэнэ
+
+Үнэ: ${price}
+
+"Унтах тусламж хэрэгтэй байна" гэж DM илгээнэ үү — 10 минутын дотор хариу өгнө.`
+    };
+  }
+
+  if (sc.includes('recovery') || n.includes('massage') || n.includes('foam roller') || n.includes('percussion') || n.includes('cupping') || n.includes('gua sha') || n.includes('tens') || n.includes('ice pack') || n.includes('cold therapy') || n.includes('heating pad')) {
+    return {
+      hook: `Дасгал хийсний дараа биеийн өвдөлт 2-3 хоног тааруулдаг уу?`,
+      script: `Булчин татах, үе мөч өвдөх — ердийн зүйл биш, биеийн тань дохио. Хурдан сэргэхгүй бол дараа дасгал хийхийн тулд хугацаа алдана.
+
+${name} — булчингийн сэргэлтийг 2 дахин хурдасгана.
+
+✅ Гэртээ мэргэжлийн засал эмчилгээний үр дүн
+✅ 15 минут хэрэглэлт — мэдэгдэхүйц хөнгөрөл
+✅ Спортсмен, ердийн хүн хоёулаа хэрэглэнэ
+
+${price} — гэртэй болсон цагаас хэрэглэнэ.
+
+"${n.split(' ')[0]} авмаар байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('fitness') || n.includes('resistance band') || n.includes('dumbbell') || n.includes('kettlebell') || n.includes('push-up') || n.includes('pull-up') || n.includes('ab roller') || n.includes('plyo') || n.includes('jump rope') || n.includes('agility')) {
+    return {
+      hook: `Gym-д явж чадахгүй, гэртээ дасгал хийж чаддаггүй хүнд яг зориулсан зүйл байна.`,
+      script: `Gym-ийн мөнгө, зам замаг, цаг хугацаа — бүгд шалтаг. Биеийг тань засах нь тийм хэцүү биш байх ёстой.
+
+${name} — гэртээ хийх дасгалыг gym-тэй адилтгана.
+
+✅ Багтамжтай, хаа ч авч явна
+✅ Шинэ эхлэгчид тохиромжтой, мэргэжилтэн ч хэрэглэнэ
+✅ Хатуу ширүүн материал — удаан эдэлнэ
+
+${price} — gym-ийн нэг сарын төлбөрөөс хямд.
+
+Авахыг хүсвэл DM илгээгээрэй.`
+    };
+  }
+
+  if (sc.includes('first aid') || n.includes('tourniquet') || n.includes('bandage') || n.includes('gauze') || n.includes('first aid') || n.includes('blood pressure') || n.includes('thermometer') || n.includes('pulse oximeter')) {
+    return {
+      hook: `Гэр бүлд яаралтай тусламж хэрэгтэй болвол юу хийхэд бэлэн үү?`,
+      script: `Ослын үед эмийн сан хайх, эмчид хүрэх — цаг алдана. Гэртээ зайлшгүй хэрэгслэл байх нь гэр бүлийн аюулгүй байдлын хамгийн хялбар алхам.
+
+${name} — яаралтай тусламжийн хамгийн найдвартай хэрэгсэл.
+
+✅ Мэргэжлийн зэрэглэлийн чанар
+✅ Хэрэглэхэд хялбар, хурдан
+✅ Гэр, машин, аялалд зайлшгүй
+
+${price}
+
+"Яаралтай тусламж" гэж DM илгээнэ үү — хүргэлттэй.`
+    };
+  }
+
+  if (sc.includes('nutrition') || n.includes('protein') || n.includes('collagen') || n.includes('vitamin') || n.includes('supplement') || n.includes('omega') || n.includes('probiot') || n.includes('glutamine') || n.includes('electrolyte') || n.includes('greens')) {
+    return {
+      hook: `Биеийн байдлаа сайжруулахыг хүсдэг ч яаж эхлэхээ мэдэхгүй байна уу?`,
+      script: `Хоол хүнс, хэрэглэх цаг — бүгдийг тооцоолох хэцүү. Гол зүйл нь биед чинь дутагдаж байгааг нэмэх л хэрэгтэй.
+
+${name} — өдөр тутмын тэжээллэг байдлыг сайжруулна.
+
+✅ Олон улсад баталгаажсан найрлага
+✅ Өдөрт нэг удаа — хялбар дадал
+✅ 2-3 долоо хоногт үр дүн мэдрэгдэнэ
+
+${price}
+
+"Захиалмаар байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('women') || n.includes('postpartum') || n.includes('prenatal') || n.includes('menstrual') || n.includes('pelvic') || n.includes('breastfeed') || n.includes('period') || n.includes('ovulation') || n.includes('hormone')) {
+    return {
+      hook: `Эмэгтэй хүний биеийн онцлог хэрэгцээнд зориулсан — таны эрүүл мэндийг нухацтай авч үзсэн.`,
+      script: `Эмэгтэй хүний биед тохиолддог зүйлүүд — нийтэд ярьдаггүй ч бодит шийдэл хэрэгтэй байдаг.
+
+${name} — таны биеийн хэрэгцээнд яг тохирсон.
+
+✅ Эмэгтэйчүүдэд зориулан боловсруулсан
+✅ Аюулгүй найрлага, батлагдсан
+✅ Бодит үр дүн — хэдэн долоо хоногийн дотор
+
+${price}
+
+"Мэдэхийг хүсч байна" гэж DM илгээнэ үү — нууцаар хариулна.`
+    };
+  }
+
+  if (sc.includes('men') || n.includes("men's") || n.includes('beard') || n.includes('testosterone') || n.includes('prostate') || n.includes('dht') || n.includes('baldness')) {
+    return {
+      hook: `Эрчүүдийн ихэнх нь биеийнхээ тухай ярихгүй — гэхдээ шийдэл байдаг.`,
+      script: `Эрчүүдийн эрүүл мэнд, үзэмж — анхаарал хандуулах зүйл. Хол хэцүү биш, нэг алхамаас эхэлнэ.
+
+${name} — эрчүүдэд зориулсан, үр дүнтэй шийдэл.
+
+✅ Эрчүүдийн биеийн онцлогт тохирсон
+✅ Өдөр тутмын хэрэглэлтэд хялбар
+✅ 30 хоногийн дотор мэдэгдэхүйц өөрчлөлт
+
+${price}
+
+DM-ээр захиална уу — нууцаар хүргэнэ.`
+    };
+  }
+
+  // ---- BEAUTY ----
+  if (sc.includes('skincare') || sc.includes('tools') && mc === 'beauty' || n.includes('serum') || n.includes('toner') || n.includes('moisturizer') || n.includes('cleanser') || n.includes('mask') || n.includes('essence') || n.includes('cream') || n.includes('acid') || n.includes('retinol') || n.includes('vitamin c') || n.includes('hyaluronic') || n.includes('niacinamide') || n.includes('peptide') || n.includes('collagen')) {
+    return {
+      hook: `Нүүрнийхээ арьс тайгалзах, бухирах, жигд бус өнгөтэй байгаад залхсан уу?`,
+      script: `Арьс бол биеийн хамгийн том эрхтэн. Зөв тэжээхгүй бол гадаад байдал, өөртөө итгэх итгэл хоёуланд нөлөөлнө.
+
+${name} — арьсны тань тэжээллэг байдлыг гүнзгий сайжруулна.
+
+✅ Мэргэжлийн зэрэглэлийн найрлага
+✅ 2-4 долоо хоногт нүүр арьсны өнгө жигдэрнэ
+✅ К-Бьюти стандарт — дэлхийд батлагдсан
+
+${price} — ганц нэг эмнэлгийн засалтын үнээс хямд, тогтмол хэрэглэнэ.
+
+"Арьсны асуудлаа шийдмээр байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('hair') || n.includes('hair') || n.includes('shampoo') || n.includes('scalp') || n.includes('conditioner') || n.includes('tonic') || n.includes('curl') || n.includes('diffuser') || n.includes('blow dry') || n.includes('straighten')) {
+    return {
+      hook: `Үс нь унах, хэврэгших, гялалздаггүй болсон ч яах ёстойгоо мэдэхгүй байна уу?`,
+      script: `Үс бол нүүрний чимэглэл. Гэхдээ угаах, засах — тийм хялбар биш. Зөв бүтээгдэхүүн хэрэглэхгүй бол хөрөнгө алдана, үр дүн гарахгүй.
+
+${name} — үсний эрүүл байдлыг дотроос нь сайжруулна.
+
+✅ Байгалийн идэвхт найрлага
+✅ Ашиглах болгон мэдэгдэхүйц зөөлрөл
+✅ Химийн бодис багатай, аюулгүй
+
+${price}
+
+"Үсний асуудлаа шийдмээр" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('makeup') || n.includes('lipstick') || n.includes('mascara') || n.includes('foundation') || n.includes('eyeshadow') || n.includes('blush') || n.includes('primer') || n.includes('concealer') || n.includes('liner') || n.includes('brow') || n.includes('lip stain') || n.includes('tint') || n.includes('lash')) {
+    return {
+      hook: `Нүүрнийхээ гоо сайхан 10 минутын дотор сайжруулмаар байна уу?`,
+      script: `Засал нь нэмэлт биш, өөртөө итгэх итгэлийн хэрэгсэл. Зөв бүтээгдэхүүн хэрэглэхэд цаг, мөнгө ихэд зарцуулах хэрэггүй.
+
+${name} — хялбар, хурдан, гайхалтай үр дүнтэй.
+
+✅ Удаан тогтдог — 12+ цаг
+✅ Эхлэгчдэд хялбар, хэрэглэхэд зөөлөн
+✅ Дэлхийн алдартай брэндүүдтэй адил чанар
+
+${price}
+
+"Авмаар байна" гэж DM-ээр холбогдоорой.`
+    };
+  }
+
+  if (sc.includes('nails') || n.includes('nail')) {
+    return {
+      hook: `Хумс нь засуулахад мөнгө олон зарцуулдаг уу? Гэртээ гоё болгох цаг болсон.`,
+      script: `Nail salon-д нэг удаа очих зардлаар гэртээ хэдэн сарын хумсаа гоёж болно.
+
+${name} — мэргэжлийн nail art-ийн үр дүн, гэртэй.
+
+✅ Хэрэглэхэд хялбар, заавар орно
+✅ Удаан хугацаагаар тогтдог
+✅ Олон загвар, маш их сонголт
+
+${price}
+
+"Nail kit авмаар байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('body') || n.includes('body') || n.includes('cellulite') || n.includes('slimming') || n.includes('whitening') || n.includes('stretch mark') || n.includes('intimate') || n.includes('tightening') || n.includes('exfoliat')) {
+    return {
+      hook: `Биеийнхээ гадаад байдлаас иттгэлгүй болоод их хувцас өмсдөг болсон уу?`,
+      script: `Биеийн арьс нь нүүрнийхээс ч их анхаарал хэрэгтэй. Зөв тэжээхгүй бол насан туршийн асуудал болно.
+
+${name} — биеийн арьсны тань нийт байдлыг сайжруулна.
+
+✅ Тогтмол хэрэглэлтийн үр дүн — 3-4 долоо хоногт
+✅ Байгалийн найрлага, аюулгүй
+✅ Гэртэй хялбар хэрэглэнэ
+
+${price}
+
+DM-ээр захиалаарай.`
+    };
+  }
+
+  // ---- HOME ----
+  if (sc.includes('kitchen') || n.includes('maker') || n.includes('cooker') || n.includes('grinder') || n.includes('pan') || n.includes('roller') || n.includes('press') || n.includes('mold') || n.includes('popcorn') || n.includes('ramen') || n.includes('dumpling') || n.includes('waffle') || n.includes('fondue') || n.includes('crepe') || n.includes('rotisserie')) {
+    return {
+      hook: `Гэртээ шинэ хоол туршиж хийхийг хүсдэг ч яаж хийхэдэа мэдэхгүй байна уу?`,
+      script: `Гадуур хоол идэх зардал нэмэгдэж байна. Гэртээ хийхийн тулд зөв хэрэгсэл л хэрэгтэй.
+
+${name} — гэрийн тогоочийг мэргэжлийн болгоно.
+
+✅ Ашиглахад маш хялбар
+✅ Цэвэрлэхэд хялбар, удаан эдэлнэ
+✅ Бүхэл гэр бүлийн дуртай хоолыг гэртээ хийнэ
+
+${price}
+
+"Захиалмаар байна" гэж DM илгээнэ үү — өнөөдөр хүргэнэ.`
+    };
+  }
+
+  if (sc.includes('smart home') || n.includes('smart') || n.includes('wifi') || n.includes('sensor') || n.includes('camera') || n.includes('doorbell') || n.includes('thermostat') || n.includes('automation') || n.includes('fingerprint')) {
+    return {
+      hook: `Гэрийнхэндээ аюулгүй, тав тухтай орчин бүрдүүлэхийг хүсдэг үү?`,
+      script: `Гэрийн технологи хурдан хөгжиж байна. Гэхдээ хаанаас эхлэхээ мэдэхгүй, үнэтэй гэж айдаг.
+
+${name} — гэрийн ухаалаг болгох хамгийн хялбар алхам.
+
+✅ Утас/таблет-аар удирдана
+✅ Суурилуулахад хялбар, заавар орно
+✅ Цахилгааны зардал хэмнэж, аюулгүй байдал нэмэгдэнэ
+
+${price}
+
+"Smart home эхлэмээр байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('organization') || n.includes('organizer') || n.includes('storage') || n.includes('rack') || n.includes('divider') || n.includes('holder') || n.includes('shelf') || n.includes('container') || n.includes('tray') || n.includes('drawer')) {
+    return {
+      hook: `Гэр дотрыг нь цэгцлэхийг хүссэн ч цагийн дараа дахин эмх замбараагүй болдог уу?`,
+      script: `Цэгцгүй орчинд ажиллах, амрах хоёуланд хэцүү. Гол нь зөв зохион байгуулалтын систем хэрэгтэй.
+
+${name} — хэрэглэхэд хялбар, хадгалахад ухаалаг.
+
+✅ Зай зогсоолыг 2 дахин сайн ашиглана
+✅ Харахад гоё, хэрэглэхэд практик
+✅ Угаахад хялбар, удаан эдэлнэ
+
+${price}
+
+"Цэгцлэхэд тусал" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('bathroom') || n.includes('shower') || n.includes('bath ') || n.includes('bidet') || n.includes('toilet') || n.includes('towel') || n.includes('mirror') || n.includes('vanity')) {
+    return {
+      hook: `Угаалгын өрөөгөө дахин загварчлахыг хүссэн ч үнэтэй гэж зогсдог уу?`,
+      script: `Угаалгын өрөө гэр бүлийн хамгийн өдөр тутам хэрэглэдэг өрөө. Багахан өөрчлөлт их зөрүүтэй мэдрэмж өгнө.
+
+${name} — угаалгын өрөөний тав тухыг нэмэгдүүлнэ.
+
+✅ Суурилуулахад хялбар
+✅ Удаан эдэлнэ, зэврэхгүй
+✅ Дизайн нь ямар ч орчинтой нийцнэ
+
+${price}
+
+DM-ээр захиалаарай.`
+    };
+  }
+
+  if (sc.includes('bedroom') || n.includes('mattress') || n.includes('duvet') || n.includes('pillow') || n.includes('blanket') || n.includes('linen') || n.includes('bedside') || n.includes('bed frame') || n.includes('silk pillowcase')) {
+    return {
+      hook: `Унтах орон чинь жинхэнэ амралт өгдөг үү, эсвэл зүгээр л хэвтдэг газар уу?`,
+      script: `Унтах орны чанар нойрны чанарт шууд нөлөөлнө. Зөв дэрлэгч, хөнжил — бие тань сэргэн босдог.
+
+${name} — унтах орны тань тав тухыг ахиулна.
+
+✅ Чанартай материал — удаан хугацаагаар ашиглана
+✅ Бие тань зөв байрлалд амрана
+✅ Гоё загвар — өрөөний гоо сайхныг нэмнэ
+
+${price}
+
+"Унтах орноо шинэчлэмээр байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('office') || n.includes('desk') || n.includes('monitor') || n.includes('keyboard') || n.includes('stand') || n.includes('ergonomic') || n.includes('footrest') || n.includes('lap desk') || n.includes('document') || n.includes('printer')) {
+    return {
+      hook: `Ажлын ширээнд 8+ цаг суугаад нуруу, хүзүү өвддөг уу?`,
+      script: `Биеийн буруу байрлал — удаан хугацаанд эрүүл мэндийн асуудал болно. Зөв тоноглолтой ажлын байр — бүтээмж нэмэгдэж, өвдөлт буурна.
+
+${name} — ажлын байрны тав тухыг ахиулна.
+
+✅ Эргономик дизайн — биеийн зөв байрлалд тохиромжтой
+✅ Бүтээмжийг нэмэгдүүлнэ
+✅ Хялбар суурилуулалт
+
+${price}
+
+"Ажлын байрыг сайжруулмаар байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('cleaning') || n.includes('clean') || n.includes('vacuum') || n.includes('mop') || n.includes('scrub') || n.includes('remover') || n.includes('spray') || n.includes('steam') || n.includes('sanitizer') || n.includes('wipes')) {
+    return {
+      hook: `Гэрийг цэвэрлэхэд олон цаг зарцуулаад эцэс нь цалгар болдоггүй уу?`,
+      script: `Цэвэрлэгч бол гэр бүлийн аюулгүй байдал. Зөв хэрэгслэлтэй бол хагас цагт хийж болно.
+
+${name} — цэвэрлэгээг хурдан, хялбар, үр дүнтэй болгоно.
+
+✅ Арав дахин хурдан цэвэрлэнэ
+✅ Химийн бодис багатай, гэр бүлд аюулгүй
+✅ Дахин ашиглах боломжтой — эдийн засгийн
+
+${price}
+
+Захиалахыг хүсвэл DM илгээгээрэй.`
+    };
+  }
+
+  if (sc.includes('living room') || n.includes('tapestry') || n.includes('bookshelf') || n.includes('bean bag') || n.includes('ottoman') || n.includes('tv stand') || n.includes('projector') || n.includes('canopy') || n.includes('ladder') || n.includes('wax seal') || n.includes('record player')) {
+    return {
+      hook: `Гэрийнхээ орчин бүрдүүлэлтийг шинэчлэхийг хүссэн ч яаж эхлэхэдэ мэдэхгүй байна уу?`,
+      script: `Гэрийн зочны өрөө — айлчлагч бүр анхааралдаг газар. Нэг зүйл нэмснээр бүх орчин өөрчлөгдөнө.
+
+${name} — зочны өрөөний загвар, тав тухыг нэмнэ.
+
+✅ Загвар нь орчин үеийн, гоё
+✅ Суурилуулахад хялбар
+✅ Үнэ хүртээмжтэй — дизайнер ирүүлэх хэрэггүй
+
+${price}
+
+"Гэрийнхээ тухай зөвлөгөө хэрэгтэй байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  // ---- GOODS ----
+  if (sc.includes('electronics') || n.includes('wireless') || n.includes('bluetooth') || n.includes('charger') || n.includes('power bank') || n.includes('usb') || n.includes('cable') || n.includes('hub') || n.includes('drone') || n.includes('monitor') || n.includes('keyboard') || n.includes('earbuds') || n.includes('nfc') || n.includes('tracker')) {
+    return {
+      hook: `Техник хэрэгслийн дагалдах хэрэгслэл нь ашигтай, зөв сонгосон тохиолдолд.`,
+      script: `Технологийн ертөнцөд зөв хэрэгсэл байх нь цаг хугацаа хэмнэж, бүтээмжийг нэмэгдүүлнэ.
+
+${name} — өдөр тутмын технологийн хэрэгцээг хялбарчилна.
+
+✅ Өндөр чанарын материал, удаан эдэлнэ
+✅ Ашиглахад хялбар, заавар орно
+✅ Монголд хүргэлттэй
+
+${price}
+
+DM-ээр захиалаарай.`
+    };
+  }
+
+  if (sc.includes('outdoor') || n.includes('camping') || n.includes('hiking') || n.includes('trekking') || n.includes('hammock') || n.includes('lantern') || n.includes('survival') || n.includes('waterproof') || n.includes('solar') || n.includes('fishing')) {
+    return {
+      hook: `Байгаль дээр гарахаа бодоод байгаа ч хэрэгслэл нь бүрэн бус уу?`,
+      script: `Байгальд гарах — зөв хэрэгслэлтэй бол тав тухтай, аюулгүй. Бэлтгэлгүй явах нь эрсдэлтэй.
+
+${name} — гадаа аялалын хамгийн хэрэгтэй нэмэлт.
+
+✅ Байгаль цаг агаарт тэсвэртэй
+✅ Хөнгөн, авч явахад хялбар
+✅ Мэргэжлийн чанар, хүртээмжтэй үнэ
+
+${price}
+
+"Аялалд бэлдэж байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('sports') || n.includes('yoga') || n.includes('resistance') || n.includes('gym') || n.includes('sport') || n.includes('ball') || n.includes('jump') || n.includes('swim') || n.includes('climbing') || n.includes('martial') || n.includes('parachute')) {
+    return {
+      hook: `Спортоо идэвхтэй хийж байгаа хүнд тохирох хэрэгсэл хэрэгтэй байна уу?`,
+      script: `Зөв спортын хэрэгсэл — гүйцэтгэлийг нэмэгдүүлж, гэмтлээс хамгаалж, илүү сайн үр дүн өгдөг.
+
+${name} — спортын үр ашгийг дэмжинэ.
+
+✅ Мэргэжлийн зэрэглэлийн чанар
+✅ Тохиромжтой дизайн — хөдөлгөөнийг хялбарчилна
+✅ Удаан эдэлнэ
+
+${price}
+
+Захиалахыг хүсвэл DM илгээгээрэй.`
+    };
+  }
+
+  if (sc.includes('travel') || n.includes('travel') || n.includes('luggage') || n.includes('passport') || n.includes('packing') || n.includes('adapter') || n.includes('money belt') || n.includes('rfid')) {
+    return {
+      hook: `Аялалдаа гарахад хэрэгтэй бүх зүйлийг цэгцтэй, аюулгүй авч явдаг уу?`,
+      script: `Аялал хийх тутам цүнх боох, зүйлсийг цэгцлэх — стрессийн шалтгаан болдог. Зөв хэрэгслэлтэй бол аялал жинхэнэ амралт болно.
+
+${name} — аялалыг хялбар, аюулгүй, эмх цэгцтэй болгоно.
+
+✅ Аялалын тусгай хэрэгцээнд зориулсан
+✅ Хөнгөн, компакт дизайн
+✅ Удаан ашиглалт — олон улс, олон аялал
+
+${price}
+
+"Аялалын хэрэгсэл хэрэгтэй байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('car') || n.includes('car') || n.includes('vehicle') || n.includes('steering') || n.includes('dash cam') || n.includes('tire') || n.includes('windshield') || n.includes('seat')) {
+    return {
+      hook: `Машин нь өдөр тутам хэрэглэдэг хамгийн их цаг зарцуулдаг орон зай — тав тухтай болгоогүй байна уу?`,
+      script: `Машинд өдөрт хэдэн цаг зарцуулдаг. Нэг зүйл нэмснээр аюулгүй байдал, тав тух нэмэгдэнэ.
+
+${name} — машинаа илүү ухаалаг, аюулгүй болгоно.
+
+✅ Хялбар суурилуулалт — хэрэгсэл хэрэггүй
+✅ Бүх машины загварт тохирно
+✅ Удаан эдэлнэ
+
+${price}
+
+DM-ээр захиалаарай.`
+    };
+  }
+
+  if (sc.includes('pet') || n.includes('dog') || n.includes('cat') || n.includes('pet') || n.includes('hamster') || n.includes('fish')) {
+    return {
+      hook: `Тэжээвэр амьтны тань тав тух, эрүүл мэнд нь таны гарт байна.`,
+      script: `Тэжээвэр амьтан — гэр бүлийн гишүүн. Тэдний хэрэгцээг хангах нь эзнийхний үүрэг.
+
+${name} — таны тэжээвэр амьтанд жинхэнэ хайр.
+
+✅ Тэжээвэр амьтны хэрэгцээнд яг тохирсон
+✅ Аюулгүй материал
+✅ Тэжээвэрт таалагдана, эзэнд хялбар
+
+${price}
+
+"Тэжээвэрт зориулж авмаар байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('fashion') || n.includes('shoes') || n.includes('belt') || n.includes('scarf') || n.includes('jewelry') || n.includes('bracelet') || n.includes('ring') || n.includes('sunglasses') || n.includes('hat') || n.includes('collar') || n.includes('compression sock')) {
+    return {
+      hook: `Хувцас загварт анхаардаг хүнд ганцхан нэмэлт байх юм бол чи хамгийн тохиромжтой сонголт хийсэн.`,
+      script: `Загвар нь зөвхөн хувцас биш — нарийн ширийн зүйлс нь бүхэл дүр төрхийг өөрчилдэг.
+
+${name} — дүр төрхийн тань нэмэлт боловч гол цэг.
+
+✅ Орчин үеийн загвар
+✅ Чанартай материал, удаан эдэлнэ
+✅ Ямар ч хувцастай нийцнэ
+
+${price}
+
+"Авмаар байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('hobby') || n.includes('craft') || n.includes('painting') || n.includes('embroidery') || n.includes('resin') || n.includes('clay') || n.includes('macrame') || n.includes('calligraphy') || n.includes('knit') || n.includes('lino') || n.includes('kintsugi') || n.includes('leather craft') || n.includes('soap making') || n.includes('wood burn') || n.includes('diamond paint') || n.includes('polymer clay') || n.includes('seed bead') || n.includes('lock pick')) {
+    return {
+      hook: `Гар урлал хийхийг хүссэн ч хаанаас эхлэхэдэ мэдэхгүй байна уу?`,
+      script: `Гар урлал нь стрессийг тайлах, авъяасаа нээх, гоё зүйл бүтээх боломж. Зөв хэрэгслэлтэй бол хялбар эхлэнэ.
+
+${name} — гар урлалын аялалыг эхлүүлэх бүрэн иж бүрдэл.
+
+✅ Анхан шатных зориулсан, хялбар заавар орно
+✅ Бүх материал иж бүрдэл байна
+✅ Хийсэн зүйлээ бэлэг болгох, зарах боломж
+
+${price}
+
+"Гар урлал эхлэмээр байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  // ---- KIDS ----
+  if (sc.includes('baby') || n.includes('baby') || n.includes('infant') || n.includes('newborn') || n.includes('pacifier') || n.includes('diaper') || n.includes('swaddle') || n.includes('bassinet') || n.includes('shusher') || n.includes('milestone') || n.includes('nose aspirator')) {
+    return {
+      hook: `Нялхсын асрамж нь шинэ эцэг эхчүүдэд хамгийн хэцүү — гэхдээ зөв хэрэгсэлтэй бол хялбар болно.`,
+      script: `Нялхас нь хариу өгч чадахгүй — тиймээс тохиромжтой хэрэгслэл сонгох нь эцэг эхийн үүрэг.
+
+${name} — нялхасын асрамжийг хялбар, аюулгүй болгоно.
+
+✅ Нялхасын нас, хэрэгцээнд тохирсон
+✅ Аюулгүй материал — хор биш
+✅ Шинэ эцэг эхэд заавар орно
+
+${price}
+
+"Нялхасаа асрахад тусламж хэрэгтэй" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('feeding') || n.includes('biб') || n.includes('spoon') || n.includes('bowl') || n.includes('cup') || n.includes('bottle') || n.includes('feeder') || n.includes('pouch') || n.includes('formula') || n.includes('high chair')) {
+    return {
+      hook: `Хүүхдийнхээ хоол идэх цаг стресстэй болоод байна уу?`,
+      script: `Хүүхэд хоол идэх нь ур чадвар бөгөөд зөв хэрэгслэл байх нь аль аль талд хялбар болгоно.
+
+${name} — хүүхдийн хоол идэх дадлыг эрүүл, аяатай болгоно.
+
+✅ Нас, ур чадварт тохирсон
+✅ Аюулгүй материал, BPA-гүй
+✅ Цэвэрлэхэд хялбар
+
+${price}
+
+DM-ээр захиалаарай.`
+    };
+  }
+
+  if (sc.includes('safety') || n.includes('safety') || n.includes('lock') || n.includes('guard') || n.includes('gate') || n.includes('anchor') || n.includes('cover') || n.includes('monitor') || n.includes('tracker') || n.includes('reflective') || n.includes('pool alarm')) {
+    return {
+      hook: `Хүүхдийнхээ аюулгүй байдлыг 100% хангахад таниас нэг алхам л дутуу байна.`,
+      script: `Хүүхэд хамгийн их хамгаалалт хэрэгтэй. Аюул заналхийлэл хаана байхыг урьдчилан мэдэхгүй тул бэлтгэл нь хамгийн чухал.
+
+${name} — хүүхдийн гэрийн аюулгүй байдлыг сайжруулна.
+
+✅ Хялбар суурилуулалт
+✅ Хүүхдэд тохирсон материал
+✅ Тодорхой стандарт баримталсан
+
+${price}
+
+"Хүүхдийнхээ аюулгүй байдлыг сайжруулмаар байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('learning') || n.includes('educational') || n.includes('learning') || n.includes('puzzle') || n.includes('alphabet') || n.includes('math') || n.includes('coding') || n.includes('reading') || n.includes('globe') || n.includes('microscope') || n.includes('telescope') || n.includes('flash card') || n.includes('language') || n.includes('montessori') || n.includes('drawing tablet')) {
+    return {
+      hook: `Хүүхдийнхээ суралцах хүслийг дэмжихийн тулд зөв хэрэгсэл байх нь эхлэлийн цэг.`,
+      script: `Хүүхэд тоглоход сурдаг. Зөв боловсролын хэрэгслэл байх нь бусдаас нэг алхам урагш явах боломж.
+
+${name} — хүүхдийн хөгжилд жинхэнэ хувь нэмэр оруулна.
+
+✅ Насанд нь тохирсон, сонирхол татдаг
+✅ Тоглоомоор дамжуулан сурна
+✅ Эцэг эх, хүүхэд хамтдаа ашиглана
+
+${price}
+
+"Хүүхдийнхээ хөгжилд хөрөнгө оруулмаар байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('sleep') && mc === 'kids' || n.includes('sleep sack') || n.includes('wake') && mc === 'kids' || n.includes('crib') || n.includes('bassinet') || n.includes('blackout') && mc === 'kids') {
+    return {
+      hook: `Хүүхдийг унтуулах нь хамгийн хэцүү цаг мөн үү?`,
+      script: `Хүүхдийн нойр — эцэг эхийн амралтын цаг. Хүүхэд сайн унтвал та ч амарна, хүүхэд ч сайн ургана.
+
+${name} — хүүхдийн унтах дутлыг шийдэх бодит арга.
+
+✅ Нялхас болон хүүхдэд аюулгүй
+✅ Нойрны зохицуулалтад туслана
+✅ Эцэг эхэд хялбар
+
+${price}
+
+"Хүүхдийнхээ нойрыг сайжруулмаар байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('creative') || n.includes('craft') || n.includes('art') || n.includes('drawing') || n.includes('painting') || n.includes('slime') || n.includes('tie dye') || n.includes('clay') || n.includes('origami') || n.includes('decoupage') || n.includes('perler') || n.includes('sewing') || n.includes('loom') || n.includes('enamel pin')) {
+    return {
+      hook: `Хүүхдийнхээ бүтээлч авъяасыг хөгжүүлэхэд тусламж хэрэгтэй байна уу?`,
+      script: `Хүүхдийн бүтээлч сэтгэлгээ — ирээдүйн хамгийн чухал ур чадвар. Тоглоомоор дамжуулан хөгжүүлэх боломж байна.
+
+${name} — хүүхдийн уран бүтээлч хандлагыг дэмжинэ.
+
+✅ Насанд тохирсон, аюулгүй материал
+✅ Гаралт нь бодит, харуулах зүйл бий
+✅ Нэг ширхэг хийснээр дараагийнхаа ухаан гарна
+
+${price}
+
+DM-ээр захиалаарай.`
+    };
+  }
+
+  if (sc.includes('outdoor play') || n.includes('sprinkler') || n.includes('slip') || n.includes('sled') || n.includes('sandbox') || n.includes('stomp rocket') || n.includes('pogo') || n.includes('archery') || n.includes('bocce') || n.includes('sack race') || n.includes('flying disc') || n.includes('bubble') || n.includes('gardening') || n.includes('hopscotch')) {
+    return {
+      hook: `Хүүхдийнхэн утас/таблет биш гадаа тоглоход дуртай — зөв тоглоом байх нь чухал.`,
+      script: `Гадаа тоглох нь хүүхдийн биеийн болон нийгмийн хөгжилд зайлшгүй. Зөв тоглоом байх нь удаан цагийг хангалттай дүүргэнэ.
+
+${name} — хүүхдийг гадаа идэвхтэй байлгах тоглоом.
+
+✅ Аюулгүй, хүүхэдт тохирсон материал
+✅ Тоглоомыг хялбар ойлгоно
+✅ Ганцаараа болон найзуудтайгаа тоглоно
+
+${price}
+
+"Хүүхдийнхэнд авмаар байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (sc.includes('bath') && mc === 'kids' || n.includes('bath toy') || n.includes('bath thermometer') || n.includes('bath crayons') || n.includes('bath seat') || n.includes('waterfall rinse') || n.includes('squirt') || n.includes('bath puppet') || n.includes('bath visor') || n.includes('bath time book')) {
+    return {
+      hook: `Хүүхдийг угааж байх нь хэцүү, уйлдаг, зугтдаг уу?`,
+      script: `Угаах цаг нь хүүхдэд тоглоомын цаг болвол бүх зүйл хялбарчилна.
+
+${name} — угаалгын цагийг хүүхдийн дуртай цаг болгоно.
+
+✅ Усанд аюулгүй, хүүхдэд тохирсон
+✅ Хүүхдийн анхаарлыг татна
+✅ Угаах нь хүүхдэд тоглоом болно
+
+${price}
+
+DM-ээр захиалаарай.`
+    };
+  }
+
+  if (sc.includes('teen') || n.includes('teen') || n.includes('acne') || n.includes('skincare starter') || n.includes('study') || n.includes('journal') || n.includes('earplugs') || n.includes('wireless earbuds teen') || n.includes('phone grip') && mc === 'kids') {
+    return {
+      hook: `Өсвөр насны хүүхдийн хэрэгцээ нь хурдан өөрчлөгддөг — тэдний дуртай зүйлийг мэдэж байна уу?`,
+      script: `Өсвөр насны хүүхэд — өөрийгөө илэрхийлэх, нийгэмд нийцэх эхлэлийн цаг. Зөв хэрэгслэл байх нь итгэлийг нэмэгдүүлнэ.
+
+${name} — өсвөр насны хүүхдийн хэрэгцээнд яг тохирсон.
+
+✅ Залуучуудын дуртай загвар
+✅ Хэрэглэхэд хялбар, утга учиртай
+✅ Эцэг эхийн бэлэг болно
+
+${price}
+
+DM-ээр захиалаарай.`
+    };
+  }
+
+  // ---- GENERAL FALLBACK BY MAIN CATEGORY ----
+  if (mc === 'health') {
+    return {
+      hook: `Эрүүл мэнддээ анхаарал хандуулахыг хүсдэг ч яаж эхлэхэдэ мэдэхгүй байна уу?`,
+      script: `Эрүүл мэнд нь хамгийн үнэтэй хөрөнгө оруулалт. Нэг хялбар алхамаас эхлэнэ.
+
+${name} — эрүүл мэндийн хэрэгцээнд практик шийдэл.
+
+✅ Үр дүн нь бодит, мэдрэгдэхүйц
+✅ Ашиглахад хялбар, цаг хэмнэнэ
+✅ Үнэ хүртээмжтэй
+
+${price}
+
+"Авмаар байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  if (mc === 'beauty') {
+    return {
+      hook: `Гоо сайхандаа хөрөнгө оруулах нь өөртөө хайртай байхын илэрхийлэл.`,
+      script: `Гоо сайхны бүтээгдэхүүн нь зөв сонголтоор үр дүн өгдөг. Хямд биш, зөв сонголт хийх нь чухал.
+
+${name} — гоо сайхны хэрэгцээнд тохирсон шийдэл.
+
+✅ Чанартай найрлага, аюулгүй
+✅ Хэрэглэхэд хялбар
+✅ Үр дүн мэдрэгдэнэ
+
+${price}
+
+DM-ээр захиалаарай.`
+    };
+  }
+
+  if (mc === 'home') {
+    return {
+      hook: `Гэр нь зөвхөн амьдардаг газар биш — амрах, сэргэх, урам зориг авах орон.`,
+      script: `Гэрийн орчин нь сэтгэл санаа, бүтээмжид нөлөөлнө. Нэг зүйл нэмснээр мэдэгдэхүйц өөрчлөлт.
+
+${name} — гэрийн тань орчинг сайжруулна.
+
+✅ Загвар нь орчин үеийн, практик
+✅ Суурилуулалт болон хэрэглэлт хялбар
+✅ Удаан хугацаанд ашиглана
+
+${price}
+
+"Гэрийнхээ тухай асуумаар байна" гэж DM илгээнэ үү.`
+    };
+  }
+
+  // Final fallback
+  return {
+    hook: `Таны хэрэгцээнд яг тохирсон шийдэл гарсан байна.`,
+    script: `Шаардлагатай бүтээгдэхүүнийг хэзээ ч хайж байдаг — одоо тань хэрэгтэй зүйл олдлоо.
+
+${name}
+
+✅ Өндөр чанар, бат бөх
+✅ Ашиглахад хялбар
+✅ Хүргэлттэй
+
+${price}
+
+DM-ээр захиалаарай — хурдан хариу өгнө.`
+  };
+}
+
+function showProductScript(p) {
+  const hookBox = document.getElementById('ai-hook-box');
+  const hookText = document.getElementById('ai-hook-text');
+  const bodyBox = document.getElementById('ai-script-body');
+  const actions = document.getElementById('ai-script-actions');
+
+  const { hook, script } = getProductScript(p);
+
+  if (hook) {
+    hookText.textContent = hook;
+    hookBox.style.display = 'block';
+  }
+  if (script) {
+    bodyBox.textContent = script;
+    bodyBox.style.display = 'block';
+  }
+  actions.style.display = 'block';
+
+  aiScripts[p.n] = { hook, script };
+}
+
+
+function copyAIScript() {
+  const hook = document.getElementById('ai-hook-text').textContent;
+  const body = document.getElementById('ai-script-body').textContent;
+  const full = (hook ? 'HOOK:\n' + hook + '\n\n' : '') + body;
+  navigator.clipboard.writeText(full).then(() => {
+    const btn = document.getElementById('ai-copy-btn');
+    btn.textContent = '✅ Хуулагдлаа!';
+    btn.style.background = 'var(--accent)';
+    btn.style.color = '#fff';
+    setTimeout(() => {
+      btn.textContent = '📋 Бүтэн script хуулах';
+      btn.style.background = '';
+      btn.style.color = '';
+    }, 2000);
+  });
+}
+
+
+function setNav(el, cat){
+  document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  currentCat=cat;
+  document.querySelectorAll('.fb').forEach(b=>{b.classList.remove('active');if(b.dataset.cat===cat)b.classList.add('active')});
+  renderGrid();
+  if(window.innerWidth<=768) toggleSidebar();
+}
+
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+}
+
+function scrollToCalc(){
+  if(activeProduct){document.getElementById('calc-section').scrollIntoView({behavior:'smooth'})}
+  else{alert('Бараа сонгосны дараа тооцоолуур ажиллана!')}
+}
+
+function scrollToScript(){
+  if(activeProduct){document.getElementById('script-section').scrollIntoView({behavior:'smooth'})}
+  else{alert('Бараа сонгосны дараа скрипт гарна!')}
+}
+
+function getFiltered(){
+  let arr=PRODUCTS.filter(p=>{
+    const catOk=currentCat==='all'||p.mc===currentCat;
+    const srchOk=!currentSearch||p.n.toLowerCase().includes(currentSearch.toLowerCase());
+    return catOk&&srchOk;
+  });
+  const sort=document.getElementById('sort-sel')?.value||'default';
+  if(sort==='profit-desc') arr.sort((a,b)=>b.npN-a.npN);
+  else if(sort==='profit-asc') arr.sort((a,b)=>a.npN-b.npN);
+  else if(sort==='mg-desc') arr.sort((a,b)=>b.mg-a.mg);
+  else if(sort==='price-asc') arr.sort((a,b)=>a.pN-b.pN);
+  else if(sort==='price-desc') arr.sort((a,b)=>b.pN-a.pN);
+  return arr;
+}
+
+function renderGrid(){
+  const filtered=getFiltered();
+  const grid=document.getElementById('grid');
+  document.getElementById('result-info').textContent=filtered.length+' / '+PRODUCTS.length+' бараа';
+  document.getElementById('nav-count').textContent=filtered.length+' бараа';
+  if(!filtered.length){grid.innerHTML='<div class="empty">🔍 Бараа олдсонгүй</div>';return;}
+  grid.innerHTML=filtered.map(p=>{
+    const emoji=CAT_EMOJI[p.mc]||'📦';
+    const catCls=CAT_COLORS[p.mc]||'';
+    const seed=p.n.charCodeAt(0)+p.cN;
+    const satLvl=seed%3;
+    const satPct=satLvl===0?25:satLvl===1?58:85;
+    const satCls=satLvl===0?'low':satLvl===1?'mid':'high';
+    const satLbl=satLvl===0?'Бага өрсөлдөөн':satLvl===1?'Дунд өрсөлдөөн':'Өндөр өрсөлдөөн';
+    return `<div class="card" onclick="openPanel(${JSON.stringify(p).replace(/"/g,'&quot;')})">
+      <div class="card-img">
+        <span class="card-emoji" style="z-index:1">${emoji}</span>
+        <img src="${cloudinaryUrl(p.mc,p.n,1)}" alt="${p.n}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s;z-index:0" onload="this.style.opacity=1;this.previousElementSibling.style.display='none'" onerror="this.style.display='none'">
+        <span class="cat-badge ${catCls}">${p.mc}</span>
+        <span class="mg-badge">${p.mg}%</span>
+      </div>
+      <div class="card-body">
+        <div class="card-name">${p.n}</div>
+        <div class="card-prices">
+          <div><div class="card-price-lbl">Авах</div><div class="card-price-val cost">${fmtN(p.cN)}</div></div>
+          <div><div class="card-price-lbl">Зарах</div><div class="card-price-val sell">${fmtN(p.pN)}</div></div>
+        </div>
+        <div class="card-profit">
+          <span class="card-profit-lbl">Цэвэр ашиг</span>
+          <span class="card-profit-val">${fmtN(p.npN)}</span>
+        </div>
+      </div>
+      <button class="card-btn">Дэлгэрэнгүй →</button>
+    </div>`;
+  }).join('');
+}
+
+function openPanel(p){
+  if(typeof p==='string') p=JSON.parse(p);
+  activeProduct=p;
+  document.body.classList.add('locked');
+  const emoji=CAT_EMOJI[p.mc]||'📦';
+  const catCls=CAT_COLORS[p.mc]||'';
+  // Image gallery — Cloudinary 3 зураг + fallback
+  const cloudImgs=getProductImgs(p);  // [url_1, url_2, url_3]
+  const gallery=document.getElementById('p-img-gallery');
+  const emojiEl=document.getElementById('p-img-emoji');
+  emojiEl.textContent=emoji;
+  gallery.querySelectorAll('img').forEach(el=>el.remove());
+  emojiEl.style.display='flex';
+  document.getElementById('p-img-dots').style.display='none';
+  window._galleryIdx=0;
+
+  // Probe хийж байгаа зургуудыг шалгана — ачааллагдсан зургуудаар gallery бүтээнэ
+  let settled=0, loaded=[];
+  function onSettle(){
+    settled++;
+    if(settled < cloudImgs.length) return; // бүгд шалгагдтал хүлээнэ
+    if(loaded.length > 0){
+      // Cloudinary зурагнууд байна → gallery бүтээнэ (index дарааллаар)
+      buildGallery(loaded.sort((a,b)=>a.i-b.i).map(x=>x.url));
+    } else {
+      // Cloudinary зурагнууд байхгүй → category fallback
+      buildGallery(getCatFallback(p));
+    }
+  }
+  function buildGallery(urls){
+    gallery.querySelectorAll('img').forEach(el=>el.remove());
+    if(!urls.length){emojiEl.style.display='flex';document.getElementById('p-img-dots').style.display='none';return;}
+    emojiEl.style.display='none';
+    // Зөвхөн эхний зургийг харуулна
+    const img=document.createElement('img');
+    img.src=urls[0]; img.className='active';
+    gallery.appendChild(img);
+    document.getElementById('p-img-dots').style.display='none';
+    window._galleryImgs=[urls[0]]; window._galleryIdx=0;
+  }
+  cloudImgs.forEach((url,i)=>{
+    const probe=new Image();
+    probe.onload=()=>{loaded.push({url,i}); onSettle();};
+    probe.onerror=()=>onSettle();
+    probe.src=url;
+  });
+  document.getElementById('p-cat').innerHTML=`<span class="cat-badge ${catCls}" style="position:static;transform:none;display:inline-block;margin-bottom:6px">${p.mc} · ${p.sc}</span>`;
+  document.getElementById('p-name').textContent=p.n;
+  document.getElementById('p-stats').innerHTML=`
+    <div class="p-stat"><div class="p-stat-lbl">Авах үнэ</div><div class="p-stat-val blue">${fmtN(p.cN)}</div></div>
+    <div class="p-stat"><div class="p-stat-lbl">Зарах үнэ</div><div class="p-stat-val">${fmtN(p.pN)}</div></div>
+    <div class="p-stat"><div class="p-stat-lbl">Цэвэр ашиг</div><div class="p-stat-val green">${fmtN(p.npN)}</div></div>`;
+  const enc=encodeURIComponent(p.n);
+  document.getElementById('p-links').innerHTML=`
+    <a class="p-link ali" href="${p.aliUrl||'https://www.alibaba.com/trade/search?SearchText='+enc}" target="_blank">🔗 Alibaba хайх</a>
+    <a class="p-link tao" href="https://s.taobao.com/search?q=${enc}" target="_blank">🔗 Taobao хайх</a>
+    <a class="p-link" href="https://www.amazon.com/s?k=${enc}" target="_blank">🛒 Amazon</a>
+    <a class="p-link fb" href="https://www.facebook.com/ads/library/?q=${enc}&search_type=keyword_unordered" target="_blank">📱 FB Ads</a>
+    <a class="p-link" href="https://www.tiktok.com/search?q=${enc}" target="_blank">🎵 TikTok</a>`;
+  const costA=Math.round(p.cN*.93);
+  const costB=Math.round(p.cN*1.08);
+  document.getElementById('supp-num').textContent='2 supplier';
+  document.getElementById('supp-grid').innerHTML=`
+    <div class="supp-card selected">
+      <div class="supp-badge">✓ Зөвлөмж</div>
+      <div class="supp-name">Supplier A</div>
+      <div class="supp-platform">Alibaba.com · B2B платформ</div>
+      <div class="supp-row"><span class="supp-k">1 ш авах үнэ</span><span class="supp-v blue">${fmtN(costA)}</span></div>
+      <div class="supp-row"><span class="supp-k">10+ ш</span><span class="supp-v blue">${fmtN(Math.round(costA*.88))}/ш</span></div>
+      <div class="supp-row"><span class="supp-k">Хүргэлт</span><span class="supp-v">7–14 хоног</span></div>
+      <div class="supp-row"><span class="supp-k">MOQ</span><span class="supp-v">1 ширхэгээс</span></div>
+    </div>
+    <div class="supp-card">
+      <div class="supp-name">Supplier B</div>
+      <div class="supp-platform">Taobao.com · B2C платформ</div>
+      <div class="supp-row"><span class="supp-k">1 ш авах үнэ</span><span class="supp-v" style="color:var(--orange)">${fmtN(costB)}</span></div>
+      <div class="supp-row"><span class="supp-k">10+ ш</span><span class="supp-v">${fmtN(Math.round(costB*.9))}/ш</span></div>
+      <div class="supp-row"><span class="supp-k">Хүргэлт</span><span class="supp-v">10–20 хоног</span></div>
+      <div class="supp-row"><span class="supp-k">MOQ</span><span class="supp-v">1 ширхэгээс</span></div>
+    </div>`;
+  document.getElementById('supp-note').innerHTML='💡 <b>Alibaba яагаад дээр?</b> Taobao-оос 10–15% хямд, B2B зориулагдсан. Дээрх линкүүдийг дарж тэдгээр платформ дээр шууд нийлүүлэгчтэй холбогдоно уу.';
+  document.getElementById('c-price').value=p.pN.toLocaleString();
+  document.getElementById('c-cost').value=p.cN.toLocaleString();
+  document.getElementById('c-qty').value='30';
+  document.getElementById('c-ship').value=(p.sh||4000).toLocaleString();
+  document.getElementById('c-mkt').value='0';
+  document.getElementById('c-other').value='2,000';
+  calcProfit();
+  setTargetDefaults(p);
+  // drawDemand disabled in free plan
+  // drawDemand(p);
+  const kws=SOCIAL_KW[p.mc]||[];
+  const socialTagsEl=document.getElementById('social-tags');
+  if(socialTagsEl) socialTagsEl.innerHTML=kws.map(k=>`<span class="social-tag">👤 ${k}</span>`).join('');
+  // Script auto-gen disabled in free plan
+  // showProductScript(p);
+  document.getElementById('panel-overlay').classList.add('open');
+  document.getElementById('panel').scrollTop=0;
+}
+
+
+
+function calcProfit(){
+  const price=getInpVal('c-price');
+  const cost=getInpVal('c-cost');
+  const qty=getInpVal('c-qty')||1;
+  const shipping=getInpVal('c-ship');
+  const mkt=getInpVal('c-mkt');
+  const other=getInpVal('c-other');
+  const customs=Math.round(cost*.03);
+  const totalCost=cost+shipping+customs+1000;
+  const netPerUnit=price-totalCost-mkt;
+  const totalNet=netPerUnit*qty-other;
+  const marginPct=price>0?Math.round(netPerUnit/price*100):0;
+  const breakeven=netPerUnit>0?Math.ceil(other/netPerUnit):'∞';
+  document.getElementById('calc-result').innerHTML=`
+    <div class="calc-r-row"><span class="calc-r-key">Нийт өртөг / ш</span><span class="calc-r-val blue">${fmtN(totalCost)}</span></div>
+    <div class="calc-r-row" style="font-size:11px;color:var(--muted2);padding:3px 0;border-bottom:1px solid var(--border)">
+      <span>Өртөг ${fmtN(cost)} + Карго ${fmtN(shipping)} + Гааль ${fmtN(customs)} + Бусад ₮1,000</span>
+    </div>
+    <div class="calc-r-row"><span class="calc-r-key">Цэвэр ашиг / ш</span><span class="calc-r-val ${netPerUnit>=0?'green':'orange'}">${fmtN(netPerUnit)}</span></div>
+    <div class="calc-r-row"><span class="calc-r-key">Нийт ашиг (${qty.toLocaleString()} ш)</span><span class="calc-r-val ${totalNet>=0?'green':'orange'}">${fmtN(totalNet)}</span></div>
+    <div class="calc-r-row"><span class="calc-r-key">Ашгийн хувь</span><span class="calc-r-val ${marginPct>=40?'green':marginPct>=20?'':''}">${marginPct}%</span></div>
+    <div class="calc-r-row"><span class="calc-r-key">Break-even</span><span class="calc-r-val">${breakeven==='∞'?'∞':Number(breakeven).toLocaleString()} ш</span></div>`;
+}
+
+function drawDemand(p){
+  const key=p.sc||p.mc;
+  const data=SEASONAL[key]||SEASONAL[p.mc]||Array(12).fill(65);
+  const W=300, H=120, padL=10, padR=10, padT=22, padB=26;
+  const chartW=W-padL-padR, chartH=H-padT-padB;
+  const maxV=Math.max(...data)+2, minV=Math.min(...data)-2;
+  const range=maxV-minV||1;
+  const xStep=chartW/11;
+
+  // Compute point coords
+  const pts=data.map((v,i)=>[padL+i*xStep, padT+chartH-(((v-minV)/range)*chartH)]);
+
+  // Build smooth cubic bezier path
+  function cpX(i){ return pts[i][0]; }
+  function cpY(i){ return pts[i][1]; }
+  let d=`M${pts[0][0]},${pts[0][1]}`;
+  for(let i=1;i<pts.length;i++){
+    const cp1x=pts[i-1][0]+(pts[i][0]-pts[i-1][0])*0.4;
+    const cp1y=pts[i-1][1];
+    const cp2x=pts[i][0]-(pts[i][0]-pts[i-1][0])*0.4;
+    const cp2y=pts[i][1];
+    d+=` C${cp1x},${cp1y} ${cp2x},${cp2y} ${pts[i][0]},${pts[i][1]}`;
+  }
+
+  // Area path (close at bottom)
+  const areaD=d+` L${pts[pts.length-1][0]},${padT+chartH} L${pts[0][0]},${padT+chartH} Z`;
+
+  // Peak point
+  const maxVal=Math.max(...data);
+  const peakIdx=data.indexOf(maxVal);
+  const [px,py]=pts[peakIdx];
+
+  // Month labels — every 2
+  let labels='';
+  const months=['1','2','3','4','5','6','7','8','9','10','11','12'];
+  data.forEach((_,i)=>{
+    if(i%2===0||i===11){
+      labels+=`<text x="${pts[i][0]}" y="${H-4}" text-anchor="middle" font-size="7" fill="#94a3b8" font-family="Outfit,sans-serif">${months[i]}-р</text>`;
+    }
+  });
+
+  // Horizontal grid lines (3)
+  let gridLines='';
+  [0.25,0.5,0.75].forEach(f=>{
+    const gy=padT+chartH*(1-f);
+    gridLines+=`<line x1="${padL}" y1="${gy}" x2="${W-padR}" y2="${gy}" stroke="#f1f5f9" stroke-width="1"/>`;
+  });
+
+  const svg=`
+    <defs>
+      <linearGradient id="area-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#3b82f6" stop-opacity=".25"/>
+        <stop offset="100%" stop-color="#3b82f6" stop-opacity=".02"/>
+      </linearGradient>
+    </defs>
+    ${gridLines}
+    <path d="${areaD}" fill="url(#area-grad)"/>
+    <path d="${d}" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${px}" cy="${py}" r="4" fill="#3b82f6" stroke="#fff" stroke-width="1.5"/>
+    <text x="${px}" y="${py-8}" text-anchor="middle" font-size="7.5" fill="#2563eb" font-weight="700" font-family="Outfit,sans-serif">▲ Оргил</text>
+    ${labels}`;
+
+  const svgEl=document.getElementById('demand-svg');
+  svgEl.innerHTML=svg;
+  svgEl.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svgEl.setAttribute('preserveAspectRatio','xMidYMid meet');
+
+  // Gauge needle — pivot (100,105)
+  const seed=p.n.charCodeAt(0)+p.cN;
+  const satLvl=seed%3;
+  const satEl=document.getElementById('sat-badge');
+  if(satEl) satEl.style.display='none';
+  const needle=document.getElementById('panel-gauge-needle');
+  const lblEl=document.getElementById('panel-sat-lbl');
+  const rot=satLvl===0?-75:satLvl===1?0:75;
+  if(needle){
+    needle.setAttribute('transform',`rotate(0,100,105)`);
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        needle.style.transition='transform .9s cubic-bezier(.34,1.2,.64,1)';
+        needle.style.transformOrigin='100px 105px';
+        needle.style.transform=`rotate(${rot}deg)`;
+      });
+    });
+  }
+  if(lblEl){
+    if(satLvl===0){lblEl.className='gauge-lbl sat-lbl-low';lblEl.textContent='Бага өрсөлдөөн';}
+    else if(satLvl===1){lblEl.className='gauge-lbl sat-lbl-mid';lblEl.textContent='Дунд өрсөлдөөн';}
+    else{lblEl.className='gauge-lbl sat-lbl-high';lblEl.textContent='Өндөр өрсөлдөөн';}
+  }
+}
+
+function closePanel(){
+  document.getElementById('panel-overlay').classList.remove('open');
+  document.body.classList.remove('locked');
+  activeProduct=null;
+}
+
+function handlePanelOverlay(e){
+  if(e.target===document.getElementById('panel-overlay')) closePanel();
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel()});
+
+document.querySelectorAll('.fb').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentCat=btn.dataset.cat;
+    renderGrid();
+  });
+});
+
+document.getElementById('search').addEventListener('input',e=>{
+  currentSearch=e.target.value;
+  renderGrid();
+});
+
+
+function openPCModal() {
+  document.getElementById('pc-modal').classList.add('open');
+  calcPC();
+}
+
+function resetPC() {
+  document.getElementById('pc-cost').value = '';
+  document.getElementById('pc-price').value = '';
+  document.getElementById('pc-ship').value = '4000';
+  document.getElementById('pc-qty').value = '30';
+  document.getElementById('pc-other').value = '25000';
+  calcPC();
+}
+
+function calcPC() {
+  const cost    = parseFloat(document.getElementById('pc-cost').value)  || 0;
+  const price   = parseFloat(document.getElementById('pc-price').value) || 0;
+  const ship    = parseFloat(document.getElementById('pc-ship').value)  || 0;
+  const qty     = parseInt(document.getElementById('pc-qty').value)     || 1;
+  const other   = parseFloat(document.getElementById('pc-other').value) || 0;
+
+  if (!cost && !price) {
+    document.getElementById('pc-result').innerHTML =
+      '<div style="text-align:center;color:var(--muted2);font-size:12px;padding:12px 0">Дээрх талбаруудыг бөглөнө үү</div>';
+    return;
+  }
+
+  const customs    = Math.round(cost * 0.03);
+  const totalCost  = cost + ship + customs + 1000;
+  const netUnit    = price - totalCost;
+  const totalNet   = netUnit * qty - other;
+  const margin     = price > 0 ? Math.round((netUnit / price) * 100) : 0;
+  const breakeven  = netUnit > 0 ? Math.ceil(other / netUnit) : '∞';
+  const roiPct     = totalCost > 0 ? Math.round((netUnit / totalCost) * 100) : 0;
+
+  const valClass = v => v >= 0 ? 'green' : 'red';
+
+  document.getElementById('pc-result').innerHTML = `
+    <div class="pc-r-row"><span class="pc-r-key">Барааны нийт өртөг / ш</span><span class="pc-r-val blue">${fmtN(totalCost)}</span></div>
+    <div class="pc-r-row" style="font-size:11px;color:var(--muted2);padding:3px 0;border-bottom:1px solid var(--border)">
+      <span>Өртөг ${fmtN(cost)} + Хүргэлт ${fmtN(ship)} + Гааль ${fmtN(customs)} + Бусад ₮1,000</span>
+    </div>
+    <div class="pc-r-row"><span class="pc-r-key">Цэвэр ашиг / ширхэг</span><span class="pc-r-val ${valClass(netUnit)}">${fmtN(netUnit)}</span></div>
+    <div class="pc-r-row"><span class="pc-r-key">Нийт ашиг (${qty} ш)</span><span class="pc-r-val ${valClass(totalNet)}">${fmtN(totalNet)}</span></div>
+    <div class="pc-r-row"><span class="pc-r-key">Ашгийн хувь (margin)</span><span class="pc-r-val ${margin >= 40 ? 'green' : margin >= 20 ? 'orange' : 'red'}">${margin}%</span></div>
+    <div class="pc-r-row"><span class="pc-r-key">ROI</span><span class="pc-r-val ${roiPct >= 50 ? 'green' : 'orange'}">${roiPct}%</span></div>
+    <div class="pc-r-row"><span class="pc-r-key">Break-even цэг</span><span class="pc-r-val">${breakeven} ш</span></div>
+  `;
+}
+
+function toggleSidebarCollapse(){
+  const sb=document.getElementById('sidebar');
+  sb.classList.toggle('collapsed');
+  const isCollapsed=sb.classList.contains('collapsed');
+  document.getElementById('sidebar-toggle').title=isCollapsed?'Цэс нээх':'Цэс нуух';
+}
+
+const SC_GENDER={
+  'Women':'female','Men':'male','Hair':'female','Makeup':'female','Nails':'female',
+  'Body':'female','Skincare Tools':'female','Beauty':'female',
+  'Feeding':'female','Sleep':'all','Kids':'all','Learning':'all','Creative':'all',
+  'Safety':'all','Bath':'all','Teen':'all','Baby':'female','Outdoor Play':'all',
+  'Fitness':'all','Recovery':'all','Nutrition':'all','Mental Health':'female',
+  'First Aid':'all','Health':'all','Home':'all','Goods':'all','Outdoor':'male',
+  'Sports':'male','Travel':'all','Car':'male','Pet':'all','Fashion':'female',
+  'Hobby':'all','Electronics':'male','Smart Home':'all','Office':'all',
+  'Kitchen':'female','Bedroom':'all','Bathroom':'female','Organization':'female',
+  'Living Room':'all','Cleaning':'female','Tools':'female',
+};
+const SC_AGE={
+  'Women':'25-34','Men':'25-34','Hair':'18-24','Makeup':'18-24','Nails':'18-24',
+  'Body':'25-34','Skincare Tools':'25-34','Beauty':'18-24','Baby':'25-34',
+  'Feeding':'25-34','Kids':'25-34','Learning':'25-34','Creative':'all','Safety':'25-34',
+  'Bath':'all','Teen':'13-17','Fitness':'18-24','Recovery':'25-34','Nutrition':'25-34',
+  'Mental Health':'25-34','First Aid':'all','Health':'35-44','Home':'25-34',
+  'Goods':'25-34','Outdoor':'25-34','Sports':'18-24','Travel':'25-34','Car':'25-34',
+  'Pet':'25-34','Fashion':'18-24','Hobby':'25-34','Electronics':'18-24','Smart Home':'25-34',
+  'Office':'25-34','Kitchen':'25-34','Bedroom':'25-34','Bathroom':'25-34',
+  'Organization':'25-34','Living Room':'25-34','Cleaning':'25-34','Tools':'25-34',
+};
+
+function updateTargetBadges(){
+  const gEl=document.getElementById('c-gender');
+  const aEl=document.getElementById('c-age');
+  const row=document.getElementById('c-target-badges');
+  if(!gEl||!aEl||!row) return;
+  const gender=gEl.value, age=aEl.value;
+  let html='';
+  if(gender==='female') html+=`<span class="target-badge gender-f">👩 Эмэгтэй</span>`;
+  else if(gender==='male') html+=`<span class="target-badge gender-m">👨 Эрэгтэй</span>`;
+  else html+=`<span class="target-badge gender-all">👥 Бүгд</span>`;
+  html+=age&&age!=='all'
+    ?`<span class="target-badge age">🎂 ${age} нас</span>`
+    :`<span class="target-badge age">🎂 Бүх нас</span>`;
+  row.innerHTML=html;
+}
+
+function setTargetDefaults(p){
+  const gEl=document.getElementById('c-gender');
+  const aEl=document.getElementById('c-age');
+  if(!gEl||!aEl) return;
+  const sc=p.sc||p.mc;
+  gEl.value=SC_GENDER[sc]||'all';
+  const rawAge=SC_AGE[sc]||'all';
+  const opts=Array.from(aEl.options).map(o=>o.value);
+  aEl.value=opts.includes(rawAge)?rawAge:'all';
+  updateTargetBadges();
+}
+
+renderGrid();
+
+/* ── USER MODAL ───────────────────────────────────── */
+function toggleUserMenu(){
+  const dd = document.getElementById('tb-dropdown');
+  dd.classList.toggle('open');
+}
+// Close dropdown on outside click
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('tb-user-wrap');
+  if(wrap && !wrap.contains(e.target)){
+    document.getElementById('tb-dropdown').classList.remove('open');
+  }
+});
+
+function openUserModal(tab){
+  document.getElementById('tb-dropdown').classList.remove('open');
+  document.getElementById('um-modal').classList.add('open');
+  document.body.classList.add('locked');
+  switchUMTab(tab||'settings');
+}
+
+function closeUserModal(){
+  document.getElementById('um-modal').classList.remove('open');
+  document.body.classList.remove('locked');
+}
+
+function switchUMTab(tab){
+  ['settings','subscription'].forEach(t=>{
+    document.getElementById('um-tab-'+t).classList.toggle('active', t===tab);
+    document.getElementById('um-pane-'+t).classList.toggle('active', t===tab);
+  });
+}
+
+function toggleEmailEdit(){
+  const inp = document.getElementById('um-email-inp');
+  inp.disabled = !inp.disabled;
+  if(!inp.disabled) inp.focus();
+}
+
+function saveSettings(){
+  const btn = document.querySelector('.um-save-btn');
+  btn.textContent = 'Хадгалж байна...';
+  btn.disabled = true;
+  setTimeout(()=>{
+    btn.textContent = 'Хадгалах';
+    btn.disabled = false;
+    const saved = document.getElementById('um-saved');
+    saved.style.display = 'block';
+    setTimeout(()=>{ saved.style.display='none'; }, 2500);
+  }, 900);
+}
+
+function confirmCancel(){
+  if(confirm('Захиалгаа цуцлахдаа итгэлтэй байна уу? Туршилтын хугацаа дуусмагц хандалт хаагдана.')){
+    alert('Захиалга цуцлах хүсэлтийг хүлээн авлаа. Баталгаажуулах и-мэйл илгээгдлээ.');
+  }
+}
+
+/* ── CLIENT FEEDBACK ─────────────────────────────── */
+let cfStars = 0;
+let cfType  = '';
+
+function openFeedback(){
+  document.getElementById('cf-modal').classList.add('open');
+  document.body.classList.add('locked');
+}
+
+function closeFeedback(){
+  document.getElementById('cf-modal').classList.remove('open');
+  document.body.classList.remove('locked');
+  setTimeout(()=>{
+    cfStars=0; cfType='';
+    const nameEl=document.getElementById('cf-name');
+    const msgEl =document.getElementById('cf-msg');
+    if(nameEl) nameEl.value='';
+    if(msgEl)  msgEl.value='';
+    document.querySelectorAll('.cf-star').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('.cf-type-btn').forEach(b=>b.classList.remove('sel'));
+    const body=document.getElementById('cf-body');
+    if(body && body.querySelector('.cf-success')){
+      body.innerHTML=`
+        <div>
+          <div class="cf-label">Үнэлгээ өгнө үү</div>
+          <div class="cf-stars" id="cf-stars">
+            <span class="cf-star" onclick="setStars(1)">⭐</span>
+            <span class="cf-star" onclick="setStars(2)">⭐</span>
+            <span class="cf-star" onclick="setStars(3)">⭐</span>
+            <span class="cf-star" onclick="setStars(4)">⭐</span>
+            <span class="cf-star" onclick="setStars(5)">⭐</span>
+          </div>
+        </div>
+        <div>
+          <div class="cf-label">Санал хүсэлтийн төрөл</div>
+          <div class="cf-type-grid">
+            <button class="cf-type-btn" onclick="setCFType(this)">💡 Санал</button>
+            <button class="cf-type-btn" onclick="setCFType(this)">🐛 Алдаа</button>
+            <button class="cf-type-btn" onclick="setCFType(this)">🙌 Магтаал</button>
+            <button class="cf-type-btn" onclick="setCFType(this)">❓ Асуулт</button>
+            <button class="cf-type-btn" onclick="setCFType(this)">📊 Бараа нэмэх</button>
+            <button class="cf-type-btn" onclick="setCFType(this)">🔧 Бусад</button>
+          </div>
+        </div>
+        <div>
+          <div class="cf-label">Нэр <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted2)">(заавал биш)</span></div>
+          <input class="cf-inp" id="cf-name" type="text" placeholder="Таны нэр...">
+        </div>
+        <div>
+          <div class="cf-label">Санал хүсэлт</div>
+          <textarea class="cf-inp cf-textarea" id="cf-msg" placeholder="ProductDrop-ийг сайжруулах санал, шүүмж, мэдээллийг энд бичнэ үү..."></textarea>
+        </div>
+        <button class="cf-submit" id="cf-submit-btn" onclick="submitFeedback()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Илгээх
+        </button>`;
+    }
+  }, 300);
+}
+
+function setStars(n){
+  cfStars = n;
+  document.querySelectorAll('.cf-star').forEach((s,i)=>{
+    s.classList.toggle('active', i < n);
+  });
+}
+
+function setCFType(btn){
+  document.querySelectorAll('.cf-type-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  cfType = btn.textContent.trim();
+}
+
+function submitFeedback(){
+  const msg = (document.getElementById('cf-msg').value||'').trim();
+  if(!msg){
+    const el = document.getElementById('cf-msg');
+    el.style.borderColor='var(--red)';
+    el.focus();
+    setTimeout(()=>{ el.style.borderColor=''; }, 1800);
+    return;
+  }
+  const btn = document.getElementById('cf-submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading-dots"><span></span><span></span><span></span></span> Илгээж байна...';
+  setTimeout(()=>{
+    document.getElementById('cf-body').innerHTML = `
+      <div class="cf-success">
+        <div class="cf-success-icon">🎉</div>
+        <div class="cf-success-title">Баярлалаа!</div>
+        <div class="cf-success-desc">
+          Таны санал хүсэлтийг хүлээн авлаа.<br>
+          ProductDrop-ийг улам сайжруулахад ашиглана.
+        </div>
+        <button onclick="closeFeedback()" style="margin-top:20px;padding:10px 28px;background:var(--accent);border:none;border-radius:10px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:700;border-radius:10px">Хаах</button>
+      </div>`;
+  }, 300);
+}
+
+renderGrid();
+
+</script>
+</div><!-- end app-layout -->
+</body>
+</html>
