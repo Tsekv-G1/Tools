@@ -133,9 +133,49 @@ td.mono{color:var(--accent);font-family:'DM Mono',monospace;font-size:10.5px;fon
 .gas-footer{margin-top:12px;font-size:11px;color:var(--muted);line-height:1.7}
 .gas-footer strong{color:var(--text)}
 code{background:#f0fdf4;color:#15803d;padding:2px 6px;border-radius:4px;font-family:'DM Mono',monospace;font-size:10px}
+
+/* MOBILE HAMBURGER */
+.mob-bar{display:none;position:fixed;top:0;left:0;right:0;z-index:150;background:var(--sidebar);padding:12px 16px;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.07)}
+.mob-logo{display:flex;align-items:center;gap:8px}
+.mob-logo-icon{width:28px;height:28px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff}
+.mob-logo-text{font-family:'DM Mono',monospace;font-size:12px;color:#fff;font-weight:500}
+.mob-logo-text em{color:var(--accent);font-style:normal}
+.hamburger{background:none;border:none;cursor:pointer;padding:6px;display:flex;flex-direction:column;gap:4px}
+.hamburger span{display:block;width:22px;height:2px;background:rgba(255,255,255,.7);border-radius:2px;transition:all .2s}
+.hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:149}
+
+@media(max-width:768px){
+  .mob-bar{display:flex}
+  #admin-panel .layout{grid-template-columns:1fr}
+  .sidebar{position:fixed;left:-240px;top:0;bottom:0;z-index:150;transition:left .25s ease;width:220px;padding-top:20px}
+  .sidebar.open{left:0}
+  .sidebar-overlay.open{display:block}
+  .main{padding:80px 14px 48px}
+  .row2{grid-template-columns:1fr}
+  .tbl-scroll{overflow-x:auto}
+  table{min-width:480px}
+  .page-header{flex-direction:column!important;gap:10px;align-items:flex-start!important}
+  .login-card{padding:20px}
+  .login-wrap{width:100%}
+}
 </style>
 </head>
 <body>
+
+<!-- MOBILE TOP BAR -->
+<div class="mob-bar" id="mob-bar">
+  <div class="mob-logo">
+    <div class="mob-logo-icon">P</div>
+    <div class="mob-logo-text">PRODUCT<em>DROP</em>.MN</div>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleSidebar()">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
 
 <!-- LOGIN -->
 <div id="admin-login">
@@ -268,7 +308,9 @@ code{background:#f0fdf4;color:#15803d;padding:2px 6px;border-radius:4px;font-fam
           <div class="result-box" id="result">
             <div class="pw-out" id="pw-out"></div>
             <div class="pw-meta" id="pw-meta"></div>
-            <button class="copy-btn" onclick="copyPW()">📋 Хуулах</button>
+            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+              <button class="copy-btn" onclick="copyPW()">📋 Хуулах</button>
+            </div>
           </div>
           <div class="sync-st" id="sync-status"></div>
         </div>
@@ -368,8 +410,35 @@ const ADMIN_SESS = 'pd_admin_sess';
 const GAS_URL    = 'https://script.google.com/macros/s/AKfycbyd3iPFcE8EhSd-fgpDotiDc1TonWUqAUxBVQVDLWcjbqR97OI2tUEsGTuJngVp7g8s/exec';
 const SALT       = 'PD2026MN';
 
+// ── Telegram тохиргоо ──────────────────────────────────────────
+// BotFather-аас авсан токеноо энд оруулна уу:
+const TELEGRAM_BOT_TOKEN = '8695289865:AAGGjH1TLin2_W8AzHkIT7rtYLR6VIZxxTo';
+const TELEGRAM_CHAT_ID   = '5877604772';
+
+function sendToTelegram(name, pw, expiry, plan) {
+  const daysLabel = document.getElementById('f-days');
+  const dLabel = daysLabel.options[daysLabel.selectedIndex].text;
+  const text =
+`Сайн байна уу ${name}? 👋
+
+Таны бүртгэл амжилттай үүслээ!
+
+👤 Нэр: ${name}
+🔢 Password: ${pw}
+📦 Plan: ${plan.toUpperCase()}
+🕐 Дуусах хугацаа: ${new Date(expiry).toLocaleString('mn-MN')}
+
+🔗 Нэвтрэх: https://productdrops.netlify.app/landing`;
+  fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({chat_id: TELEGRAM_CHAT_ID, text: text})
+  }).catch(()=>{});
+}
+
 function adminLogin() {
-  if (document.getElementById('admin-pwd').value.trim() === ADMIN_PASS) {
+  const pwd = document.getElementById('admin-pwd').value.trim();
+  if (pwd === ADMIN_PASS) {
     sessionStorage.setItem(ADMIN_SESS, '1');
     document.getElementById('admin-login').style.display = 'none';
     document.getElementById('admin-panel').style.display = 'block';
@@ -382,6 +451,20 @@ function adminLogin() {
   }
 }
 document.getElementById('admin-pwd').addEventListener('keydown', e => { if(e.key==='Enter') adminLogin(); });
+
+function toggleSidebar() {
+  const sb = document.querySelector('.sidebar');
+  const ov = document.getElementById('sb-overlay');
+  const hb = document.getElementById('hamburger');
+  sb.classList.toggle('open');
+  ov.classList.toggle('open');
+  hb.classList.toggle('open');
+}
+function closeSidebar() {
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('sb-overlay').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
 (function(){
   if(sessionStorage.getItem(ADMIN_SESS)==='1'){
     document.getElementById('admin-login').style.display='none';
@@ -434,6 +517,8 @@ function genPW() {
     `Дуусах: <strong>${new Date(expiry).toLocaleString('mn-MN')}</strong><br>`+
     `<span style="color:var(--muted2);font-size:10px">↳ Session: нэвтэрсэн цагаасаа +12 цаг</span>`;
   document.getElementById('result').style.display = 'block';
+
+  sendToTelegram(name, pw, expiry, plan);
 
   const btn = document.getElementById('gen-btn');
   btn.disabled = true; btn.textContent = 'Хадгалж байна...';
