@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ProductDrop.MN — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F0F2F5;
+  --sidebar:#0D1117;
+  --white:#FFFFFF;
+  --border:#E4E8EF;
+  --border2:#CDD3DC;
+  --text:#0D1117;
+  --muted:#5A6478;
+  --muted2:#9AA3B2;
+  --accent:#16a34a;
+  --accent-bg:#f0fdf4;
+  --accent-border:rgba(22,163,74,.2);
+  --red:#dc2626;
+  --red-bg:#fef2f2;
+  --shadow:0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.06);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.14);
+  --radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* LOGIN */
+#admin-login{position:fixed;inset:0;background:var(--sidebar);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-wrap{width:min(380px,100%)}
+.login-logo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:28px}
+.logo-icon{width:40px;height:40px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff;flex-shrink:0}
+.logo-text{font-family:'DM Mono',monospace;font-weight:500;font-size:16px;color:#fff}
+.logo-text em{color:var(--accent);font-style:normal}
+.login-card{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);border-radius:16px;padding:28px}
+.login-title{font-size:20px;font-weight:800;color:#fff;margin-bottom:4px}
+.login-sub{font-size:12px;color:rgba(255,255,255,.4);margin-bottom:22px}
+.lg-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.4);display:block;margin-bottom:6px}
+.lg-input{width:100%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);color:#fff;font-family:'Outfit',sans-serif;font-size:13px;padding:10px 14px;border-radius:9px;outline:none;transition:border .15s}
+.lg-input::placeholder{color:rgba(255,255,255,.25)}
+.lg-input:focus{border-color:var(--accent);background:rgba(22,163,74,.08)}
+.lg-btn{width:100%;margin-top:14px;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'Outfit',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:all .15s}
+.lg-btn:hover{background:#15803d;transform:translateY(-1px)}
+#admin-err{margin-top:10px;font-size:11px;color:#fca5a5;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.2);border-radius:8px;padding:10px;display:none;text-align:center}
+
+/* LAYOUT */
+#admin-panel{display:none;min-height:100vh}
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{background:var(--sidebar);padding:24px 14px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sb-logo{display:flex;align-items:center;gap:9px;padding:0 6px;margin-bottom:26px}
+.sb-logo-icon{width:32px;height:32px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.sb-logo-text{font-family:'DM Mono',monospace;font-weight:500;font-size:12px;color:#fff;line-height:1.3}
+.sb-logo-text em{color:var(--accent);font-style:normal}
+.sb-badge{display:inline-block;font-size:8px;font-weight:700;padding:2px 6px;border-radius:3px;background:rgba(22,163,74,.15);border:1px solid rgba(22,163,74,.3);color:var(--accent);letter-spacing:.5px;margin-top:2px}
+.sb-section{font-size:8.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:rgba(255,255,255,.25);padding:0 8px;margin:18px 0 7px}
+.sb-nav{display:flex;flex-direction:column;gap:2px}
+.sb-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;color:rgba(255,255,255,.45);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;border:none;background:none;width:100%;text-align:left}
+.sb-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8)}
+.sb-item.active{background:rgba(22,163,74,.12);color:var(--accent)}
+.sb-item-icon{font-size:13px;width:18px;text-align:center;flex-shrink:0}
+.sb-spacer{flex:1}
+.sb-stats-label{font-size:8.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:rgba(255,255,255,.25);padding:0 8px;margin-bottom:8px}
+.sb-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:10px}
+.sb-stat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:7px;padding:9px 5px;text-align:center}
+.sb-stat-num{font-size:17px;font-weight:800;color:#fff;line-height:1}
+.sb-stat-num.green{color:var(--accent)}
+.sb-stat-num.red{color:#f87171}
+.sb-stat-lbl{font-size:8px;color:rgba(255,255,255,.28);margin-top:3px;text-transform:uppercase;letter-spacing:.5px}
+.sb-logout{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;color:rgba(255,255,255,.28);font-size:11px;cursor:pointer;transition:all .15s;border:none;background:none;width:100%;margin-top:2px}
+.sb-logout:hover{color:#f87171;background:rgba(220,38,38,.08)}
+
+/* MAIN */
+.main{padding:28px 28px 48px;display:flex;flex-direction:column;gap:0}
+
+.page-header{margin-bottom:20px}
+.page-title{font-size:21px;font-weight:800;color:var(--text)}
+.page-sub{font-size:12px;color:var(--muted);margin-top:3px}
+
+/* CARD */
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.card-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted)}
+.card-bar{width:26px;height:3px;background:var(--accent);border-radius:2px;margin-top:4px}
+
+/* FORM */
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+input,select{background:var(--bg);border:1.5px solid var(--border2);color:var(--text);font-family:'Outfit',sans-serif;font-size:13px;padding:9px 12px;border-radius:8px;outline:none;width:100%;transition:border .15s,box-shadow .15s}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.warn-box{background:#fffbeb;border:1.5px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:11px;color:#92400e;margin-top:10px;line-height:1.7;display:flex;gap:8px;align-items:flex-start}
+.btn-primary{width:100%;margin-top:14px;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'Outfit',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:all .15s}
+.btn-primary:hover{background:#15803d;transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.result-box{background:var(--accent-bg);border:1.5px solid var(--accent-border);border-radius:10px;padding:16px;margin-top:14px;display:none}
+.pw-out{font-family:'DM Mono',monospace;font-weight:700;font-size:14px;color:var(--accent);letter-spacing:1.2px;word-break:break-all;margin-bottom:10px;line-height:1.6}
+.pw-meta{font-size:11px;color:var(--muted);line-height:2}
+.copy-btn{margin-top:10px;padding:7px 16px;background:#fff;border:1.5px solid var(--accent-border);color:var(--accent);border-radius:7px;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
+.copy-btn:hover{background:var(--accent);color:#fff}
+.sync-st{font-size:11px;margin-top:8px;text-align:right;color:var(--muted)}
+.sync-st.ok{color:var(--accent);font-weight:600}
+.sync-st.err{color:var(--red);font-weight:600}
+.info-pill{background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:9px;padding:12px 16px;font-size:11px;color:#1e40af;line-height:1.8;display:flex;gap:10px;align-items:flex-start;margin-bottom:16px}
+
+/* TABLE */
+.tbl-wrap{border:1.5px solid var(--border);border-radius:10px;overflow:hidden}
+.tbl-scroll{max-height:400px;overflow-y:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:10px 14px;text-align:left;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1;white-space:nowrap}
+td{padding:10px 14px;font-size:12px;border-bottom:1px solid var(--border);background:#fff;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafbfc}
+td.mono{color:var(--accent);font-family:'DM Mono',monospace;font-size:10.5px;font-weight:600;max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap}
+.tag-ok{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)}
+.tag-exp{background:var(--red-bg);color:var(--red);border:1px solid #fca5a5}
+.tag-plan{background:#f5f3ff;color:#6d28d9;border:1px solid #ddd6fe}
+.tag-h12{background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;margin-left:4px}
+.del-btn{background:none;border:none;color:var(--muted2);cursor:pointer;font-size:14px;padding:3px 7px;border-radius:5px;transition:all .15s}
+.del-btn:hover{background:var(--red-bg);color:var(--red)}
+.refresh-btn{font-size:11px;color:var(--accent);cursor:pointer;font-weight:600;padding:5px 12px;border:1px solid var(--accent-border);border-radius:7px;background:var(--accent-bg);transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+.refresh-btn:hover{background:var(--accent);color:#fff}
+
+/* GAS */
+.gas-box{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px}
+.gas-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.gas-sub{font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.6}
+.gas-code{background:#0D1117;border-radius:9px;padding:16px;font-family:'DM Mono',monospace;font-size:11px;color:#a5f3c0;line-height:1.7;overflow-x:auto;white-space:pre}
+.gas-footer{margin-top:12px;font-size:11px;color:var(--muted);line-height:1.7}
+.gas-footer strong{color:var(--text)}
+code{background:#f0fdf4;color:#15803d;padding:2px 6px;border-radius:4px;font-family:'DM Mono',monospace;font-size:10px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="admin-login">
+  <div class="login-wrap">
+    <div class="login-logo">
+      <div class="logo-icon">P</div>
+      <div class="logo-text">PRODUCT<em>DROP</em>.MN</div>
+    </div>
+    <div class="login-card">
+      <div class="login-title">Admin нэвтрэх</div>
+      <div class="login-sub">Зөвхөн зөвшөөрөгдсөн хэрэглэгчид</div>
+      <label class="lg-label">Admin нууц үг</label>
+      <input class="lg-input" type="password" id="admin-pwd" placeholder="Нууц үг оруулна уу...">
+      <button class="lg-btn" onclick="adminLogin()">Нэвтрэх →</button>
+      <div id="admin-err">❌ Нууц үг буруу байна</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL -->
+<div id="admin-panel">
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sb-logo">
+        <div class="sb-logo-icon">P</div>
+        <div>
+          <div class="sb-logo-text">PRODUCT<em>DROP</em>.MN</div>
+          <div class="sb-badge">ADMIN</div>
+        </div>
+      </div>
+
+      <div class="sb-section">Үндсэн</div>
+      <nav class="sb-nav">
+        <button class="sb-item active" onclick="showSection('generate')">
+          <span class="sb-item-icon">🔑</span> Нууц үг үүсгэх
+        </button>
+        <button class="sb-item" onclick="showSection('list')">
+          <span class="sb-item-icon">📋</span> Хэрэглэгчдийн жагсаалт
+        </button>
+        <button class="sb-item" onclick="showSection('gas')">
+          <span class="sb-item-icon">⚙️</span> GAS тохиргоо
+        </button>
+      </nav>
+
+      <div class="sb-spacer"></div>
+
+      <div class="sb-stats-label">Статистик</div>
+      <div class="sb-stats">
+        <div class="sb-stat">
+          <div class="sb-stat-num" id="stat-total">—</div>
+          <div class="sb-stat-lbl">Нийт</div>
+        </div>
+        <div class="sb-stat">
+          <div class="sb-stat-num green" id="stat-active">—</div>
+          <div class="sb-stat-lbl">Идэвхтэй</div>
+        </div>
+        <div class="sb-stat">
+          <div class="sb-stat-num red" id="stat-expired">—</div>
+          <div class="sb-stat-lbl">Дууссан</div>
+        </div>
+      </div>
+
+      <button class="sb-logout" onclick="adminLogout()">
+        <span style="font-size:14px">⎋</span> Гарах
+      </button>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- GENERATE -->
+      <div id="sec-generate">
+        <div class="page-header">
+          <div class="page-title">Нууц үг үүсгэх</div>
+          <div class="page-sub">Шинэ хэрэглэгчид нэвтрэх нууц үг үүсгэж Google Sheets-т хадгална</div>
+        </div>
+
+        <div class="info-pill">
+          <span style="flex-shrink:0">🕐</span>
+          <div><strong>12 цагийн session систем</strong> — Нэвтэрсэн цагаасаа 12 цаг хандах боломжтой. Нууц үгийн хугацаа болон session хязгаар тусдаа ажилладаг — хоёулаа биелэх ёстой.</div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-label">Шинэ бүртгэл</div>
+              <div class="card-bar"></div>
+            </div>
+            <span style="font-size:22px">🔑</span>
+          </div>
+
+          <div class="row2">
+            <div class="field"><label>Хэрэглэгчийн нэр</label><input id="f-name" placeholder="Билгүүн"></div>
+            <div class="field"><label>Утас / ID</label><input id="f-id" placeholder="99001122"></div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label>Нууц үгийн хүчинтэй хугацаа</label>
+              <select id="f-days">
+                <option value="0.5">⏱ 12 цаг (туршилт)</option>
+                <option value="1">1 хоног</option>
+                <option value="3">3 хоног</option>
+                <option value="7">7 хоног</option>
+                <option value="30" selected>30 хоног</option>
+                <option value="60">60 хоног</option>
+                <option value="90">90 хоног</option>
+                <option value="180">180 хоног</option>
+                <option value="365">1 жил</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Subscription төрөл</label>
+              <select id="f-plan">
+                <option value="lite">Lite</option>
+                <option value="pro" selected>Pro</option>
+                <option value="business">Business</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="warn-box">
+            <span style="flex-shrink:0">⚠️</span>
+            <div><strong>Анхааруулга:</strong> Нэвтэрсний дараа яг <strong>12 цаг</strong> болмогц session дуусна. Нууц үгийн хугацаа хэдэн хоног байсан ч хамаагүй — дахин нэвтрэх шаардлагатай болно.</div>
+          </div>
+
+          <button class="btn-primary" id="gen-btn" onclick="genPW()">✨ Нууц үг үүсгэх →</button>
+
+          <div class="result-box" id="result">
+            <div class="pw-out" id="pw-out"></div>
+            <div class="pw-meta" id="pw-meta"></div>
+            <button class="copy-btn" onclick="copyPW()">📋 Хуулах</button>
+          </div>
+          <div class="sync-st" id="sync-status"></div>
+        </div>
+      </div>
+
+      <!-- LIST -->
+      <div id="sec-list" style="display:none">
+        <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
+          <div>
+            <div class="page-title">Хэрэглэгчдийн жагсаалт</div>
+            <div class="page-sub">Бүх идэвхтэй болон дууссан нууц үгүүд</div>
+          </div>
+          <span class="refresh-btn" style="margin-top:4px" onclick="renderList()">↻ Шинэчлэх</span>
+        </div>
+
+        <div class="tbl-wrap">
+          <div class="tbl-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Нэр / ID</th>
+                  <th>Нууц үг</th>
+                  <th>Дуусах</th>
+                  <th>Plan</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="pw-list">
+                <tr><td colspan="5" style="text-align:center;color:var(--muted2);padding:28px">Уншиж байна...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- GAS -->
+      <div id="sec-gas" style="display:none">
+        <div class="page-header">
+          <div class="page-title">GAS тохиргоо</div>
+          <div class="page-sub">Google Apps Script дээр verify action нэмэх заавар</div>
+        </div>
+
+        <div class="gas-box">
+          <div class="gas-title">📋 doGet(e) функц дотор нэмэх код</div>
+          <div class="gas-sub">
+            Доорх кодыг <code>doGet(e)</code> функц дотор <code>verify</code> case-д нэмнэ үү.
+          </div>
+          <div class="gas-code">if (action === 'verify') {
+  var pw    = e.parameter.pw   || '';
+  var sheet = SpreadsheetApp.getActiveSpreadsheet()
+                .getSheetByName('Passwords');
+  var data  = sheet.getDataRange().getValues();
+  var now   = Date.now();
+
+  for (var i = 1; i &lt; data.length; i++) {
+    // Баганын дараалал: name, uid, plan, pw, expiry, days
+    if (data[i][3] === pw) {
+      var expiry = parseInt(data[i][4]);
+      if (expiry > now) {
+        return ContentService
+          .createTextOutput(JSON.stringify({
+            valid: true,
+            plan: data[i][2]   // ← plan буцаана: "lite" | "pro" | "business"
+          }))
+          .setMimeType(ContentService.MimeType.JSON);
+      } else {
+        return ContentService
+          .createTextOutput(JSON.stringify({
+            valid: false,
+            message: 'Нууц үгийн хугацаа дууссан'
+          }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+    }
+  }
+  return ContentService
+    .createTextOutput(JSON.stringify({
+      valid: false,
+      message: 'Нууц үг олдсонгүй'
+    }))
+    .setMimeType(ContentService.MimeType.JSON);
+}</div>
+          <div class="gas-footer">
+            ⚠️ Нэмсний дараа <strong>Deploy → New deployment</strong> хийж шинэ URL-г хуулна уу.<br>
+            GAS офлайн үед клиент-талын expiry шалгалт автоматаар ажилладаг (fallback).
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script>
+const ADMIN_PASS = 'PD-ADMIN-2026';
+const ADMIN_SESS = 'pd_admin_sess';
+const GAS_URL    = 'https://script.google.com/macros/s/AKfycbyd3iPFcE8EhSd-fgpDotiDc1TonWUqAUxBVQVDLWcjbqR97OI2tUEsGTuJngVp7g8s/exec';
+const SALT       = 'PD2026MN';
+
+function adminLogin() {
+  if (document.getElementById('admin-pwd').value.trim() === ADMIN_PASS) {
+    sessionStorage.setItem(ADMIN_SESS, '1');
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+    renderStats();
+  } else {
+    const e = document.getElementById('admin-err');
+    e.style.display = 'block';
+    document.getElementById('admin-pwd').style.borderColor = 'rgba(220,38,38,.5)';
+    setTimeout(() => { e.style.display='none'; document.getElementById('admin-pwd').style.borderColor=''; }, 2500);
+  }
+}
+document.getElementById('admin-pwd').addEventListener('keydown', e => { if(e.key==='Enter') adminLogin(); });
+(function(){
+  if(sessionStorage.getItem(ADMIN_SESS)==='1'){
+    document.getElementById('admin-login').style.display='none';
+    document.getElementById('admin-panel').style.display='block';
+    renderStats();
+  }
+})();
+
+function adminLogout() {
+  sessionStorage.removeItem(ADMIN_SESS);
+  document.getElementById('admin-panel').style.display='none';
+  document.getElementById('admin-login').style.display='flex';
+  document.getElementById('admin-pwd').value='';
+}
+
+function showSection(name) {
+  ['generate','list','gas'].forEach(s => {
+    document.getElementById('sec-'+s).style.display = s===name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.sb-item').forEach((el,i) => {
+    el.classList.toggle('active', ['generate','list','gas'][i] === name);
+  });
+  if(name==='list') renderList();
+}
+
+function genPW() {
+  const name = document.getElementById('f-name').value.trim() || 'User';
+  const uid  = (document.getElementById('f-id').value.trim()  || Math.random().toString(36).slice(2,8)).toUpperCase().replace(/[^A-Z0-9]/g,'');
+  const days = parseFloat(document.getElementById('f-days').value);
+  const plan = document.getElementById('f-plan').value; // lite | pro | Business
+
+  const PLAN_CODE = {lite:'L', pro:'P', business:'B'};
+  const pcode  = PLAN_CODE[plan] || 'P';
+
+  const expiry = Date.now() + days * 86400000;
+  const exB36  = expiry.toString(36).toUpperCase();
+
+  // Checksum: uid + exB36 + SALT + plan  (name-гүй → client-side шалгаж болно)
+  const raw = uid + exB36 + SALT + plan;
+  let ck = 0;
+  for(let i=0;i<raw.length;i++) ck=(ck*31+raw.charCodeAt(i))&0xFFFFFF;
+  const pw = 'PD-'+pcode+uid+'-'+exB36+'-'+ck.toString(36).toUpperCase().padStart(5,'0');
+
+  document.getElementById('pw-out').textContent = pw;
+  const daysLabel = days < 1 ? '12 цаг (туршилт)' : days+' хоног';
+  document.getElementById('pw-meta').innerHTML =
+    `Хэрэглэгч: <strong>${name}</strong> (${uid})<br>`+
+    `Plan: <strong>${plan.toUpperCase()}</strong> <span style="color:var(--muted2)">[${pcode}]</span><br>`+
+    `Нууц үгийн хугацаа: <strong>${daysLabel}</strong><br>`+
+    `Дуусах: <strong>${new Date(expiry).toLocaleString('mn-MN')}</strong><br>`+
+    `<span style="color:var(--muted2);font-size:10px">↳ Session: нэвтэрсэн цагаасаа +12 цаг</span>`;
+  document.getElementById('result').style.display = 'block';
+
+  const btn = document.getElementById('gen-btn');
+  btn.disabled = true; btn.textContent = 'Хадгалж байна...';
+  const st = document.getElementById('sync-status');
+  st.className = 'sync-st'; st.textContent = '⏳ Sheets-т хадгалж байна...';
+
+  fetch(GAS_URL+'?action=add&name='+encodeURIComponent(name)+'&uid='+encodeURIComponent(uid)+'&plan='+plan+'&pw='+encodeURIComponent(pw)+'&expiry='+expiry+'&days='+days)
+    .then(r=>r.json())
+    .then(()=>{ st.className='sync-st ok'; st.textContent='✓ Амжилттай хадгалагдлаа'; btn.disabled=false; btn.textContent='✨ Нууц үг үүсгэх →'; renderStats(); })
+    .catch(()=>{ st.className='sync-st err'; st.textContent='✗ Sheets холбогдсонгүй — нууц үг үүссэн боловч хадгалагдсангүй'; btn.disabled=false; btn.textContent='✨ Нууц үг үүсгэх →'; });
+}
+
+function copyPW() {
+  navigator.clipboard.writeText(document.getElementById('pw-out').textContent).then(()=>{
+    document.querySelector('.copy-btn').textContent='✓ Хуулагдлаа!';
+    setTimeout(()=>{ document.querySelector('.copy-btn').textContent='📋 Хуулах'; },2000);
+  });
+}
+
+function renderStats(pws) {
+  if(!pws){
+    fetch(GAS_URL).then(r=>r.json()).then(renderStats).catch(()=>{});
+    return;
+  }
+  const now = Date.now();
+  const active = pws.filter(p=>p.expiry>now).length;
+  document.getElementById('stat-total').textContent   = pws.length;
+  document.getElementById('stat-active').textContent  = active;
+  document.getElementById('stat-expired').textContent = pws.length - active;
+}
+
+function renderList() {
+  const tbody = document.getElementById('pw-list');
+  tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted2);padding:28px">Уншиж байна...</td></tr>';
+  fetch(GAS_URL)
+    .then(r=>r.json())
+    .then(pws=>{
+      renderStats(pws);
+      if(!pws.length){ tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted2);padding:28px">Нууц үг байхгүй</td></tr>'; return; }
+      const now = Date.now();
+      tbody.innerHTML = pws.map(p=>{
+        const exp = p.expiry < now;
+        const h12 = parseFloat(p.days||30) <= 0.5 ? '<span class="tag tag-h12">12ц</span>' : '';
+        return `<tr>
+          <td><strong>${p.name}</strong><br><span style="color:var(--muted2);font-size:10px">${p.uid}</span></td>
+          <td class="mono" title="${p.pw}">${p.pw}</td>
+          <td><span class="tag ${exp?'tag-exp':'tag-ok'}">${new Date(p.expiry).toLocaleDateString('mn-MN')}${exp?' ✗':''}</span>${h12}</td>
+          <td><span class="tag tag-plan">${p.plan||'pro'}</span></td>
+          <td><button class="del-btn" onclick="delPW('${p.pw}')">✕</button></td>
+        </tr>`;
+      }).join('');
+    })
+    .catch(()=>{
+      tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--red);padding:28px">⚠ Sheets холбогдсонгүй</td></tr>';
+      ['stat-total','stat-active','stat-expired'].forEach(id=>document.getElementById(id).textContent='—');
+    });
+}
+
+function delPW(pw) {
+  if(!confirm('Устгахдаа итгэлтэй байна уу?')) return;
+  fetch(GAS_URL+'?action=delete&pw='+encodeURIComponent(pw)).then(()=>renderList()).catch(()=>alert('Устгаж чадсангүй'));
+}
+</script>
+</body>
+</html>
