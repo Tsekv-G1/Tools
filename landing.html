@@ -1138,7 +1138,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
     <h1 style="margin-top:20px">Дараагийн <span class="grad">ашигтай бараагаа</span><br>эндээс ол</h1>
     <p class="hero-sub">200+ судалгаа хийгдсэн бараа, supplier линк, ашгийн тооцоолуур, content script — нэг дороо. Эхлээд <strong>үнэгүй туршаад</strong> дараа шийд.</p>
     <div class="hero-btns">
-      <a class="btn-primary" href="Lite.html">🚀 Үнэгүй эхлэх →</a>
+      <a class="btn-primary" href="#" onclick="goLiteFree();return false;">🚀 Үнэгүй эхлэх →</a>
       <button class="btn-secondary" onclick="openLoginModal()">🔑 Нэвтрэх</button>
     </div>
     <div class="hero-stats">
@@ -1381,7 +1381,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
         <li class="no">Content AI Script</li>
         <li class="no">7 хоног бүр шинэ бараа</li>
       </ul>
-      <a class="pricing-btn secondary" href="Lite.html">🚀 Үнэгүй туршилт →</a>
+      <a class="pricing-btn secondary" href="#" onclick="goLiteFree();return false;">🚀 Үнэгүй туршилт →</a>
     </div>
     <div class="pricing-card featured">
       <div class="pricing-badge">⭐ Хамгийн их сонгогддог</div>
@@ -1571,7 +1571,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
   <h2>Дараагийн ашигтай бараагаа<br>өнөөдөр ол</h2>
   <p>24 цагийн үнэгүй туршилт. Картны мэдээлэл шаардлагагүй.</p>
   <div class="hero-btns">
-    <a class="btn-primary" href="Lite.html">🚀 Одоо үнэгүй эхлэх →</a>
+    <a class="btn-primary" href="#" onclick="goLiteFree();return false;">🚀 Одоо үнэгүй эхлэх →</a>
     <button class="btn-secondary" onclick="openLoginModal()">🔑 Нэвтрэх</button>
   </div>
 </div>
@@ -2144,10 +2144,15 @@ async function doLogin() {
   if (isPdToken) {
     var result = verifyPW(pw);
     if (result.valid) {
+      // sessionStorage → Pro3-т дамжуулах
       sessionStorage.setItem('pd_plan',       result.plan);
       sessionStorage.setItem('pd_name',       name);
       sessionStorage.setItem('pd_login_time', Date.now().toString());
       sessionStorage.setItem('pd_token',      pw);
+      // localStorage → Pro3 шууд таних (session алдагдахгүй)
+      localStorage.setItem('pd_session_token', pw);
+      localStorage.setItem('pd_user_name',     name);
+      localStorage.setItem('pd_login_time',    Date.now().toString());
       closeModal('modal-login');
       showWelcome(name, result.plan);
       return;
@@ -2172,10 +2177,16 @@ async function doLogin() {
     var data = await res.json();
     if (data.valid) {
       var plan = data.plan || 'pro';
+      // sessionStorage → Pro3-т дамжуулах
       sessionStorage.setItem('pd_plan',       plan);
       sessionStorage.setItem('pd_name',       name);
       sessionStorage.setItem('pd_login_time', Date.now().toString());
       sessionStorage.setItem('pd_token',      pw);
+      // localStorage → Pro3 шууд таних (энгийн нууц үгтэй хэрэглэгч)
+      // Pro3 checkSession() → simple password → 12цагийн session
+      localStorage.setItem('pd_session_token', pw);
+      localStorage.setItem('pd_user_name',     name);
+      localStorage.setItem('pd_login_time',    Date.now().toString());
       closeModal('modal-login');
       showWelcome(name, plan);
     } else {
