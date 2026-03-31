@@ -700,7 +700,11 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
   position:fixed;inset:0;z-index:3000;
   background:#080e08;
   display:none;align-items:center;justify-content:center;
-  flex-direction:column;gap:0;overflow:hidden;
+  flex-direction:column;gap:0;
+  overflow:hidden;
+  width:100%;height:100%;
+  max-width:100vw;max-height:100vh;
+  contain:strict;
 }
 #welcome-overlay.show{display:flex}
 
@@ -714,11 +718,11 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
 }
 @keyframes gridDrift{from{background-position:0 0}to{background-position:52px 52px}}
 
-#wl-blob1{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(22,163,74,.15) 0%,transparent 70%);top:-150px;left:-150px;animation:blobFloat 9s ease-in-out infinite;pointer-events:none}
-#wl-blob2{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(34,197,94,.1) 0%,transparent 70%);bottom:-100px;right:-100px;animation:blobFloat 11s ease-in-out infinite reverse;pointer-events:none}
+#wl-blob1{position:absolute;width:min(600px,120vw);height:min(600px,120vw);border-radius:50%;background:radial-gradient(circle,rgba(22,163,74,.15) 0%,transparent 70%);top:-20%;left:-20%;animation:blobFloat 9s ease-in-out infinite;pointer-events:none}
+#wl-blob2{position:absolute;width:min(500px,100vw);height:min(500px,100vw);border-radius:50%;background:radial-gradient(circle,rgba(34,197,94,.1) 0%,transparent 70%);bottom:-15%;right:-15%;animation:blobFloat 11s ease-in-out infinite reverse;pointer-events:none}
 @keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,-40px) scale(1.12)}}
 
-#wl-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 24px}
+#wl-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 24px;width:100%;max-width:100vw;box-sizing:border-box}
 
 .wl-logo{
   font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,.18);
@@ -765,7 +769,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
 .wl-greeting.wl-in{opacity:1;transform:translateY(0)}
 
 .wl-name{
-  font-size:clamp(32px,7vw,54px);font-weight:900;color:#fff;
+  font-size:clamp(26px,7vw,54px);font-weight:900;color:#fff;
   letter-spacing:-2px;line-height:1.05;
   opacity:0;transform:translateY(14px);
   transition:opacity .55s ease,transform .55s ease;
@@ -989,7 +993,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
           <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:4px">Бүртгэл амжилттай ✓</div>
           <div style="font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:1px">Дансаар төлөх</div>
           <div style="font-size:19px;font-weight:800;color:var(--text);margin-top:2px">Pro Plan</div>
-          <div style="font-size:28px;font-weight:900;color:var(--accent);letter-spacing:-1px;line-height:1.1">₮49,900<small style="font-size:14px;font-weight:500;color:var(--muted)">/сар</small></div>
+          <div style="font-size:28px;font-weight:900;color:var(--accent);letter-spacing:-1px;line-height:1.1">₮49,900<small style="font-size:14px;font-weight:500;color:var(--muted)">/3 сар</small></div>
         </div>
         <button class="modal-close" onclick="closeModal('modal-request')">✕</button>
       </div>
@@ -1379,19 +1383,19 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
         <li class="no">Эрэлтийн шинжилгээ</li>
         <li class="no">Social targeting</li>
         <li class="no">Content AI Script</li>
-        <li class="no">7 хоног бүр шинэ бараа</li>
+        <li class="no">10 хоног бүр шинэ бараа</li>
       </ul>
       <a class="pricing-btn secondary" href="#" onclick="goLiteFree();return false;">🚀 Үнэгүй туршилт →</a>
     </div>
     <div class="pricing-card featured">
       <div class="pricing-badge">⭐ Хамгийн их сонгогддог</div>
       <div class="pricing-name">Pro</div>
-      <div class="pricing-price">₮49,900<small>/сар</small></div>
-      <div class="pricing-period" style="margin-bottom:8px">Сарын захиалга · цуцлах боломжтой</div>
+      <div class="pricing-price">₮49,900<small>/3 сар</small></div>
+      <div class="pricing-period" style="margin-bottom:8px">3 сараар · дахин сунгах боломжтой</div>
       <div style="font-size:12px;color:var(--accent);font-weight:600;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:8px;padding:6px 12px;margin-bottom:20px;line-height:1.5">✓ Content AI Script орсон — өрсөлдөгч платформд байхгүй</div>
       <ul class="pricing-features">
         <li>200+ бараа бүгд</li>
-        <li>7 хоног бүр 100+ шинэ бараа</li>
+        <li>10 хоног бүр 100 шинэ бараа</li>
         <li>Supplier харьцуулалт</li>
         <li>Ашгийн тооцоолуур</li>
         <li>Эрэлтийн шинжилгээ</li>
@@ -1437,7 +1441,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
       <div style="color:var(--text2)">Үнэгүй туршилт</div><div style="color:var(--accent);font-weight:700;text-align:center">✓ 24 цаг</div><div style="color:var(--muted2);text-align:center">✗</div>
       <div style="color:var(--text2)">Content AI Script</div><div style="color:var(--accent);font-weight:700;text-align:center">✓</div><div style="color:var(--muted2);text-align:center">✗</div>
       <div style="color:var(--text2)">Supplier харьцуулалт</div><div style="color:var(--accent);font-weight:700;text-align:center">✓</div><div style="color:var(--muted2);text-align:center">✗</div>
-      <div style="color:var(--text2)">7 хоног бүр шинэ бараа</div><div style="color:var(--accent);font-weight:700;text-align:center">✓</div><div style="color:var(--accent);font-weight:700;text-align:center">✓</div>
+      <div style="color:var(--text2)">10 хоног бүр шинэ бараа</div><div style="color:var(--accent);font-weight:700;text-align:center">✓</div><div style="color:var(--accent);font-weight:700;text-align:center">✓</div>
       <div style="color:var(--text2)">Ашгийн тооцоолуур</div><div style="color:var(--accent);font-weight:700;text-align:center">✓</div><div style="color:var(--accent);font-weight:700;text-align:center">✓</div>
     </div>
   </div>
@@ -1551,8 +1555,8 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
       <div class="faq-a">ProductDrop нь зөвхөн судалгааны мэдээлэл өгдөг. Alibaba дээр 1 бараанаас ₮15,000–₮50,000-оос эхлэн захиалж болно. Тест хийхэд ₮50,000–₮150,000 хангалттай. ProductDrop өөрөө бараа нийлүүлдэггүй — та Alibaba/Taobao-гаас шууд захиалдаг.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">7 хоног бүр шинэ бараа нэмэгддэг үү? <span class="faq-arrow">›</span></div>
-      <div class="faq-a">Тийм. Pro план дээр 7 хоног бүр 100+ шинэ бараа нэмэгддэг. Давхцалгүйгээр сар бүр шинэ судалгаа хийсэн бараанууд нэмэгдэнэ.</div>
+      <div class="faq-q">10 хоног бүр шинэ бараа нэмэгддэг үү? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">Тийм. Pro план дээр 10 хоног бүр 100 шинэ бараа нэмэгддэг. Давхцалгүйгээр сар бүр шинэ судалгаа хийсэн бараанууд нэмэгдэнэ.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-q">Нууц үгийг хэзээ авах вэ? <span class="faq-arrow">›</span></div>
@@ -1581,7 +1585,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
   <div class="trust-item"><span class="trust-icon">🆓</span>Lite багц 24 цаг үнэгүй</div>
   <div class="trust-item"><span class="trust-icon">🔒</span>Картны мэдээлэл шаардлагагүй</div>
   <div class="trust-item"><span class="trust-icon">📦</span>200+ судалгаа хийсэн бараа</div>
-  <div class="trust-item"><span class="trust-icon">🔄</span>7 хоног бүр 100+ шинэ бараа</div>
+  <div class="trust-item"><span class="trust-icon">🔄</span>10 хоног бүр 100 шинэ бараа</div>
   <div class="trust-item"><span class="trust-icon">💬</span>Бүх мэдээлэл Монгол хэлээр</div>
 </div>
 
@@ -1602,7 +1606,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
       <div class="pay-header-left">
         <div class="pay-plan-label">Дансаар төлөх</div>
         <div class="pay-plan-name" id="pay-plan-name">Pro Plan</div>
-        <div class="pay-plan-price" id="pay-plan-price">₮49,900<span style="font-size:13px;color:#5a5a72;font-weight:400">/сар</span></div>
+        <div class="pay-plan-price" id="pay-plan-price">₮49,900<span style="font-size:13px;color:#5a5a72;font-weight:400">/3 сар</span></div>
       </div>
       <button class="pay-close" onclick="closePayment()">✕</button>
     </div>
@@ -1690,8 +1694,8 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
       <div class="faq-a">ProductDrop нь зөвхөн судалгааны мэдээлэл өгдөг. Alibaba дээр 1 бараанаас ₮15,000–₮50,000-оос эхлэн захиалж болно. Тест хийхэд ₮50,000–₮150,000 хангалттай. ProductDrop өөрөө бараа нийлүүлдэггүй — та Alibaba/Taobao-гаас шууд захиалдаг.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">7 хоног бүр шинэ бараа нэмэгддэг үү? <span class="faq-arrow">›</span></div>
-      <div class="faq-a">Тийм. Pro план дээр 7 хоног бүр 100+ шинэ бараа нэмэгддэг. Давхцалгүйгээр сар бүр шинэ судалгаа хийсэн бараанууд нэмэгдэнэ.</div>
+      <div class="faq-q">10 хоног бүр шинэ бараа нэмэгддэг үү? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">Тийм. Pro план дээр 10 хоног бүр 100 шинэ бараа нэмэгддэг. Давхцалгүйгээр сар бүр шинэ судалгаа хийсэн бараанууд нэмэгдэнэ.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-q">Нууц үгийг хэзээ авах вэ? <span class="faq-arrow">›</span></div>
@@ -1832,14 +1836,14 @@ document.querySelectorAll('.modal-overlay').forEach(function(m){
 /* ── PAYMENT MODAL ───────────────────────── */
 var PLANS = {
   lite:    {name:'Lite Plan',    price:'₮29,900'},
-  pro:     {name:'Pro Plan',     price:'₮49,900'},
+  pro:     {name:'Pro Plan',     price:'₮49,900/3 сар'},
   business:{name:'Business Plan',price:'₮99,900'}
 };
 
 function openPayment(planKey){
   var p = PLANS[planKey] || PLANS.pro;
   document.getElementById('pay-plan-name').textContent  = p.name;
-  document.getElementById('pay-plan-price').innerHTML   = p.price+'<span style="font-size:13px;color:#5a5a72;font-weight:400">/сар</span>';
+  document.getElementById('pay-plan-price').innerHTML   = p.price+'<span style="font-size:13px;color:#5a5a72;font-weight:400">/3 сар</span>';
   document.getElementById('pay-amount').textContent     = p.price;
   var btn = document.getElementById('copy-acc-btn');
   btn.textContent='ХУУЛАХ'; btn.className='pay-copy-btn';
@@ -2171,10 +2175,17 @@ async function doLogin() {
     var tid  = setTimeout(function(){ ctrl.abort(); }, 12000);
     var res  = await fetch(
       GAS_URL_LOGIN + '?action=verify&pw=' + encodeURIComponent(pw) + '&name=' + encodeURIComponent(name),
-      { signal: ctrl.signal }
+      { signal: ctrl.signal, redirect: 'follow' }
     );
     clearTimeout(tid);
-    var data = await res.json();
+    var rawText = await res.text();
+    var data;
+    try { data = JSON.parse(rawText); }
+    catch(pe) {
+      // GAS redirect-ийн дараах JSON-г авах
+      var match = rawText.match(/\{[\s\S]*\}/);
+      data = match ? JSON.parse(match[0]) : { valid: false, message: '⚠️ Хариу унших алдаа' };
+    }
     if (data.valid) {
       var plan = data.plan || 'pro';
       // sessionStorage → Pro3-т дамжуулах
