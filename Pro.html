@@ -1968,15 +1968,15 @@ body.locked{overflow:hidden;position:fixed;width:100%}
       <div class="lg-logo-text">PRODUCT<span>DROP</span>.MN</div>
     </div>
     <div class="lg-title">Нэвтрэх</div>
-    <div class="lg-sub">Каталогт хандахын тулд нэвтрэлтийн мэдээллээ оруулна уу</div>
+    <div class="lg-sub">Утасны дугаар болон бүртгэлийн нууц үгийг оруулна уу</div>
     <div class="lg-form">
       <div class="lg-field">
-        <label class="lg-label">Нэвтрэх нэр</label>
-        <input class="lg-inp" id="lg-username" type="text" placeholder="Нэвтрэх нэр..." autocomplete="username">
+        <label class="lg-label">Утасны дугаар</label>
+        <input class="lg-inp" id="lg-username" type="tel" inputmode="numeric" placeholder="88748966" autocomplete="username">
       </div>
       <div class="lg-field">
         <label class="lg-label">Нууц үг</label>
-        <input class="lg-inp" id="lg-password" type="password" placeholder="Нууц үг..." autocomplete="current-password">
+        <input class="lg-inp" id="lg-password" type="password" placeholder="Бүртгэл үүсгэхдээ оруулсан нууц үг" autocomplete="current-password" spellcheck="false" autocorrect="off" autocapitalize="none">
       </div>
       <button class="lg-btn" id="lg-submit" onclick="doLogin()">Нэвтрэх →</button>
       <div class="lg-err" id="lg-err"></div>
@@ -7425,8 +7425,13 @@ function verifyToken(token) {
 }
 
 function checkSession() {
-  const token = localStorage.getItem(LS_TOKEN);
-  return !!verifyToken(token);
+  const token     = localStorage.getItem(LS_TOKEN);
+  const loginTime = parseInt(localStorage.getItem(LS_TIME) || '0');
+  if (!token) return false;
+  // PD-format token: validate checksum + expiry
+  if (token.toUpperCase().startsWith('PD-')) return !!verifyToken(token);
+  // Simple password: 12-hour session
+  return (Date.now() - loginTime) < 12 * 3600 * 1000;
 }
 
 async function doLogin() {
@@ -7436,29 +7441,49 @@ async function doLogin() {
   const loadEl   = document.getElementById('lg-loading');
   const btnEl    = document.getElementById('lg-submit');
   errEl.classList.remove('show');
+
   if (!username || !password) {
     errEl.textContent = 'Нэвтрэх нэр болон нууц үгийг оруулна уу';
     errEl.classList.add('show'); return;
   }
-  const tokenInfo = verifyToken(password);
-  if (!tokenInfo) {
-    errEl.textContent = 'Нууц үг буруу, хугацаа дууссан, эсвэл энэ планд зориулагдаагүй байна';
-    errEl.classList.add('show'); return;
+
+  const isPdToken = password.toUpperCase().startsWith('PD-');
+
+  // PD-format: offline client-side check first
+  if (isPdToken) {
+    const tokenInfo = verifyToken(password);
+    if (!tokenInfo) {
+      errEl.textContent = 'Нэвтрэх код буруу эсвэл хугацаа дууссан байна';
+      errEl.classList.add('show'); return;
+    }
   }
+
+  // Always try GAS verify (both PD and simple passwords)
   btnEl.disabled = true;
   loadEl.classList.add('show');
   try {
     const controller = new AbortController();
-    const tid = setTimeout(() => controller.abort(), 6000);
+    const tid = setTimeout(() => controller.abort(), 12000);
     const res  = await fetch(GAS_URL + '?action=verify&pw=' + encodeURIComponent(password) + '&name=' + encodeURIComponent(username), { signal: controller.signal });
     clearTimeout(tid);
     const data = await res.json();
-    if (data.valid === false) {
+    if (!data.valid) {
       errEl.textContent = data.message || 'Нэвтрэх нэр эсвэл нууц үг буруу байна';
       errEl.classList.add('show');
       btnEl.disabled = false; loadEl.classList.remove('show'); return;
     }
-  } catch(e) { console.warn('GAS offline, client-side verify used'); }
+  } catch(e) {
+    clearTimeout && clearTimeout();
+    // GAS offline
+    if (!isPdToken) {
+      // Simple password cannot be verified offline
+      errEl.textContent = 'Серверт холбогдож чадсангүй. Дахин оролдоно уу.';
+      errEl.classList.add('show');
+      btnEl.disabled = false; loadEl.classList.remove('show'); return;
+    }
+    console.warn('GAS offline, PD token used for offline verify');
+  }
+
   localStorage.setItem(LS_TOKEN, password);
   localStorage.setItem(LS_USER,  username);
   localStorage.setItem(LS_TIME,  Date.now().toString());
