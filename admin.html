@@ -437,100 +437,197 @@ code{background:#f0fdf4;color:#15803d;padding:2px 6px;border-radius:4px;font-fam
           <div class="gas-title">📋 Google Apps Script — бүтэн doGet(e) код</div>
           <div class="gas-sub">
             Доорх бүтэн кодыг Google Apps Script дээр <code>doGet(e)</code> функц болгон хуулж, 2 Sheet үүсгэнэ үү:<br>
-            <strong>Passwords</strong> (name, uid, plan, pw, expiry, days) · <strong>Registrations</strong> (phone, pw, plan, status, date)
+            <strong>Sheet1</strong> (registered, name, uid, plan, pw, expiry, days) · <strong>Registrations</strong> (phone, pw, plan, status, date)
           </div>
-          <div class="gas-code">function doGet(e) {
+          <div class="gas-code">// ================================================================
+//  ProductDrop.MN — Google Apps Script (бүтэн код)
+//  Хуучин кодыг БҮГДИЙГ устгаад ЭНЭ кодыг paste хийнэ үү
+//
+//  Sheets: "Sheet1"        → registered | name | uid | plan | pw | expiry | days
+//          "Registrations" → phone | pw | plan | status | date
+//
+//  Deploy → Web app → Execute as: Me → Who has access: Anyone
+// ================================================================
+
+function doGet(e) {
   var action = e.parameter.action || 'list';
-  var ss     = SpreadsheetApp.getActiveSpreadsheet();
-  var CORS   = { 'Access-Control-Allow-Origin': '*' };
+  var ss     = SpreadsheetApp.openById('1_CwF_EAUJK76nOdTpY7U7Qr2dz9oeZeq_FKGPTWZIrg');
 
-  // ── LIST passwords ──────────────────────────────────
-  if (action === 'list' || !action) {
-    var sheet = ss.getSheetByName('Passwords');
-    var data  = sheet.getDataRange().getValues();
-    var rows  = [];
-    for (var i = 1; i &lt; data.length; i++) {
-      rows.push({ name:data[i][0], uid:data[i][1], plan:data[i][2],
-                  pw:data[i][3], expiry:data[i][4], days:data[i][5] });
-    }
-    return out(rows);
+  // ── Helper: expiry утгыг Unix ms timestamp болгон аюулгүй унших ──
+  function safeExpiry(val) {
+    if (val instanceof Date) return val.getTime();
+    var n = typeof val === 'number' ? val : parseFloat(String(val).trim());
+    return isNaN(n) ? 0 : n;
   }
 
-  // ── ADD password ────────────────────────────────────
-  if (action === 'add') {
-    var sh = ss.getSheetByName('Passwords');
-    sh.appendRow([e.parameter.name, e.parameter.uid, e.parameter.plan,
-                  e.parameter.pw, parseInt(e.parameter.expiry), parseFloat(e.parameter.days)]);
-    return out({ ok: true });
-  }
-
-  // ── DELETE password ─────────────────────────────────
-  if (action === 'delete') {
-    var sh = ss.getSheetByName('Passwords');
-    var d  = sh.getDataRange().getValues();
-    for (var i = 1; i &lt; d.length; i++) {
-      if (d[i][3] === e.parameter.pw) { sh.deleteRow(i+1); break; }
-    }
-    return out({ ok: true });
-  }
-
-  // ── REGISTER (landing.html-аас) ─────────────────────
-  if (action === 'register') {
-    var sh = ss.getSheetByName('Registrations');
-    if (!sh) sh = ss.insertSheet('Registrations');
-    // Давхардал шалгах
-    var d = sh.getDataRange().getValues();
-    for (var i = 1; i &lt; d.length; i++) {
-      if (d[i][0] == e.parameter.phone) {
-        sh.getRange(i+1, 4).setValue('PENDING');
-        return out({ ok: true, updated: true });
-      }
-    }
-    sh.appendRow([e.parameter.phone, e.parameter.pw,
-                  e.parameter.plan || 'pro',
-                  e.parameter.status || 'PENDING',
-                  e.parameter.date || new Date().toLocaleString()]);
-    return out({ ok: true });
-  }
-
-  // ── LIST registrations (admin) ───────────────────────
-  if (action === 'listRegistrations') {
-    var sh = ss.getSheetByName('Registrations');
-    if (!sh) return out([]);
-    var d = sh.getDataRange().getValues();
+  // ── 1. LIST — нууц үгийн жагсаалт ───────────────────────────────
+  if (action === 'list') {
+    var sheet = ss.getSheetByName('Sheet1');
+    if (!sheet) return out([]);
+    var data = sheet.getDataRange().getValues();
     var rows = [];
-    for (var i = 1; i &lt; d.length; i++) {
-      rows.push({ phone:d[i][0], pw:d[i][1], plan:d[i][2], status:d[i][3], date:d[i][4] });
+    for (var i = 1; i &lt; data.length; i++) {
+      if (!data[i][4]) continue;  // pw хоосон бол алгасах
+      rows.push({
+        registered: data[i][0],
+        name:       data[i][1],
+        uid:        data[i][2],
+        plan:       data[i][3],
+        pw:         String(data[i][4]),
+        expiry:     safeExpiry(data[i][5]),  // ← always number
+        days:       data[i][6]
+      });
     }
     return out(rows);
   }
 
-  // ── APPROVE registration ─────────────────────────────
-  if (action === 'approveReg') {
-    var sh = ss.getSheetByName('Registrations');
-    if (!sh) return out({ ok:false });
+  // ── 2. ADD — нууц үг нэмэх ───────────────────────────────────────
+  if (action === 'add') {
+    var sh = ss.getSheetByName('Sheet1');
+    if (!sh) sh = ss.insertSheet('Sheet1');
+    sh.appendRow([
+      new Date().toLocaleString('mn-MN'),
+      e.parameter.name,
+      e.parameter.uid,
+      e.parameter.plan,
+      e.parameter.pw,
+      parseFloat(e.parameter.expiry),  // ← float, not parseInt
+      parseFloat(e.parameter.days)
+    ]);
+    return out({ ok: true });
+  }
+
+  // ── 3. DELETE — нууц үг устгах ───────────────────────────────────
+  if (action === 'delete') {
+    var sh = ss.getSheetByName('Sheet1');
+    if (!sh) return out({ ok: false });
     var d = sh.getDataRange().getValues();
     for (var i = 1; i &lt; d.length; i++) {
-      if (d[i][0] == e.parameter.phone) {
-        sh.getRange(i+1, 4).setValue('APPROVED');
+      if (String(d[i][4]) === String(e.parameter.pw)) {
+        sh.deleteRow(i + 1);
         return out({ ok: true });
       }
     }
     return out({ ok: false, msg: 'not found' });
   }
 
-  // ── DELETE registration ──────────────────────────────
-  if (action === 'deleteReg') {
+  // ── 4. VERIFY — нэвтрэх нууц үг шалгах ──────────────────────────
+  if (action === 'verify') {
+    var sh  = ss.getSheetByName('Sheet1');
+    if (!sh) return out({ valid: false, message: 'Sheet олдсонгүй' });
+    var d   = sh.getDataRange().getValues();
+    var now = Date.now();
+    for (var i = 1; i &lt; d.length; i++) {
+      if (String(d[i][4]) === String(e.parameter.pw)) {
+        var expiry = safeExpiry(d[i][5]);  // ← fixed
+        if (expiry &gt; now) {
+          return out({ valid: true, plan: String(d[i][3]) });
+        } else {
+          return out({ valid: false, message: 'Нууц үгийн хугацаа дууссан' });
+        }
+      }
+    }
+    return out({ valid: false, message: 'Нууц үг олдсонгүй' });
+  }
+
+  // ── 5. REGISTER — шинэ хэрэглэгч бүртгүүлэх ─────────────────────
+  if (action === 'register') {
     var sh = ss.getSheetByName('Registrations');
-    if (!sh) return out({ ok:false });
+    if (!sh) {
+      sh = ss.insertSheet('Registrations');
+      sh.appendRow(['phone', 'pw', 'plan', 'status', 'date']);
+    }
     var d = sh.getDataRange().getValues();
     for (var i = 1; i &lt; d.length; i++) {
-      if (d[i][0] == e.parameter.phone) { sh.deleteRow(i+1); break; }
+      if (String(d[i][0]) === String(e.parameter.phone)) {
+        sh.getRange(i + 1, 4).setValue('PENDING');
+        return out({ ok: true, updated: true });
+      }
     }
+    sh.appendRow([
+      e.parameter.phone,
+      e.parameter.pw,
+      e.parameter.plan   || 'pro',
+      e.parameter.status || 'PENDING',
+      e.parameter.date   || new Date().toLocaleString('mn-MN')
+    ]);
     return out({ ok: true });
   }
 
-  return out({ error: 'unknown action' });
+  // ── 6. LIST REGISTRATIONS ─────────────────────────────────────────
+  if (action === 'listRegistrations') {
+    var sh = ss.getSheetByName('Registrations');
+    if (!sh) return out([]);
+    var d = sh.getDataRange().getValues();
+    var rows = [];
+    for (var i = 1; i &lt; d.length; i++) {
+      if (!d[i][0]) continue;
+      rows.push({
+        phone:  String(d[i][0]),
+        pw:     String(d[i][1]),
+        plan:   String(d[i][2] || 'pro'),
+        status: String(d[i][3] || 'PENDING'),
+        date:   String(d[i][4] || '')
+      });
+    }
+    return out(rows);
+  }
+
+  // ── 7. APPROVE REG ────────────────────────────────────────────────
+  if (action === 'approveReg') {
+    var sh = ss.getSheetByName('Registrations');
+    if (!sh) return out({ ok: false });
+    var d = sh.getDataRange().getValues();
+    for (var i = 1; i &lt; d.length; i++) {
+      if (String(d[i][0]) === String(e.parameter.phone)) {
+        sh.getRange(i + 1, 4).setValue('APPROVED');
+        return out({ ok: true });
+      }
+    }
+    return out({ ok: false, msg: 'not found' });
+  }
+
+  // ── 8. DELETE REG ─────────────────────────────────────────────────
+  if (action === 'deleteReg') {
+    var sh = ss.getSheetByName('Registrations');
+    if (!sh) return out({ ok: false });
+    var d = sh.getDataRange().getValues();
+    for (var i = 1; i &lt; d.length; i++) {
+      if (String(d[i][0]) === String(e.parameter.phone)) {
+        sh.deleteRow(i + 1);
+        return out({ ok: true });
+      }
+    }
+    return out({ ok: false, msg: 'not found' });
+  }
+
+  // ── 9. APPROVE AND ADD ────────────────────────────────────────────
+  if (action === 'approveAndAdd') {
+    var shReg = ss.getSheetByName('Registrations');
+    if (shReg) {
+      var dReg = shReg.getDataRange().getValues();
+      for (var i = 1; i &lt; dReg.length; i++) {
+        if (String(dReg[i][0]) === String(e.parameter.phone)) {
+          shReg.getRange(i + 1, 4).setValue('APPROVED');
+          break;
+        }
+      }
+    }
+    var shPw = ss.getSheetByName('Sheet1');
+    if (!shPw) shPw = ss.insertSheet('Sheet1');
+    shPw.appendRow([
+      new Date().toLocaleString('mn-MN'),
+      e.parameter.phone,
+      e.parameter.uid    || e.parameter.phone,
+      e.parameter.plan   || 'pro',
+      e.parameter.pw,
+      parseFloat(e.parameter.expiry),
+      parseFloat(e.parameter.days || 30)
+    ]);
+    return out({ ok: true });
+  }
+
+  return out({ error: 'unknown action: ' + action });
 }
 
 function out(data) {
@@ -539,7 +636,7 @@ function out(data) {
     .setMimeType(ContentService.MimeType.JSON);
 }</div>
           <div class="gas-footer">
-            1️⃣ Google Sheets-д <strong>Passwords</strong> болон <strong>Registrations</strong> нэртэй 2 sheet үүсгэнэ үү.<br>
+            1️⃣ Google Sheets-д эхний sheet нэрийг <strong>Sheet1</strong> байлгаад <strong>Registrations</strong> нэртэй 2-р sheet үүсгэнэ үү.<br>
             2️⃣ Дээрх кодыг Apps Script-д хуулж <strong>Deploy → New deployment → Web app → Anyone</strong> гэж тохируулна уу.<br>
             3️⃣ URL-г <code>GAS_URL</code> хувьсагч руу admin.html болон landing.html дотор хуулна уу.<br>
             ⚠️ Deploy хийх бүрт шинэ URL үүснэ — хоёр файлд шинэчлэхээ мартуузай.
