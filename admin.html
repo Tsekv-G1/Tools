@@ -156,10 +156,12 @@ code{background:#f0fdf4;color:#15803d;padding:2px 6px;border-radius:4px;font-fam
   .main{padding:80px 14px 48px}
   .row2{grid-template-columns:1fr}
   .tbl-scroll{overflow-x:auto}
-  table{min-width:480px}
+  table{min-width:420px}
   .page-header{flex-direction:column!important;gap:10px;align-items:flex-start!important}
   .login-card{padding:20px}
   .login-wrap{width:100%}
+  /* iOS auto-zoom fix: inputs ≥16px */
+  input,select,textarea{font-size:16px!important}
 }
 </style>
 </head>
@@ -214,6 +216,9 @@ code{background:#f0fdf4;color:#15803d;padding:2px 6px;border-radius:4px;font-fam
         <button class="sb-item active" onclick="showSection('generate')">
           <span class="sb-item-icon">🔑</span> Нууц үг үүсгэх
         </button>
+        <button class="sb-item" onclick="showSection('registrations')">
+          <span class="sb-item-icon">📥</span> Шинэ бүртгэлүүд <span id="pending-badge" style="display:none;background:#dc2626;color:#fff;font-size:8px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px">0</span>
+        </button>
         <button class="sb-item" onclick="showSection('list')">
           <span class="sb-item-icon">📋</span> Хэрэглэгчдийн жагсаалт
         </button>
@@ -258,6 +263,21 @@ code{background:#f0fdf4;color:#15803d;padding:2px 6px;border-radius:4px;font-fam
         <div class="info-pill">
           <span style="flex-shrink:0">🕐</span>
           <div><strong>12 цагийн session систем</strong> — Нэвтэрсэн цагаасаа 12 цаг хандах боломжтой. Нууц үгийн хугацаа болон session хязгаар тусдаа ажилладаг — хоёулаа биелэх ёстой.</div>
+        </div>
+
+        <!-- ── TELEGRAM PASTE PARSER ── -->
+        <div class="card" style="margin-bottom:14px;border-color:rgba(22,163,74,.25);background:var(--accent-bg)">
+          <div class="card-head" style="padding-bottom:10px">
+            <div>
+              <div class="card-label" style="color:var(--accent)">📋 Telegram-аас хурдан бүртгэл</div>
+              <div class="card-bar"></div>
+            </div>
+            <span style="font-size:20px">⚡</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.6">Telegram-аас ирсэн бүртгэлийн мэдэгдлийг доор paste хийгээд "Задлах" дарна уу.</div>
+          <textarea id="tg-paste" placeholder="🆕 Шинэ бүртгэл - ProductDrop.MN&#10;&#10;📞 Утас: 88748966&#10;🔑 Нууц үг: xxxxxx&#10;📦 Plan: PRO&#10;..." style="width:100%;min-height:100px;padding:12px;background:#fff;border:1.5px solid var(--accent-border);border-radius:10px;font-family:monospace;font-size:12px;color:var(--text);resize:vertical;outline:none;line-height:1.6" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--accent-border)'"></textarea>
+          <button onclick="parseTgMessage()" style="margin-top:10px;padding:10px 20px;background:var(--accent);color:#fff;border:none;border-radius:9px;font-family:Outfit,sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='#14a044'" onmouseout="this.style.background='var(--accent)'">⚡ Задлах → Форм бөглөх</button>
+          <div id="tg-parse-result" style="display:none;margin-top:10px;font-size:12px;padding:8px 12px;border-radius:8px"></div>
         </div>
 
         <div class="card">
@@ -316,6 +336,38 @@ code{background:#f0fdf4;color:#15803d;padding:2px 6px;border-radius:4px;font-fam
         </div>
       </div>
 
+
+      <!-- REGISTRATIONS -->
+      <div id="sec-registrations" style="display:none">
+        <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
+          <div>
+            <div class="page-title">Шинэ бүртгэлүүд</div>
+            <div class="page-sub">Хэрэглэгчдийн бүртгэл — төлбөрийн төлөв шинэчлэх</div>
+          </div>
+          <span class="refresh-btn" style="margin-top:4px" onclick="renderRegistrations()">↻ Шинэчлэх</span>
+        </div>
+
+        <div class="tbl-wrap">
+          <div class="tbl-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Утас</th>
+                  <th>Нууц үг</th>
+                  <th>Plan</th>
+                  <th>Огноо</th>
+                  <th>Төлөв</th>
+                  <th>Үйлдэл</th>
+                </tr>
+              </thead>
+              <tbody id="reg-list">
+                <tr><td colspan="6" style="text-align:center;color:var(--muted2);padding:28px">Уншиж байна...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <!-- LIST -->
       <div id="sec-list" style="display:none">
         <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between">
@@ -331,7 +383,8 @@ code{background:#f0fdf4;color:#15803d;padding:2px 6px;border-radius:4px;font-fam
             <table>
               <thead>
                 <tr>
-                  <th>Нэр / ID</th>
+                  <th>Бүртэгсэн</th>
+                  <th>Нэр / Дугаар</th>
                   <th>Нууц үг</th>
                   <th>Дуусах</th>
                   <th>Plan</th>
@@ -339,7 +392,7 @@ code{background:#f0fdf4;color:#15803d;padding:2px 6px;border-radius:4px;font-fam
                 </tr>
               </thead>
               <tbody id="pw-list">
-                <tr><td colspan="5" style="text-align:center;color:var(--muted2);padding:28px">Уншиж байна...</td></tr>
+                <tr><td colspan="6" style="text-align:center;color:var(--muted2);padding:28px">Уншиж байна...</td></tr>
               </tbody>
             </table>
           </div>
@@ -353,49 +406,116 @@ code{background:#f0fdf4;color:#15803d;padding:2px 6px;border-radius:4px;font-fam
           <div class="page-sub">Google Apps Script дээр verify action нэмэх заавар</div>
         </div>
 
-        <div class="gas-box">
-          <div class="gas-title">📋 doGet(e) функц дотор нэмэх код</div>
+        <div class="gas-box" style="margin-bottom:14px">
+          <div class="gas-title">📋 Google Apps Script — бүтэн doGet(e) код</div>
           <div class="gas-sub">
-            Доорх кодыг <code>doGet(e)</code> функц дотор <code>verify</code> case-д нэмнэ үү.
+            Доорх бүтэн кодыг Google Apps Script дээр <code>doGet(e)</code> функц болгон хуулж, 2 Sheet үүсгэнэ үү:<br>
+            <strong>Passwords</strong> (name, uid, plan, pw, expiry, days) · <strong>Registrations</strong> (phone, pw, plan, status, date)
           </div>
-          <div class="gas-code">if (action === 'verify') {
-  var pw    = e.parameter.pw   || '';
-  var sheet = SpreadsheetApp.getActiveSpreadsheet()
-                .getSheetByName('Passwords');
-  var data  = sheet.getDataRange().getValues();
-  var now   = Date.now();
+          <div class="gas-code">function doGet(e) {
+  var action = e.parameter.action || 'list';
+  var ss     = SpreadsheetApp.getActiveSpreadsheet();
+  var CORS   = { 'Access-Control-Allow-Origin': '*' };
 
-  for (var i = 1; i &lt; data.length; i++) {
-    // Баганын дараалал: name, uid, plan, pw, expiry, days
-    if (data[i][3] === pw) {
-      var expiry = parseInt(data[i][4]);
-      if (expiry > now) {
-        return ContentService
-          .createTextOutput(JSON.stringify({
-            valid: true,
-            plan: data[i][2]   // ← plan буцаана: "lite" | "pro" | "business"
-          }))
-          .setMimeType(ContentService.MimeType.JSON);
-      } else {
-        return ContentService
-          .createTextOutput(JSON.stringify({
-            valid: false,
-            message: 'Нууц үгийн хугацаа дууссан'
-          }))
-          .setMimeType(ContentService.MimeType.JSON);
+  // ── LIST passwords ──────────────────────────────────
+  if (action === 'list' || !action) {
+    var sheet = ss.getSheetByName('Passwords');
+    var data  = sheet.getDataRange().getValues();
+    var rows  = [];
+    for (var i = 1; i &lt; data.length; i++) {
+      rows.push({ name:data[i][0], uid:data[i][1], plan:data[i][2],
+                  pw:data[i][3], expiry:data[i][4], days:data[i][5] });
+    }
+    return out(rows);
+  }
+
+  // ── ADD password ────────────────────────────────────
+  if (action === 'add') {
+    var sh = ss.getSheetByName('Passwords');
+    sh.appendRow([e.parameter.name, e.parameter.uid, e.parameter.plan,
+                  e.parameter.pw, parseInt(e.parameter.expiry), parseFloat(e.parameter.days)]);
+    return out({ ok: true });
+  }
+
+  // ── DELETE password ─────────────────────────────────
+  if (action === 'delete') {
+    var sh = ss.getSheetByName('Passwords');
+    var d  = sh.getDataRange().getValues();
+    for (var i = 1; i &lt; d.length; i++) {
+      if (d[i][3] === e.parameter.pw) { sh.deleteRow(i+1); break; }
+    }
+    return out({ ok: true });
+  }
+
+  // ── REGISTER (landing.html-аас) ─────────────────────
+  if (action === 'register') {
+    var sh = ss.getSheetByName('Registrations');
+    if (!sh) sh = ss.insertSheet('Registrations');
+    // Давхардал шалгах
+    var d = sh.getDataRange().getValues();
+    for (var i = 1; i &lt; d.length; i++) {
+      if (d[i][0] == e.parameter.phone) {
+        sh.getRange(i+1, 4).setValue('PENDING');
+        return out({ ok: true, updated: true });
       }
     }
+    sh.appendRow([e.parameter.phone, e.parameter.pw,
+                  e.parameter.plan || 'pro',
+                  e.parameter.status || 'PENDING',
+                  e.parameter.date || new Date().toLocaleString()]);
+    return out({ ok: true });
   }
+
+  // ── LIST registrations (admin) ───────────────────────
+  if (action === 'listRegistrations') {
+    var sh = ss.getSheetByName('Registrations');
+    if (!sh) return out([]);
+    var d = sh.getDataRange().getValues();
+    var rows = [];
+    for (var i = 1; i &lt; d.length; i++) {
+      rows.push({ phone:d[i][0], pw:d[i][1], plan:d[i][2], status:d[i][3], date:d[i][4] });
+    }
+    return out(rows);
+  }
+
+  // ── APPROVE registration ─────────────────────────────
+  if (action === 'approveReg') {
+    var sh = ss.getSheetByName('Registrations');
+    if (!sh) return out({ ok:false });
+    var d = sh.getDataRange().getValues();
+    for (var i = 1; i &lt; d.length; i++) {
+      if (d[i][0] == e.parameter.phone) {
+        sh.getRange(i+1, 4).setValue('APPROVED');
+        return out({ ok: true });
+      }
+    }
+    return out({ ok: false, msg: 'not found' });
+  }
+
+  // ── DELETE registration ──────────────────────────────
+  if (action === 'deleteReg') {
+    var sh = ss.getSheetByName('Registrations');
+    if (!sh) return out({ ok:false });
+    var d = sh.getDataRange().getValues();
+    for (var i = 1; i &lt; d.length; i++) {
+      if (d[i][0] == e.parameter.phone) { sh.deleteRow(i+1); break; }
+    }
+    return out({ ok: true });
+  }
+
+  return out({ error: 'unknown action' });
+}
+
+function out(data) {
   return ContentService
-    .createTextOutput(JSON.stringify({
-      valid: false,
-      message: 'Нууц үг олдсонгүй'
-    }))
+    .createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
 }</div>
           <div class="gas-footer">
-            ⚠️ Нэмсний дараа <strong>Deploy → New deployment</strong> хийж шинэ URL-г хуулна уу.<br>
-            GAS офлайн үед клиент-талын expiry шалгалт автоматаар ажилладаг (fallback).
+            1️⃣ Google Sheets-д <strong>Passwords</strong> болон <strong>Registrations</strong> нэртэй 2 sheet үүсгэнэ үү.<br>
+            2️⃣ Дээрх кодыг Apps Script-д хуулж <strong>Deploy → New deployment → Web app → Anyone</strong> гэж тохируулна уу.<br>
+            3️⃣ URL-г <code>GAS_URL</code> хувьсагч руу admin.html болон landing.html дотор хуулна уу.<br>
+            ⚠️ Deploy хийх бүрт шинэ URL үүснэ — хоёр файлд шинэчлэхээ мартуузай.
           </div>
         </div>
       </div>
@@ -443,6 +563,7 @@ function adminLogin() {
     document.getElementById('admin-login').style.display = 'none';
     document.getElementById('admin-panel').style.display = 'block';
     renderStats();
+    renderRegistrations();
   } else {
     const e = document.getElementById('admin-err');
     e.style.display = 'block';
@@ -470,6 +591,7 @@ function closeSidebar() {
     document.getElementById('admin-login').style.display='none';
     document.getElementById('admin-panel').style.display='block';
     renderStats();
+    renderRegistrations();
   }
 })();
 
@@ -481,13 +603,14 @@ function adminLogout() {
 }
 
 function showSection(name) {
-  ['generate','list','gas'].forEach(s => {
+  ['generate','registrations','list','gas'].forEach(s => {
     document.getElementById('sec-'+s).style.display = s===name ? 'block' : 'none';
   });
   document.querySelectorAll('.sb-item').forEach((el,i) => {
-    el.classList.toggle('active', ['generate','list','gas'][i] === name);
+    el.classList.toggle('active', ['generate','registrations','list','gas'][i] === name);
   });
   if(name==='list') renderList();
+  if(name==='registrations') renderRegistrations();
 }
 
 function genPW() {
@@ -525,10 +648,96 @@ function genPW() {
   const st = document.getElementById('sync-status');
   st.className = 'sync-st'; st.textContent = '⏳ Sheets-т хадгалж байна...';
 
-  fetch(GAS_URL+'?action=add&name='+encodeURIComponent(name)+'&uid='+encodeURIComponent(uid)+'&plan='+plan+'&pw='+encodeURIComponent(pw)+'&expiry='+expiry+'&days='+days)
-    .then(r=>r.json())
+  const ctrl = new AbortController();
+  const tid2 = setTimeout(() => ctrl.abort(), 12000);
+  fetch(GAS_URL+'?action=add&name='+encodeURIComponent(name)+'&uid='+encodeURIComponent(uid)+'&plan='+plan+'&pw='+encodeURIComponent(pw)+'&expiry='+expiry+'&days='+days, {signal: ctrl.signal})
+    .then(r=>{ clearTimeout(tid2); return r.json(); })
     .then(()=>{ st.className='sync-st ok'; st.textContent='✓ Амжилттай хадгалагдлаа'; btn.disabled=false; btn.textContent='✨ Нууц үг үүсгэх →'; renderStats(); })
     .catch(()=>{ st.className='sync-st err'; st.textContent='✗ Sheets холбогдсонгүй — нууц үг үүссэн боловч хадгалагдсангүй'; btn.disabled=false; btn.textContent='✨ Нууц үг үүсгэх →'; });
+}
+
+function parseTgMessage() {
+  var raw = document.getElementById('tg-paste').value.trim();
+  var res = document.getElementById('tg-parse-result');
+  if (!raw) {
+    res.style.display='block';
+    res.style.cssText='display:block;background:#fef2f2;border:1px solid #fca5a5;color:#dc2626;font-size:12px;padding:8px 12px;border-radius:8px;margin-top:10px';
+    res.textContent='⚠️ Текст хоосон байна'; return;
+  }
+
+  var phoneMatch = raw.match(/📞[^\d]*(\d{7,12})/);
+  var phone = phoneMatch ? phoneMatch[1] : '';
+
+  var pwMatch = raw.match(/🔑[^:：]*[:：]\s*(\S+)/);
+  var userPw = pwMatch ? pwMatch[1] : '';
+
+  var planMatch = raw.match(/📦[^\n]*Plan[:\s]+([A-Za-z]+)/i);
+  var planRaw = planMatch ? planMatch[1].toLowerCase() : 'pro';
+  var planMap = {pro:'pro', lite:'lite', business:'business'};
+  var plan = planMap[planRaw] || 'pro';
+
+  if (!phone) {
+    res.style.cssText='display:block;background:#fef2f2;border:1px solid #fca5a5;color:#dc2626;font-size:12px;padding:8px 12px;border-radius:8px;margin-top:10px';
+    res.textContent='❌ Утасны дугаар олдсонгүй'; return;
+  }
+
+  // Fill standard form too
+  document.getElementById('f-name').value = phone;
+  document.getElementById('f-id').value   = phone;
+  var planSel = document.getElementById('f-plan');
+  for (var i=0;i<planSel.options.length;i++) {
+    if (planSel.options[i].value===plan){ planSel.selectedIndex=i; break; }
+  }
+
+  // Store parsed pw for quick-save
+  document.getElementById('tg-paste').dataset.parsedPw   = userPw;
+  document.getElementById('tg-paste').dataset.parsedPhone = phone;
+  document.getElementById('tg-paste').dataset.parsedPlan  = plan;
+
+  var hasPw = userPw.length >= 3;
+  res.style.cssText='display:block;background:#f0fdf4;border:1px solid rgba(22,163,74,.3);color:#15803d;font-size:12px;padding:10px 14px;border-radius:8px;margin-top:10px;line-height:1.8';
+  res.innerHTML = '✓ Задлагдлаа<br>'
+    + '📞 Утас: <strong>' + phone + '</strong> · 📦 Plan: <strong>' + plan.toUpperCase() + '</strong>'
+    + (hasPw ? ' · 🔑 Нууц үг: <strong>' + userPw + '</strong>' : '')
+    + '<br><br>'
+    + (hasPw
+      ? '<button onclick="quickSaveUser()" style="padding:9px 18px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:Outfit,sans-serif;font-weight:700;font-size:12px;cursor:pointer;margin-right:8px">⚡ Хэрэглэгчийн нууц үгээр хадгалах</button>'
+      : '')
+    + '<span style="font-size:11px;opacity:.75">эсвэл доор шинэ PD токен үүсгэнэ үү</span>';
+}
+
+async function quickSaveUser() {
+  var el    = document.getElementById('tg-paste');
+  var phone = el.dataset.parsedPhone;
+  var pw    = el.dataset.parsedPw;
+  var plan  = el.dataset.parsedPlan;
+  var res   = document.getElementById('tg-parse-result');
+  if (!phone || !pw) { alert('Мэдээлэл дутуу байна'); return; }
+
+  // Expiry: 30 хоног
+  var expiry = Date.now() + 30*86400000;
+  var days   = 30;
+
+  res.innerHTML = '⏳ GAS-т хадгалж байна...';
+  try {
+    var url = GAS_URL+'?action=add'
+      +'&name='+encodeURIComponent(phone)
+      +'&uid='+encodeURIComponent(phone)
+      +'&plan='+encodeURIComponent(plan)
+      +'&pw='+encodeURIComponent(pw)
+      +'&expiry='+expiry
+      +'&days='+days;
+    var r = await fetch(url);
+    await r.json();
+    res.style.cssText='display:block;background:#f0fdf4;border:1px solid rgba(22,163,74,.4);color:#15803d;font-size:12px;padding:10px 14px;border-radius:8px;margin-top:10px;line-height:1.8';
+    res.innerHTML = '✅ Амжилттай хадгалагдлаа!<br>'
+      + '📞 Утас: <strong>'+phone+'</strong> · 🔑 Нууц үг: <strong>'+pw+'</strong> · 📦 <strong>'+plan.toUpperCase()+'</strong><br>'
+      + '<span style="font-size:11px;opacity:.8">Хэрэглэгч энэ нууц үгээрээ шууд нэвтрэнэ. Шинэ PD код илгээх шаардлагагүй.</span>';
+    renderStats();
+  } catch(e) {
+    res.style.background='#fef2f2'; res.style.color='#dc2626';
+    res.innerHTML='❌ GAS холбогдсонгүй: '+e.message;
+  }
 }
 
 function copyPW() {
@@ -540,11 +749,11 @@ function copyPW() {
 
 function renderStats(pws) {
   if(!pws){
-    fetch(GAS_URL).then(r=>r.json()).then(renderStats).catch(()=>{});
+    fetch(GAS_URL + '?action=list').then(r=>r.json()).then(renderStats).catch(()=>{});
     return;
   }
   const now = Date.now();
-  const active = pws.filter(p=>p.expiry>now).length;
+  const active = pws.filter(p => parseInt(p.expiry) > now).length;
   document.getElementById('stat-total').textContent   = pws.length;
   document.getElementById('stat-active').textContent  = active;
   document.getElementById('stat-expired').textContent = pws.length - active;
@@ -552,27 +761,28 @@ function renderStats(pws) {
 
 function renderList() {
   const tbody = document.getElementById('pw-list');
-  tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted2);padding:28px">Уншиж байна...</td></tr>';
-  fetch(GAS_URL)
+  tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted2);padding:28px">Уншиж байна...</td></tr>';
+  fetch(GAS_URL + '?action=list')
     .then(r=>r.json())
     .then(pws=>{
       renderStats(pws);
-      if(!pws.length){ tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted2);padding:28px">Нууц үг байхгүй</td></tr>'; return; }
+      if(!pws.length){ tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted2);padding:28px">Нууц үг байхгүй</td></tr>'; return; }
       const now = Date.now();
       tbody.innerHTML = pws.map(p=>{
         const exp = p.expiry < now;
         const h12 = parseFloat(p.days||30) <= 0.5 ? '<span class="tag tag-h12">12ц</span>' : '';
         return `<tr>
-          <td><strong>${p.name}</strong><br><span style="color:var(--muted2);font-size:10px">${p.uid}</span></td>
+          <td style="font-size:10px;color:var(--muted2);white-space:nowrap">${p.registered||'—'}</td>
+          <td><strong>${p.name||'—'}</strong><br><span style="color:var(--muted2);font-size:10px">${p.uid||'—'}</span></td>
           <td class="mono" title="${p.pw}">${p.pw}</td>
           <td><span class="tag ${exp?'tag-exp':'tag-ok'}">${new Date(p.expiry).toLocaleDateString('mn-MN')}${exp?' ✗':''}</span>${h12}</td>
-          <td><span class="tag tag-plan">${p.plan||'pro'}</span></td>
+          <td><span class="tag tag-plan">${(p.plan||'pro').toUpperCase()}</span></td>
           <td><button class="del-btn" onclick="delPW('${p.pw}')">✕</button></td>
         </tr>`;
       }).join('');
     })
     .catch(()=>{
-      tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--red);padding:28px">⚠ Sheets холбогдсонгүй</td></tr>';
+      tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--red);padding:28px">⚠ Sheets холбогдсонгүй</td></tr>';
       ['stat-total','stat-active','stat-expired'].forEach(id=>document.getElementById(id).textContent='—');
     });
 }
@@ -580,6 +790,172 @@ function renderList() {
 function delPW(pw) {
   if(!confirm('Устгахдаа итгэлтэй байна уу?')) return;
   fetch(GAS_URL+'?action=delete&pw='+encodeURIComponent(pw)).then(()=>renderList()).catch(()=>alert('Устгаж чадсангүй'));
+}
+
+// ── REGISTRATIONS ─────────────────────────────────────────────
+// data-* attribute ашиглан onclick injection-оос сэргийлнэ
+function renderRegistrations() {
+  const tbody = document.getElementById('reg-list');
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted2);padding:28px">Уншиж байна...</td></tr>';
+  fetch(GAS_URL + '?action=listRegistrations')
+    .then(r => r.json())
+    .then(regs => {
+      if (!regs || !regs.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted2);padding:28px">Бүртгэл байхгүй</td></tr>';
+        updatePendingBadge(0);
+        return;
+      }
+      const pending = regs.filter(r => r.status === 'PENDING').length;
+      updatePendingBadge(pending);
+
+      // DOM-оор үүсгэх — template literal injection-оос зайлсхийнэ
+      tbody.innerHTML = '';
+      regs.forEach(function(r, idx) {
+        const isPending = r.status === 'PENDING';
+
+        const tr = document.createElement('tr');
+        tr.id = 'reg-row-' + idx;
+
+        // Phone
+        const tdPhone = document.createElement('td');
+        tdPhone.innerHTML = '<strong>' + escH(r.phone) + '</strong>';
+        tr.appendChild(tdPhone);
+
+        // PW
+        const tdPw = document.createElement('td');
+        tdPw.className = 'mono';
+        tdPw.textContent = r.pw;
+        tr.appendChild(tdPw);
+
+        // Plan
+        const tdPlan = document.createElement('td');
+        tdPlan.innerHTML = '<span class="tag tag-plan">' + escH((r.plan||'pro').toUpperCase()) + '</span>';
+        tr.appendChild(tdPlan);
+
+        // Date
+        const tdDate = document.createElement('td');
+        tdDate.style.cssText = 'font-size:11px;color:var(--muted2)';
+        tdDate.textContent = r.date || '—';
+        tr.appendChild(tdDate);
+
+        // Status
+        const tdStatus = document.createElement('td');
+        if (isPending) {
+          tdStatus.innerHTML = '<span class="tag" style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa">⏳ Хүлээгдэж байна</span>';
+        } else {
+          tdStatus.innerHTML = '<span class="tag tag-ok">✓ Баталгаажсан</span>';
+        }
+        tr.appendChild(tdStatus);
+
+        // Actions
+        const tdAct = document.createElement('td');
+        if (isPending) {
+          const btnApprove = document.createElement('button');
+          btnApprove.textContent = '✓ Баталгаажуулах';
+          btnApprove.style.cssText = 'padding:5px 12px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;margin-right:6px';
+          btnApprove.dataset.phone = r.phone;
+          btnApprove.dataset.pw    = r.pw;
+          btnApprove.dataset.plan  = r.plan || 'pro';
+          btnApprove.dataset.idx   = idx;
+          btnApprove.addEventListener('click', function() {
+            approveReg(this.dataset.phone, this.dataset.pw, this.dataset.plan, this.dataset.idx);
+          });
+
+          const btnReject = document.createElement('button');
+          btnReject.textContent = '✕';
+          btnReject.style.cssText = 'padding:5px 10px;background:#fef2f2;color:#dc2626;border:1px solid #fca5a5;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer';
+          btnReject.dataset.phone = r.phone;
+          btnReject.dataset.idx   = idx;
+          btnReject.addEventListener('click', function() {
+            rejectReg(this.dataset.phone, this.dataset.idx);
+          });
+
+          tdAct.appendChild(btnApprove);
+          tdAct.appendChild(btnReject);
+        } else {
+          tdAct.innerHTML = '<span style="font-size:11px;color:var(--muted2)">—</span>';
+        }
+        tr.appendChild(tdAct);
+
+        tbody.appendChild(tr);
+      });
+    })
+    .catch(() => {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--red);padding:28px">⚠ GAS холбогдсонгүй</td></tr>';
+    });
+}
+
+function escH(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function updatePendingBadge(count) {
+  const badge = document.getElementById('pending-badge');
+  if (!badge) return;
+  if (count > 0) { badge.style.display = 'inline'; badge.textContent = count; }
+  else { badge.style.display = 'none'; }
+}
+
+async function approveReg(phone, pw, plan, idx) {
+  const row = document.getElementById('reg-row-' + idx);
+  if (row) row.style.opacity = '0.5';
+
+  // GAS-д нэг дуудлагаар: APPROVED болгож + Passwords-д нэмэх
+  const expiry = Date.now() + 30 * 86400000;
+  const uid    = phone.replace(/\D/g, '');
+  try {
+    const ctrl = new AbortController();
+    const tid  = setTimeout(() => ctrl.abort(), 12000);
+    await fetch(GAS_URL
+      + '?action=approveAndAdd'
+      + '&phone='  + encodeURIComponent(phone)
+      + '&name='   + encodeURIComponent(phone)
+      + '&pw='     + encodeURIComponent(pw)
+      + '&plan='   + encodeURIComponent(plan)
+      + '&uid='    + encodeURIComponent(uid)
+      + '&expiry=' + expiry
+      + '&days=30',
+      { signal: ctrl.signal }
+    );
+    clearTimeout(tid);
+  } catch(e) { console.error('GAS approveAndAdd failed:', e); }
+
+  // 3. Admin Telegram-д баталгаажсан мэдэгдэл явуулах
+  // (хэрэглэгчийн chat_id мэдэгдэхгүй тул admin-д мэдэгдэл явуулж,
+  //  admin тэндээс хэрэглэгч рүү дамжуулна)
+  const msg = '✅ Бүртгэл баталгаажлаа!\n\n'
+    + '📞 Утас: ' + phone + '\n'
+    + '🔑 Нууц үг: ' + pw + '\n'
+    + '📦 Plan: ' + plan.toUpperCase() + '\n'
+    + '🕐 Хугацаа: 30 хоног\n\n'
+    + '👉 Хэрэглэгч рүү нууц үгийг дамжуулна уу:\n'
+    + '🔗 https://productdrops.netlify.app/landing';
+  try {
+    await fetch('https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/sendMessage', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msg })
+    });
+  } catch(e) { console.error('TG notify failed:', e); }
+
+  // UI шинэчлэх
+  if (row) {
+    row.style.opacity = '1';
+    row.cells[4].innerHTML = '<span class="tag tag-ok">✓ Баталгаажсан</span>';
+    row.cells[5].innerHTML = '<span style="font-size:11px;color:var(--muted2)">—</span>';
+  }
+  renderRegistrations();
+  renderStats();
+}
+
+async function rejectReg(phone, idx) {
+  if (!confirm(phone + ' бүртгэлийг устгахдаа итгэлтэй байна уу?')) return;
+  const row = document.getElementById('reg-row-' + idx);
+  if (row) row.style.opacity = '0.5';
+  try {
+    await fetch(GAS_URL + '?action=deleteReg&phone=' + encodeURIComponent(phone));
+  } catch(e) {}
+  renderRegistrations();
 }
 </script>
 </body>
