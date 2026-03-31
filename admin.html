@@ -836,9 +836,9 @@ async function quickSaveUser() {
   var res   = document.getElementById('tg-parse-result');
   if (!phone || !pw) { alert('Мэдээлэл дутуу байна'); return; }
 
-  // Expiry: 90 хоног (3 сар)
-  var expiry = Date.now() + 90*86400000;
-  var days   = 90;
+  // Expiry: 30 хоног
+  var expiry = Date.now() + 30*86400000;
+  var days   = 30;
 
   res.innerHTML = '⏳ GAS-т хадгалж байна...';
   try {
@@ -892,7 +892,7 @@ function renderList() {
       const now = Date.now();
       tbody.innerHTML = pws.map(p=>{
         const exp = +new Date(p.expiry) < now;
-        const h12 = parseFloat(p.days||90) <= 0.5 ? '<span class="tag tag-h12">12ц</span>' : '';
+        const h12 = parseFloat(p.days||30) <= 0.5 ? '<span class="tag tag-h12">12ц</span>' : '';
         return `<tr>
           <td data-label="Бүртгэсэн" style="font-size:10px;color:var(--muted2)">${p.registered||'—'}</td>
           <td data-label="Нэр"><strong>${p.name||'—'}</strong> <span style="color:var(--muted2);font-size:10px">${p.uid||'—'}</span></td>
@@ -1031,7 +1031,7 @@ async function approveReg(phone, pw, plan, idx) {
   if (row) row.style.opacity = '0.5';
 
   // GAS-д нэг дуудлагаар: APPROVED болгож + Passwords-д нэмэх
-  const expiry = Date.now() + 90 * 86400000;
+  const expiry = Date.now() + 30 * 86400000;
   const uid    = phone.replace(/\D/g, '');
   try {
     await fetch(GAS_URL
@@ -1041,7 +1041,7 @@ async function approveReg(phone, pw, plan, idx) {
       + '&plan='   + encodeURIComponent(plan)
       + '&uid='    + encodeURIComponent(uid)
       + '&expiry=' + expiry
-      + '&days=90', { mode: 'no-cors' }
+      + '&days=30', { mode: 'no-cors' }
     );
   } catch(e) { console.error('GAS approveAndAdd failed:', e); }
 
@@ -1053,7 +1053,7 @@ async function approveReg(phone, pw, plan, idx) {
     + '🔑 Нууц үг: ' + pw + '\n'
     + '📦 Plan: ' + plan.toUpperCase() + '\n'
     + '🕐 Хугацаа: 30 хоног\n\n'
-    + '👉 Хэрэглэгч рүү нууц үгийг дамжуулна уу:\n'
+    + '👉 Та доорх Website аар нэвтрэх хэсэгт дарж нэвтрээрэй:\n'
     + '🔗 https://productdrops.netlify.app/landing';
   try {
     await fetch('https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/sendMessage', {
