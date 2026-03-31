@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ProductDrop.MN — Монголын #1 Бараа судалгааны Платформ</title>
-<meta name="description" content="Монголын #1 Бараа Судалгааны бүтээгдэхүүн судалгааны платформ. Борлуулалт сайтай бүтээгдэхүүн олж, ашгаа тооцоол.">
+<title>ProductDrop.MN — Дараагийн ашигтай бараагаа эндээс ол</title>
+<meta name="description" content="200+ судалгаа хийгдсэн бараа, supplier линк, content script нэг дороо. 24 цаг үнэгүй туршилт.">
 <link rel="icon" type="image/png" href="https://res.cloudinary.com/di0nven1w/image/upload/v1774793918/favicon_djarfu.png">
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://productdrop.mn/">
 <meta property="og:title" content="ProductDrop.MN — Монголын #1 Бараа Судалгааны Платформ">
-<meta property="og:description" content="Монголын #1 Бараа Судалгааны бүтээгдэхүүн судалгааны платформ. Борлуулалт сайтай бүтээгдэхүүн олж, ашгаа тооцоол.">
+<meta property="og:description" content="200+ судалгаа хийгдсэн бараа, supplier линк, content script нэг дороо. 24 цаг үнэгүй туршилт.">
 <meta property="og:image" content="https://res.cloudinary.com/di0nven1w/image/upload/v1774493447/og_czmbkm.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -863,6 +863,15 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
   transition:opacity .4s ease,transform .4s ease;
 }
 .wl-sale-item.wl-in{opacity:1;transform:scale(1)}
+/* FAQ */
+.faq-item{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color .15s}
+.faq-item:hover{border-color:var(--accent-border)}
+.faq-item.open{border-color:var(--accent-border)}
+.faq-q{padding:18px 20px;font-size:15px;font-weight:600;color:var(--text);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.faq-arrow{font-size:20px;color:var(--muted);transition:transform .2s;flex-shrink:0}
+.faq-item.open .faq-arrow{transform:rotate(90deg);color:var(--accent)}
+.faq-a{display:none;padding:0 20px 18px;font-size:14px;color:var(--muted);line-height:1.75;border-top:1px solid var(--border)}
+.faq-item.open .faq-a{display:block}
 </style>
 </head>
 <body>
@@ -923,7 +932,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
       </div>
       <div class="contact-item">
         <div class="contact-icon">🕐</div>
-        <div><div class="contact-label">Ажлын цаг</div><div class="contact-val">Даваа–Баасан · 10:00–18:00</div></div>
+        <div><div class="contact-label">Ажлын цаг</div><div class="contact-val">Долоо хоног бүр · 08:00–22:00</div></div>
       </div>
       <p style="margin-top:16px;font-size:12px;color:var(--muted2)">Ихэнх асуултад 24 цагийн дотор хариу өгнө.</p>
     </div>
@@ -932,38 +941,105 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
 
 <!-- REQUEST MODAL -->
 <div class="modal-overlay" id="modal-request">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h3>🚀 Үнэгүй эхлэх</h3>
-      <button class="modal-close" onclick="closeModal('modal-request')">✕</button>
-    </div>
-    <div class="req-body">
-      <div id="req-form-wrap">
-        <p class="req-desc">Мэдээллээ үлдээгээрэй — <strong>30 минутын дотор</strong> нэвтрэх нууц үг илгээнэ.</p>
-        <div class="req-field">
-          <label>Нэр</label>
-          <input type="text" id="req-name" placeholder="Таны нэр" maxlength="60" onkeydown="if(event.key==='Enter')submitRequest()">
-        </div>
-        <div class="req-field">
-          <label>Утасны дугаар</label>
-          <input type="tel" id="req-phone" placeholder="99001122" maxlength="20" onkeydown="if(event.key==='Enter')submitRequest()">
-        </div>
-        <div class="req-field">
-          <label>Instagram эсвэл Facebook нэр</label>
-          <input type="text" id="req-social" placeholder="@tanii.username" maxlength="80" onkeydown="if(event.key==='Enter')submitRequest()">
-        </div>
-        <button class="req-submit" id="req-btn" onclick="submitRequest()">
-          ✅ Хүсэлт илгээх
-        </button>
-        <div class="req-err" id="req-err"></div>
-        <p class="req-note">Зөвхөн нэвтрэх нууц үг илгээхэд ашиглана. Спам байхгүй.</p>
+  <div class="modal-box" style="max-width:460px;border-radius:24px;overflow:hidden">
+
+    <!-- STEP 1: Бүртгэл -->
+    <div id="req-step1">
+      <div style="background:var(--text);padding:36px 32px 28px;text-align:center;position:relative">
+        <button onclick="closeModal('modal-request')" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:32px;height:32px;color:rgba(255,255,255,.6);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.15)'" onmouseout="this.style.background='rgba(255,255,255,.08)'">✕</button>
+        <div style="font-size:26px;font-weight:900;color:#fff;letter-spacing:-.5px;margin-bottom:8px">Бүртгэл үүсгэх</div>
+        <div style="font-size:14px;color:rgba(255,255,255,.5);line-height:1.6">Утасны дугаар болон нууц үг үүсгэн оруулна уу</div>
       </div>
-      <div class="req-success" id="req-success">
-        <div class="req-success-icon">🎉</div>
-        <div class="req-success-title">Хүсэлт хүлээн авлаа!</div>
-        <div class="req-success-sub">30 минутын дотор тан руу нэвтрэх нууц үг илгээнэ.<br>Утас эсвэл Instagram-аа шалгаарай.</div>
+      <div style="background:var(--bg);padding:24px 28px 28px">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <input type="tel" id="req-phone" placeholder="Утасны дугаар" maxlength="20"
+            style="width:100%;padding:14px 18px;background:var(--surface);border:1.5px solid var(--border2);border-radius:12px;font-size:15px;font-family:Outfit,sans-serif;color:var(--text);outline:none;transition:border .15s,box-shadow .15s"
+            onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 3px var(--accent-bg)'" onblur="this.style.borderColor='var(--border2)';this.style.boxShadow='none'"
+            onkeydown="if(event.key==='Enter')document.getElementById('req-pw').focus()">
+          <div style="position:relative">
+            <input type="password" id="req-pw" placeholder="Нууц үг"
+              style="width:100%;padding:14px 48px 14px 18px;background:var(--surface);border:1.5px solid var(--border2);border-radius:12px;font-size:15px;font-family:Outfit,sans-serif;color:var(--text);outline:none;transition:border .15s,box-shadow .15s"
+              onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 3px var(--accent-bg)'" onblur="this.style.borderColor='var(--border2)';this.style.boxShadow='none'"
+              onkeydown="if(event.key==='Enter')document.getElementById('req-pw2').focus()">
+            <span onclick="togglePw('req-pw',this)" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--muted2);font-size:17px;user-select:none">👁</span>
+          </div>
+          <div style="position:relative">
+            <input type="password" id="req-pw2" placeholder="Нууц үг давтах"
+              style="width:100%;padding:14px 48px 14px 18px;background:var(--surface);border:1.5px solid var(--border2);border-radius:12px;font-size:15px;font-family:Outfit,sans-serif;color:var(--text);outline:none;transition:border .15s,box-shadow .15s"
+              onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 3px var(--accent-bg)'" onblur="this.style.borderColor='var(--border2)';this.style.boxShadow='none'"
+              onkeydown="if(event.key==='Enter')submitRequest()">
+            <span onclick="togglePw('req-pw2',this)" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--muted2);font-size:17px;user-select:none">👁</span>
+          </div>
+          <div id="req-err" style="display:none;font-size:12px;color:#dc2626;background:#fef2f2;border:1px solid #fca5a5;border-radius:9px;padding:10px 14px;text-align:center"></div>
+          <button id="req-btn" onclick="submitRequest()"
+            style="width:100%;padding:16px;background:var(--accent);border:none;border-radius:12px;font-size:16px;font-weight:800;color:#fff;cursor:pointer;font-family:Outfit,sans-serif;letter-spacing:-.2px;margin-top:4px;transition:background .2s,transform .2s,box-shadow .2s"
+            onmouseover="this.style.background='#14a044';this.style.transform='translateY(-1px)';this.style.boxShadow='0 8px 24px rgba(22,163,74,.25)'"
+            onmouseout="this.style.background='var(--accent)';this.style.transform='none';this.style.boxShadow='none'">
+            Төлбөр төлөх ( QPay )
+          </button>
+          <p style="text-align:center;font-size:11px;color:var(--muted2);line-height:1.6">Бүртгэлийн мэдээлэл хамгаалагдсан. Спам байхгүй.</p>
+        </div>
       </div>
     </div>
+
+    <!-- STEP 2: Дансны мэдээлэл -->
+    <div id="req-step2" style="display:none">
+      <div style="background:#fff;border-bottom:1px solid var(--border);padding:18px 24px;display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:4px">Бүртгэл амжилттай ✓</div>
+          <div style="font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:1px">Дансаар төлөх</div>
+          <div style="font-size:19px;font-weight:800;color:var(--text);margin-top:2px">Pro Plan</div>
+          <div style="font-size:28px;font-weight:900;color:var(--accent);letter-spacing:-1px;line-height:1.1">₮49,900<small style="font-size:14px;font-weight:500;color:var(--muted)">/сар</small></div>
+        </div>
+        <button class="modal-close" onclick="closeModal('modal-request')">✕</button>
+      </div>
+      <div style="height:3px;background:var(--border)"><div style="width:100%;height:100%;background:var(--accent)"></div></div>
+      <div style="padding:20px 24px;overflow-y:auto;max-height:64vh">
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.5;padding-top:3px">Доорх дансны мэдээллийг <b>хуулж авна</b></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.5;padding-top:3px">Банкны апп нээж <b>шилжүүлэг хийнэ</b> — Утга хэсэгт утасны дугаараа бичнэ</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.5;padding-top:3px">Instagram <b>@productdrop.mn</b>-д screenshot явуулна</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.5;padding-top:3px"><b>30 минутын</b> дотор нэвтрэх нууц үг илгээгдэнэ</div>
+          </div>
+        </div>
+        <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border)"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Банк</div><div style="font-size:14px;font-weight:700;color:var(--text)">Хаан Банк</div></div>
+          <div style="display:flex;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border)"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">IBAN</div><div style="font-size:14px;font-weight:700;color:var(--text)">18000500</div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border)">
+            <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Дансны дугаар</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="font-size:16px;font-weight:900;color:var(--text);letter-spacing:.5px">5018953118</div>
+              <button onclick="copyAcc2(this)" style="background:var(--accent);color:#fff;border:none;border-radius:7px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:Outfit,sans-serif">ХУУЛАХ</button>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border)"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Хүлээн авагч</div><div style="font-size:14px;font-weight:700;color:var(--text)">Ганбаар Цэвэгмид</div></div>
+          <div style="display:flex;justify-content:space-between;padding:11px 16px"><div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Дүн</div><div style="font-size:18px;font-weight:900;color:var(--accent)">₮49,900</div></div>
+        </div>
+        <div style="background:var(--accent-bg);border:1.5px solid var(--accent-border);border-radius:10px;padding:14px 16px;margin-bottom:16px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:6px">✓ Утга хэсэгт</div>
+          <div style="font-size:13px;color:var(--text2)">Таны бүртгэлийн утасны дугаар: <b id="req-utga-hint" style="color:var(--accent)">—</b></div>
+        </div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:16px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Холбоо барих</div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span>📱</span><div style="font-size:13px;font-weight:600">Instagram: <a href="https://instagram.com/productdrop.mn" target="_blank" style="color:var(--accent)">@productdrop.mn</a></div></div>
+          <div style="display:flex;align-items:center;gap:10px"><span>📞</span><div style="font-size:13px;font-weight:600">Утас: <a href="tel:+97688748966" style="color:var(--accent)">+976 8874-8966</a></div></div>
+        </div>
+        <button onclick="closeModal('modal-request')" style="width:100%;padding:14px;background:var(--text);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Outfit,sans-serif">Ойлголоо →</button>
+        <p style="text-align:center;font-size:11px;color:var(--muted2);margin-top:10px">Асуулт байвал Instagram DM-аар холбогдоорой</p>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1058,17 +1134,17 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
 
   <!-- LEFT: text -->
   <div class="hs-left">
-    <div class="hero-badge"><span class="hero-badge-dot"></span> 🇲🇳 Монголд Онлайн дэлгүүр эрхлэгчдэд зориулсан #1 Website</div>
-    <h1 style="margin-top:20px">Зөв бараагаа сонгоод<br><span class="grad">ашигтай онлайн дэлгүүр</span> эхлүүл</h1>
-    <p class="hero-sub">Судалгаа хийгдсэн бараанаас ашигтайгаа сонго. Тооцоолуур, supplier харьцуулалт, social targeting бүгд нэг дороо. <strong>7 хоног бүр 100+ шинэ бараа нэмэгддэг.</strong></p>
+    <div class="hero-badge"><span class="hero-badge-dot"></span> 🇲🇳 Монголын онлайн бизнес эрхлэгчдийн #1 бараа судалгааны платформ</div>
+    <h1 style="margin-top:20px">Дараагийн <span class="grad">ашигтай бараагаа</span><br>эндээс ол</h1>
+    <p class="hero-sub">200+ судалгаа хийгдсэн бараа, supplier линк, ашгийн тооцоолуур, content script — нэг дороо. Эхлээд <strong>үнэгүй туршаад</strong> дараа шийд.</p>
     <div class="hero-btns">
-      <button class="btn-primary" onclick="openLoginModal()">🔑 Нэвтрэх / Эхлэх</button>
-      <a class="btn-secondary" href="#" onclick="goLiteFree();return false;">🚀 Үнэгүй туршилт</a>
+      <a class="btn-primary" href="Lite.html">🚀 Үнэгүй эхлэх →</a>
+      <button class="btn-secondary" onclick="openLoginModal()">🔑 Нэвтрэх</button>
     </div>
     <div class="hero-stats">
       <div class="stat"><div class="stat-n">200<span class="hi">+</span></div><div class="stat-l">Судалгаа хийсэн бараа</div></div>
-      <div class="stat"><div class="stat-n">100<span class="hi">+</span></div><div class="stat-l">7 хоног бүр шинэ бараа</div></div>
       <div class="stat"><div class="stat-n">50<span class="hi">%+</span></div><div class="stat-l">Дундаж ашгийн хувь</div></div>
+      <div class="stat"><div class="stat-n">4.9<span class="hi">★</span></div><div class="stat-l">Хэрэглэгчдийн үнэлгээ</div></div>
     </div>
   </div>
 
@@ -1196,18 +1272,56 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
 </div><!-- /hero-split -->
 </div>
 
+
+<!-- TOP TESTIMONIALS STRIP -->
+<div class="section-outer" style="background:var(--surface2)">
+<div style="max-width:1100px;margin:0 auto;padding:32px 32px">
+  <div style="text-align:center;margin-bottom:20px">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent)">Баталгаажсан үр дүн</div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+    <div style="background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:20px;box-shadow:var(--shadow)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="width:40px;height:40px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:16px;flex-shrink:0">Ц</div>
+        <div><div style="font-size:13px;font-weight:700">Г. Цэнгэлмаа</div><div style="font-size:11px;color:var(--muted)">E-commerce · Instagram</div></div>
+        <div style="margin-left:auto;color:#f59e0b;font-size:13px">★★★★★</div>
+      </div>
+      <div style="background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:13px;font-weight:700;color:var(--accent)">💰 7 хоногт ₮483,300 орлого</div>
+      <p style="font-size:13px;color:var(--text2);line-height:1.65">"Баярлалаа, эхний захиалгуудаа авч эхэлсэн. Beauty Category-оос эхэлсэн маань маш зөв сонголт байлаа."</p>
+    </div>
+    <div style="background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:20px;box-shadow:var(--shadow)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="width:40px;height:40px;border-radius:50%;background:#0891b2;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:16px;flex-shrink:0">С</div>
+        <div><div style="font-size:13px;font-weight:700">Ц. Сүхбат</div><div style="font-size:11px;color:var(--muted)">E-commerce · Instagram</div></div>
+        <div style="margin-left:auto;color:#f59e0b;font-size:13px">★★★★★</div>
+      </div>
+      <div style="background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:13px;font-weight:700;color:var(--accent)">💳 7 хоногт ₮225,600 орлого</div>
+      <p style="font-size:13px;color:var(--text2);line-height:1.65">"Дажгүй сайн байгаа, зөвлөгөөг нь үзээд хэдэн захиалга авсан. Маш их баярлалаа."</p>
+    </div>
+    <div style="background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:20px;box-shadow:var(--shadow)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="width:40px;height:40px;border-radius:50%;background:#2563eb;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:16px;flex-shrink:0">B</div>
+        <div><div style="font-size:13px;font-weight:700">Bilguun Bgy</div><div style="font-size:11px;color:var(--muted)">Online бизнес · Instagram</div></div>
+        <div style="margin-left:auto;color:#f59e0b;font-size:13px">★★★★★</div>
+      </div>
+      <div style="background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:13px;font-weight:700;color:var(--accent)">📦 3 бараа сонгоод захиалга авсан</div>
+      <p style="font-size:13px;color:var(--text2);line-height:1.65">"3 бараа сонгоод creative-ийг нь хийчихсэн, захиалга ирсэн байна. Маш хялбар байлаа."</p>
+    </div>
+  </div>
+</div>
+</div>
 <!-- FEATURES -->
 <div class="section-outer" id="features">
 <section>
   <div class="section-label">Онцлог</div>
-  <div class="section-title">Онлайн бизнесд хэрэгтэй<br>бүгдийг нэг дор</div>
-  <div class="section-sub">Бараа судалгааны хамгийн дэлгэрэнгүй мэдээлэл, тооцоолуур, хэрэгслийг нэг платформоос авна.</div>
+  <div class="section-title">Бараа сонгохоос борлуулалт хүртэл<br>бүгдийг нэг дор</div>
+  <div class="section-sub">Судалгаа, тооцоолуур, supplier линк, content script — өөр хаана ч нэг дороо байхгүй.</div>
   <div class="features-grid">
     <div class="feature-card"><div class="feature-icon green">📊</div><h3>Ашгийн тооцоолуур</h3><p>Авах үнэ, хүргэлт, маркетинг зардал бүгдийг автоматаар тооцоолж цэвэр ашгийг гарга.</p><img class="feature-card-img" src="https://res.cloudinary.com/di0nven1w/image/upload/v1774827906/features_feat_calculator_zox6as.png" alt="Ашгийн тооцоолуур"></div>
     <div class="feature-card"><div class="feature-icon blue">🔗</div><h3>Supplier мэдээлэл</h3><p>Alibaba болон Taobao дахь нийлүүлэгчдийн мэдээллийг харьцуулан, шийдвэрээ мэдлэгтэйгээр гарга.</p><img class="feature-card-img" src="https://res.cloudinary.com/di0nven1w/image/upload/v1774827906/features_feat_supplier_eaw0fz.png" alt="Supplier мэдээлэл"></div>
     <div class="feature-card"><div class="feature-icon orange">📈</div><h3>Эрэлтийн шинжилгээ</h3><p>Бараа бүрийн сезоны эрэлт, зах зээлийн өрсөлдөөний шинжилгээ.</p><img class="feature-card-img" src="https://res.cloudinary.com/di0nven1w/image/upload/v1774827906/features_feat_demand_gm2tg0.png" alt="Эрэлтийн шинжилгээ"></div>
     <div class="feature-card"><div class="feature-icon purple">📱</div><h3>Social targeting</h3><p>Facebook болон Instagram зарлалд ашиглах нас , хүйс, сонирхол сегментүүдийг бэлэн авна.</p><img class="feature-card-img" src="https://res.cloudinary.com/di0nven1w/image/upload/v1774827906/features_feat_social_h8snt3.png" alt="Social targeting"></div>
-    <div class="feature-card"><div class="feature-icon pink">✍️</div><h3>Content AI Script</h3><p>Бараа бүрт тохирсон Reel/Shorts видео скрипт бэлэн. Шууд хэрэглэ.</p><img class="feature-card-img" src="https://res.cloudinary.com/di0nven1w/image/upload/v1774828072/features_feat_content_g5wzub.png" alt="Content AI Script"></div>
+    <div class="feature-card" style="border-color:var(--accent-border);background:var(--accent-bg)"><div class="feature-icon pink">✍️</div><h3>Content AI Script <span style="font-size:10px;background:var(--accent);color:#fff;padding:2px 8px;border-radius:20px;font-weight:700;vertical-align:middle;margin-left:4px">ОНЦГОЙ</span></h3><p>Бараа бүрт тохирсон Reel/Shorts видео скрипт бэлэн — Монголын өөр ямар ч платформд байхгүй онцлог.</p><img class="feature-card-img" src="https://res.cloudinary.com/di0nven1w/image/upload/v1774828072/features_feat_content_g5wzub.png" alt="Content AI Script"></div>
     <div class="feature-card"><div class="feature-icon teal">🏆</div><h3>Dropshipping</h3><p>Дэлхийн зах зээл дээр одоо ямар бараа хамгийн их зарагдаж байгааг судалж мэдэж авна.</p><img class="feature-card-img" src="https://res.cloudinary.com/di0nven1w/image/upload/v1774827906/features_feat_dropship_txmfk3.png" alt="Dropshipping"></div>
   </div>
 </section>
@@ -1234,7 +1348,6 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
         <div class="step-num">3</div>
         <h3>Supplier судал</h3>
         <p>Alibaba болон Taobao дахь нийлүүлэгчдийн мэдээлэл, үнийг харьцуулж, тэдгээр платформд шууд захиалга өг.</p>
-        <span class="step-note">⚠️ ProductDrop бараа нийлүүлдэггүй</span>
       </div>
       <div class="step">
         <div class="step-num">4</div>
@@ -1251,7 +1364,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
 <section>
   <div class="section-label">Үнэ</div>
   <div class="section-title">Танд тохирсон төлөвлөгөө</div>
-  <div class="section-sub">Lite багц үнэгүй — нэвтэрснээс хойш 12 цаг 25 бараа + supplier линктэй. Бүтэн каталог хэрэгтэй бол Pro эсвэл Business сонгоорой.</div>
+  <div class="section-sub">Lite багц <strong>үнэгүй</strong> — картны мэдээлэл шаардлагагүй, 24 цаг 25 бараа бүрэн ашигла. Итгэлтэй болсон хойноо Pro сонго.</div>
   <div class="pricing-grid">
     <div class="pricing-card">
       <div class="pricing-name">Lite</div>
@@ -1268,13 +1381,14 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
         <li class="no">Content AI Script</li>
         <li class="no">7 хоног бүр шинэ бараа</li>
       </ul>
-      <button class="pricing-btn secondary" onclick="goLiteFree()">🚀 Үнэгүй туршилт →</button>
+      <a class="pricing-btn secondary" href="Lite.html">🚀 Үнэгүй туршилт →</a>
     </div>
     <div class="pricing-card featured">
       <div class="pricing-badge">⭐ Хамгийн их сонгогддог</div>
       <div class="pricing-name">Pro</div>
       <div class="pricing-price">₮49,900<small>/сар</small></div>
-      <div class="pricing-period" style="margin-bottom:28px">Сарын захиалга</div>
+      <div class="pricing-period" style="margin-bottom:8px">Сарын захиалга · цуцлах боломжтой</div>
+      <div style="font-size:12px;color:var(--accent);font-weight:600;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:8px;padding:6px 12px;margin-bottom:20px;line-height:1.5">✓ Content AI Script орсон — өрсөлдөгч платформд байхгүй</div>
       <ul class="pricing-features">
         <li>200+ бараа бүгд</li>
         <li>7 хоног бүр 100+ шинэ бараа</li>
@@ -1285,7 +1399,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
         <li>Content AI Script бэлэн</li>
         <li>Ашиглах заавар</li>
       </ul>
-      <button class="pricing-btn primary" onclick="openPayment('pro')">Худалдан авах →</button>
+      <button class="pricing-btn primary" onclick="openRequestModal()">Худалдан авах →</button>
     </div>
     <div class="pricing-card coming-soon">
       <div class="coming-soon-overlay">
@@ -1313,6 +1427,21 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
       </div>
     </div>
   </div>
+
+  <div style="margin-top:32px;padding:20px 24px;background:var(--surface2);border:1.5px solid var(--border);border-radius:14px;max-width:680px">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:14px">ProductDrop vs Бусад платформ</div>
+    <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px 20px;font-size:13px;align-items:center">
+      <div style="font-weight:600;color:var(--muted);font-size:11px;padding-bottom:6px;border-bottom:1px solid var(--border)">Онцлог</div>
+      <div style="font-weight:700;color:var(--accent);font-size:11px;text-align:center;padding-bottom:6px;border-bottom:1px solid var(--border)">ProductDrop</div>
+      <div style="font-weight:600;color:var(--muted2);font-size:11px;text-align:center;padding-bottom:6px;border-bottom:1px solid var(--border)">Бусад</div>
+      <div style="color:var(--text2)">Үнэгүй туршилт</div><div style="color:var(--accent);font-weight:700;text-align:center">✓ 24 цаг</div><div style="color:var(--muted2);text-align:center">✗</div>
+      <div style="color:var(--text2)">Content AI Script</div><div style="color:var(--accent);font-weight:700;text-align:center">✓</div><div style="color:var(--muted2);text-align:center">✗</div>
+      <div style="color:var(--text2)">Supplier харьцуулалт</div><div style="color:var(--accent);font-weight:700;text-align:center">✓</div><div style="color:var(--muted2);text-align:center">✗</div>
+      <div style="color:var(--text2)">7 хоног бүр шинэ бараа</div><div style="color:var(--accent);font-weight:700;text-align:center">✓</div><div style="color:var(--accent);font-weight:700;text-align:center">✓</div>
+      <div style="color:var(--text2)">Ашгийн тооцоолуур</div><div style="color:var(--accent);font-weight:700;text-align:center">✓</div><div style="color:var(--accent);font-weight:700;text-align:center">✓</div>
+    </div>
+  </div>
+
 </section>
 </div>
 
@@ -1321,7 +1450,14 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
 <section>
   <div class="section-label">Хэрэглэгчид</div>
   <div class="section-title">Амжилтын жишээнүүд</div>
-  <div class="section-sub">Монголын онлайн бизнес эрхлэгчид ProductDrop ашиглан бизнесээ ашигтай болгосон туршлагаас.</div>
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:8px;flex-wrap:wrap">
+    <div class="section-sub" style="margin-bottom:0">Бодит хэрэглэгчдийн туршлага.</div>
+    <div style="display:inline-flex;align-items:center;gap:8px;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:20px;padding:6px 16px;flex-shrink:0">
+      <span style="color:#f59e0b;font-size:14px">★★★★★</span>
+      <span style="font-size:13px;font-weight:700;color:var(--accent)">4.9 / 5</span>
+      <span style="font-size:12px;color:var(--muted)">· 40+ үнэлгээ</span>
+    </div>
+  </div>
   <div class="carousel-wrap">
     <button class="carousel-btn prev" onclick="moveCarousel(-1)">‹</button>
     <button class="carousel-btn next" onclick="moveCarousel(1)">›</button>
@@ -1400,13 +1536,43 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
 </section>
 </div>
 
+<!-- FAQ -->
+<div class="section-outer">
+<section>
+  <div class="section-label">Түгээмэл асуулт</div>
+  <div class="section-title">Асуусан зүйлд хариулъя</div>
+  <div style="margin-top:40px;display:flex;flex-direction:column;gap:12px;max-width:720px">
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">ProductDrop scam биш гэдгийг яаж мэдэх вэ? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">Манай Instagram <a href="https://instagram.com/productdrop.mn" target="_blank" style="color:var(--accent)">@productdrop.mn</a>-д бодит хэрэглэгчдийн screenshot, үр дүн байдаг. Lite багц <b>үнэгүй</b> — мөнгө төлөхгүйгээр 25 бараа, supplier линкийг 24 цаг ашиглаж үзнэ. Эхлээд туршаад, итгэлтэй болсон хойноо Pro авна.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Бараа захиалахад мөнгө хэд хэрэгтэй вэ? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">ProductDrop нь зөвхөн судалгааны мэдээлэл өгдөг. Alibaba дээр 1 бараанаас ₮15,000–₮50,000-оос эхлэн захиалж болно. Тест хийхэд ₮50,000–₮150,000 хангалттай. ProductDrop өөрөө бараа нийлүүлдэггүй — та Alibaba/Taobao-гаас шууд захиалдаг.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">7 хоног бүр шинэ бараа нэмэгддэг үү? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">Тийм. Pro план дээр 7 хоног бүр 100+ шинэ бараа нэмэгддэг. Давхцалгүйгээр сар бүр шинэ судалгаа хийсэн бараанууд нэмэгдэнэ.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Нууц үгийг хэзээ авах вэ? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">Бүртгэл үүсгэж, төлбөр хийснээс хойш <b>30 минутын дотор</b> Instagram DM эсвэл утсаар нууц үг илгээнэ. 30 минут өнгөрсөн ч ирээгүй бол <a href="https://instagram.com/productdrop.mn" target="_blank" style="color:var(--accent)">@productdrop.mn</a>-д DM бичнэ үү.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Lite-аас Pro руу шилжих боломжтой юу? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">Тийм. Lite-г туршаад хэрэгтэй гэж үзвэл <a href="https://instagram.com/productdrop.mn" target="_blank" style="color:var(--accent)">@productdrop.mn</a>-д DM бичихэд Pro нууц үг 30 минутын дотор ирнэ.</div>
+    </div>
+  </div>
+</section>
+</div>
+
 <!-- CTA -->
 <div class="cta-section">
-  <h2>Өнөөдрөөс эхлэх үү?</h2>
-  <p>1 хоногийн үнэгүй туршилт. Картны мэдээлэл шаардлагагүй.</p>
+  <h2>Дараагийн ашигтай бараагаа<br>өнөөдөр ол</h2>
+  <p>24 цагийн үнэгүй туршилт. Картны мэдээлэл шаардлагагүй.</p>
   <div class="hero-btns">
-    <button class="btn-primary" onclick="openLoginModal()">🔑 Нэвтрэх / Эхлэх</button>
-    <a class="btn-secondary" href="#" onclick="goLiteFree();return false;">🚀 Үнэгүй туршилт</a>
+    <a class="btn-primary" href="Lite.html">🚀 Одоо үнэгүй эхлэх →</a>
+    <button class="btn-secondary" onclick="openLoginModal()">🔑 Нэвтрэх</button>
   </div>
 </div>
 
@@ -1509,7 +1675,37 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
         </div>
       </div>
 
-      <!-- CTA -->
+      <!-- FAQ -->
+<div class="section-outer">
+<section>
+  <div class="section-label">Түгээмэл асуулт</div>
+  <div class="section-title">Асуусан зүйлд хариулъя</div>
+  <div style="margin-top:40px;display:flex;flex-direction:column;gap:12px;max-width:720px">
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">ProductDrop scam биш гэдгийг яаж мэдэх вэ? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">Манай Instagram <a href="https://instagram.com/productdrop.mn" target="_blank" style="color:var(--accent)">@productdrop.mn</a>-д бодит хэрэглэгчдийн screenshot, үр дүн байдаг. Lite багц <b>үнэгүй</b> — мөнгө төлөхгүйгээр 25 бараа, supplier линкийг 24 цаг ашиглаж үзнэ. Эхлээд туршаад, итгэлтэй болсон хойноо Pro авна.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Бараа захиалахад мөнгө хэд хэрэгтэй вэ? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">ProductDrop нь зөвхөн судалгааны мэдээлэл өгдөг. Alibaba дээр 1 бараанаас ₮15,000–₮50,000-оос эхлэн захиалж болно. Тест хийхэд ₮50,000–₮150,000 хангалттай. ProductDrop өөрөө бараа нийлүүлдэггүй — та Alibaba/Taobao-гаас шууд захиалдаг.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">7 хоног бүр шинэ бараа нэмэгддэг үү? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">Тийм. Pro план дээр 7 хоног бүр 100+ шинэ бараа нэмэгддэг. Давхцалгүйгээр сар бүр шинэ судалгаа хийсэн бараанууд нэмэгдэнэ.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Нууц үгийг хэзээ авах вэ? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">Бүртгэл үүсгэж, төлбөр хийснээс хойш <b>30 минутын дотор</b> Instagram DM эсвэл утсаар нууц үг илгээнэ. 30 минут өнгөрсөн ч ирээгүй бол <a href="https://instagram.com/productdrop.mn" target="_blank" style="color:var(--accent)">@productdrop.mn</a>-д DM бичнэ үү.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Lite-аас Pro руу шилжих боломжтой юу? <span class="faq-arrow">›</span></div>
+      <div class="faq-a">Тийм. Lite-г туршаад хэрэгтэй гэж үзвэл <a href="https://instagram.com/productdrop.mn" target="_blank" style="color:var(--accent)">@productdrop.mn</a>-д DM бичихэд Pro нууц үг 30 минутын дотор ирнэ.</div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- CTA -->
       <button class="pay-cta" onclick="closePayment()">Ойлголоо →</button>
       <div class="pay-footer-note">Асуулт байвал Instagram DM-аар холбогдоорой</div>
     </div>
@@ -1720,61 +1916,93 @@ var TG_TOKEN = '8695289865:AAGGjH1TLin2_W8AzHkIT7rtYLR6VIZxxTo';
 var TG_CHAT  = '5877604772';
 
 function openRequestModal() {
-  document.getElementById('req-form-wrap').style.display = 'block';
-  document.getElementById('req-success').style.display   = 'none';
-  document.getElementById('req-name').value  = '';
-  document.getElementById('req-phone').value = '';
-  document.getElementById('req-social').value= '';
-  document.getElementById('req-err').style.display = 'none';
-  document.getElementById('req-btn').disabled = false;
-  document.getElementById('req-btn').textContent = '✅ Хүсэлт илгээх';
+  var s1 = document.getElementById('req-step1');
+  var s2 = document.getElementById('req-step2');
+  if (s1) s1.style.display = 'block';
+  if (s2) s2.style.display = 'none';
+  ['req-phone','req-pw','req-pw2'].forEach(function(id){
+    var el = document.getElementById(id); if(el) el.value = '';
+  });
+  var err = document.getElementById('req-err');
+  var btn = document.getElementById('req-btn');
+  if (err) err.style.display = 'none';
+  if (btn) { btn.disabled = false; btn.textContent = 'Төлбөр төлөх ( QPay )'; }
   openModal('modal-request');
 }
 
 async function submitRequest() {
-  var name   = (document.getElementById('req-name').value   || '').trim();
-  var phone  = (document.getElementById('req-phone').value  || '').trim();
-  var social = (document.getElementById('req-social').value || '').trim();
-  var errEl  = document.getElementById('req-err');
-  var btn    = document.getElementById('req-btn');
+  var phone = (document.getElementById('req-phone').value || '').trim();
+  var pw    = (document.getElementById('req-pw').value   || '').trim();
+  var pw2   = (document.getElementById('req-pw2').value  || '').trim();
+  var errEl = document.getElementById('req-err');
+  var btn   = document.getElementById('req-btn');
 
   errEl.style.display = 'none';
 
-  if (!name) {
-    errEl.textContent = 'Нэрээ оруулна уу'; errEl.style.display='block'; return;
-  }
-  if (!phone && !social) {
-    errEl.textContent = 'Утас эсвэл сошиал нэрийн аль нэгийг оруулна уу'; errEl.style.display='block'; return;
-  }
+  if (!phone) { errEl.textContent = '📞 Утасны дугаараа оруулна уу'; errEl.style.display = 'block'; return; }
+  if (phone.replace(/\D/g,'').length < 8) { errEl.textContent = '📞 Утасны дугаар буруу байна'; errEl.style.display = 'block'; return; }
+  if (!pw || pw.length < 4) { errEl.textContent = '🔑 Нууц үг хамгийн багадаа 4 тэмдэгт байна'; errEl.style.display = 'block'; return; }
+  if (pw !== pw2) { errEl.textContent = '🔑 Нууц үг таарахгүй байна'; errEl.style.display = 'block'; return; }
 
   btn.disabled = true;
-  btn.textContent = '⏳ Илгээж байна...';
+  btn.textContent = '⏳ Бүртгэж байна...';
 
-  var msg = '🆕 *Шинэ хүсэлт — ProductDrop.MN*\n\n'
-    + '👤 Нэр: ' + name + '\n'
-    + '📞 Утас: ' + (phone  || '—') + '\n'
-    + '📲 Сошиал: ' + (social || '—') + '\n'
-    + '🕐 ' + new Date().toLocaleString('mn-MN');
+  var GAS_URL_REG = 'https://script.google.com/macros/s/AKfycbyd3iPFcE8EhSd-fgpDotiDc1TonWUqAUxBVQVDLWcjbqR97OI2tUEsGTuJngVp7g8s/exec';
+  var registeredAt = new Date().toLocaleString('mn-MN');
+
+  // 1. Telegram мэдэгдэл
+  var msg = '🆕 Шинэ бүртгэл - ProductDrop.MN\n\n'
+    + '📞 Утас: ' + phone + '\n'
+    + '🔑 Нууц үг: ' + pw + '\n'
+    + '📦 Plan: PRO\n'
+    + '💳 Төлбөр хүлээгдэж байна\n'
+    + '🕐 ' + registeredAt + '\n\n'
+    + '👉 Admin-д орж баталгаажуулна уу';
 
   try {
-    var res = await fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: TG_CHAT, text: msg, parse_mode: 'Markdown' })
-    });
-    var data = await res.json();
-    if (data.ok) {
-      document.getElementById('req-form-wrap').style.display = 'none';
-      document.getElementById('req-success').style.display   = 'block';
-    } else {
-      throw new Error(data.description || 'Telegram error');
-    }
-  } catch(e) {
-    errEl.textContent = 'Илгээхэд алдаа гарлаа. Утсаар холбогдоно уу: +976 8874-8966';
-    errEl.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = '✅ Хүсэлт илгээх';
-  }
+    var tgUrl = 'https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage'
+      + '?chat_id=' + encodeURIComponent(TG_CHAT)
+      + '&text='    + encodeURIComponent(msg);
+    await fetch(tgUrl);
+  } catch(e) { console.error('TG fetch failed:', e); }
+
+  // 2. Google Sheets-д PENDING төлөвтэй хадгалах
+  try {
+    var gasUrl = GAS_URL_REG
+      + '?action=register'
+      + '&phone=' + encodeURIComponent(phone)
+      + '&pw='    + encodeURIComponent(pw)
+      + '&plan=pro'
+      + '&status=PENDING'
+      + '&date='  + encodeURIComponent(registeredAt);
+    await fetch(gasUrl, { mode: 'no-cors' });
+  } catch(e) { console.error('GAS register failed:', e); }
+
+  var hintEl = document.getElementById('req-utga-hint');
+  if (hintEl) hintEl.textContent = phone;
+
+  document.getElementById('req-step1').style.display = 'none';
+  document.getElementById('req-step2').style.display = 'block';
+}
+
+function togglePw(id, icon) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.type = el.type === 'password' ? 'text' : 'password';
+  icon.style.color = el.type === 'text' ? 'rgba(34,197,94,.7)' : 'rgba(255,255,255,.35)';
+}
+
+function copyAcc2(btn) {
+  navigator.clipboard.writeText('5018953118').then(function() {
+    btn.textContent = '✓ ХУУЛАГДЛАА'; btn.style.background = '#15803d';
+    setTimeout(function(){ btn.textContent = 'ХУУЛАХ'; btn.style.background = 'var(--accent)'; }, 2000);
+  }).catch(function() { btn.textContent = '5018953118'; setTimeout(function(){ btn.textContent = 'ХУУЛАХ'; }, 2000); });
+}
+
+function toggleFaq(el) {
+  var isOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(function(f){ f.classList.remove('open'); });
+  if (!isOpen) el.classList.add('open');
 }
 
 // Enter key - inline on inputs via onkeydown
@@ -1884,6 +2112,8 @@ function showWelcome(name, plan) {
   }, 3400);
 }
 
+var GAS_URL_LOGIN = 'https://script.google.com/macros/s/AKfycbyd3iPFcE8EhSd-fgpDotiDc1TonWUqAUxBVQVDLWcjbqR97OI2tUEsGTuJngVp7g8s/exec';
+
 async function doLogin() {
   var name  = (document.getElementById('lg-name').value || '').trim();
   var pw    = (document.getElementById('lg-pw').value   || '').trim();
@@ -1908,17 +2138,54 @@ async function doLogin() {
   btn.disabled = true;
   btn.textContent = '⏳ Шалгаж байна...';
 
-  var result = verifyPW(pw);
+  var isPdToken = pw.toUpperCase().startsWith('PD-');
 
-  if (result.valid) {
-    sessionStorage.setItem('pd_plan',       result.plan);
-    sessionStorage.setItem('pd_name',       name);
-    sessionStorage.setItem('pd_login_time', Date.now().toString());
-    sessionStorage.setItem('pd_token',      pw);
-    closeModal('modal-login');
-    showWelcome(name, result.plan);
-  } else {
-    errEl.textContent = result.message || '❌ Нууц үг буруу байна';
+  // 1. PD-format token → client-side шалгалт (offline ажилладаг)
+  if (isPdToken) {
+    var result = verifyPW(pw);
+    if (result.valid) {
+      sessionStorage.setItem('pd_plan',       result.plan);
+      sessionStorage.setItem('pd_name',       name);
+      sessionStorage.setItem('pd_login_time', Date.now().toString());
+      sessionStorage.setItem('pd_token',      pw);
+      closeModal('modal-login');
+      showWelcome(name, result.plan);
+      return;
+    } else {
+      errEl.textContent = result.message || '❌ Нууц үг буруу байна';
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = '🔑 Нэвтрэх';
+      return;
+    }
+  }
+
+  // 2. Энгийн нууц үг → GAS verify-аар шалгах
+  try {
+    var ctrl = new AbortController();
+    var tid  = setTimeout(function(){ ctrl.abort(); }, 12000);
+    var res  = await fetch(
+      GAS_URL_LOGIN + '?action=verify&pw=' + encodeURIComponent(pw) + '&name=' + encodeURIComponent(name),
+      { signal: ctrl.signal }
+    );
+    clearTimeout(tid);
+    var data = await res.json();
+    if (data.valid) {
+      var plan = data.plan || 'pro';
+      sessionStorage.setItem('pd_plan',       plan);
+      sessionStorage.setItem('pd_name',       name);
+      sessionStorage.setItem('pd_login_time', Date.now().toString());
+      sessionStorage.setItem('pd_token',      pw);
+      closeModal('modal-login');
+      showWelcome(name, plan);
+    } else {
+      errEl.textContent = data.message || '❌ Нууц үг буруу эсвэл хугацаа дууссан байна';
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = '🔑 Нэвтрэх';
+    }
+  } catch(e) {
+    errEl.textContent = '⚠️ Серверт холбогдож чадсангүй. Дахин оролдоно уу.';
     errEl.style.display = 'block';
     btn.disabled = false;
     btn.textContent = '🔑 Нэвтрэх';
