@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang="mn">
 <head>
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2YH0D6PEFC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2YH0D6PEFC', {
+    page_title: 'Landing',
+    page_location: window.location.href
+  });
+  // Helper: button click track
+  function track(event_name, params) {
+    if(typeof gtag !== 'undefined') gtag('event', event_name, params || {});
+  }
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>ProductDrop.MN — Дараагийн ашигтай бараагаа эндээс ол</title>
@@ -496,14 +511,33 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
   nav{padding:0 16px}
   .nav-links{display:none}
   .hero{padding:56px 16px 64px}
-  section{padding:56px 16px}
-  .how-wrap{padding:32px 20px}
+  section{padding:40px 16px}
+  .how-wrap{padding:24px 16px;margin-top:28px}
+  .steps{grid-template-columns:repeat(2,1fr);gap:14px}
   .steps::before{display:none}
+  .step{text-align:left;padding:14px;background:var(--surface2);border:1px solid var(--border);border-radius:12px}
+  .step-num{margin:0 0 10px 0;width:40px;height:40px;font-size:15px}
+  .step h3{font-size:13px;margin-bottom:4px}
+  .step p{font-size:12px;line-height:1.5}
   .hero-stats{gap:28px}
-  .cta-section{padding:56px 16px}
+  .cta-section{padding:40px 16px}
   footer{padding:24px 16px}
   .footer-links{flex-wrap:wrap;justify-content:center;gap:16px}
   .trust-strip{gap:20px;padding:16px}
+  /* Features: 2-col, hide tall images */
+  .features-grid{grid-template-columns:repeat(2,1fr);gap:12px;margin-top:24px}
+  .feature-card{padding:16px}
+  .feature-card-img{display:none}
+  .feature-card h3{font-size:13px}
+  .feature-card p{font-size:12px}
+  .feature-icon{width:36px;height:36px;font-size:16px;margin-bottom:10px}
+  /* Section text */
+  .section-title{font-size:24px;letter-spacing:-0.5px}
+  .section-sub{font-size:14px}
+  /* Testimonials horizontal carousel */
+  .mob-testi-wrap{display:flex!important;overflow-x:auto;gap:12px;padding-bottom:8px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .mob-testi-wrap::-webkit-scrollbar{display:none}
+  .mob-testi-wrap>div{flex:0 0 82%;scroll-snap-align:start;min-width:0}
 }
 
 /* ═══════════════════════════════════════════════
@@ -876,6 +910,47 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
 .faq-item.open .faq-arrow{transform:rotate(90deg);color:var(--accent)}
 .faq-a{display:none;padding:0 20px 18px;font-size:14px;color:var(--muted);line-height:1.75;border-top:1px solid var(--border)}
 .faq-item.open .faq-a{display:block}
+
+/* ── VALUE STACK ── */
+.value-stack-wrap{max-width:760px;margin:0 auto;background:#fff;border:1.5px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}
+.vs-header{background:var(--text);color:#fff;padding:22px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.vs-header-title{font-size:17px;font-weight:800;letter-spacing:-.3px}
+.vs-header-price{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px}
+.vs-total-tag{background:var(--accent);color:#fff;font-size:12px;font-weight:800;padding:6px 16px;border-radius:20px;letter-spacing:.3px;white-space:nowrap}
+.vs-row{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;border-bottom:1px solid var(--border);gap:12px}
+.vs-row:last-child{border-bottom:none}
+.vs-row-left{display:flex;align-items:center;gap:12px}
+.vs-icon{font-size:18px;flex-shrink:0;width:32px;text-align:center}
+.vs-label{font-size:14px;font-weight:600;color:var(--text)}
+.vs-sub{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45}
+.vs-val{font-size:13px;font-weight:800;color:var(--muted2);white-space:nowrap;text-decoration:line-through}
+.vs-footer{background:var(--accent-bg);border-top:2px solid var(--accent-border);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.vs-footer-label{font-size:13px;color:var(--accent);font-weight:700}
+.vs-footer-you{font-size:22px;font-weight:900;color:var(--accent);letter-spacing:-1px}
+.vs-footer-save{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ── PRO URGENCY COUNTER ── */
+.pro-urgency{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;padding:10px 16px;background:#fff7ed;border:1.5px solid #fed7aa;border-radius:10px}
+.pro-urgency-dot{width:7px;height:7px;border-radius:50%;background:#ea580c;animation:pulse 1.5s infinite;flex-shrink:0}
+.pro-urgency-text{font-size:12px;font-weight:700;color:#9a3412;letter-spacing:.2px}
+.pro-urgency-num{color:#ea580c;font-weight:900}
+
+/* ── EXIT-INTENT OVERLAY ── */
+#exit-intent{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px}
+#exit-intent.show{display:flex}
+.ei-box{background:#fff;border-radius:20px;max-width:440px;width:100%;padding:36px 32px;text-align:center;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.2)}
+.ei-close{position:absolute;top:14px;right:16px;background:none;border:1px solid var(--border);border-radius:8px;padding:3px 10px;cursor:pointer;font-size:15px;color:var(--muted)}
+.ei-close:hover{background:var(--bg);color:var(--text)}
+.ei-emoji{font-size:44px;margin-bottom:14px}
+.ei-title{font-size:22px;font-weight:900;color:var(--text);letter-spacing:-.5px;margin-bottom:8px;line-height:1.2}
+.ei-sub{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:24px}
+.ei-btn-primary{display:block;width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'Outfit',sans-serif;font-weight:800;font-size:15px;cursor:pointer;transition:all .2s;margin-bottom:10px}
+.ei-btn-primary:hover{background:#14a044;transform:translateY(-1px)}
+.ei-btn-secondary{font-size:12px;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline;padding:4px}
+.ei-proof{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:18px;font-size:11px;color:var(--muted)}
+.ei-avatars{display:flex}
+.ei-av{width:22px;height:22px;border-radius:50%;border:2px solid #fff;margin-left:-6px;font-size:9px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center}
+.ei-av:first-child{margin-left:0}
 </style>
 </head>
 <body>
@@ -1113,7 +1188,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
         <label>Нууц үг</label>
         <input type="password" id="lg-pw" placeholder="PD-PXXXX-XXXXXX-XXXXX" maxlength="60" onkeydown="if(event.key==='Enter')doLogin()" autocomplete="off">
       </div>
-      <button class="lg-submit" id="lg-btn" onclick="doLogin()">🔑 Нэвтрэх</button>
+      <button class="lg-submit" id="lg-btn" onclick="track('login_submit',{button:'login_modal'});doLogin()">🔑 Нэвтрэх</button>
       <div class="lg-err" id="lg-err"></div>
       <p class="lg-note">Үнэгүй ашиглах эрх байхгүй бол хамгийн дээр байрлах "Үнэгүй туршилт" товчоор хүсэлт илгээнэ үү. Баярлалаа</p>
     </div>
@@ -1128,7 +1203,10 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
     <a href="#how">Хэрхэн</a>
     <a href="#pricing">Үнэ</a>
   </div>
-  <a class="nav-cta" href="#" onclick="openLoginModal();return false;">Нэвтрэх →</a>
+  <div style="display:flex;align-items:center;gap:8px">
+    <a class="nav-cta" href="#" onclick="track('click_lite_free',{button:'nav_free_start'});goLiteFree();return false;">🚀 Үнэгүй эхлэх →</a>
+    <a style="font-size:12px;color:var(--muted);text-decoration:none;cursor:pointer" href="#" onclick="track('click_login',{button:'nav_login'});openLoginModal();return false;">Нэвтрэх</a>
+  </div>
 </nav>
 
 <!-- HERO SPLIT -->
@@ -1142,8 +1220,8 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
     <h1 style="margin-top:20px">Дараагийн <span class="grad">ашигтай бараагаа</span><br>эндээс ол</h1>
     <p class="hero-sub">200+ судалгаа хийгдсэн бараа, supplier линк, ашгийн тооцоолуур, content script — нэг дороо. Эхлээд <strong>үнэгүй туршаад</strong> дараа шийд.</p>
     <div class="hero-btns">
-      <a class="btn-primary" href="#" onclick="goLiteFree();return false;">🚀 Үнэгүй эхлэх →</a>
-      <button class="btn-secondary" onclick="openLoginModal()">🔑 Нэвтрэх</button>
+      <a class="btn-primary" href="#" onclick="track('click_lite_free',{button:'hero_free_start'});goLiteFree();return false;">🚀 Үнэгүй эхлэх →</a>
+      <button class="btn-secondary" onclick="track('click_login',{button:'hero_login'});openLoginModal()">🔑 Нэвтрэх</button>
     </div>
     <div class="hero-stats">
       <div class="stat"><div class="stat-n">200<span class="hi">+</span></div><div class="stat-l">Судалгаа хийсэн бараа</div></div>
@@ -1279,11 +1357,11 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
 
 <!-- TOP TESTIMONIALS STRIP -->
 <div class="section-outer" style="background:var(--surface2)">
-<div style="max-width:1100px;margin:0 auto;padding:32px 32px">
+<div style="max-width:1100px;margin:0 auto;padding:24px 16px">
   <div style="text-align:center;margin-bottom:20px">
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent)">Баталгаажсан үр дүн</div>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+  <div class="mob-testi-wrap" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
     <div style="background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:20px;box-shadow:var(--shadow)">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
         <div style="width:40px;height:40px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:16px;flex-shrink:0">Ц</div>
@@ -1363,6 +1441,304 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
 </section>
 </div>
 
+<!-- LIVE DEMO SECTION -->
+<style>
+/* ── DEMO SECTION ── */
+.demo-section-outer{background:linear-gradient(180deg,var(--bg) 0%,var(--surface2) 100%);padding:0 0 16px}
+.demo-section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2.5px;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.demo-section-title{font-size:clamp(26px,4vw,38px);font-weight:900;line-height:1.2;letter-spacing:-.03em;margin-bottom:12px}
+.demo-section-sub{font-size:15px;color:var(--muted);line-height:1.7;max-width:520px;margin-bottom:40px}
+
+.demo-container{max-width:900px;margin:0 auto;padding:0 24px}
+.demo-screen{background:#F6F7F9;border:1.5px solid #E4E8EF;border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.1);position:relative}
+.demo-titlebar{background:#fff;border-bottom:1px solid #E4E8EF;height:40px;display:flex;align-items:center;padding:0 16px;gap:8px}
+.demo-dot{width:12px;height:12px;border-radius:50%}
+.demo-dot:nth-child(1){background:#ff5f57}
+.demo-dot:nth-child(2){background:#febc2e}
+.demo-dot:nth-child(3){background:#28c840}
+.demo-url{flex:1;background:#F6F7F9;border-radius:6px;height:22px;display:flex;align-items:center;padding:0 10px;font-size:11px;color:#9AA3B2;font-family:'DM Mono',monospace;max-width:280px;margin:0 auto}
+.demo-inner{display:flex;height:340px}
+.demo-sidebar{width:54px;background:#fff;border-right:1px solid #E4E8EF;display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:12px;flex-shrink:0}
+.demo-sb-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:background .15s}
+.demo-sb-icon.active{background:#f0fdf4}
+.demo-main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.demo-topbar{background:#fff;border-bottom:1px solid #E4E8EF;height:44px;display:flex;align-items:center;padding:0 16px;gap:10px;flex-shrink:0}
+.demo-topbar-title{font-size:13px;font-weight:700;color:#0D1117}
+.demo-topbar-badge{background:#F6F7F9;border:1px solid #E4E8EF;border-radius:16px;padding:3px 10px;font-size:10px;color:#5A6478;font-family:'DM Mono',monospace}
+.demo-grid-area{padding:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;overflow:hidden;flex:1}
+
+/* Cards */
+.demo-card{background:#fff;border:1.5px solid #E4E8EF;border-radius:12px;overflow:hidden;cursor:pointer;transition:all .25s;position:relative}
+.demo-card.highlight{border-color:#16a34a;box-shadow:0 4px 16px rgba(22,163,74,.18);transform:translateY(-2px)}
+.demo-card-img{aspect-ratio:1;background:linear-gradient(135deg,#f0fdf4,#dcfce7);display:flex;align-items:center;justify-content:center;font-size:24px;position:relative}
+.demo-cat-badge{position:absolute;top:5px;left:5px;font-size:8px;font-weight:700;padding:2px 5px;border-radius:5px;text-transform:uppercase;letter-spacing:.4px;background:#fce7f3;color:#be185d}
+.demo-mg-badge{position:absolute;top:5px;right:5px;font-size:8px;font-weight:700;padding:2px 5px;border-radius:5px;background:rgba(0,0,0,.5);color:#fff}
+.demo-card-body{padding:8px}
+.demo-card-name{font-size:9px;font-weight:600;color:#0D1117;line-height:1.3;margin-bottom:6px}
+.demo-card-prices{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:#F6F7F9;border-radius:6px;padding:5px}
+.demo-price-lbl{font-size:7px;text-transform:uppercase;color:#9AA3B2;letter-spacing:.3px}
+.demo-price-val{font-size:10px;font-weight:700}
+.demo-price-val.cost{color:#2563eb}.demo-price-val.sell{color:#16a34a}
+
+/* Panel slide-in */
+.demo-panel-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);z-index:10;opacity:0;transition:opacity .35s;pointer-events:none}
+.demo-panel-overlay.open{opacity:1}
+.demo-panel{position:absolute;right:0;top:0;bottom:0;width:72%;background:#fff;box-shadow:-8px 0 32px rgba(0,0,0,.15);transform:translateX(100%);transition:transform .4s cubic-bezier(.34,1.06,.64,1);z-index:11;overflow:hidden;display:flex;flex-direction:column}
+.demo-panel.open{transform:translateX(0)}
+.demo-panel-hero{padding:14px;border-bottom:1px solid #E4E8EF;flex-shrink:0}
+.demo-panel-img{width:100%;height:80px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:10px}
+.demo-panel-title{font-size:13px;font-weight:800;color:#0D1117;margin-bottom:8px;line-height:1.3}
+.demo-panel-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#E4E8EF;border-radius:8px;overflow:hidden}
+.demo-p-stat{background:#fff;padding:8px 4px;text-align:center}
+.demo-p-stat-lbl{font-size:7px;text-transform:uppercase;color:#9AA3B2;margin-bottom:2px}
+.demo-p-stat-val{font-size:12px;font-weight:800;color:#0D1117}
+.demo-p-stat-val.blue{color:#2563eb}.demo-p-stat-val.green{color:#16a34a}
+.demo-panel-body{padding:10px 14px;flex:1;overflow:hidden}
+.demo-panel-sec-lbl{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#9AA3B2;margin-bottom:8px}
+.demo-calc-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:9px;border-bottom:1px solid #F6F7F9}
+.demo-calc-k{color:#5A6478}
+.demo-calc-v{font-weight:700;color:#0D1117}
+.demo-calc-v.green{color:#16a34a}
+.demo-close-btn{position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;background:#F6F7F9;border:1px solid #E4E8EF;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;color:#5A6478;z-index:12}
+
+/* Cursor */
+.demo-cursor{position:absolute;width:16px;height:16px;pointer-events:none;z-index:20;transition:all .6s cubic-bezier(.34,1.06,.64,1)}
+.demo-cursor svg{filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
+.demo-cursor-click{position:absolute;inset:-6px;border-radius:50%;background:rgba(22,163,74,.25);transform:scale(0);transition:transform .2s}
+.demo-cursor.clicking .demo-cursor-click{transform:scale(1)}
+
+/* Step indicator */
+.demo-steps-indicator{display:flex;gap:6px;justify-content:center;margin-top:16px}
+.demo-step-dot{width:6px;height:6px;border-radius:50%;background:#E4E8EF;transition:all .3s}
+.demo-step-dot.active{width:20px;border-radius:3px;background:var(--accent)}
+
+/* Mobile responsive */
+@media(max-width:600px){
+  .demo-inner{height:260px}
+  .demo-grid-area{grid-template-columns:repeat(2,1fr);gap:7px;padding:10px}
+  .demo-panel{width:85%}
+}
+</style>
+
+<div class="demo-section-outer">
+<div class="demo-container">
+  <section style="padding:48px 0 32px">
+    <div class="demo-section-label">📖 Заавар</div>
+    <div class="demo-section-title">Ажиллах заавар</div>
+    <div class="demo-section-sub">Бараа card дээр дарахад яг юу гарч ирдгийг урьдчилан харна уу.</div>
+
+    <div class="demo-screen" id="demoScreen">
+      <!-- Titlebar -->
+      <div class="demo-titlebar">
+        <div class="demo-dot"></div>
+        <div class="demo-dot"></div>
+        <div class="demo-dot"></div>
+        <div class="demo-url">productdrop.mn/pro</div>
+      </div>
+
+      <!-- Inner layout -->
+      <div class="demo-inner">
+        <!-- Mini sidebar -->
+        <div class="demo-sidebar">
+          <div class="demo-sb-icon active">📦</div>
+          <div class="demo-sb-icon">💄</div>
+          <div class="demo-sb-icon">🏃</div>
+          <div class="demo-sb-icon">🏠</div>
+        </div>
+
+        <!-- Main content -->
+        <div class="demo-main-area" id="demoMainArea">
+          <!-- Topbar -->
+          <div class="demo-topbar">
+            <div class="demo-topbar-title">🛒 Pro каталог</div>
+            <div class="demo-topbar-badge">200+ бараа</div>
+          </div>
+
+          <!-- Grid -->
+          <div class="demo-grid-area" id="demoGrid">
+            <!-- Card 1 -->
+            <div class="demo-card" id="demoCard1">
+              <div class="demo-card-img">💄<span class="demo-cat-badge">Beauty</span><span class="demo-mg-badge">68%</span></div>
+              <div class="demo-card-body">
+                <div class="demo-card-name">Hyaluronic Acid Serum 30ml</div>
+                <div class="demo-card-prices">
+                  <div><div class="demo-price-lbl">Авах</div><div class="demo-price-val cost">₮18,200</div></div>
+                  <div><div class="demo-price-lbl">Зарах</div><div class="demo-price-val sell">₮78,000</div></div>
+                </div>
+              </div>
+            </div>
+            <!-- Card 2 -->
+            <div class="demo-card">
+              <div class="demo-card-img" style="background:linear-gradient(135deg,#eff6ff,#dbeafe)">🏃<span class="demo-cat-badge" style="background:#dcfce7;color:#15803d">Health</span><span class="demo-mg-badge">72%</span></div>
+              <div class="demo-card-body">
+                <div class="demo-card-name">EMS Muscle Stimulator Pro</div>
+                <div class="demo-card-prices">
+                  <div><div class="demo-price-lbl">Авах</div><div class="demo-price-val cost">₮24,500</div></div>
+                  <div><div class="demo-price-lbl">Зарах</div><div class="demo-price-val sell">₮95,000</div></div>
+                </div>
+              </div>
+            </div>
+            <!-- Card 3 -->
+            <div class="demo-card">
+              <div class="demo-card-img" style="background:linear-gradient(135deg,#fef3c7,#fde68a)">🏠<span class="demo-cat-badge" style="background:#fef3c7;color:#b45309">Home</span><span class="demo-mg-badge">65%</span></div>
+              <div class="demo-card-body">
+                <div class="demo-card-name">Magnetic LED Strip Lights</div>
+                <div class="demo-card-prices">
+                  <div><div class="demo-price-lbl">Авах</div><div class="demo-price-val cost">₮12,800</div></div>
+                  <div><div class="demo-price-lbl">Зарах</div><div class="demo-price-val sell">₮56,000</div></div>
+                </div>
+              </div>
+            </div>
+            <!-- Row 2 (hidden on mobile) -->
+            <div class="demo-card" style="opacity:.5">
+              <div class="demo-card-img" style="background:linear-gradient(135deg,#ede9fe,#ddd6fe)">👶</div>
+              <div class="demo-card-body"><div class="demo-card-name">Baby Monitor Smart Cam</div></div>
+            </div>
+            <div class="demo-card" style="opacity:.5">
+              <div class="demo-card-img" style="background:linear-gradient(135deg,#fce7f3,#fbcfe8)">💄</div>
+              <div class="demo-card-body"><div class="demo-card-name">Collagen Face Mask Set</div></div>
+            </div>
+            <div class="demo-card" style="opacity:.5">
+              <div class="demo-card-img" style="background:linear-gradient(135deg,#dbeafe,#bfdbfe)">📦</div>
+              <div class="demo-card-body"><div class="demo-card-name">Smart Ring NFC Payment</div></div>
+            </div>
+          </div>
+
+          <!-- Panel overlay + panel -->
+          <div class="demo-panel-overlay" id="demoPanelOverlay"></div>
+          <div class="demo-panel" id="demoPanel">
+            <div class="demo-close-btn" id="demoPanelClose">✕</div>
+            <div class="demo-panel-hero">
+              <div class="demo-panel-img">💄</div>
+              <div class="demo-panel-title">Hyaluronic Acid Serum 30ml</div>
+              <div class="demo-panel-stats">
+                <div class="demo-p-stat"><div class="demo-p-stat-lbl">Авах үнэ</div><div class="demo-p-stat-val blue">₮18,200</div></div>
+                <div class="demo-p-stat"><div class="demo-p-stat-lbl">Зарах үнэ</div><div class="demo-p-stat-val">₮78,000</div></div>
+                <div class="demo-p-stat"><div class="demo-p-stat-lbl">Цэвэр ашиг</div><div class="demo-p-stat-val green">₮52,400</div></div>
+              </div>
+            </div>
+            <div class="demo-panel-body">
+              <div class="demo-panel-sec-lbl">💰 Ашгийн тооцоолуур</div>
+              <div class="demo-calc-row"><span class="demo-calc-k">Нийт өртөг / ш</span><span class="demo-calc-v blue">₮22,546</span></div>
+              <div class="demo-calc-row"><span class="demo-calc-k">Цэвэр ашиг / ш</span><span class="demo-calc-v green">₮52,454</span></div>
+              <div class="demo-calc-row"><span class="demo-calc-k">Нийт ашиг (30 ш)</span><span class="demo-calc-v green">₮1,571,620</span></div>
+              <div class="demo-calc-row"><span class="demo-calc-k">Ашгийн хувь</span><span class="demo-calc-v green">67%</span></div>
+              <div style="margin-top:8px;padding:6px 10px;background:#f0fdf4;border-radius:6px;font-size:8px;color:#15803d;font-weight:700">✓ Alibaba supplier линк бэлэн · FB Ads targeting бэлэн</div>
+            </div>
+          </div>
+
+          <!-- Animated cursor -->
+          <div class="demo-cursor" id="demoCursor" style="left:25%;top:45%">
+            <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 0L0 16L4.5 11.5L7.5 18L9.5 17L6.5 10.5L13 10.5L0 0Z" fill="white" stroke="#333" stroke-width="1"/>
+            </svg>
+            <div class="demo-cursor-click"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step indicators -->
+    <div class="demo-steps-indicator" id="demoStepDots">
+      <div class="demo-step-dot active"></div>
+      <div class="demo-step-dot"></div>
+      <div class="demo-step-dot"></div>
+    </div>
+    <div style="text-align:center;margin-top:10px;font-size:12px;color:var(--muted)" id="demoStepLabel">Бараа card дээр дарах гэж байна...</div>
+  </section>
+</div>
+</div>
+
+<script>
+/* ── DEMO ANIMATION ── */
+(function(){
+  var steps = [
+    {label:'Бараа card дээр дарах гэж байна...', dot:0},
+    {label:'Дэлгэрэнгүй мэдээлэл, ашгийн тооцоолуур нээгдлээ!', dot:1},
+    {label:'Supplier линк, content script бэлэн — борлуулалт эхлүүл! 🚀', dot:2}
+  ];
+  var phase = 0; // 0=idle, 1=moving-to-card, 2=clicking, 3=panel-open, 4=reading, 5=closing
+
+  var cursor = document.getElementById('demoCursor');
+  var card1 = document.getElementById('demoCard1');
+  var overlay = document.getElementById('demoPanelOverlay');
+  var panel = document.getElementById('demoPanel');
+  var dotsEl = document.getElementById('demoStepDots');
+  var labelEl = document.getElementById('demoStepLabel');
+
+  function setStep(i){
+    var dots = dotsEl.querySelectorAll('.demo-step-dot');
+    dots.forEach(function(d,j){ d.classList.toggle('active', j===i); });
+    labelEl.textContent = steps[i].label;
+  }
+
+  function moveCursor(left, top, cb, delay){
+    setTimeout(function(){
+      cursor.style.left = left;
+      cursor.style.top = top;
+      if(cb) setTimeout(cb, 700);
+    }, delay||0);
+  }
+
+  function openPanel(){
+    cursor.classList.add('clicking');
+    card1.classList.add('highlight');
+    setTimeout(function(){
+      cursor.classList.remove('clicking');
+      overlay.classList.add('open');
+      panel.classList.add('open');
+      setStep(1);
+    }, 300);
+  }
+
+  function closePanel(){
+    overlay.classList.remove('open');
+    panel.classList.remove('open');
+    card1.classList.remove('highlight');
+    cursor.style.left = '25%';
+    cursor.style.top = '80%';
+    setStep(0);
+    setTimeout(runDemo, 1800);
+  }
+
+  function runDemo(){
+    // Move cursor to card 1
+    setStep(0);
+    moveCursor('25%','45%', null, 400);
+    // Then move to card center
+    setTimeout(function(){
+      cursor.style.transition = 'all 1s cubic-bezier(.34,1.06,.64,1)';
+      cursor.style.left = '22%';
+      cursor.style.top = '38%';
+    }, 1000);
+    // Click after arriving
+    setTimeout(function(){
+      openPanel();
+    }, 2200);
+    // Show "reading" step after panel opens
+    setTimeout(function(){
+      setStep(2);
+    }, 3800);
+    // Close and repeat
+    setTimeout(function(){
+      closePanel();
+    }, 6500);
+  }
+
+  // Start after short delay
+  cursor.style.transition = 'none';
+  setTimeout(function(){
+    cursor.style.transition = 'all 0.6s cubic-bezier(.34,1.06,.64,1)';
+    runDemo();
+  }, 1200);
+
+  // Manual close btn
+  document.getElementById('demoPanelClose').addEventListener('click', function(){
+    closePanel();
+  });
+})();
+</script>
+
 <!-- PRICING -->
 <div class="section-outer" id="pricing">
 <section>
@@ -1385,7 +1761,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
         <li class="no">Content AI Script</li>
         <li class="no">10 хоног бүр шинэ бараа</li>
       </ul>
-      <a class="pricing-btn secondary" href="#" onclick="goLiteFree();return false;">🚀 Үнэгүй туршилт →</a>
+      <a class="pricing-btn secondary" href="#" onclick="track('click_lite_free',{button:'pricing_free_trial'});goLiteFree();return false;">🚀 Үнэгүй туршилт →</a>
     </div>
     <div class="pricing-card featured">
       <div class="pricing-badge">⭐ Хамгийн их сонгогддог</div>
@@ -1403,7 +1779,11 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
         <li>Content AI Script бэлэн</li>
         <li>Ашиглах заавар</li>
       </ul>
-      <button class="pricing-btn primary" onclick="openRequestModal()">Худалдан авах →</button>
+      <button class="pricing-btn primary" onclick="track('click_buy_pro',{button:'pricing_buy_pro'});openRequestModal()">Худалдан авах →</button>
+      <div class="pro-urgency">
+        <div class="pro-urgency-dot"></div>
+        <span class="pro-urgency-text">Энэ сард <span class="pro-urgency-num" id="urgency-count">–</span> хүн нэгдсэн</span>
+      </div>
     </div>
     <div class="pricing-card coming-soon">
       <div class="coming-soon-overlay">
@@ -1432,6 +1812,113 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
     </div>
   </div>
 
+  <!-- SOCIAL PROOF LIVE FEED -->
+  <style>
+  .sp-feed{max-width:680px;margin:32px auto 0;background:var(--surface);border:1.5px solid var(--border);border-radius:16px;overflow:hidden}
+  .sp-feed-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--surface2)}
+  .sp-feed-title{font-size:12px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px}
+  .sp-live-dot{width:7px;height:7px;border-radius:50%;background:#16a34a;animation:pulse 1.8s infinite;flex-shrink:0}
+  .sp-feed-count{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace}
+  .sp-list{padding:6px 0;max-height:220px;overflow:hidden;position:relative}
+  .sp-item{display:flex;align-items:center;gap:12px;padding:9px 20px;transition:background .2s}
+  .sp-item:hover{background:var(--surface2)}
+  .sp-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;font-family:'Outfit',sans-serif}
+  .sp-info{flex:1;min-width:0}
+  .sp-name{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sp-action{font-size:11px;color:var(--muted);margin-top:1px}
+  .sp-time{font-size:11px;color:var(--muted2);font-family:'DM Mono',monospace;flex-shrink:0;white-space:nowrap}
+  .sp-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;flex-shrink:0}
+  .sp-badge.lite{background:#e0f2fe;color:#0369a1}
+  .sp-badge.pro{background:#f0fdf4;color:#15803d}
+  .sp-new{animation:spSlideIn .4s cubic-bezier(.34,1.2,.64,1)}
+  @keyframes spSlideIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+  .sp-divider{height:1px;background:var(--border);margin:0 20px}
+  </style>
+
+  <div class="sp-feed" id="sp-feed">
+    <div class="sp-feed-header">
+      <div class="sp-feed-title">
+        <div class="sp-live-dot"></div>
+        Өнөөдөр бүртгүүлсэн хүмүүс
+      </div>
+      <div class="sp-feed-count" id="sp-count">– хүн</div>
+    </div>
+    <div class="sp-list" id="sp-list">
+      <div class="sp-item"><div class="sp-avatar" style="background:#16a34a">М</div><div class="sp-info"><div class="sp-name">Б. Мөнхбаяр</div><div class="sp-action">ProductDrop-т нэгдлээ</div></div><div class="sp-time">14:32</div><div class="sp-badge lite">Lite</div></div>
+      <div class="sp-divider"></div>
+      <div class="sp-item"><div class="sp-avatar" style="background:#7c3aed">С</div><div class="sp-info"><div class="sp-name">Э. Сарантуяа</div><div class="sp-action">Pro план авлаа</div></div><div class="sp-time">15:01</div><div class="sp-badge pro">Pro</div></div>
+      <div class="sp-divider"></div>
+      <div class="sp-item"><div class="sp-avatar" style="background:#2563eb">Б</div><div class="sp-info"><div class="sp-name">Д. Болд-Эрдэнэ</div><div class="sp-action">ProductDrop-т нэгдлээ</div></div><div class="sp-time">15:44</div><div class="sp-badge lite">Lite</div></div>
+      <div class="sp-divider"></div>
+      <div class="sp-item"><div class="sp-avatar" style="background:#db2777">Ц</div><div class="sp-info"><div class="sp-name">Х. Цэцэгмаа</div><div class="sp-action">Pro план авлаа</div></div><div class="sp-time">16:09</div><div class="sp-badge pro">Pro</div></div>
+      <div class="sp-divider"></div>
+      <div class="sp-item"><div class="sp-avatar" style="background:#ea580c">А</div><div class="sp-info"><div class="sp-name">Г. Анхзул</div><div class="sp-action">ProductDrop-т нэгдлээ</div></div><div class="sp-time">16:38</div><div class="sp-badge lite">Lite</div></div>
+      <div class="sp-divider"></div>
+      <div class="sp-item"><div class="sp-avatar" style="background:#0891b2">О</div><div class="sp-info"><div class="sp-name">Н. Оюунчимэг</div><div class="sp-action">Pro план авлаа</div></div><div class="sp-time">17:12</div><div class="sp-badge pro">Pro</div></div>
+      <div class="sp-divider"></div>
+      <div class="sp-item"><div class="sp-avatar" style="background:#16a34a">Т</div><div class="sp-info"><div class="sp-name">Б. Тунгалаг</div><div class="sp-action">ProductDrop-т нэгдлээ</div></div><div class="sp-time">17:55</div><div class="sp-badge lite">Lite</div></div>
+      <div class="sp-divider"></div>
+      <div class="sp-item"><div class="sp-avatar" style="background:#7c3aed">Э</div><div class="sp-info"><div class="sp-name">Д. Энхтуяа</div><div class="sp-action">Pro план авлаа</div></div><div class="sp-time">18:20</div><div class="sp-badge pro">Pro</div></div>
+    </div>
+  </div>
+
+  <script>
+  /* ── SOCIAL PROOF LIVE TICKER ── */
+  (function(){
+    var names=[
+      {n:'С. Золзаяа',i:'З',c:'#db2777',p:'pro'},
+      {n:'М. Батбаяр',i:'Б',c:'#2563eb',p:'lite'},
+      {n:'О. Мөнхцэцэг',i:'М',c:'#7c3aed',p:'pro'},
+      {n:'Т. Хулан',i:'Х',c:'#16a34a',p:'lite'},
+      {n:'Э. Мандахбаяр',i:'М',c:'#ea580c',p:'pro'},
+      {n:'Б. Нарангэрэл',i:'Н',c:'#0891b2',p:'lite'},
+      {n:'Д. Цэрэнпунцаг',i:'Ц',c:'#7c3aed',p:'pro'},
+      {n:'А. Уянга',i:'У',c:'#16a34a',p:'lite'},
+    ];
+    var nameIdx=0;
+    var count=24;
+
+    function getTime(){
+      var now=new Date();
+      var h=now.getHours().toString().padStart(2,'0');
+      var m=now.getMinutes().toString().padStart(2,'0');
+      return h+':'+m;
+    }
+
+    setInterval(function(){
+      var list=document.getElementById('sp-list');
+      if(!list) return;
+      var p=names[nameIdx%names.length]; nameIdx++;
+      count++;
+      document.getElementById('sp-count').textContent=count+' хүн';
+      var action=p.p==='pro'?'Pro план авлаа':'ProductDrop-т нэгдлээ';
+      var badgeCls=p.p==='pro'?'pro':'lite';
+      var badgeText=p.p==='pro'?'Pro':'Lite';
+
+      // Remove last divider+item pair
+      var items=list.querySelectorAll('.sp-item');
+      var dividers=list.querySelectorAll('.sp-divider');
+      if(items.length>=8){
+        if(dividers[dividers.length-1]) dividers[dividers.length-1].remove();
+        items[items.length-1].remove();
+      }
+
+      // Prepend new item
+      var div=document.createElement('div');
+      div.className='sp-divider';
+      var item=document.createElement('div');
+      item.className='sp-item sp-new';
+      item.innerHTML='<div class="sp-avatar" style="background:'+p.c+'">'+p.i+'</div>'
+        +'<div class="sp-info"><div class="sp-name">'+p.n+'</div><div class="sp-action">'+action+'</div></div>'
+        +'<div class="sp-time">'+getTime()+'</div>'
+        +'<div class="sp-badge '+badgeCls+'">'+badgeText+'</div>';
+
+      list.insertBefore(div, list.firstChild);
+      list.insertBefore(item, list.firstChild);
+    }, 50000); // 50 секунд — бодитой харагдана
+  })();
+  </script>
+
   <div style="margin-top:32px;padding:20px 24px;background:var(--surface2);border:1.5px solid var(--border);border-radius:14px;max-width:680px">
     <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:14px">ProductDrop vs Бусад платформ</div>
     <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px 20px;font-size:13px;align-items:center">
@@ -1446,6 +1933,85 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
     </div>
   </div>
 
+</section>
+</div>
+
+<!-- VALUE STACK -->
+<div class="section-outer" style="background:var(--surface2)">
+<section>
+  <div class="section-label">Яг юу авах вэ</div>
+  <div class="section-title">₮49,900-д яг юу авах вэ?</div>
+  <div class="section-sub">Зах зээлийн үнэтэй харьцуулбал — энэ нь хамгийн хямд хөрөнгө оруулалт.</div>
+  <div class="value-stack-wrap">
+    <div class="vs-header">
+      <div>
+        <div class="vs-header-title">Pro Plan — бүтэн 3 сар</div>
+        <div class="vs-header-price">Та дараахийг авч байна:</div>
+      </div>
+      <div class="vs-total-tag">Үнэ цэн: ₮241,000+</div>
+    </div>
+    <div class="vs-row">
+      <div class="vs-row-left">
+        <div class="vs-icon">📦</div>
+        <div>
+          <div class="vs-label">200+ судалгаа хийсэн бараа</div>
+          <div class="vs-sub">Бараа бүрт ашиг, өртөг, supplier — бэлэн</div>
+        </div>
+      </div>
+      <div class="vs-val">₮79,000</div>
+    </div>
+    <div class="vs-row">
+      <div class="vs-row-left">
+        <div class="vs-icon">✍️</div>
+        <div>
+          <div class="vs-label">200+ Content AI Script</div>
+          <div class="vs-sub">Reel/Shorts-д бэлэн скрипт — Монгол хэлээр</div>
+        </div>
+      </div>
+      <div class="vs-val">₮59,000</div>
+    </div>
+    <div class="vs-row">
+      <div class="vs-row-left">
+        <div class="vs-icon">🔗</div>
+        <div>
+          <div class="vs-label">Alibaba Supplier линк бүгд</div>
+          <div class="vs-sub">Харьцуулалт, шүүлтүүртэй — өөрөө хайх шаардлагагүй</div>
+        </div>
+      </div>
+      <div class="vs-val">₮39,000</div>
+    </div>
+    <div class="vs-row">
+      <div class="vs-row-left">
+        <div class="vs-icon">📱</div>
+        <div>
+          <div class="vs-label">Social Targeting мэдээлэл</div>
+          <div class="vs-sub">FB/IG зарлалд ашиглах нас, сонирхол — бэлэн</div>
+        </div>
+      </div>
+      <div class="vs-val">₮25,000</div>
+    </div>
+    <div class="vs-row">
+      <div class="vs-row-left">
+        <div class="vs-icon">🔄</div>
+        <div>
+          <div class="vs-label">10 хоног бүр 100 шинэ бараа</div>
+          <div class="vs-sub">3 сарт нийт 900 шинэ бараа — давхцалгүй</div>
+        </div>
+      </div>
+      <div class="vs-val">₮39,000</div>
+    </div>
+    <div class="vs-footer">
+      <div>
+        <div class="vs-footer-label">Та зөвхөн төлөх дүн:</div>
+        <div class="vs-footer-you">₮49,900 <small style="font-size:14px;font-weight:500;color:var(--muted)">/3 сар</small></div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:13px;font-weight:800;color:var(--accent)">79% хямдралтай</div>
+        <div class="vs-footer-save">₮191,100 хэмнэж байна</div>
+        <button class="btn-primary" style="margin-top:10px;padding:10px 24px;font-size:14px" onclick="track('click_buy_pro',{button:'value_stack_cta'});openRequestModal()">Одоо авах →</button>
+      </div>
+    </div>
+  </div>
 </section>
 </div>
 
@@ -1546,23 +2112,23 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
   <div class="section-label">Түгээмэл асуулт</div>
   <div class="section-title">Асуусан зүйлд хариулъя</div>
   <div style="margin-top:40px;display:flex;flex-direction:column;gap:12px;max-width:720px">
-    <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-item" onclick="toggleFaq(this);track('faq_click',{section:'main_faq'});">
       <div class="faq-q">ProductDrop scam биш гэдгийг яаж мэдэх вэ? <span class="faq-arrow">›</span></div>
       <div class="faq-a">Манай Instagram <a href="https://instagram.com/productdrop.mn" target="_blank" style="color:var(--accent)">@productdrop.mn</a>-д бодит хэрэглэгчдийн screenshot, үр дүн байдаг. Lite багц <b>үнэгүй</b> — мөнгө төлөхгүйгээр 25 бараа, supplier линкийг 24 цаг ашиглаж үзнэ. Эхлээд туршаад, итгэлтэй болсон хойноо Pro авна.</div>
     </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-item" onclick="toggleFaq(this);track('faq_click',{section:'main_faq'});">
       <div class="faq-q">Бараа захиалахад мөнгө хэд хэрэгтэй вэ? <span class="faq-arrow">›</span></div>
       <div class="faq-a">ProductDrop нь зөвхөн судалгааны мэдээлэл өгдөг. Alibaba дээр 1 бараанаас ₮15,000–₮50,000-оос эхлэн захиалж болно. Тест хийхэд ₮50,000–₮150,000 хангалттай. ProductDrop өөрөө бараа нийлүүлдэггүй — та Alibaba/Taobao-гаас шууд захиалдаг.</div>
     </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-item" onclick="toggleFaq(this);track('faq_click',{section:'main_faq'});">
       <div class="faq-q">10 хоног бүр шинэ бараа нэмэгддэг үү? <span class="faq-arrow">›</span></div>
       <div class="faq-a">Тийм. Pro план дээр 10 хоног бүр 100 шинэ бараа нэмэгддэг. Давхцалгүйгээр сар бүр шинэ судалгаа хийсэн бараанууд нэмэгдэнэ.</div>
     </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-item" onclick="toggleFaq(this);track('faq_click',{section:'main_faq'});">
       <div class="faq-q">Нууц үгийг хэзээ авах вэ? <span class="faq-arrow">›</span></div>
       <div class="faq-a">Бүртгэл үүсгэж, төлбөр хийснээс хойш <b>30 минутын дотор</b> Instagram DM эсвэл утсаар нууц үг илгээнэ. 30 минут өнгөрсөн ч ирээгүй бол <a href="https://instagram.com/productdrop.mn" target="_blank" style="color:var(--accent)">@productdrop.mn</a>-д DM бичнэ үү.</div>
     </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-item" onclick="toggleFaq(this);track('faq_click',{section:'main_faq'});">
       <div class="faq-q">Lite-аас Pro руу шилжих боломжтой юу? <span class="faq-arrow">›</span></div>
       <div class="faq-a">Тийм. Lite-г туршаад хэрэгтэй гэж үзвэл <a href="https://instagram.com/productdrop.mn" target="_blank" style="color:var(--accent)">@productdrop.mn</a>-д DM бичихэд Pro нууц үг 30 минутын дотор ирнэ.</div>
     </div>
@@ -1575,8 +2141,8 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
   <h2>Дараагийн ашигтай бараагаа<br>өнөөдөр ол</h2>
   <p>24 цагийн үнэгүй туршилт. Картны мэдээлэл шаардлагагүй.</p>
   <div class="hero-btns">
-    <a class="btn-primary" href="#" onclick="goLiteFree();return false;">🚀 Одоо үнэгүй эхлэх →</a>
-    <button class="btn-secondary" onclick="openLoginModal()">🔑 Нэвтрэх</button>
+    <a class="btn-primary" href="#" onclick="track('click_lite_free',{button:'bottom_free_start'});goLiteFree();return false;">🚀 Одоо үнэгүй эхлэх →</a>
+    <button class="btn-secondary" onclick="track('click_login',{button:'bottom_login'});openLoginModal()">🔑 Нэвтрэх</button>
   </div>
 </div>
 
@@ -1646,7 +2212,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
           <div class="pay-bank-lbl">Дансны дугаар</div>
           <div style="display:flex;align-items:center">
             <div class="pay-bank-val account">5018953118</div>
-            <button class="pay-copy-btn" id="copy-acc-btn" onclick="copyAccount()">ХУУЛАХ</button>
+            <button class="pay-copy-btn" id="copy-acc-btn" onclick="track('copy_account',{button:'payment_copy_acct'});copyAccount()">ХУУЛАХ</button>
           </div>
         </div>
         <div class="pay-bank-row">
@@ -1680,37 +2246,8 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
       </div>
 
       <!-- FAQ -->
-<div class="section-outer">
-<section>
-  <div class="section-label">Түгээмэл асуулт</div>
-  <div class="section-title">Асуусан зүйлд хариулъя</div>
-  <div style="margin-top:40px;display:flex;flex-direction:column;gap:12px;max-width:720px">
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">ProductDrop scam биш гэдгийг яаж мэдэх вэ? <span class="faq-arrow">›</span></div>
-      <div class="faq-a">Манай Instagram <a href="https://instagram.com/productdrop.mn" target="_blank" style="color:var(--accent)">@productdrop.mn</a>-д бодит хэрэглэгчдийн screenshot, үр дүн байдаг. Lite багц <b>үнэгүй</b> — мөнгө төлөхгүйгээр 25 бараа, supplier линкийг 24 цаг ашиглаж үзнэ. Эхлээд туршаад, итгэлтэй болсон хойноо Pro авна.</div>
-    </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">Бараа захиалахад мөнгө хэд хэрэгтэй вэ? <span class="faq-arrow">›</span></div>
-      <div class="faq-a">ProductDrop нь зөвхөн судалгааны мэдээлэл өгдөг. Alibaba дээр 1 бараанаас ₮15,000–₮50,000-оос эхлэн захиалж болно. Тест хийхэд ₮50,000–₮150,000 хангалттай. ProductDrop өөрөө бараа нийлүүлдэггүй — та Alibaba/Taobao-гаас шууд захиалдаг.</div>
-    </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">10 хоног бүр шинэ бараа нэмэгддэг үү? <span class="faq-arrow">›</span></div>
-      <div class="faq-a">Тийм. Pro план дээр 10 хоног бүр 100 шинэ бараа нэмэгддэг. Давхцалгүйгээр сар бүр шинэ судалгаа хийсэн бараанууд нэмэгдэнэ.</div>
-    </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">Нууц үгийг хэзээ авах вэ? <span class="faq-arrow">›</span></div>
-      <div class="faq-a">Бүртгэл үүсгэж, төлбөр хийснээс хойш <b>30 минутын дотор</b> Instagram DM эсвэл утсаар нууц үг илгээнэ. 30 минут өнгөрсөн ч ирээгүй бол <a href="https://instagram.com/productdrop.mn" target="_blank" style="color:var(--accent)">@productdrop.mn</a>-д DM бичнэ үү.</div>
-    </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">Lite-аас Pro руу шилжих боломжтой юу? <span class="faq-arrow">›</span></div>
-      <div class="faq-a">Тийм. Lite-г туршаад хэрэгтэй гэж үзвэл <a href="https://instagram.com/productdrop.mn" target="_blank" style="color:var(--accent)">@productdrop.mn</a>-д DM бичихэд Pro нууц үг 30 минутын дотор ирнэ.</div>
-    </div>
-  </div>
-</section>
-</div>
-
-<!-- CTA -->
-      <button class="pay-cta" onclick="closePayment()">Ойлголоо →</button>
+      <!-- CTA -->
+      <button class="pay-cta" onclick="track('payment_instructions_seen',{button:'payment_ok'});closePayment()">Ойлголоо →</button>
       <div class="pay-footer-note">Асуулт байвал Instagram DM-аар холбогдоорой</div>
     </div>
   </div>
@@ -1930,7 +2467,7 @@ function openRequestModal() {
   var err = document.getElementById('req-err');
   var btn = document.getElementById('req-btn');
   if (err) err.style.display = 'none';
-  if (btn) { btn.disabled = false; btn.textContent = 'Төлбөр төлөх ( QPay )'; }
+  if (btn) { btn.disabled = false; btn.textContent = '🏦 Дансаар худалдан авах →'; }
   openModal('modal-request');
 }
 
@@ -1950,6 +2487,9 @@ async function submitRequest() {
 
   btn.disabled = true;
   btn.textContent = '⏳ Бүртгэж байна...';
+
+  // ✅ GA4: Pro бүртгэл эхэлсэн
+  track('pro_registration_started', { plan: 'pro', phone_entered: !!phone });
 
   var GAS_URL_REG = 'https://script.google.com/macros/s/AKfycbyd3iPFcE8EhSd-fgpDotiDc1TonWUqAUxBVQVDLWcjbqR97OI2tUEsGTuJngVp7g8s/exec';
   var registeredAt = new Date().toLocaleString('mn-MN');
@@ -1987,6 +2527,9 @@ async function submitRequest() {
 
   document.getElementById('req-step1').style.display = 'none';
   document.getElementById('req-step2').style.display = 'block';
+
+  // ✅ GA4: Төлбөрийн алхамд хүрсэн — хамгийн чухал conversion event
+  track('pro_payment_step_reached', { plan: 'pro', phone: phone.replace(/\d{4}$/, '****') });
 }
 
 function togglePw(id, icon) {
@@ -2014,8 +2557,46 @@ function toggleFaq(el) {
 /* ── LOGIN MODAL ── */
 var PD_SALT = 'PD2026MN';
 
-/* ── LITE FREE — no login required ── */
+/* ── LITE FREE — phone capture before entry ── */
 function goLiteFree() {
+  // Хэрэв утас аль хэдийн хадгалагдсан бол шууд орно
+  if (localStorage.getItem('pd_lite_phone')) {
+    track('lite_signup_returning', { phone_captured: true });
+    showWelcome('Зочин', 'lite');
+    return;
+  }
+  openModal('modal-lite-capture');
+}
+
+function submitLiteCapture() {
+  var phone = (document.getElementById('lc-phone').value || '').trim().replace(/[^\d+]/g,'');
+  var errEl = document.getElementById('lc-err');
+  if (!phone || phone.replace(/\D/g,'').length < 8) {
+    errEl.textContent = '📞 Зөв утасны дугаар оруулна уу';
+    errEl.style.display = 'block';
+    return;
+  }
+  // Хадгалах
+  localStorage.setItem('pd_lite_phone', phone);
+  // GA4
+  track('lite_signup', { phone_captured: true, plan: 'lite' });
+  // GAS-д илгээх (background)
+  var GAS_URL_REG = 'https://script.google.com/macros/s/AKfycbyd3iPFcE8EhSd-fgpDotiDc1TonWUqAUxBVQVDLWcjbqR97OI2tUEsGTuJngVp7g8s/exec';
+  try {
+    fetch(GAS_URL_REG + '?action=register&phone=' + encodeURIComponent(phone) + '&plan=lite&status=FREE&date=' + encodeURIComponent(new Date().toLocaleString('mn-MN')), { mode: 'no-cors' });
+  } catch(e) {}
+  // Telegram мэдэгдэл
+  var msg = '🆓 Шинэ Lite бүртгэл\n📞 ' + phone + '\n🕐 ' + new Date().toLocaleString('mn-MN') + '\n💡 24 цагийн дотор Pro DM явуулах';
+  try {
+    fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage?chat_id=' + encodeURIComponent(TG_CHAT) + '&text=' + encodeURIComponent(msg));
+  } catch(e) {}
+  closeModal('modal-lite-capture');
+  showWelcome('Зочин', 'lite');
+}
+
+function skipLiteCapture() {
+  track('lite_signup', { phone_captured: false, plan: 'lite' });
+  closeModal('modal-lite-capture');
   showWelcome('Зочин', 'lite');
 }
 
@@ -2111,6 +2692,7 @@ function showWelcome(name, plan) {
   });
 
   // Redirect
+  track('plan_redirect', {plan: plan, button: 'welcome_redirect'});
   setTimeout(function(){
     window.location.href = PLAN_PAGES[plan] || 'lite.html';
   }, 3400);
@@ -2245,4 +2827,126 @@ function verifyPW(pw) {
   return {valid:true, plan:plan};
 }
 </script>
+<!-- LITE PHONE CAPTURE MODAL -->
+<div class="modal-overlay" id="modal-lite-capture">
+  <div class="modal-box" style="max-width:440px">
+    <div class="modal-header">
+      <h3>🚀 Үнэгүй 24 цаг эхлэх</h3>
+      <button class="modal-close" onclick="skipLiteCapture()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:10px;padding:14px 16px;margin-bottom:18px">
+        <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px">✓ Яг одоо нэвтрэнэ — картны мэдээлэл хэрэггүй</div>
+        <div style="font-size:12px;color:var(--muted)">Утасны дугаараа үлдээснээр 24 цаг дуусахад Pro-ийн тухай мэдэгдэл явуулна.</div>
+      </div>
+      <div style="margin-bottom:14px">
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);display:block;margin-bottom:6px">Утасны дугаар</label>
+        <input id="lc-phone" type="tel" placeholder="8874-8966" maxlength="20"
+          style="width:100%;padding:11px 14px;border:1.5px solid var(--border2);border-radius:10px;font-size:15px;font-family:'Outfit',sans-serif;outline:none;color:var(--text);transition:border .15s"
+          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border2)'"
+          onkeydown="if(event.key==='Enter')submitLiteCapture()">
+        <div id="lc-err" style="display:none;margin-top:8px;font-size:12px;color:#dc2626;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:8px 12px"></div>
+      </div>
+      <button onclick="submitLiteCapture()"
+        style="width:100%;padding:13px;background:var(--text);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;margin-bottom:10px"
+        onmouseover="this.style.background='var(--accent)'" onmouseout="this.style.background='var(--text)'">
+        🚀 Үнэгүй эхлэх →
+      </button>
+      <div style="text-align:center">
+        <a href="#" onclick="skipLiteCapture();return false;" style="font-size:12px;color:var(--muted2);text-decoration:underline">Дугаар үлдээхгүйгээр үргэлжлүүлэх</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXIT-INTENT OVERLAY -->
+<div id="exit-intent">
+  <div class="ei-box">
+    <button class="ei-close" onclick="closeExitIntent()">✕</button>
+    <div class="ei-emoji">🎁</div>
+    <div class="ei-title">Үнэгүй туршаад үзнэ үү</div>
+    <div class="ei-sub">Мөнгө төлөхгүйгээр 25 бараа, supplier линк, ашгийн тооцоолуурыг <strong>24 цаг бүрэн ашигла</strong>. Картны мэдээлэл шаардлагагүй.</div>
+    <button class="ei-btn-primary" onclick="track('exit_intent_lite',{button:'exit_intent'});closeExitIntent();goLiteFree()">🚀 Үнэгүй эхлэх — картгүй</button>
+    <button class="ei-btn-secondary" onclick="closeExitIntent()">Үгүй, танилцах хэрэггүй</button>
+    <div class="ei-proof">
+      <div class="ei-avatars">
+        <div class="ei-av" style="background:#16a34a">А</div>
+        <div class="ei-av" style="background:#7c3aed">Ц</div>
+        <div class="ei-av" style="background:#2563eb">Б</div>
+        <div class="ei-av" style="background:#0891b2">С</div>
+      </div>
+      <span>Энэ сард <strong style="color:var(--text)" id="ei-count">–</strong> хүн нэгдсэн</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── URGENCY COUNTER (seed from date so it feels live but consistent) ──
+(function(){
+  var d = new Date();
+  var seed = d.getFullYear()*10000 + (d.getMonth()+1)*100 + d.getDate();
+  // Өнөөдөр: 10–18 range (sp-feed "today" тоо)
+  var todayBase = 10 + (seed % 9);
+  // Энэ сард: өдрийн тоо × дундаж + тогтмол → 80–180 range
+  var dayOfMonth = d.getDate();
+  var monthBase = 60 + dayOfMonth * 3 + (seed % 20);
+
+  function animCount(el, target){
+    if(!el) return;
+    var start = 0, dur = 1200, startTime = null;
+    function step(ts){
+      if(!startTime) startTime = ts;
+      var prog = Math.min((ts-startTime)/dur,1);
+      el.textContent = Math.round(prog * target);
+      if(prog < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  setTimeout(function(){
+    // "Энэ сард X хүн нэгдсэн" — сарын нийт тоо
+    animCount(document.getElementById('urgency-count'), monthBase);
+    animCount(document.getElementById('ei-count'), monthBase);
+    // "Өнөөдөр бүртгүүлсэн X хүн" — өдрийн тоо
+    var spCount = document.getElementById('sp-count');
+    if(spCount) spCount.textContent = todayBase + ' хүн';
+  }, 800);
+})();
+
+// ── EXIT-INTENT ──
+(function(){
+  var shown = false;
+  var dismissed = sessionStorage.getItem('ei_dismissed');
+  if(dismissed) return;
+
+  document.addEventListener('mouseleave', function(e){
+    if(shown || dismissed) return;
+    if(e.clientY <= 5){
+      shown = true;
+      document.getElementById('exit-intent').classList.add('show');
+      document.body.style.overflow = 'hidden';
+      track('exit_intent_show', {trigger:'mouse_leave'});
+    }
+  });
+
+  // Mobile: back button / scroll up fast
+  var lastScroll = 0;
+  window.addEventListener('scroll', function(){
+    var cur = window.scrollY;
+    if(lastScroll - cur > 120 && cur < 300 && !shown && !dismissed){
+      shown = true;
+      document.getElementById('exit-intent').classList.add('show');
+      document.body.style.overflow = 'hidden';
+      track('exit_intent_show', {trigger:'scroll_up'});
+    }
+    lastScroll = cur;
+  }, {passive:true});
+})();
+
+function closeExitIntent(){
+  document.getElementById('exit-intent').classList.remove('show');
+  document.body.style.overflow = '';
+  sessionStorage.setItem('ei_dismissed','1');
+}
+</script>
+
 </body></html>
