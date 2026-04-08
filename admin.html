@@ -339,6 +339,7 @@ code{background:#f0fdf4;color:#15803d;padding:2px 6px;border-radius:4px;font-fam
               <label>Subscription төрөл</label>
               <select id="f-plan">
                 <option value="lite">Lite</option>
+                <option value="starter">Starter</option>
                 <option value="pro" selected>Pro</option>
                 <option value="business">Business</option>
               </select>
@@ -440,7 +441,7 @@ code{background:#f0fdf4;color:#15803d;padding:2px 6px;border-radius:4px;font-fam
             <strong>Sheet1</strong> (registered, name, uid, plan, pw, expiry, days) · <strong>Registrations</strong> (phone, pw, plan, status, date)
           </div>
           <div class="gas-code">// ================================================================
-//  ProductDrop.MN — Google Apps Script (бүтэн код)
+//  ProductDrop.MN — Google Apps Script (v2 — Starter+Pro хугацаатай)
 //  Хуучин кодыг БҮГДИЙГ устгаад ЭНЭ кодыг paste хийнэ үү
 //
 //  Sheets: "Sheet1"        → registered | name | uid | plan | pw | expiry | days
@@ -449,55 +450,69 @@ code{background:#f0fdf4;color:#15803d;padding:2px 6px;border-radius:4px;font-fam
 //  Deploy → Web app → Execute as: Me → Who has access: Anyone
 // ================================================================
 
+function safeExpiry(val) {
+  if (val &amp;&amp; typeof val.getTime === 'function') {
+    var t = val.getTime();
+    return isNaN(t) ? 0 : t;
+  }
+  var n = typeof val === 'number' ? val : parseFloat(String(val).trim());
+  return isNaN(n) ? 0 : n;
+}
+
+function safeDate(msParam, fallbackDays) {
+  var ms = parseFloat(msParam);
+  if (isNaN(ms) || ms &lt; 1000000000000) {
+    ms = Date.now() + (fallbackDays || 90) * 86400000;
+  }
+  return new Date(ms);
+}
+
+function out(data) {
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
 function doGet(e) {
   var action = e.parameter.action || 'list';
-  var ss     = SpreadsheetApp.openById('1_CwF_EAUJK76nOdTpY7U7Qr2dz9oeZeq_FKGPTWZIrg');
+  var ss = SpreadsheetApp.openById('1_CwF_EAUJK76nOdTpY7U7Qr2dz9oeZeq_FKGPTWZIrg');
 
-  // ── Helper: expiry утгыг Unix ms timestamp болгон аюулгүй унших ──
-  function safeExpiry(val) {
-    if (val instanceof Date) return val.getTime();
-    var n = typeof val === 'number' ? val : parseFloat(String(val).trim());
-    return isNaN(n) ? 0 : n;
-  }
-
-  // ── 1. LIST — нууц үгийн жагсаалт ───────────────────────────────
   if (action === 'list') {
     var sheet = ss.getSheetByName('Sheet1');
     if (!sheet) return out([]);
     var data = sheet.getDataRange().getValues();
     var rows = [];
     for (var i = 1; i &lt; data.length; i++) {
-      if (!data[i][4]) continue;  // pw хоосон бол алгасах
+      if (!data[i][4]) continue;
       rows.push({
         registered: data[i][0],
         name:       data[i][1],
         uid:        data[i][2],
         plan:       data[i][3],
         pw:         String(data[i][4]),
-        expiry:     safeExpiry(data[i][5]),  // ← always number
+        expiry:     safeExpiry(data[i][5]),
         days:       data[i][6]
       });
     }
     return out(rows);
   }
 
-  // ── 2. ADD — нууц үг нэмэх ───────────────────────────────────────
   if (action === 'add') {
     var sh = ss.getSheetByName('Sheet1');
     if (!sh) sh = ss.insertSheet('Sheet1');
+    var days = parseFloat(e.parameter.days) || 90;
     sh.appendRow([
       new Date().toLocaleString('mn-MN'),
       e.parameter.name,
       e.parameter.uid,
       e.parameter.plan,
       e.parameter.pw,
-      parseFloat(e.parameter.expiry),  // ← float, not parseInt
-      parseFloat(e.parameter.days)
+      safeDate(e.parameter.expiry, days),
+      days
     ]);
     return out({ ok: true });
   }
 
-  // ── 3. DELETE — нууц үг устгах ───────────────────────────────────
   if (action === 'delete') {
     var sh = ss.getSheetByName('Sheet1');
     if (!sh) return out({ ok: false });
@@ -511,15 +526,46 @@ function doGet(e) {
     return out({ ok: false, msg: 'not found' });
   }
 
-  // ── 4. VERIFY — нэвтрэх нууц үг шалгах ──────────────────────────
+  if (action === 'debug') {
+    var sh = ss.getSheetByName('Sheet1');
+    if (!sh) return out({ error: 'Sheet1 олдсонгүй' });
+    var d = sh.getDataRange().getValues();
+    var rows = [];
+    for (var i = 1; i &lt; d.length; i++) {
+      var raw  = d[i][5];
+      var safe = safeExpiry(raw);
+      var dateStr = 'INVALID';
+      try { dateStr = new Date(safe).toISOString(); } catch(err) { dateStr = 'ERROR: ' + safe; }
+      rows.push({
+        row:       i+1,
+        pw:        String(d[i][4]).substring(0, 8) + '...',
+        raw_type:  typeof raw,
+        raw_val:   String(raw).substring(0, 30),
+        safe_ms:   safe,
+        safe_date: dateStr,
+        now_ms:    Date.now(),
+        is_valid:  safe &gt; Date.now()
+      });
+    }
+    return out(rows);
+  }
+
   if (action === 'verify') {
     var sh  = ss.getSheetByName('Sheet1');
     if (!sh) return out({ valid: false, message: 'Sheet олдсонгүй' });
     var d   = sh.getDataRange().getValues();
     var now = Date.now();
+    var inputName = (e.parameter.name || '').trim().toLowerCase();
     for (var i = 1; i &lt; d.length; i++) {
       if (String(d[i][4]) === String(e.parameter.pw)) {
-        var expiry = safeExpiry(d[i][5]);  // ← fixed
+        var sheetName = String(d[i][1]).trim().toLowerCase();
+        if (inputName &amp;&amp; sheetName &amp;&amp; inputName !== sheetName) {
+          return out({ valid: false, message: 'Нэр эсвэл нууц үг буруу байна' });
+        }
+        var expiry = safeExpiry(d[i][5]);
+        if (expiry === 0) {
+          return out({ valid: false, message: 'Хугацаа тохируулагдаагүй. Админтай холбогдоно уу.' });
+        }
         if (expiry &gt; now) {
           return out({ valid: true, plan: String(d[i][3]) });
         } else {
@@ -530,7 +576,6 @@ function doGet(e) {
     return out({ valid: false, message: 'Нууц үг олдсонгүй' });
   }
 
-  // ── 5. REGISTER — шинэ хэрэглэгч бүртгүүлэх ─────────────────────
   if (action === 'register') {
     var sh = ss.getSheetByName('Registrations');
     if (!sh) {
@@ -554,7 +599,6 @@ function doGet(e) {
     return out({ ok: true });
   }
 
-  // ── 6. LIST REGISTRATIONS ─────────────────────────────────────────
   if (action === 'listRegistrations') {
     var sh = ss.getSheetByName('Registrations');
     if (!sh) return out([]);
@@ -573,7 +617,6 @@ function doGet(e) {
     return out(rows);
   }
 
-  // ── 7. APPROVE REG ────────────────────────────────────────────────
   if (action === 'approveReg') {
     var sh = ss.getSheetByName('Registrations');
     if (!sh) return out({ ok: false });
@@ -587,7 +630,6 @@ function doGet(e) {
     return out({ ok: false, msg: 'not found' });
   }
 
-  // ── 8. DELETE REG ─────────────────────────────────────────────────
   if (action === 'deleteReg') {
     var sh = ss.getSheetByName('Registrations');
     if (!sh) return out({ ok: false });
@@ -601,7 +643,6 @@ function doGet(e) {
     return out({ ok: false, msg: 'not found' });
   }
 
-  // ── 9. APPROVE AND ADD ────────────────────────────────────────────
   if (action === 'approveAndAdd') {
     var shReg = ss.getSheetByName('Registrations');
     if (shReg) {
@@ -615,25 +656,20 @@ function doGet(e) {
     }
     var shPw = ss.getSheetByName('Sheet1');
     if (!shPw) shPw = ss.insertSheet('Sheet1');
+    var days2 = parseFloat(e.parameter.days) || 90;
     shPw.appendRow([
       new Date().toLocaleString('mn-MN'),
       e.parameter.phone,
-      e.parameter.uid    || e.parameter.phone,
-      e.parameter.plan   || 'pro',
+      e.parameter.uid  || e.parameter.phone,
+      e.parameter.plan || 'pro',
       e.parameter.pw,
-      parseFloat(e.parameter.expiry),
-      parseFloat(e.parameter.days || 30)
+      safeDate(e.parameter.expiry, days2),
+      days2
     ]);
     return out({ ok: true });
   }
 
   return out({ error: 'unknown action: ' + action });
-}
-
-function out(data) {
-  return ContentService
-    .createTextOutput(JSON.stringify(data))
-    .setMimeType(ContentService.MimeType.JSON);
 }</div>
           <div class="gas-footer">
             1️⃣ Google Sheets-д эхний sheet нэрийг <strong>Sheet1</strong> байлгаад <strong>Registrations</strong> нэртэй 2-р sheet үүсгэнэ үү.<br>
@@ -697,6 +733,16 @@ function adminLogin() {
 }
 document.getElementById('admin-pwd').addEventListener('keydown', e => { if(e.key==='Enter') adminLogin(); });
 
+// Plan сонгоход хугацаа автоматаар тохируулна
+document.getElementById('f-plan').addEventListener('change', function() {
+  var PLAN_DAYS = {lite:'0.5', starter:'30', pro:'90', business:'90'};
+  var fDays = document.getElementById('f-days');
+  var target = PLAN_DAYS[this.value] || '90';
+  for (var i = 0; i < fDays.options.length; i++) {
+    if (String(fDays.options[i].value) === target) { fDays.selectedIndex = i; break; }
+  }
+});
+
 function toggleSidebar() {
   const sb = document.querySelector('.sidebar');
   const ov = document.getElementById('sb-overlay');
@@ -743,7 +789,7 @@ function genPW() {
   const days = parseFloat(document.getElementById('f-days').value);
   const plan = document.getElementById('f-plan').value; // lite | pro | Business
 
-  const PLAN_CODE = {lite:'L', pro:'P', business:'B'};
+  const PLAN_CODE = {lite:'L', starter:'S', pro:'P', business:'B'};
   const pcode  = PLAN_CODE[plan] || 'P';
 
   const expiry = Date.now() + days * 86400000;
@@ -795,7 +841,7 @@ function parseTgMessage() {
 
   var planMatch = raw.match(/📦[^\n]*Plan[:\s]+([A-Za-z]+)/i);
   var planRaw = planMatch ? planMatch[1].toLowerCase() : 'pro';
-  var planMap = {pro:'pro', lite:'lite', business:'business'};
+  var planMap = {pro:'pro', lite:'lite', starter:'starter', business:'business'};
   var plan = planMap[planRaw] || 'pro';
 
   if (!phone) {
@@ -836,9 +882,10 @@ async function quickSaveUser() {
   var res   = document.getElementById('tg-parse-result');
   if (!phone || !pw) { alert('Мэдээлэл дутуу байна'); return; }
 
-  // Expiry: 90 хоног
-  var expiry = Date.now() + 90*86400000;
-  var days   = 90;
+  // Plan-аас хамаарсан хугацаа
+  var QUICK_PLAN_DAYS = {starter: 30, pro: 90, business: 90, lite: 1};
+  var days   = QUICK_PLAN_DAYS[(plan || 'pro').toLowerCase()] || 90;
+  var expiry = Date.now() + days*86400000;
 
   res.innerHTML = '⏳ GAS-т хадгалж байна...';
   try {
@@ -1031,7 +1078,9 @@ async function approveReg(phone, pw, plan, idx) {
   if (row) row.style.opacity = '0.5';
 
   // GAS-д нэг дуудлагаар: APPROVED болгож + Passwords-д нэмэх
-  const expiry = Date.now() + 90 * 86400000;
+  const PLAN_DAYS_MAP = {starter: 30, pro: 90, business: 90, lite: 1};
+  const daysNum = PLAN_DAYS_MAP[(plan || 'pro').toLowerCase()] || 90;
+  const expiry = Date.now() + daysNum * 86400000;
   const uid    = phone.replace(/\D/g, '');
   try {
     await fetch(GAS_URL
@@ -1041,7 +1090,7 @@ async function approveReg(phone, pw, plan, idx) {
       + '&plan='   + encodeURIComponent(plan)
       + '&uid='    + encodeURIComponent(uid)
       + '&expiry=' + expiry
-      + '&days=90', { mode: 'no-cors' }
+      + '&days='   + daysNum, { mode: 'no-cors' }
     );
   } catch(e) { console.error('GAS approveAndAdd failed:', e); }
 
@@ -1052,7 +1101,7 @@ async function approveReg(phone, pw, plan, idx) {
     + '📞 Утас: ' + phone + '\n'
     + '🔑 Нууц үг: ' + pw + '\n'
     + '📦 Plan: ' + plan.toUpperCase() + '\n'
-    + '🕐 Хугацаа: 90 хоног\n\n'
+    + '🕐 Хугацаа: ' + daysNum + ' хоног\n\n'
     + '👉 Та доорх Website аар нэвтрэх хэсэгт дарж нэвтрээрэй:\n'
     + '🔗 https://productdrops.netlify.app/landing';
   try {
