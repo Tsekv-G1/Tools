@@ -836,9 +836,9 @@ async function quickSaveUser() {
   var res   = document.getElementById('tg-parse-result');
   if (!phone || !pw) { alert('Мэдээлэл дутуу байна'); return; }
 
-  // Expiry: 30 хоног
-  var expiry = Date.now() + 30*86400000;
-  var days   = 30;
+  // Expiry: 90 хоног
+  var expiry = Date.now() + 90*86400000;
+  var days   = 90;
 
   res.innerHTML = '⏳ GAS-т хадгалж байна...';
   try {
@@ -1031,7 +1031,7 @@ async function approveReg(phone, pw, plan, idx) {
   if (row) row.style.opacity = '0.5';
 
   // GAS-д нэг дуудлагаар: APPROVED болгож + Passwords-д нэмэх
-  const expiry = Date.now() + 30 * 86400000;
+  const expiry = Date.now() + 90 * 86400000;
   const uid    = phone.replace(/\D/g, '');
   try {
     await fetch(GAS_URL
@@ -1041,7 +1041,7 @@ async function approveReg(phone, pw, plan, idx) {
       + '&plan='   + encodeURIComponent(plan)
       + '&uid='    + encodeURIComponent(uid)
       + '&expiry=' + expiry
-      + '&days=30', { mode: 'no-cors' }
+      + '&days=90', { mode: 'no-cors' }
     );
   } catch(e) { console.error('GAS approveAndAdd failed:', e); }
 
@@ -1052,7 +1052,7 @@ async function approveReg(phone, pw, plan, idx) {
     + '📞 Утас: ' + phone + '\n'
     + '🔑 Нууц үг: ' + pw + '\n'
     + '📦 Plan: ' + plan.toUpperCase() + '\n'
-    + '🕐 Хугацаа: 30 хоног\n\n'
+    + '🕐 Хугацаа: 90 хоног\n\n'
     + '👉 Та доорх Website аар нэвтрэх хэсэгт дарж нэвтрээрэй:\n'
     + '🔗 https://productdrops.netlify.app/landing';
   try {
