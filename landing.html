@@ -88,7 +88,7 @@ body{
   position:relative;
 }
 /* All major sections sit above canvas z-index:0 */
-body>*:not(#bg-video-full){position:relative;z-index:1}
+body>*:not(#bg-video-full):not(#site-header):not(.modal-overlay):not(.pay-overlay):not(#welcome-overlay):not(#exit-intent):not(#sticky-mob):not(.fomo-toast){position:relative;z-index:1}
 
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;display:none;align-items:center;justify-content:center;padding:16px}
@@ -111,30 +111,60 @@ body>*:not(#bg-video-full){position:relative;z-index:1}
 
 /* NAV */
 nav{
-  position:fixed;top:0;left:0;right:0;z-index:150;
-  background:transparent;
-  border-bottom:none;
+  background:none!important;
+  background-color:transparent!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  border-bottom:none!important;
+  box-shadow:none!important;
   padding:0 40px;height:64px;
   display:grid;grid-template-columns:1fr auto 1fr;
   align-items:center;
-  transition:background .3s,border-color .3s,backdrop-filter .3s;
 }
 nav.scrolled{
-  background:rgba(7,7,9,.78);
-  backdrop-filter:blur(24px) saturate(160%);
-  -webkit-backdrop-filter:blur(24px) saturate(160%);
-  border-bottom:1px solid rgba(255,255,255,.06);
+  background:none!important;
+  background-color:transparent!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  border-bottom:none!important;
+  box-shadow:none!important;
 }
-.logo{font-family:var(--font-mono);font-weight:500;font-size:13.5px;letter-spacing:.8px;color:var(--text);text-decoration:none;text-transform:uppercase;white-space:nowrap}
+/* Deep layered text shadows for legibility over any bg */
+.logo{
+  font-family:var(--font-mono);font-weight:500;font-size:13.5px;
+  letter-spacing:.8px;color:#fff;text-decoration:none;
+  text-transform:uppercase;white-space:nowrap;
+  text-shadow:
+    0 1px 3px rgba(0,0,0,1),
+    0 2px 12px rgba(0,0,0,.95),
+    0 4px 28px rgba(0,0,0,.85),
+    0 8px 48px rgba(0,0,0,.6);
+}
 .logo span{color:var(--accent)}
 /* CENTER NAV LINKS */
 .nav-links{display:flex;align-items:center;gap:32px;justify-content:center}
-.nav-links a{font-size:13px;color:rgba(240,238,248,.55);text-decoration:none;transition:color .2s;letter-spacing:.1px;font-weight:400;white-space:nowrap}
-.nav-links a:hover{color:rgba(240,238,248,.95)}
+.nav-links a{
+  font-size:13px;color:rgba(255,255,255,.8);text-decoration:none;
+  transition:color .2s;letter-spacing:.1px;font-weight:500;white-space:nowrap;
+  text-shadow:
+    0 1px 3px rgba(0,0,0,1),
+    0 2px 12px rgba(0,0,0,.95),
+    0 4px 28px rgba(0,0,0,.8),
+    0 8px 40px rgba(0,0,0,.5);
+}
+.nav-links a:hover{color:#fff}
 /* RIGHT SIDE ACTIONS */
 .nav-actions{display:flex;align-items:center;gap:10px;justify-content:flex-end}
-.nav-login{font-size:13px;color:rgba(240,238,248,.55);text-decoration:none;padding:6px 14px;transition:color .2s;font-weight:400;letter-spacing:.1px}
-.nav-login:hover{color:rgba(240,238,248,.9)}
+.nav-login{
+  font-size:13px;color:rgba(255,255,255,.75);text-decoration:none;
+  padding:6px 14px;transition:color .2s;font-weight:500;letter-spacing:.1px;
+  text-shadow:
+    0 1px 3px rgba(0,0,0,1),
+    0 2px 12px rgba(0,0,0,.95),
+    0 4px 28px rgba(0,0,0,.8),
+    0 8px 40px rgba(0,0,0,.5);
+}
+.nav-login:hover{color:#fff}
 .nav-cta{
   background:transparent;
   color:rgba(240,238,248,.9);
@@ -162,10 +192,9 @@ nav.scrolled{
   transform:none;
   box-shadow:none;
 }
-/* Push content down so fixed nav doesn't overlap */
-body>*:not(nav):first-of-type{padding-top:64px}
-.hero-wrapper,#ann-bar{margin-top:0}
-/* hide ann-bar or keep it subtle — it now sits BELOW nav */
+/* Ann-bar is fixed at top:0, nav sits below it */
+.hero-wrapper{margin-top:0}
+/* nav top offset set via JS after ann-bar renders */
 
 /* HERO — base styles kept minimal, split layout overrides in showcase block */
 .hero-base{padding:80px 32px 96px;text-align:center;position:relative;overflow:hidden}
@@ -252,9 +281,9 @@ h1{margin-left:0;margin-right:0}
   gap:0;
   max-width:1160px;
   margin:0 auto;
-  padding:72px 32px 40px;
+  padding:80px 32px 40px;
   align-items:center;
-  min-height:580px;
+  min-height:460px;
 }
 .hs-left{padding-right:32px}
 
@@ -463,7 +492,7 @@ h1{margin-left:0;margin-right:0}
 @media(max-width:860px){
   .hero-split{
     grid-template-columns:1fr;
-    padding:48px 24px 32px;
+    padding:8px 24px 32px;
     text-align:center;
   }
   .hero{text-align:center}
@@ -637,7 +666,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
 
 /* MOBILE */
 @media(max-width:640px){
-  nav{padding:0 16px;display:flex;justify-content:space-between;align-items:center}
+  nav{padding:0 16px;display:grid;background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border-bottom:none!important}
   .nav-links{display:none!important}
   .nav-hide-mob{display:none!important}
   .hero{padding:56px 16px 64px}
@@ -679,7 +708,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
   /* ── HERO SPLIT — MOBILE STACK ── */
   .hero-split{
     grid-template-columns:1fr!important;
-    padding:48px 20px 56px!important;
+    padding:16px 20px 40px!important;
     min-height:auto!important;
     gap:0!important;
   }
@@ -1169,8 +1198,10 @@ nav{
   box-shadow:none!important;
 }
 nav.scrolled{
-  background:rgba(7,7,9,.78)!important;
-  border-bottom:1px solid rgba(255,255,255,.06)!important;
+  background:transparent!important;
+  border-bottom:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
 }
 
 /* ── PRODUCT CONSTELLATION CARDS ── */
@@ -1602,6 +1633,21 @@ body{
   .hs-left h1{font-size:clamp(28px,4.5vw,44px)!important}
   .hero-stats{gap:20px}
 }
+/* ── MOBILE HERO FIX (≤640px) ── */
+@media(max-width:640px){
+  .hero-split{
+    grid-template-columns:1fr!important;
+    padding:40px 20px 32px!important;
+    gap:0;
+    min-height:unset;
+  }
+  .hs-left{padding-right:0!important;text-align:center}
+  .hs-left .hero-badge{margin-left:auto;margin-right:auto}
+  .hs-left h1{margin-left:auto!important;margin-right:auto!important;text-align:center}
+  .hs-left .hero-sub{margin-left:auto!important;margin-right:auto!important;text-align:center}
+  .hs-left .hero-btns{align-items:center!important}
+  .hs-right{display:none!important}
+}
 
 /* ═══════════════════════════════════════════════
    APPLE MINIMAL — Subtract until perfect
@@ -1643,28 +1689,21 @@ body,body::before,body::after{
   background:#06060A!important;
   animation:none!important;
 }
-body>*:not(#bg-video-full){position:relative!important;z-index:1!important}
+body>*:not(#bg-video-full):not(#site-header):not(.modal-overlay):not(.pay-overlay):not(#welcome-overlay):not(#exit-intent):not(#sticky-mob):not(.fomo-toast){position:relative!important;z-index:1!important}
 #bg-video-full{z-index:0!important}
+/* Restore fixed positioning for overlays and header */
+#site-header{position:fixed!important;top:0!important;left:0!important;right:0!important;z-index:200!important}
+.modal-overlay{position:fixed!important;inset:0!important;z-index:1000!important}
+.pay-overlay{position:fixed!important;inset:0!important;z-index:2000!important}
+#welcome-overlay{position:fixed!important;inset:0!important;z-index:3000!important}
+#exit-intent{position:fixed!important;inset:0!important;z-index:2000!important}
+#sticky-mob{position:fixed!important;bottom:0!important;left:0!important;right:0!important;z-index:300!important}
+.fomo-toast{position:fixed!important;bottom:88px!important;left:20px!important;z-index:298!important}
 .bg-orb-left{display:none!important}
 
 /* ── NAV: transparent, scrolled state handled by JS ── */
-nav{
-  background:transparent!important;
-  border-bottom:none!important;
-  box-shadow:none!important;
-  backdrop-filter:none!important;
-  -webkit-backdrop-filter:none!important;
-}
-nav.scrolled{
-  background:rgba(7,7,9,.78)!important;
-  backdrop-filter:blur(24px) saturate(160%)!important;
-  -webkit-backdrop-filter:blur(24px) saturate(160%)!important;
-  border-bottom:1px solid rgba(255,255,255,.06)!important;
-}
-.logo span{
-  color:var(--accent)!important;
-  text-shadow:none!important;
-}
+/* nav always transparent — defined in base styles */
+.logo span{color:var(--accent)!important}
 
 /* ── TYPOGRAPHY: Apple SF-scale clarity ── */
 h1{
@@ -1869,12 +1908,15 @@ body::before,body::after,
 
 /* ── CTA SECTION: Dark with pure type ── */
 .cta-section{
-  background:#000!important;
-  border-top:1px solid rgba(255,255,255,.07)!important;
+  background:rgba(6,10,20,.75)!important;
+  border-top:1px solid rgba(0,113,227,.18)!important;
+  backdrop-filter:blur(2px)!important;
 }
+.cta-section h2{color:#fff!important;text-shadow:0 2px 20px rgba(0,0,0,.8)!important}
+.cta-section p{color:rgba(255,255,255,.72)!important}
 .cta-section .btn-primary{
-  background:var(--accent)!important;
-  box-shadow:none!important;
+  background:linear-gradient(135deg,var(--accent3),var(--accent),var(--accent2))!important;
+  box-shadow:0 6px 32px rgba(0,113,227,.45)!important;
   color:#ffffff!important;
 }
 
@@ -1918,11 +1960,14 @@ body::before,body::after,
 /* ── ALTERNATING SECTION TINT: Off ── */
 .section-outer:nth-child(even){background:transparent!important}
 
-/* ── FULL-PAGE CANVAS: All sections transparent so canvas shows through ── */
-.section-outer,
+/* ── CTA SECTION: Subtle overlay for readability ── */
+.cta-section{
+  background:rgba(6,10,20,.75)!important;
+  background-color:rgba(6,10,20,.75)!important;
+  backdrop-filter:blur(2px);
+}
 section,
 .hero-dark-wrap,
-.cta-section,
 .trust-strip,
 .features-section,
 .pricing-section,
@@ -1930,6 +1975,10 @@ section,
 .faq-section,
 .how-section,
 .value-stack-section{
+  background:transparent!important;
+  background-color:transparent!important;
+}
+.section-outer{
   background:transparent!important;
   background-color:transparent!important;
 }
@@ -1959,7 +2008,7 @@ footer{
 </head>
 <body>
 <!-- FULL-PAGE VIDEO BACKGROUND -->
-<video id="bg-video-full" autoplay muted loop playsinline preload="none" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;object-fit:cover;display:block;opacity:0;transition:opacity 1.2s ease"></video>
+<video id="bg-video-full" autoplay muted loop playsinline preload="none" style="position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;min-width:100%;min-height:100%;z-index:0;pointer-events:none;object-fit:cover;display:block;opacity:0;transition:opacity 1.2s ease;transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform"></video>
 <script>
 (function(){
   var src='https://stream.mux.com/Aa02T7oM1wH5Mk5EEVDYhbZ1ChcdhRsS2m1NYyx4Ua1g.m3u8';
@@ -2253,22 +2302,120 @@ footer{
 </div>
 
 <!-- ANNOUNCEMENT BAR -->
-<div id="ann-bar" style="background:rgba(10,10,18,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(41,151,255,.15);text-align:center;padding:8px 40px 8px 16px;font-size:12px;font-weight:400;letter-spacing:.2px;color:rgba(240,238,248,.65);position:relative;z-index:99;line-height:1.4;margin-top:64px">
-  <span style="display:inline-flex;align-items:center;gap:8px">
-    <span style="width:5px;height:5px;border-radius:50%;background:#2997FF;box-shadow:0 0 8px rgba(41,151,255,.9);animation:annPulse 2.4s ease-in-out infinite;flex-shrink:0"></span>
-    Энэ сард <strong id="ann-count" style="color:#2997FF;font-weight:700">127</strong> хүн нэгдсэн &nbsp;·&nbsp; үнэгүй туршилт нээлттэй
-  </span>
-  <button onclick="this.parentElement.remove()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:rgba(240,238,248,.3);width:20px;height:20px;font-size:16px;cursor:pointer;line-height:1;transition:color .2s;display:flex;align-items:center;justify-content:center" onmouseover="this.style.color='rgba(240,238,248,.8)'" onmouseout="this.style.color='rgba(240,238,248,.3)'">×</button>
-</div>
 <style>
 @keyframes annPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.85)}}
-@media(max-width:480px){
-  #ann-bar{font-size:11px;padding:9px 32px 9px 12px}
+
+/* ── SITE HEADER WRAPPER ─────────────────────────────────
+   Single fixed container — ann-bar stacks above nav.
+   No JS height math needed. Zero gap guaranteed.
+──────────────────────────────────────────────────────── */
+#site-header{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:200;
+  display:flex;
+  flex-direction:column;
+}
+
+/* Ann-bar lives inside wrapper — no longer fixed on its own */
+#ann-bar{
+  background:rgba(10,10,18,.85);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(41,151,255,.15);
+  text-align:center;
+  padding:9px 40px 9px 16px;
+  font-size:12px;
+  font-weight:400;
+  letter-spacing:.2px;
+  color:rgba(240,238,248,.65);
+  line-height:1.4;
+  position:relative; /* inside flex column, not fixed */
+  width:100%;
+  transition:max-height .3s ease, opacity .3s ease, padding .3s ease;
+  overflow:hidden;
+}
+#ann-bar.dismissed{
+  max-height:0;
+  padding-top:0;
+  padding-bottom:0;
+  opacity:0;
+  border-bottom:none;
+}
+
+/* Nav is now simply the second child — sits flush below ann-bar */
+#main-nav{
+  position:relative !important; /* override old fixed */
+  top:auto !important;
+  left:auto;right:auto;
+  width:100%;
+}
+
+/* Hero padding-top = total header height, set by JS once */
+.hero-dark-wrap{
+  padding-top:0;
+  transition:padding-top .3s ease;
+}
+
+@media(max-width:640px){
+  #ann-bar{font-size:11px;padding:8px 32px 8px 12px}
+}
+@media(max-width:768px){
+  .nav-links{display:none!important}
+  .nav-hide-mob{display:none!important}
+  nav{padding:0 16px;grid-template-columns:1fr auto}
 }
 </style>
+<script>
+(function(){
+  /* Measure #site-header and apply as hero padding-top */
+  function syncHero(){
+    var hdr=document.getElementById('site-header');
+    var hero=document.querySelector('.hero-dark-wrap');
+    if(!hdr||!hero) return;
+    hero.style.paddingTop=hdr.offsetHeight+'px';
+  }
 
-<!-- NAV -->
-<nav id="main-nav">
+  /* Dismiss ann-bar with smooth collapse */
+  function initDismiss(){
+    var btn=document.getElementById('ann-dismiss');
+    if(!btn) return;
+    btn.addEventListener('click',function(){
+      var bar=document.getElementById('ann-bar');
+      if(bar){
+        bar.style.maxHeight=bar.offsetHeight+'px'; /* snapshot for transition */
+        requestAnimationFrame(function(){
+          bar.classList.add('dismissed');
+        });
+      }
+      // Re-sync hero after transition
+      setTimeout(syncHero,350);
+    });
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',function(){syncHero();initDismiss();});
+  } else {
+    syncHero();
+    initDismiss();
+  }
+  window.addEventListener('resize',syncHero);
+})();
+</script>
+
+<!-- SITE HEADER: ann-bar + nav stacked in one fixed wrapper -->
+<div id="site-header">
+  <!-- Announcement bar -->
+  <div id="ann-bar">
+    <span style="display:inline-flex;align-items:center;gap:8px">
+      <span style="width:5px;height:5px;border-radius:50%;background:#2997FF;box-shadow:0 0 8px rgba(41,151,255,.9);animation:annPulse 2.4s ease-in-out infinite;flex-shrink:0"></span>
+      Энэ сард <strong id="ann-count" style="color:#2997FF;font-weight:700">127</strong> хүн нэгдсэн &nbsp;·&nbsp; үнэгүй туршилт нээлттэй
+    </span>
+    <button id="ann-dismiss" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:rgba(240,238,248,.3);width:20px;height:20px;font-size:16px;cursor:pointer;line-height:1;transition:color .2s;display:flex;align-items:center;justify-content:center" onmouseover="this.style.color='rgba(240,238,248,.8)'" onmouseout="this.style.color='rgba(240,238,248,.3)'">×</button>
+  </div>
+
+  <!-- Nav sits flush below ann-bar, no gap -->
+  <nav id="main-nav">
   <!-- LEFT: Logo -->
   <a class="logo" href="#">PRODUCT<span>DROP</span>.MN</a>
   <!-- CENTER: Nav links -->
@@ -2284,8 +2431,7 @@ footer{
     <a class="nav-cta primary" href="#" onclick="track('click_lite_free',{button:'nav_free'});goLiteFree();return false;">Үнэгүй эхлэх</a>
   </div>
 </nav>
-
-<!-- HERO SPLIT -->
+</div><!-- /#site-header -->
 <style>
 /* ── PREMIUM DARK HERO ── */
 /* ── HERO DARK WRAP ── */
@@ -2429,7 +2575,7 @@ footer{
   .hero-feat{padding:0 36px}
 }
 @media(max-width:640px){
-  .hero-stats-bar{padding:0 20px 64px}
+  .hero-stats-bar{padding:0 20px 32px}
   .hero-stats-inner{flex-direction:column;gap:32px;align-items:center;width:100%}
   .hero-stat-divider{width:80px;height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.15),transparent)}
   .hero-stat-item{padding:0}
@@ -2489,36 +2635,10 @@ footer{
 /* trust pills below CTA */
 .hero-trust-pill{font-size:12.5px;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:6px}
 .hero-trust-pill span.dot{width:5px;height:5px;border-radius:50%;background:#2997FF;display:inline-block;flex-shrink:0;box-shadow:0 0 6px rgba(41,151,255,.5)}
-/* dark nav override */
-.nav-dark{background:rgba(9,9,11,.88)!important;border-bottom-color:rgba(255,255,255,.07)!important;backdrop-filter:blur(24px)!important}
-.nav-dark .logo{color:#fff!important}
-.nav-dark .logo span{color:#0071E3!important}
-.nav-dark .nav-links a{color:rgba(255,255,255,.5)!important}
-.nav-dark .nav-links a:hover{color:#fff!important}
-.nav-dark .nav-cta:not([style*="transparent"]){background:linear-gradient(135deg,#059669,#0071E3)!important;color:#fff!important;font-weight:700!important;border-color:transparent!important;box-shadow:0 2px 14px rgba(0,113,227,.3)!important}
+/* nav-dark removed — nav is always fully transparent */
 </style>
 <script>
-// Nav dark mode with hero
-(function(){
-  function syncNav(){
-    var nav=document.querySelector('nav');
-    if(!nav) return;
-    nav.classList.add('nav-dark');
-  }
-  document.addEventListener('DOMContentLoaded',syncNav);
-  if(document.readyState!=='loading') syncNav();
-})();
-// NAV SCROLL: transparent → frosted on scroll
-(function(){
-  var nav=document.getElementById('main-nav');
-  if(!nav) return;
-  function onScroll(){
-    if(window.scrollY>40){nav.classList.add('scrolled')}
-    else{nav.classList.remove('scrolled')}
-  }
-  window.addEventListener('scroll',onScroll,{passive:true});
-  onScroll();
-})();
+// NAV: always transparent, no class changes
 </script>
 <div class="hero-dark-wrap">
 <canvas id="hero-canvas-aurora" style="display:none"></canvas>
@@ -3084,7 +3204,7 @@ footer{
 </div>
 
 <!-- CTA -->
-<div class="cta-section" style="background:linear-gradient(160deg,#080f09 0%,#0e1d10 50%,#111f13 100%);position:relative;overflow:hidden">
+<div class="cta-section" style="background:linear-gradient(160deg,#060A14 0%,#08102A 50%,#060A14 100%);position:relative;overflow:hidden">
   <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:700px;height:600px;background:radial-gradient(circle,rgba(0,113,227,.1) 0%,transparent 65%);pointer-events:none"></div>
   <div style="position:relative;z-index:1">
     <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,113,227,.1);border:1px solid rgba(41,151,255,.28);border-radius:20px;padding:6px 18px;margin-bottom:24px">
@@ -3098,6 +3218,7 @@ footer{
       <div style="font-size:13px;color:rgba(255,255,255,.45)">Аль хэдийн гишүүн үү? <a href="#" onclick="track('click_login',{button:'bottom_login'});openLoginModal();return false;" style="color:#2997FF;font-weight:700;text-decoration:none">Нэвтрэх →</a></div>
     </div>
   </div>
+</div>
 
 <!-- TRUST STRIP -->
 <div class="trust-strip">
@@ -3198,41 +3319,6 @@ footer{
         </div>
       </div>
 
-      <!-- FAQ -->
-<div class="section-outer">
-<section>
-  <div class="section-label">Түгээмэл асуулт</div>
-  <div class="section-title">Ихэвчлэн асуудаг зүйлүүд</div>
-  <div style="margin-top:40px;display:flex;flex-direction:column;gap:12px;max-width:720px">
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">Би онлайн бизнесийн туршлагагүй — болох уу? <span class="faq-arrow">›</span></div>
-      <div class="faq-a">Тийм, болно. ProductDrop нь яг эхлэгчдэд зориулан бэлдсэн. Бараа сонгохоос зарах хүртэлх бүх алхмыг тайлбарласан заавар байдаг. Олон гишүүн маань анх удаа онлайн бизнес эхэлсэн хүмүүс — тэд захиалга авсан.</div>
-    </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">ProductDrop scam биш гэдгийг яаж мэдэх вэ? <span class="faq-arrow">›</span></div>
-      <div class="faq-a">Манай Instagram <a href="https://instagram.com/productdrop.mn" target="_blank" style="color:var(--accent)">@productdrop.mn</a>-д бодит хэрэглэгчдийн screenshot, үр дүн байдаг. Lite багц <b>үнэгүй</b> — мөнгө төлөхгүйгээр 25 бараа, supplier линкийг 24 цаг ашиглаж үзнэ. Эхлээд туршаад, итгэлтэй болсон хойноо Pro авна.</div>
-    </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">Бараа захиалахад мөнгө хэд хэрэгтэй вэ? <span class="faq-arrow">›</span></div>
-      <div class="faq-a">ProductDrop нь зөвхөн судалгааны мэдээлэл өгдөг. Alibaba дээр 1 бараанаас ₮15,000–₮50,000-оос эхлэн захиалж болно. Тест хийхэд ₮50,000–₮150,000 хангалттай. ProductDrop өөрөө бараа нийлүүлдэггүй — та Alibaba/Taobao-гаас шууд захиалдаг.</div>
-    </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">10 хоног бүр шинэ бараа нэмэгддэг үү? <span class="faq-arrow">›</span></div>
-      <div class="faq-a">Тийм. Pro план дээр 10 хоног бүр 100 шинэ бараа нэмэгддэг. Давхцалгүйгээр сар бүр шинэ судалгаа хийсэн бараанууд нэмэгдэнэ.</div>
-    </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">Нууц үгийг хэзээ авах вэ? <span class="faq-arrow">›</span></div>
-      <div class="faq-a">Бүртгэл үүсгэж, төлбөр хийснээс хойш <b>30 минутын дотор</b> Instagram DM эсвэл утсаар нууц үг илгээнэ. 30 минут өнгөрсөн ч ирээгүй бол <a href="https://instagram.com/productdrop.mn" target="_blank" style="color:var(--accent)">@productdrop.mn</a>-д DM бичнэ үү.</div>
-    </div>
-    <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-q">Lite-аас Pro руу шилжих боломжтой юу? <span class="faq-arrow">›</span></div>
-      <div class="faq-a">Тийм. Lite-г туршаад хэрэгтэй гэж үзвэл <a href="https://instagram.com/productdrop.mn" target="_blank" style="color:var(--accent)">@productdrop.mn</a>-д DM бичихэд Pro нууц үг 30 минутын дотор ирнэ.</div>
-    </div>
-  </div>
-</section>
-</div>
-
-<!-- CTA -->
       <button class="pay-cta" onclick="track('payment_confirmed',{button:'payment_ok'});closePayment()">Ойлголоо →</button>
       <div class="pay-footer-note">Асуулт байвал Instagram DM-аар холбогдоорой</div>
     </div>
@@ -3862,7 +3948,9 @@ function verifyPW(pw) {
     if(shown || dismissed) return;
     if(e.clientY <= 5){
       shown = true;
+      var _scrollY = window.scrollY;
       document.getElementById('exit-intent').classList.add('show');
+      document.body.style.top = '-'+_scrollY+'px';
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
@@ -3876,7 +3964,9 @@ function verifyPW(pw) {
     var cur = window.scrollY;
     if(lastScroll - cur > 120 && cur < 300 && !shown && !dismissed){
       shown = true;
+      var _scrollY2 = window.scrollY;
       document.getElementById('exit-intent').classList.add('show');
+      document.body.style.top = '-'+_scrollY2+'px';
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
@@ -3888,9 +3978,12 @@ function verifyPW(pw) {
 
 function closeExitIntent(){
   document.getElementById('exit-intent').classList.remove('show');
+  var scrollY = parseInt(document.body.style.top || '0') * -1;
   document.body.style.overflow = '';
   document.body.style.position = '';
+  document.body.style.top = '';
   document.body.style.width = '';
+  window.scrollTo(0, scrollY);
   sessionStorage.setItem('ei_dismissed','1');
 }
 </script>
