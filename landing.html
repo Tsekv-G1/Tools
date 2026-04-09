@@ -4344,6 +4344,140 @@ h1 .grad {
 .hero-dark-wrap .hero-bottom-fade{z-index:3;}
 .hero-dark-wrap .hero-stats-bar{position:relative;z-index:4;}
 
+/* ══════════════════════════════════════════
+   VIDEO BG CONTRAST FIXES — text readability
+═══════════════════════════════════════════ */
+
+/* Hero badge — видео дээр харагдахуйц */
+.hero-badge{
+  background:rgba(0,0,0,.55)!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+  backdrop-filter:blur(12px)!important;
+  -webkit-backdrop-filter:blur(12px)!important;
+  color:#fff!important;
+}
+.hero-badge-dot{ background:#2997FF!important; }
+
+/* Section headings text-shadow — видео-г дайрч унших */
+.section-title,
+.section-label,
+h1,h2,h3{
+  text-shadow:0 1px 8px rgba(0,0,0,.85),0 2px 24px rgba(0,0,0,.7)!important;
+}
+/* gradient text (ti) — webkit-text-fill-color байвал text-shadow ажиллахгүй тул drop-shadow ашиглана */
+.section-title .ti,
+h1 .grad{
+  text-shadow:none!important;
+  filter:drop-shadow(0 1px 6px rgba(0,0,0,.8)) drop-shadow(0 2px 16px rgba(0,0,0,.6))!important;
+}
+
+/* Hero sub & section sub */
+.hero-sub,
+.hero-dark-wrap .hero-sub,
+.section-sub,
+.step p,
+.feature-card p{
+  text-shadow:0 1px 6px rgba(0,0,0,.9),0 2px 16px rgba(0,0,0,.7)!important;
+}
+
+/* Section-outer — видео дээр тавигдах section-д нимгэн dark scrim */
+.section-outer{
+  position:relative;
+  z-index:1;
+}
+.section-outer::before{
+  content:'';
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.32);
+  pointer-events:none;
+  z-index:0;
+}
+.section-outer > *{
+  position:relative;
+  z-index:1;
+}
+
+/* Store builder — subtitle харагдахуйц болгох */
+.section-outer section [style*="rgba(0,0,0,.32)"],
+.section-outer section div[style*="background:rgba(0,113,227,.04)"]{
+  background:rgba(0,0,0,.55)!important;
+  border-color:rgba(0,113,227,.35)!important;
+  backdrop-filter:blur(8px)!important;
+  -webkit-backdrop-filter:blur(8px)!important;
+}
+
+/* Feature pills (✓ Домэйн шаардахгүй гэх мэт) */
+.section-outer section span[style*="background:rgba(255,255,255,.05)"]{
+  background:rgba(0,0,0,.5)!important;
+  border-color:rgba(255,255,255,.18)!important;
+  color:rgba(255,255,255,.85)!important;
+}
+
+/* Feature cards */
+.feature-card{
+  background:rgba(0,0,0,.45)!important;
+  backdrop-filter:blur(16px)!important;
+  -webkit-backdrop-filter:blur(16px)!important;
+  border:1px solid rgba(255,255,255,.1)!important;
+}
+.feature-card h3{
+  color:#fff!important;
+}
+.feature-card p{
+  color:rgba(255,255,255,.7)!important;
+}
+
+/* How-wrap steps */
+.how-wrap{
+  background:rgba(0,0,0,.45)!important;
+  backdrop-filter:blur(16px)!important;
+  -webkit-backdrop-filter:blur(16px)!important;
+  border-color:rgba(255,255,255,.1)!important;
+}
+.step h3{color:#fff!important;}
+.step p{color:rgba(255,255,255,.7)!important;}
+.step-num{
+  background:rgba(0,0,0,.5)!important;
+  color:#2997FF!important;
+  border-color:rgba(41,151,255,.35)!important;
+}
+
+/* Testimonial cards */
+.testimonial{
+  background:rgba(0,0,0,.5)!important;
+  backdrop-filter:blur(16px)!important;
+  -webkit-backdrop-filter:blur(16px)!important;
+  border-color:rgba(255,255,255,.1)!important;
+}
+
+/* Pricing cards */
+.pricing-card{
+  background:rgba(0,0,0,.5)!important;
+  backdrop-filter:blur(16px)!important;
+  -webkit-backdrop-filter:blur(16px)!important;
+}
+.pricing-card.featured{
+  background:rgba(0,30,80,.6)!important;
+}
+
+/* FAQ items */
+.faq-item{
+  background:rgba(0,0,0,.45)!important;
+  backdrop-filter:blur(14px)!important;
+  -webkit-backdrop-filter:blur(14px)!important;
+  border-color:rgba(255,255,255,.09)!important;
+}
+
+/* Mobile-specific: scrim арай хүчтэй */
+@media(max-width:768px){
+  .section-outer::before{
+    background:rgba(0,0,0,.42)!important;
+  }
+  .hero-badge{
+    background:rgba(0,0,0,.65)!important;
+  }
+}
+
 </style>
 
 <!-- scarcity banner removed -->
