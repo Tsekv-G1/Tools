@@ -8850,7 +8850,7 @@ function openPanel(p){
     <div class="p-stat"><div class="p-stat-lbl">Авах үнэ</div><div class="p-stat-val blue">${fmtN(p.cN)}</div></div>
     <div class="p-stat"><div class="p-stat-lbl">Зарах үнэ</div><div class="p-stat-val">${fmtN(p.pN)}</div></div>
     <div class="p-stat"><div class="p-stat-lbl">Цэвэр ашиг</div><div class="p-stat-val green">${fmtN(p.npN)}</div></div>`;
-  const enc=encodeURIComponent(p.n);
+  const enc=encodeURIComponent(p._en||p.n);
   document.getElementById('p-links').innerHTML=`
     <a class="p-link ali" href="${p.aliUrl||'https://www.alibaba.com/trade/search?SearchText='+enc}" target="_blank">🔗 Alibaba хайх</a>
     <a class="p-link tao" href="${p.taobaoUrl||'https://s.taobao.com/search?q='+enc}" target="_blank">🔗 Taobao хайх</a>
