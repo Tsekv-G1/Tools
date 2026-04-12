@@ -624,6 +624,40 @@ body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font
 .tut-thumb-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);opacity:0;transition:all .2s}
 .tut-thumb:not(.coming-soon-thumb):hover .tut-thumb-play{opacity:1}
 .tut-thumb-play-icon{width:36px;height:36px;background:rgba(255,255,255,.95);border-radius:50%;display:flex;align-items:center;justify-content:center}
+/* ── ШУУД АШИГЛАХ ACTION BOX ── */
+.tut-action-box{margin-top:10px;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:12px 14px}
+.tut-action-box.prompt-box{background:#fef9c3;border-color:#fde047}
+.tut-action-lbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#15803d;margin-bottom:5px}
+.tut-action-box.prompt-box .tut-action-lbl{color:#a16207}
+.tut-action-sub{font-size:11px;color:#374151;margin-bottom:7px}
+.tut-prompt-txt{background:#fff;border:1px solid #fde047;border-radius:7px;padding:10px 12px;font-size:11.5px;line-height:1.75;color:#713f12;white-space:pre-wrap;font-family:'Outfit',sans-serif}
+.tut-act-row{display:flex;gap:7px;margin-top:4px}
+.tut-act-inp{flex:1;min-width:0;padding:7px 10px;border:1.5px solid #d1d5db;border-radius:8px;font-size:12px;font-family:'Outfit',sans-serif;outline:none;color:#111827;background:#fff}
+.tut-act-inp:focus{border-color:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.12)}
+.tut-act-sbtn{padding:7px 12px;background:#111827;color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap;transition:background .15s;flex-shrink:0}
+.tut-act-sbtn:hover{background:#16a34a}
+.tut-act-btns{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.tut-act-cpbtn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;background:#111827;color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:background .15s}
+.tut-act-cpbtn:hover{background:#16a34a}
+.tut-act-lnk{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;background:#fff;color:#374151;border:1.5px solid #d1d5db;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;text-decoration:none}
+.tut-act-lnk:hover{border-color:#16a34a;color:#16a34a}
+.tut-act-fullbtn{width:100%;padding:9px 14px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:background .15s;text-align:left}
+.tut-act-fullbtn:hover{background:#15803d}
+.tut-act-fullbtn2{width:100%;margin-top:7px;padding:9px 14px;background:#fff;color:#374151;border:1.5px solid #d1d5db;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;text-align:left}
+.tut-act-fullbtn2:hover{border-color:#16a34a;color:#16a34a}
+.tut-url-result{display:none;margin-top:8px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 12px}
+[data-theme="dark"] .tut-action-box{background:#0d2a1a;border-color:rgba(22,163,74,.5)}
+[data-theme="dark"] .tut-action-box.prompt-box{background:#2a2000;border-color:#a16207}
+[data-theme="dark"] .tut-action-lbl{color:#4ade80}
+[data-theme="dark"] .tut-action-box.prompt-box .tut-action-lbl{color:#fbbf24}
+[data-theme="dark"] .tut-action-sub{color:var(--muted)}
+[data-theme="dark"] .tut-prompt-txt{background:#1a1500;border-color:#a16207;color:#fde68a}
+[data-theme="dark"] .tut-act-inp{background:var(--input-bg);border-color:var(--border2);color:var(--text)}
+[data-theme="dark"] .tut-act-sbtn{background:var(--text)}
+[data-theme="dark"] .tut-act-cpbtn{background:var(--text)}
+[data-theme="dark"] .tut-act-lnk{background:var(--white);border-color:var(--border2);color:var(--muted)}
+[data-theme="dark"] .tut-act-fullbtn2{background:var(--white);border-color:var(--border2);color:var(--muted)}
+[data-theme="dark"] .tut-url-result{background:rgba(22,163,74,.1);border-color:rgba(22,163,74,.3)}
 /* YouTube video player modal */
 .yt-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1000;align-items:center;justify-content:center;padding:20px;flex-direction:column;gap:14px}
 .yt-modal.open{display:flex}
@@ -9487,6 +9521,91 @@ fetch('tutorials.json?v=' + Date.now())
 function getTutorials(){
   return _tutorials || TUT_DEFAULT;
 }
+/* ── ШУУД АШИГЛАХ ФУНКЦУУД ── */
+function tutGetAction(id){
+  if(id===4){
+    return '<div class="tut-action-box">'
+      +'<div class="tut-action-lbl">⚡ Шууд ашиглах — Alibaba хайлт</div>'
+      +'<div class="tut-action-sub">Барааны нэр оруулаад нийлүүлэгч хай</div>'
+      +'<div class="tut-act-row">'
+      +'<input class="tut-act-inp" id="tut-ali" placeholder="Ж.нь: LED strip light, yoga mat...">'
+      +'<button class="tut-act-sbtn" onclick="tutAli()">🔍 Alibaba ↗</button>'
+      +'</div>'
+      +'</div>';
+  }
+  if(id===5){
+    return '<div class="tut-action-box prompt-box">'
+      +'<div class="tut-action-lbl">⚡ Шууд ашиглах — ChatGPT Prompt</div>'
+      +'<div class="tut-prompt-txt">Дараах TikTok/Instagram script-ийг илүү engaging болгож, hook-ийг хүчтэй болго, CTA нэмж өг:\n\n[Барааны Content Script-ийг энд paste хий]</div>'
+      +'<div class="tut-act-btns">'
+      +'<button class="tut-act-cpbtn" id="tut-cp-btn" onclick="tutCopyPrompt()">📋 Prompt хуулах</button>'
+      +'<a class="tut-act-lnk" href="https://chat.openai.com" target="_blank">🤖 ChatGPT нээх ↗</a>'
+      +'</div>'
+      +'</div>';
+  }
+  if(id===6){
+    return '<div class="tut-action-box">'
+      +'<div class="tut-action-lbl">⚡ Шууд ашиглах — URL богиносгох</div>'
+      +'<div class="tut-act-row">'
+      +'<input class="tut-act-inp" id="tut-url" placeholder="https://productdrop.mn/...">'
+      +'<button class="tut-act-sbtn" id="tut-url-btn" onclick="tutTiny()">⚡ Богиносгох</button>'
+      +'</div>'
+      +'<div class="tut-url-result" id="tut-url-res">'
+      +'<div style="font-size:10px;font-weight:700;color:#15803d;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">✓ Богиносгосон холбоос</div>'
+      +'<div id="tut-url-short" style="font-size:13px;font-weight:700;color:var(--text);word-break:break-all"></div>'
+      +'<button onclick="tutCopyURL()" id="tut-url-cp" style="margin-top:7px;font-size:10px;font-weight:700;padding:4px 12px;background:#16a34a;color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:Outfit,sans-serif">📋 Хуулах</button>'
+      +'</div>'
+      +'</div>';
+  }
+  if(id===7){
+    return '<div class="tut-action-box">'
+      +'<div class="tut-action-lbl">⚡ Шууд ашиглах</div>'
+      +'<button class="tut-act-fullbtn" onclick="closeTutorial();setTimeout(function(){openAdMetric()},300)">📊 Ad Metric Analyzer нээх →</button>'
+      +'<button class="tut-act-fullbtn2" onclick="closeTutorial();setTimeout(function(){var c=document.querySelector(\'.card\');if(c)c.click();},300)">💰 Ашгийн тооцоолуур харах →</button>'
+      +'</div>';
+  }
+  return '';
+}
+function tutCopyPrompt(){
+  var txt='Дараах TikTok/Instagram script-ийг илүү engaging болгож, hook-ийг хүчтэй болго, CTA нэмж өг:\n\n[Барааны Content Script-ийг энд paste хий]';
+  var btn=document.getElementById('tut-cp-btn');
+  navigator.clipboard.writeText(txt).then(function(){
+    if(btn){btn.textContent='✅ Хуулагдлаа!';setTimeout(function(){btn.textContent='📋 Prompt хуулах';},2000);}
+  }).catch(function(){
+    var t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();
+    if(btn){btn.textContent='✅ Хуулагдлаа!';setTimeout(function(){btn.textContent='📋 Prompt хуулах';},2000);}
+  });
+}
+function tutAli(){
+  var inp=document.getElementById('tut-ali');
+  if(!inp||!inp.value.trim()){if(inp)inp.focus();return;}
+  window.open('https://www.alibaba.com/trade/search?SearchText='+encodeURIComponent(inp.value.trim()),'_blank');
+}
+function tutTiny(){
+  var inp=document.getElementById('tut-url');
+  if(!inp||!inp.value.trim()){if(inp)inp.focus();return;}
+  var url=inp.value.trim();
+  if(!url.startsWith('http'))url='https://'+url;
+  var btn=document.getElementById('tut-url-btn');
+  if(btn){btn.textContent='⏳...';btn.disabled=true;}
+  fetch('https://tinyurl.com/api-create.php?url='+encodeURIComponent(url))
+    .then(function(r){return r.text();})
+    .then(function(s){
+      var res=document.getElementById('tut-url-res');
+      var sh=document.getElementById('tut-url-short');
+      if(res&&sh){sh.textContent=s;res.style.display='block';}
+    })
+    .catch(function(){window.open('https://tinyurl.com/','_blank');})
+    .finally(function(){if(btn){btn.textContent='⚡ Богиносгох';btn.disabled=false;}});
+}
+function tutCopyURL(){
+  var sh=document.getElementById('tut-url-short');
+  if(!sh||!sh.textContent)return;
+  var btn=document.getElementById('tut-url-cp');
+  navigator.clipboard.writeText(sh.textContent).then(function(){
+    if(btn){btn.textContent='✅ Хуулагдлаа!';setTimeout(function(){btn.textContent='📋 Хуулах';},2000);}
+  });
+}
 function renderTutorials(){
   var list=getTutorials();
   var el=document.getElementById('tut-lessons-list'); if(!el) return;
@@ -9523,6 +9642,7 @@ function renderTutorials(){
           +(tags?'<div class="tut-tags">'+tags+'</div>':'')
         +'</div>'
         +watchBtn
+        +tutGetAction(l.id)
       +'</div>'
       +thumbHtml
     +'</div>';
