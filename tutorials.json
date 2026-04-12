@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "title": "ProductDrop.MN Платформ — Эхлэл",
+    "desc": "Эхлэл танилцууга",
+    "duration": "~0:15 Секунд",
+    "ytid": "FjND959v7JM",
+    "thumb": "https://res.cloudinary.com/di0nven1w/image/upload/v1775975093/hf_20260412_062157_00278083-61ad-4f34-858d-c4e871d813c7_yb1qzl.png",
+    "tags": [
+      "📋 Website заавар",
+      "🔥 Must Watch"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Хэсэг 01 · Dashboard & Navigation Танилцуулга",
+    "desc": "Sidebar, search bar, sort функц болон нийт бараанууд хэрхэн байрлаж байгааг харуулна.",
+    "duration": "30 сек · 0:15–0:45",
+    "ytid": "",
+    "thumb": "",
+    "tags": [
+      "📋 Website заавар"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Хэсэг 02 · Бараа Дэлгэрэнгүй & Ашгийн Тооцоолуур",
+    "desc": "Side panel нээх, авах/зарах үнэ, хүргэлт, гааль, цэвэр ашиг болон margin хэрхэн тохируулах. Star хийж хадгалах.",
+    "duration": "60 сек · 0:45–1:45",
+    "ytid": "",
+    "thumb": "",
+    "tags": [
+      "📋 Website заавар"
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Хэсэг 03 · Supplier Линк — Alibaba/Taobao",
+    "desc": "Supplier линк дарж бараа нийлүүлэгчийн хуудас руу хэрхэн шилжих, захиалга өгөх процессийг харуулна.",
+    "duration": "30 сек · 1:45–2:15",
+    "ytid": "",
+    "thumb": "",
+    "tags": [
+      "📦 Alibaba"
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Хэсэг 04 · Content Script + ChatGPT Prompt",
+    "desc": "Барааны бэлэн content script авах, хуулж ChatGPT-д өгөх арга. Сайжруулах prompt: \"Дараах TikTok/Instagram script-ийг илүү engaging болгож, hook-ийг хүчтэй болго, CTA нэмж өг:\" гэж бичээд paste хий.",
+    "duration": "60 сек · 2:15–3:15",
+    "ytid": "",
+    "thumb": "",
+    "tags": [
+      "✍️ Content",
+      "🔧 Tools"
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Хэсэг 05 · Дэлгүүр Нээх + TinyURL Холбоос",
+    "desc": "ProductDrop.MN дээрх дэлгүүр нээх алхмуудыг тайлбарлана. TinyURL.com ашиглан урт холбоосоо богино болгох арга: tinyurl.com руу орж URL paste хийгээд богино холбоос авна.",
+    "duration": "45 сек · 3:15–4:00",
+    "ytid": "",
+    "thumb": "",
+    "tags": [
+      "📋 Website заавар"
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Хэсэг 06 · Ашгийн Тооцоолол & Ad Analyzer & Санал Хүсэлт",
+    "desc": "Sidebar-н Ашгийн тооцоолол, Ad Metric Analyzer хэрэгслүүдийг хэрхэн ашиглах. Санал хүсэлт илгээх хэсэгт барааны хүсэлт, алдааны мэдэгдэл илгээж болно.",
+    "duration": "60 сек · 4:00–5:00",
+    "ytid": "",
+    "thumb": "",
+    "tags": [
+      "📊 Ads шинжилгээ",
+      "🔧 Tools"
+    ]
+  }
+]
