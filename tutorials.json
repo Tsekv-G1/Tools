@@ -15,9 +15,9 @@
     "id": 2,
     "title": "Хэсэг 01 · Dashboard & Navigation Танилцуулга",
     "desc": "Sidebar, search bar, sort функц болон нийт бараанууд хэрхэн байрлаж байгааг харуулна.",
-    "duration": "30 сек · 0:15–0:45",
-    "ytid": "",
-    "thumb": "",
+    "duration": "33 сек",
+    "ytid": "TxPPhCEWXjw",
+    "thumb": "https://res.cloudinary.com/di0nven1w/image/upload/v1775975867/hf_20260412_061319_aa38fc16-f35c-4dca-92f3-85f2bac47f83_ypfnkc.png",
     "tags": [
       "📋 Website заавар"
     ]
@@ -25,10 +25,10 @@
   {
     "id": 3,
     "title": "Хэсэг 02 · Бараа Дэлгэрэнгүй & Ашгийн Тооцоолуур",
-    "desc": "Side panel нээх, авах/зарах үнэ, хүргэлт, гааль, цэвэр ашиг болон margin хэрхэн тохируулах. Star хийж хадгалах.",
-    "duration": "60 сек · 0:45–1:45",
-    "ytid": "",
-    "thumb": "",
+    "desc": "Side panel нээх, авах/зарах үнэ, хүргэлт, цэвэр ашиг болон margin хэрхэн тохируулах. Star хийж хадгалах.",
+    "duration": "60 сек",
+    "ytid": "5JRfoCKogtA",
+    "thumb": "https://res.cloudinary.com/di0nven1w/image/upload/v1775976188/hf_20260412_061323_ce2a6ef5-39b0-41e0-9da9-514d5240d7c1_aof6ia.png",
     "tags": [
       "📋 Website заавар"
     ]
@@ -48,9 +48,9 @@
     "id": 5,
     "title": "Хэсэг 04 · Content Script + ChatGPT Prompt",
     "desc": "Барааны бэлэн content script авах, хуулж ChatGPT-д өгөх арга. Сайжруулах prompt: \"Дараах TikTok/Instagram script-ийг илүү engaging болгож, hook-ийг хүчтэй болго, CTA нэмж өг:\" гэж бичээд paste хий.",
-    "duration": "60 сек · 2:15–3:15",
-    "ytid": "",
-    "thumb": "",
+    "duration": "60 сек",
+    "ytid": "LeXAC3DdxHQ",
+    "thumb": "https://res.cloudinary.com/di0nven1w/image/upload/v1775976183/hf_20260412_061330_a9d99c8e-902f-4e75-84c2-326cabb8321e_tahgzf.png",
     "tags": [
       "✍️ Content",
       "🔧 Tools"
@@ -60,9 +60,9 @@
     "id": 6,
     "title": "Хэсэг 05 · Дэлгүүр Нээх + TinyURL Холбоос",
     "desc": "ProductDrop.MN дээрх дэлгүүр нээх алхмуудыг тайлбарлана. TinyURL.com ашиглан урт холбоосоо богино болгох арга: tinyurl.com руу орж URL paste хийгээд богино холбоос авна.",
-    "duration": "45 сек · 3:15–4:00",
-    "ytid": "",
-    "thumb": "",
+    "duration": "3:12 сек",
+    "ytid": "XBUhn5GnQAQ",
+    "thumb": "https://res.cloudinary.com/di0nven1w/image/upload/v1775976183/hf_20260412_061821_a7f33658-63d7-46d6-b19e-ffebdc656a7c_cjjfln.png",
     "tags": [
       "📋 Website заавар"
     ]
@@ -71,9 +71,9 @@
     "id": 7,
     "title": "Хэсэг 06 · Ашгийн Тооцоолол & Ad Analyzer & Санал Хүсэлт",
     "desc": "Sidebar-н Ашгийн тооцоолол, Ad Metric Analyzer хэрэгслүүдийг хэрхэн ашиглах. Санал хүсэлт илгээх хэсэгт барааны хүсэлт, алдааны мэдэгдэл илгээж болно.",
-    "duration": "60 сек · 4:00–5:00",
-    "ytid": "",
-    "thumb": "",
+    "duration": "60 сек",
+    "ytid": "iQkfsEIXMZw",
+    "thumb": "https://res.cloudinary.com/di0nven1w/image/upload/v1775976172/hf_20260412_061828_c637ec98-5d28-4ca3-8830-35577f414583_tknq3r.png",
     "tags": [
       "📊 Ads шинжилгээ",
       "🔧 Tools"
