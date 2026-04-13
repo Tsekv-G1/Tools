@@ -77,94 +77,71 @@
   --font-body:'Inter',sans-serif;
   --font-mono:'JetBrains Mono',monospace;
 }
-html{scroll-behavior:smooth;overflow-x:hidden;max-width:100%}
+html{scroll-behavior:smooth;overflow-x:hidden;max-width:100%;-webkit-tap-highlight-color:transparent}
 body{
   background:#06060A;
   color:var(--text);
   font-family:var(--font-body);
   -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
   overflow-x:hidden;
   max-width:100%;
   position:relative;
+  min-height:100vh;
 }
 /* All major sections sit above canvas z-index:0 */
-body>*:not(#bg-video-full):not(#site-header):not(.modal-overlay):not(.pay-overlay):not(#welcome-overlay):not(#exit-intent):not(#sticky-mob):not(.fomo-toast){position:relative;z-index:1}
+body>*{z-index:1}
 
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;display:none;align-items:center;justify-content:center;padding:16px}
+/* ── MODAL BASE ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:1000;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
 .modal-overlay.open{display:flex}
-.modal-box{background:#fff;border-radius:16px;max-width:620px;width:100%;max-height:80vh;overflow-y:auto;position:relative;box-shadow:var(--shadow-lg)}
-.modal-header{padding:24px 28px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1}
-.modal-header h3{font-size:18px;font-weight:700}
-.modal-close{background:none;border:1px solid var(--border);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:16px;color:var(--muted)}
-.modal-close:hover{background:var(--bg);color:var(--text)}
-.modal-body{padding:24px 28px;line-height:1.8;color:var(--text2);font-size:14px}
-.modal-body h4{font-size:15px;font-weight:700;color:var(--text);margin:20px 0 8px}
+.modal-box{background:#0a0a0e;border-radius:16px;max-width:620px;width:100%;max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 32px 80px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.08)}
+.modal-header{padding:20px 24px 16px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#0a0a0e;z-index:1}
+.modal-header h3{font-size:17px;font-weight:700;color:#f0eef8}
+.modal-close{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:14px;color:rgba(255,255,255,.45);transition:all .15s}
+.modal-close:hover{background:rgba(255,255,255,.1);color:#f0eef8;border-color:rgba(255,255,255,.25)}
+.modal-body{padding:22px 24px;line-height:1.8;color:rgba(255,255,255,.55);font-size:14px}
+.modal-body h4{font-size:14px;font-weight:700;color:#f0eef8;margin:18px 0 7px}
 .modal-body h4:first-child{margin-top:0}
-.modal-body p{margin-bottom:12px}
+.modal-body p{margin-bottom:11px}
 .modal-body ul{padding-left:20px;margin-bottom:12px}
 .modal-body ul li{margin-bottom:6px}
-.modal-body .contact-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg);border-radius:8px;margin-bottom:10px}
+.modal-body .contact-item{display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:9px;margin-bottom:9px}
 .modal-body .contact-icon{font-size:20px}
-.modal-body .contact-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-.modal-body .contact-val{font-size:14px;font-weight:600}
+.modal-body .contact-label{font-size:11px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.5px}
+.modal-body .contact-val{font-size:14px;font-weight:600;color:#f0eef8}
 
 /* NAV */
 nav{
-  background:none!important;
-  background-color:transparent!important;
-  backdrop-filter:none!important;
-  -webkit-backdrop-filter:none!important;
-  border-bottom:none!important;
-  box-shadow:none!important;
+  position:fixed;top:0;left:0;right:0;z-index:150;
+  background:transparent;
+  border-bottom:none;
   padding:0 40px;height:64px;
   display:grid;grid-template-columns:1fr auto 1fr;
   align-items:center;
+  transition:background .35s ease,border-color .35s ease,backdrop-filter .35s ease;
 }
 nav.scrolled{
-  background:none!important;
-  background-color:transparent!important;
-  backdrop-filter:none!important;
-  -webkit-backdrop-filter:none!important;
-  border-bottom:none!important;
-  box-shadow:none!important;
+  background:rgba(7,7,9,.82);
+  backdrop-filter:blur(28px) saturate(170%);
+  -webkit-backdrop-filter:blur(28px) saturate(170%);
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
-/* Deep layered text shadows for legibility over any bg */
-.logo{
-  font-family:var(--font-mono);font-weight:500;font-size:13.5px;
-  letter-spacing:.8px;color:#fff;text-decoration:none;
-  text-transform:uppercase;white-space:nowrap;
-  text-shadow:
-    0 1px 3px rgba(0,0,0,1),
-    0 2px 12px rgba(0,0,0,.95),
-    0 4px 28px rgba(0,0,0,.85),
-    0 8px 48px rgba(0,0,0,.6);
+@media(max-width:640px){
+  nav{padding:0 18px;height:56px}
+  .nav-links{display:none}
+  .nav-login{display:none}
 }
+.logo{font-family:var(--font-mono);font-weight:500;font-size:13.5px;letter-spacing:.8px;color:var(--text);text-decoration:none;text-transform:uppercase;white-space:nowrap}
 .logo span{color:var(--accent)}
 /* CENTER NAV LINKS */
 .nav-links{display:flex;align-items:center;gap:32px;justify-content:center}
-.nav-links a{
-  font-size:13px;color:rgba(255,255,255,.8);text-decoration:none;
-  transition:color .2s;letter-spacing:.1px;font-weight:500;white-space:nowrap;
-  text-shadow:
-    0 1px 3px rgba(0,0,0,1),
-    0 2px 12px rgba(0,0,0,.95),
-    0 4px 28px rgba(0,0,0,.8),
-    0 8px 40px rgba(0,0,0,.5);
-}
-.nav-links a:hover{color:#fff}
+.nav-links a{font-size:13px;color:rgba(240,238,248,.55);text-decoration:none;transition:color .2s;letter-spacing:.1px;font-weight:400;white-space:nowrap}
+.nav-links a:hover{color:rgba(240,238,248,.95)}
 /* RIGHT SIDE ACTIONS */
 .nav-actions{display:flex;align-items:center;gap:10px;justify-content:flex-end}
-.nav-login{
-  font-size:13px;color:rgba(255,255,255,.75);text-decoration:none;
-  padding:6px 14px;transition:color .2s;font-weight:500;letter-spacing:.1px;
-  text-shadow:
-    0 1px 3px rgba(0,0,0,1),
-    0 2px 12px rgba(0,0,0,.95),
-    0 4px 28px rgba(0,0,0,.8),
-    0 8px 40px rgba(0,0,0,.5);
-}
-.nav-login:hover{color:#fff}
+.nav-login{font-size:13px;color:rgba(240,238,248,.55);text-decoration:none;padding:6px 14px;transition:color .2s;font-weight:400;letter-spacing:.1px}
+.nav-login:hover{color:rgba(240,238,248,.9)}
 .nav-cta{
   background:transparent;
   color:rgba(240,238,248,.9);
@@ -192,9 +169,14 @@ nav.scrolled{
   transform:none;
   box-shadow:none;
 }
-/* Ann-bar is fixed at top:0, nav sits below it */
+/* Push content down so fixed nav doesn't overlap */
+body>*:not(nav):first-of-type{padding-top:64px}
 .hero-wrapper{margin-top:0}
-/* nav top offset set via JS after ann-bar renders */
+/* ann-bar sits below fixed nav */
+#ann-bar{margin-top:64px}
+@media(max-width:640px){
+  #ann-bar{margin-top:56px}
+}
 
 /* HERO — base styles kept minimal, split layout overrides in showcase block */
 .hero-base{padding:80px 32px 96px;text-align:center;position:relative;overflow:hidden}
@@ -230,10 +212,12 @@ h1 .grad{
   background:linear-gradient(135deg,var(--accent3) 0%,var(--accent) 55%,var(--accent2) 100%);
   color:#ffffff;padding:14px 32px;border-radius:10px;
   font-size:14.5px;font-weight:800;text-decoration:none;
-  transition:all .25s;display:inline-flex;align-items:center;gap:8px;
+  transition:all .28s cubic-bezier(.34,1.2,.64,1);display:inline-flex;align-items:center;gap:8px;
   letter-spacing:.2px;
   box-shadow:0 4px 24px rgba(0,113,227,.3),inset 0 1px 0 rgba(255,255,255,.2);
   position:relative;overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
 }
 .btn-primary::after{
   content:'';position:absolute;inset:0;
@@ -281,9 +265,9 @@ h1{margin-left:0;margin-right:0}
   gap:0;
   max-width:1160px;
   margin:0 auto;
-  padding:80px 32px 40px;
+  padding:72px 32px 40px;
   align-items:center;
-  min-height:460px;
+  min-height:580px;
 }
 .hs-left{padding-right:32px}
 
@@ -492,11 +476,11 @@ h1{margin-left:0;margin-right:0}
 @media(max-width:860px){
   .hero-split{
     grid-template-columns:1fr;
-    padding:8px 24px 32px;
+    padding:48px 20px 32px;
     text-align:center;
   }
   .hero{text-align:center}
-  h1{margin-left:auto;margin-right:auto}
+  h1{margin-left:auto;margin-right:auto;letter-spacing:-1.8px}
   .hero-sub{margin-left:auto;margin-right:auto}
   .hero-stats{justify-content:center}
   .hs-left{padding-right:0}
@@ -515,9 +499,10 @@ h1{margin-left:0;margin-right:0}
   .hs-center-name{font-size:10px;min-height:24px}
 }
 @media(max-width:480px){
-  .hs-right{height:360px}
-  .hs-center{width:148px}
-  .hs-center-img{height:80px}
+  .hero-split{padding:40px 16px 24px}
+  .hs-right{height:340px}
+  .hs-center{width:145px}
+  .hs-center-img{height:78px}
   .hs-sat-1{width:80px;left:0;top:2%}
   .hs-sat-1 img{width:60px;height:46px}
   .hs-sat-2{width:76px;right:0;top:1%}
@@ -526,6 +511,9 @@ h1{margin-left:0;margin-right:0}
   .hs-sat-3 img{width:60px;height:48px}
   .hs-pill-profit{right:2%;font-size:9.5px;padding:5px 10px}
   .hs-pill-live{left:0;font-size:9.5px;padding:5px 10px}
+  .hero-btns{gap:14px}
+  .btn-primary,.btn-secondary{padding:13px 24px;font-size:14px;width:100%;justify-content:center}
+  .hero-btns{flex-direction:column;align-items:stretch}
 }
 
 /* FULL WIDTH SECTION WRAPPER */
@@ -581,8 +569,8 @@ section{padding:80px 32px;max-width:1100px;margin:0 auto}
 .pricing-features li.no{color:var(--muted2)}
 .pricing-features li.no::before{content:'—';color:var(--muted2)}
 .pricing-btn{width:100%;padding:13px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:none;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Inter',sans-serif}
-.pricing-btn.primary{background:var(--text);color:#fff}
-.pricing-btn.primary:hover{background:var(--accent)}
+.pricing-btn.primary{background:linear-gradient(135deg,#0a0a0e,#1a1a22);color:#f0eef8;border:1px solid rgba(255,255,255,.12)}
+.pricing-btn.primary:hover{background:var(--accent);border-color:var(--accent)}
 .pricing-btn.secondary{background:transparent;color:var(--text);border:1.5px solid var(--border2)}
 .pricing-btn.secondary:hover{border-color:var(--accent);color:var(--accent)}
 
@@ -611,7 +599,7 @@ section{padding:80px 32px;max-width:1100px;margin:0 auto}
 .coming-soon-sub{font-size:13px;color:var(--muted);line-height:1.55;max-width:180px}
 .coming-soon-badge{
   display:inline-flex;align-items:center;gap:6px;
-  background:var(--text);color:#fff;
+  background:#0a0a0e;color:#f0eef8;border:1px solid rgba(255,255,255,.15);
   border-radius:20px;padding:6px 16px;
   font-size:11px;font-weight:700;letter-spacing:.5px;
   margin-top:4px;
@@ -647,7 +635,7 @@ section{padding:80px 32px;max-width:1100px;margin:0 auto}
 .trust-icon{font-size:18px}
 
 /* CTA SECTION */
-.cta-section{background:var(--text);padding:80px 32px;text-align:center}
+.cta-section{background:linear-gradient(160deg,#080f0a 0%,#0b1810 50%,#0d1a12 100%);padding:80px 32px;text-align:center}
 .cta-section h2{font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-1.5px;margin-bottom:12px;color:#fff}
 .cta-section p{font-size:16px;color:rgba(255,255,255,.65);margin-bottom:36px}
 .cta-section .btn-primary{background:var(--accent);color:#fff}
@@ -666,7 +654,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
 
 /* MOBILE */
 @media(max-width:640px){
-  nav{padding:0 16px;display:grid;background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border-bottom:none!important}
+  nav{padding:0 16px;display:flex;justify-content:space-between;align-items:center}
   .nav-links{display:none!important}
   .nav-hide-mob{display:none!important}
   .hero{padding:56px 16px 64px}
@@ -708,7 +696,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
   /* ── HERO SPLIT — MOBILE STACK ── */
   .hero-split{
     grid-template-columns:1fr!important;
-    padding:16px 20px 40px!important;
+    padding:48px 20px 56px!important;
     min-height:auto!important;
     gap:0!important;
   }
@@ -865,10 +853,11 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
 /* CTA */
 .pay-cta{
   width:100%;padding:14px;border-radius:10px;
-  background:var(--text);color:#fff;border:none;
+  background:linear-gradient(135deg,#0058C0,#0071E3);color:#fff;border:none;
   font-family:'Inter',sans-serif;font-weight:700;
   font-size:15px;cursor:pointer;transition:all .2s;
   display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 4px 18px rgba(0,113,227,.25);
 }
 .pay-cta:hover{background:var(--accent);transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,113,227,.2)}
 .pay-footer-note{
@@ -877,49 +866,41 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
 
 /* ── REQUEST MODAL ── */
 #modal-request .modal-box{max-width:440px;border-radius:20px;overflow:hidden}
-#modal-request .modal-header{background:var(--text);color:#fff;border-bottom:none;padding:22px 26px 18px}
-#modal-request .modal-header h3{color:#fff;font-size:17px;font-weight:800}
-#modal-request .modal-close{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.7)}
-#modal-request .modal-close:hover{background:rgba(255,255,255,.1);color:#fff}
 .req-body{padding:22px 26px 26px}
-.req-desc{font-size:12.5px;color:var(--muted);line-height:1.7;margin-bottom:20px}
+.req-desc{font-size:12.5px;color:rgba(255,255,255,.45);line-height:1.7;margin-bottom:20px}
 .req-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
-.req-field label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
-.req-field input{background:var(--bg);border:1.5px solid var(--border2);color:var(--text);font-family:'Inter',sans-serif;font-size:16px;padding:10px 14px;border-radius:9px;outline:none;width:100%;transition:border .15s,box-shadow .15s}
-.req-field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
-.req-field input::placeholder{color:var(--muted2)}
-.req-submit{width:100%;margin-top:8px;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
-.req-submit:hover{background:#0058C0;transform:translateY(-1px)}
+.req-field label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.35)}
+.req-field input{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);color:#f0eef8;font-family:'Inter',sans-serif;font-size:16px;padding:10px 14px;border-radius:9px;outline:none;width:100%;transition:border .15s,box-shadow .15s}
+.req-field input:focus{border-color:#0071E3;box-shadow:0 0 0 3px rgba(0,113,227,.15)}
+.req-field input::placeholder{color:rgba(255,255,255,.2)}
+.req-submit{width:100%;margin-top:8px;padding:13px;background:linear-gradient(135deg,#0058C0,#0071E3);color:#fff;border:none;border-radius:10px;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px rgba(0,113,227,.3)}
+.req-submit:hover{background:linear-gradient(135deg,#0071E3,#2997FF);transform:translateY(-1px)}
 .req-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.req-note{font-size:11px;color:var(--muted2);text-align:center;margin-top:12px;line-height:1.6}
+.req-note{font-size:11px;color:rgba(255,255,255,.2);text-align:center;margin-top:12px;line-height:1.6}
 .req-success{display:none;text-align:center;padding:10px 0}
 .req-success-icon{font-size:44px;margin-bottom:12px}
-.req-success-title{font-size:17px;font-weight:800;color:var(--text);margin-bottom:6px}
-.req-success-sub{font-size:13px;color:var(--muted);line-height:1.6}
-.req-err{font-size:11px;color:#dc2626;background:#fef2f2;border:1px solid #fca5a5;border-radius:7px;padding:9px 12px;margin-top:8px;display:none;text-align:center}
+.req-success-title{font-size:17px;font-weight:800;color:#f0eef8;margin-bottom:6px}
+.req-success-sub{font-size:13px;color:rgba(255,255,255,.4);line-height:1.6}
+.req-err{font-size:11px;color:#fca5a5;background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.2);border-radius:7px;padding:9px 12px;margin-top:8px;display:none;text-align:center}
 
 /* ── LOGIN MODAL ── */
-#modal-login .modal-box{max-width:400px;border-radius:20px;overflow:hidden;border-top:3px solid var(--accent)}
-#modal-login .modal-header{background:var(--text);color:#fff;border-bottom:none;padding:22px 26px 18px}
-#modal-login .modal-header h3{color:#fff;font-size:17px;font-weight:800}
-#modal-login .modal-close{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.7)}
-#modal-login .modal-close:hover{background:rgba(255,255,255,.1);color:#fff}
-.lg-body{padding:22px 26px 26px}
-.lg-desc{font-size:12.5px;color:var(--muted);line-height:1.7;margin-bottom:20px;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:9px;padding:10px 14px}
+#modal-login .modal-box{max-width:400px;border-radius:20px;overflow:hidden;border-top:2px solid #0071E3}
+.lg-body{padding:20px 22px 24px;background:#0a0a0e}
+.lg-desc{font-size:12.5px;color:rgba(255,255,255,.4);line-height:1.7;margin-bottom:20px;background:rgba(0,113,227,.08);border:1px solid rgba(0,113,227,.2);border-radius:9px;padding:10px 14px}
 .lg-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
-.lg-field label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
-.lg-field input{background:var(--bg);border:1.5px solid var(--border2);color:var(--text);font-family:'Inter',sans-serif;font-size:16px;padding:10px 14px;border-radius:9px;outline:none;width:100%;transition:border .15s,box-shadow .15s}
-.lg-field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
-.lg-field input::placeholder{color:var(--muted2)}
-.lg-submit{width:100%;margin-top:8px;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
-.lg-submit:hover{background:#0058C0;transform:translateY(-1px)}
+.lg-field label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.35)}
+.lg-field input{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);color:#f0eef8;font-family:'Inter',sans-serif;font-size:16px;padding:10px 14px;border-radius:9px;outline:none;width:100%;transition:border .15s,box-shadow .15s}
+.lg-field input:focus{border-color:#0071E3;box-shadow:0 0 0 3px rgba(0,113,227,.15)}
+.lg-field input::placeholder{color:rgba(255,255,255,.2)}
+.lg-submit{width:100%;margin-top:8px;padding:13px;background:linear-gradient(135deg,#0058C0,#0071E3);color:#fff;border:none;border-radius:10px;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px rgba(0,113,227,.3)}
+.lg-submit:hover{background:linear-gradient(135deg,#0071E3,#2997FF);transform:translateY(-1px)}
 .lg-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.lg-note{font-size:11px;color:var(--muted2);text-align:center;margin-top:12px;line-height:1.6}
-.lg-err{font-size:11px;color:#dc2626;background:#fef2f2;border:1px solid #fca5a5;border-radius:7px;padding:9px 12px;margin-top:8px;display:none;text-align:center}
-.lg-plans{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
-.lg-plan-pill{background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:8px 6px;text-align:center}
-.lg-plan-pill-name{font-size:10px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.5px}
-.lg-plan-pill-desc{font-size:9px;color:var(--muted);margin-top:3px;line-height:1.4}
+.lg-note{font-size:11px;color:rgba(255,255,255,.2);text-align:center;margin-top:12px;line-height:1.6}
+.lg-err{font-size:11px;color:#fca5a5;background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.2);border-radius:7px;padding:9px 12px;margin-top:8px;display:none;text-align:center}
+.lg-plans{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+.lg-plan-pill{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);border-radius:9px;padding:8px 6px;text-align:center}
+.lg-plan-pill-name{font-size:10px;font-weight:700;color:#f0eef8;text-transform:uppercase;letter-spacing:.5px}
+.lg-plan-pill-desc{font-size:9px;color:rgba(255,255,255,.3);margin-top:3px;line-height:1.4}
 
 /* ── WELCOME OVERLAY ── */
 #welcome-overlay{
@@ -1105,7 +1086,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:32px;disp
 
 /* ── VALUE STACK ── */
 .value-stack-wrap{max-width:760px;margin:0 auto;background:#fff;border:1.5px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}
-.vs-header{background:var(--text);color:#fff;padding:22px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.vs-header{background:linear-gradient(135deg,#0c1420,#111928);color:#f0eef8;padding:22px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
 .vs-header-title{font-size:17px;font-weight:800;letter-spacing:-.3px}
 .vs-header-price{font-size:13px;color:rgba(255,255,255,.6);margin-top:3px}
 .vs-total-tag{background:var(--accent);color:#fff;font-size:12px;font-weight:800;padding:6px 16px;border-radius:20px;letter-spacing:.3px;white-space:nowrap}
@@ -1198,10 +1179,8 @@ nav{
   box-shadow:none!important;
 }
 nav.scrolled{
-  background:transparent!important;
-  border-bottom:none!important;
-  backdrop-filter:none!important;
-  -webkit-backdrop-filter:none!important;
+  background:rgba(7,7,9,.78)!important;
+  border-bottom:1px solid rgba(255,255,255,.06)!important;
 }
 
 /* ── PRODUCT CONSTELLATION CARDS ── */
@@ -1507,29 +1486,38 @@ footer{
 /* ── REQUEST & LOGIN MODALS ── */
 #modal-request .modal-header,
 #modal-login .modal-header{
-  background:linear-gradient(135deg,#111316,#13151A)!important;
+  background:linear-gradient(135deg,#0c1a30,#0d1f3a)!important;
   border-bottom:1px solid rgba(255,255,255,.08)!important;
+}
+#modal-request .modal-box,
+#modal-login .modal-box{
+  background:#0a0a0e!important;
+  border:1px solid rgba(255,255,255,.1)!important;
 }
 .req-field input,.lg-field input{
   background:rgba(255,255,255,.05)!important;
-  border-color:rgba(255,255,255,.12)!important;
-  color:var(--text)!important;
+  border-color:rgba(255,255,255,.1)!important;
+  color:#f0eef8!important;
+}
+.req-field input::placeholder,.lg-field input::placeholder{
+  color:rgba(255,255,255,.22)!important;
 }
 .req-field input:focus,.lg-field input:focus{
-  border-color:var(--accent)!important;
-  box-shadow:0 0 0 3px rgba(0,113,227,.12)!important;
+  border-color:#0071E3!important;
+  box-shadow:0 0 0 3px rgba(0,113,227,.15)!important;
 }
-.lg-desc{background:rgba(0,113,227,.1)!important;border-color:rgba(0,113,227,.22)!important}
-.lg-plan-pill{background:rgba(255,255,255,.04)!important;border-color:rgba(255,255,255,.1)!important}
+.req-field label,.lg-field label{color:rgba(255,255,255,.38)!important}
+.lg-desc{background:rgba(0,113,227,.1)!important;border-color:rgba(0,113,227,.22)!important;color:rgba(255,255,255,.5)!important}
+.lg-plan-pill{background:rgba(255,255,255,.04)!important;border-color:rgba(255,255,255,.09)!important}
+.lg-plan-pill-name{color:#f0eef8!important}
+.lg-plan-pill-desc{color:rgba(255,255,255,.3)!important}
+.req-note,.lg-note{color:rgba(255,255,255,.22)!important}
+.lg-err,.req-err{color:#fca5a5!important;background:rgba(220,38,38,.1)!important;border-color:rgba(220,38,38,.2)!important}
 
 /* ── EXIT INTENT ── */
 .ei-box{background:#111113!important;border:1px solid rgba(255,255,255,.1)!important}
 .ei-close{border-color:rgba(255,255,255,.12)!important;color:var(--muted)!important}
 .ei-close:hover{background:rgba(255,255,255,.06)!important}
-
-/* Inline style overrides for white backgrounds */
-[style*="background:#fff"]{background:#111113!important}
-[style*="background: #fff"]{background:#111113!important}
 
 /* ═══════════════════════════════════════════════
    SECTION BACKGROUNDS — Premium dark layering
@@ -1633,21 +1621,6 @@ body{
   .hs-left h1{font-size:clamp(28px,4.5vw,44px)!important}
   .hero-stats{gap:20px}
 }
-/* ── MOBILE HERO FIX (≤640px) ── */
-@media(max-width:640px){
-  .hero-split{
-    grid-template-columns:1fr!important;
-    padding:40px 20px 32px!important;
-    gap:0;
-    min-height:unset;
-  }
-  .hs-left{padding-right:0!important;text-align:center}
-  .hs-left .hero-badge{margin-left:auto;margin-right:auto}
-  .hs-left h1{margin-left:auto!important;margin-right:auto!important;text-align:center}
-  .hs-left .hero-sub{margin-left:auto!important;margin-right:auto!important;text-align:center}
-  .hs-left .hero-btns{align-items:center!important}
-  .hs-right{display:none!important}
-}
 
 /* ═══════════════════════════════════════════════
    APPLE MINIMAL — Subtract until perfect
@@ -1689,21 +1662,28 @@ body,body::before,body::after{
   background:#06060A!important;
   animation:none!important;
 }
-body>*:not(#bg-video-full):not(#site-header):not(.modal-overlay):not(.pay-overlay):not(#welcome-overlay):not(#exit-intent):not(#sticky-mob):not(.fomo-toast){position:relative!important;z-index:1!important}
-#bg-video-full{z-index:0!important}
-/* Restore fixed positioning for overlays and header */
-#site-header{position:fixed!important;top:0!important;left:0!important;right:0!important;z-index:200!important}
-.modal-overlay{position:fixed!important;inset:0!important;z-index:1000!important}
-.pay-overlay{position:fixed!important;inset:0!important;z-index:2000!important}
-#welcome-overlay{position:fixed!important;inset:0!important;z-index:3000!important}
-#exit-intent{position:fixed!important;inset:0!important;z-index:2000!important}
-#sticky-mob{position:fixed!important;bottom:0!important;left:0!important;right:0!important;z-index:300!important}
-.fomo-toast{position:fixed!important;bottom:88px!important;left:20px!important;z-index:298!important}
+body>*{z-index:1}
+#bg-video-full{display:none!important}
 .bg-orb-left{display:none!important}
 
 /* ── NAV: transparent, scrolled state handled by JS ── */
-/* nav always transparent — defined in base styles */
-.logo span{color:var(--accent)!important}
+nav{
+  background:transparent!important;
+  border-bottom:none!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+nav.scrolled{
+  background:rgba(7,7,9,.78)!important;
+  backdrop-filter:blur(24px) saturate(160%)!important;
+  -webkit-backdrop-filter:blur(24px) saturate(160%)!important;
+  border-bottom:1px solid rgba(255,255,255,.06)!important;
+}
+.logo span{
+  color:var(--accent)!important;
+  text-shadow:none!important;
+}
 
 /* ── TYPOGRAPHY: Apple SF-scale clarity ── */
 h1{
@@ -1908,15 +1888,12 @@ body::before,body::after,
 
 /* ── CTA SECTION: Dark with pure type ── */
 .cta-section{
-  background:rgba(6,10,20,.75)!important;
-  border-top:1px solid rgba(0,113,227,.18)!important;
-  backdrop-filter:blur(2px)!important;
+  background:#000!important;
+  border-top:1px solid rgba(255,255,255,.07)!important;
 }
-.cta-section h2{color:#fff!important;text-shadow:0 2px 20px rgba(0,0,0,.8)!important}
-.cta-section p{color:rgba(255,255,255,.72)!important}
 .cta-section .btn-primary{
-  background:linear-gradient(135deg,var(--accent3),var(--accent),var(--accent2))!important;
-  box-shadow:0 6px 32px rgba(0,113,227,.45)!important;
+  background:var(--accent)!important;
+  box-shadow:none!important;
   color:#ffffff!important;
 }
 
@@ -1960,14 +1937,11 @@ body::before,body::after,
 /* ── ALTERNATING SECTION TINT: Off ── */
 .section-outer:nth-child(even){background:transparent!important}
 
-/* ── CTA SECTION: Subtle overlay for readability ── */
-.cta-section{
-  background:rgba(6,10,20,.75)!important;
-  background-color:rgba(6,10,20,.75)!important;
-  backdrop-filter:blur(2px);
-}
+/* ── FULL-PAGE CANVAS: Sections use subtle dark backgrounds so canvas shows through ── */
+.section-outer,
 section,
 .hero-dark-wrap,
+.cta-section,
 .trust-strip,
 .features-section,
 .pricing-section,
@@ -1975,10 +1949,6 @@ section,
 .faq-section,
 .how-section,
 .value-stack-section{
-  background:transparent!important;
-  background-color:transparent!important;
-}
-.section-outer{
   background:transparent!important;
   background-color:transparent!important;
 }
@@ -2007,52 +1977,7 @@ footer{
 </style>
 </head>
 <body>
-<!-- FULL-PAGE VIDEO BACKGROUND -->
-<video id="bg-video-full" autoplay muted loop playsinline preload="none" style="position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;min-width:100%;min-height:100%;z-index:0;pointer-events:none;object-fit:cover;display:block;opacity:0;transition:opacity 1.2s ease;transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform"></video>
-<script>
-(function(){
-  var src='https://stream.mux.com/Aa02T7oM1wH5Mk5EEVDYhbZ1ChcdhRsS2m1NYyx4Ua1g.m3u8';
-  var video=document.getElementById('bg-video-full');
-
-  function tryNativeHls(){
-    if(!video) return;
-    if(video.canPlayType('application/vnd.apple.mpegurl')){
-      video.src=src;
-      video.load();
-      video.play().catch(function(){});
-      video.addEventListener('canplay',function(){video.style.opacity='1';},{once:true});
-    }
-  }
-
-  function loadBgVideo(){
-    if(!video) return;
-    // iOS Safari — native HLS дэмжинэ, шууд ачаална
-    if(video.canPlayType('application/vnd.apple.mpegurl')){
-      tryNativeHls();
-      return;
-    }
-    // Desktop / Android Chrome — HLS.js ашиглана
-    var script=document.createElement('script');
-    script.src='https://cdn.jsdelivr.net/npm/hls.js@1.5.15/dist/hls.min.js';
-    script.onload=function(){
-      if(Hls.isSupported()){
-        var hls=new Hls({autoStartLoad:true,startLevel:0,maxBufferLength:20,enableWorker:true});
-        hls.loadSource(src);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED,function(){
-          video.play().catch(function(){});
-          video.style.opacity='1';
-        });
-      }
-    };
-    document.head.appendChild(script);
-  }
-
-  // Хуудас бүрэн ачаалагдсаны дараа л video эхэлнэ
-  if(document.readyState==='complete'){ loadBgVideo(); }
-  else { window.addEventListener('load', loadBgVideo); }
-})();
-</script>
+<!-- Background: aurora canvas animation handles the background -->
 
 <!-- BG ORB LEFT -->
 <div class="bg-orb-left" style="display:none"></div>
@@ -2122,43 +2047,53 @@ footer{
 
 <!-- REQUEST MODAL -->
 <div class="modal-overlay" id="modal-request">
-  <div class="modal-box" style="max-width:460px;border-radius:24px;overflow:hidden">
+  <div class="modal-box" style="max-width:460px;border-radius:20px;overflow:hidden;background:#0a0a0e;border:1px solid rgba(255,255,255,.1)">
 
     <!-- STEP 1: Бүртгэл -->
     <div id="req-step1">
-      <div style="background:var(--text);padding:36px 32px 28px;text-align:center;position:relative">
-        <button onclick="closeModal('modal-request')" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:32px;height:32px;color:rgba(255,255,255,.6);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.15)'" onmouseout="this.style.background='rgba(255,255,255,.08)'">✕</button>
-        <div style="font-size:26px;font-weight:900;color:#fff;letter-spacing:-.5px;margin-bottom:8px">Бүртгэл үүсгэх</div>
-        <div style="font-size:14px;color:rgba(255,255,255,.5);line-height:1.6">Утасны дугаар болон нууц үг үүсгэн оруулна уу</div>
+      <div style="background:linear-gradient(135deg,#0c1a30 0%,#0d1f3a 100%);padding:32px 28px 24px;text-align:center;position:relative;border-bottom:1px solid rgba(255,255,255,.08)">
+        <button onclick="closeModal('modal-request')" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:50%;width:32px;height:32px;color:rgba(255,255,255,.5);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.14)'" onmouseout="this.style.background='rgba(255,255,255,.06)'">✕</button>
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(0,113,227,.15);border:1.5px solid rgba(41,151,255,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:20px">🔐</div>
+        <div style="font-size:22px;font-weight:900;color:#ffffff;letter-spacing:-.5px;margin-bottom:6px">Бүртгэл үүсгэх</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.45);line-height:1.6">Утасны дугаар болон нууц үг үүсгэн оруулна уу</div>
       </div>
-      <div style="background:var(--bg);padding:24px 28px 28px">
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <input type="tel" id="req-phone" placeholder="Утасны дугаар" maxlength="20"
-            style="width:100%;padding:14px 18px;background:var(--surface);border:1.5px solid var(--border2);border-radius:12px;font-size:16px;font-family:Outfit,sans-serif;color:var(--text);outline:none;transition:border .15s,box-shadow .15s"
-            onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 3px var(--accent-bg)'" onblur="this.style.borderColor='var(--border2)';this.style.boxShadow='none'"
-            onkeydown="if(event.key==='Enter')document.getElementById('req-pw').focus()">
-          <div style="position:relative">
-            <input type="password" id="req-pw" placeholder="Нууц үг"
-              style="width:100%;padding:14px 48px 14px 18px;background:var(--surface);border:1.5px solid var(--border2);border-radius:12px;font-size:16px;font-family:Outfit,sans-serif;color:var(--text);outline:none;transition:border .15s,box-shadow .15s"
-              onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 3px var(--accent-bg)'" onblur="this.style.borderColor='var(--border2)';this.style.boxShadow='none'"
-              onkeydown="if(event.key==='Enter')document.getElementById('req-pw2').focus()">
-            <span onclick="togglePw('req-pw',this)" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--muted2);font-size:17px;user-select:none">👁</span>
+      <div style="background:#0a0a0e;padding:22px 24px 26px">
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <div>
+            <label style="display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:7px">Утасны дугаар</label>
+            <input type="tel" id="req-phone" placeholder="88001234" maxlength="20"
+              style="width:100%;padding:13px 16px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:10px;font-size:16px;font-family:Inter,sans-serif;color:#f0eef8;outline:none;transition:border .15s,box-shadow .15s"
+              onfocus="this.style.borderColor='#0071E3';this.style.boxShadow='0 0 0 3px rgba(0,113,227,.15)'" onblur="this.style.borderColor='rgba(255,255,255,.1)';this.style.boxShadow='none'"
+              onkeydown="if(event.key==='Enter')document.getElementById('req-pw').focus()">
           </div>
-          <div style="position:relative">
-            <input type="password" id="req-pw2" placeholder="Нууц үг давтах"
-              style="width:100%;padding:14px 48px 14px 18px;background:var(--surface);border:1.5px solid var(--border2);border-radius:12px;font-size:16px;font-family:Outfit,sans-serif;color:var(--text);outline:none;transition:border .15s,box-shadow .15s"
-              onfocus="this.style.borderColor='var(--accent)';this.style.boxShadow='0 0 0 3px var(--accent-bg)'" onblur="this.style.borderColor='var(--border2)';this.style.boxShadow='none'"
-              onkeydown="if(event.key==='Enter')submitRequest()">
-            <span onclick="togglePw('req-pw2',this)" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--muted2);font-size:17px;user-select:none">👁</span>
+          <div>
+            <label style="display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:7px">Нууц үг</label>
+            <div style="position:relative">
+              <input type="password" id="req-pw" placeholder="Дор хаяж 6 тэмдэгт"
+                style="width:100%;padding:13px 46px 13px 16px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:10px;font-size:16px;font-family:Inter,sans-serif;color:#f0eef8;outline:none;transition:border .15s,box-shadow .15s"
+                onfocus="this.style.borderColor='#0071E3';this.style.boxShadow='0 0 0 3px rgba(0,113,227,.15)'" onblur="this.style.borderColor='rgba(255,255,255,.1)';this.style.boxShadow='none'"
+                onkeydown="if(event.key==='Enter')document.getElementById('req-pw2').focus()">
+              <span onclick="togglePw('req-pw',this)" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;color:rgba(255,255,255,.3);font-size:17px;user-select:none;transition:color .15s" onmouseover="this.style.color='rgba(255,255,255,.7)'" onmouseout="this.style.color='rgba(255,255,255,.3)'">👁</span>
+            </div>
           </div>
-          <div id="req-err" style="display:none;font-size:12px;color:#dc2626;background:#fef2f2;border:1px solid #fca5a5;border-radius:9px;padding:10px 14px;text-align:center"></div>
+          <div>
+            <label style="display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:7px">Нууц үг давтах</label>
+            <div style="position:relative">
+              <input type="password" id="req-pw2" placeholder="Нууц үгийг дахин оруулах"
+                style="width:100%;padding:13px 46px 13px 16px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:10px;font-size:16px;font-family:Inter,sans-serif;color:#f0eef8;outline:none;transition:border .15s,box-shadow .15s"
+                onfocus="this.style.borderColor='#0071E3';this.style.boxShadow='0 0 0 3px rgba(0,113,227,.15)'" onblur="this.style.borderColor='rgba(255,255,255,.1)';this.style.boxShadow='none'"
+                onkeydown="if(event.key==='Enter')submitRequest()">
+              <span onclick="togglePw('req-pw2',this)" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;color:rgba(255,255,255,.3);font-size:17px;user-select:none;transition:color .15s" onmouseover="this.style.color='rgba(255,255,255,.7)'" onmouseout="this.style.color='rgba(255,255,255,.3)'">👁</span>
+            </div>
+          </div>
+          <div id="req-err" style="display:none;font-size:12px;color:#fca5a5;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.25);border-radius:9px;padding:10px 14px;text-align:center"></div>
           <button id="req-btn" onclick="submitRequest()"
-            style="width:100%;padding:16px;background:var(--accent);border:none;border-radius:12px;font-size:16px;font-weight:800;color:#fff;cursor:pointer;font-family:Outfit,sans-serif;letter-spacing:-.2px;margin-top:4px;transition:background .2s,transform .2s,box-shadow .2s"
-            onmouseover="this.style.background='#0058C0';this.style.transform='translateY(-1px)';this.style.boxShadow='0 8px 24px rgba(0,113,227,.25)'"
-            onmouseout="this.style.background='var(--accent)';this.style.transform='none';this.style.boxShadow='none'">
-            Төлбөр төлөх ( QPay )
+            style="width:100%;padding:15px;background:linear-gradient(135deg,#0058C0,#0071E3);border:none;border-radius:11px;font-size:16px;font-weight:800;color:#fff;cursor:pointer;font-family:Inter,sans-serif;letter-spacing:-.2px;margin-top:2px;transition:background .2s,transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(0,113,227,.3)"
+            onmouseover="this.style.background='linear-gradient(135deg,#0071E3,#2997FF)';this.style.transform='translateY(-1px)';this.style.boxShadow='0 8px 28px rgba(0,113,227,.4)'"
+            onmouseout="this.style.background='linear-gradient(135deg,#0058C0,#0071E3)';this.style.transform='none';this.style.boxShadow='0 4px 20px rgba(0,113,227,.3)'">
+            💳 Төлбөр төлөх ( QPay )
           </button>
-          <p style="text-align:center;font-size:11px;color:var(--muted2);line-height:1.6">Бүртгэлийн мэдээлэл хамгаалагдсан. Спам байхгүй.</p>
+          <p style="text-align:center;font-size:11px;color:rgba(255,255,255,.25);line-height:1.6">🔒 Бүртгэлийн мэдээлэл хамгаалагдсан. Спам байхгүй.</p>
         </div>
       </div>
     </div>
@@ -2216,8 +2151,8 @@ footer{
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span>📱</span><div style="font-size:13px;font-weight:600">Instagram: <a href="https://instagram.com/productdrop.mn" target="_blank" style="color:var(--accent)">@productdrop.mn</a></div></div>
           <div style="display:flex;align-items:center;gap:10px"><span>📞</span><div style="font-size:13px;font-weight:600">Утас: <a href="tel:+97688748966" style="color:var(--accent)">+976 8874-8966</a></div></div>
         </div>
-        <button onclick="closeModal('modal-request')" style="width:100%;padding:14px;background:var(--text);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Outfit,sans-serif">Ойлголоо →</button>
-        <p style="text-align:center;font-size:11px;color:var(--muted2);margin-top:10px">Асуулт байвал Instagram DM-аар холбогдоорой</p>
+        <button onclick="closeModal('modal-request')" style="width:100%;padding:14px;background:linear-gradient(135deg,#0058C0,#0071E3);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;box-shadow:0 4px 18px rgba(0,113,227,.25)">✓ Ойлголоо →</button>
+        <p style="text-align:center;font-size:11px;color:rgba(255,255,255,.25);margin-top:10px">Асуулт байвал Instagram DM-аар холбогдоорой</p>
       </div>
     </div>
 
@@ -2262,160 +2197,66 @@ footer{
 
 <!-- LOGIN MODAL -->
 <div class="modal-overlay" id="modal-login">
-  <div class="modal-box">
-    <div class="modal-header">
-      <h3>🔑 Нэвтрэх</h3>
-      <button class="modal-close" onclick="closeModal('modal-login')">✕</button>
+  <div class="modal-box" style="background:#0a0a0e;border:1px solid rgba(255,255,255,.1);border-radius:20px;overflow:hidden">
+    <div class="modal-header" style="background:linear-gradient(135deg,#0c1a30 0%,#0d1f3a 100%);border-bottom:1px solid rgba(255,255,255,.08);padding:22px 24px 18px">
+      <h3 style="color:#fff;font-size:17px;font-weight:800">🔑 Нэвтрэх</h3>
+      <button class="modal-close" style="border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.5)" onclick="closeModal('modal-login')">✕</button>
     </div>
-    <div class="lg-body">
+    <div class="lg-body" style="background:#0a0a0e">
       <div class="lg-plans" style="grid-template-columns:repeat(4,1fr)">
-        <div class="lg-plan-pill">
-          <div class="lg-plan-pill-name">Lite</div>
-          <div class="lg-plan-pill-desc">25 бараа · үнэгүй</div>
+        <div class="lg-plan-pill" style="background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1)">
+          <div class="lg-plan-pill-name" style="color:#f0eef8">Lite</div>
+          <div class="lg-plan-pill-desc" style="color:rgba(255,255,255,.35)">25 бараа · үнэгүй</div>
         </div>
-        <div class="lg-plan-pill" style="border-color:#bfdbfe;background:#eff6ff">
-          <div class="lg-plan-pill-name" style="color:#1d4ed8">Starter</div>
-          <div class="lg-plan-pill-desc">200+ бараа · 1 сар</div>
+        <div class="lg-plan-pill" style="background:rgba(37,99,235,.08);border-color:rgba(37,99,235,.25)">
+          <div class="lg-plan-pill-name" style="color:#60a5fa">Starter</div>
+          <div class="lg-plan-pill-desc" style="color:rgba(255,255,255,.35)">200+ бараа · 1 сар</div>
         </div>
-        <div class="lg-plan-pill" style="border-color:var(--accent-border);background:var(--accent-bg)">
-          <div class="lg-plan-pill-name" style="color:var(--accent)">Pro</div>
-          <div class="lg-plan-pill-desc">200+ бараа · 3 сар</div>
+        <div class="lg-plan-pill" style="background:rgba(0,113,227,.1);border-color:rgba(41,151,255,.3)">
+          <div class="lg-plan-pill-name" style="color:#2997FF">Pro</div>
+          <div class="lg-plan-pill-desc" style="color:rgba(255,255,255,.35)">200+ бараа · 3 сар</div>
         </div>
-        <div class="lg-plan-pill">
-          <div class="lg-plan-pill-name">Business</div>
-          <div class="lg-plan-pill-desc">Premium · сургалт</div>
+        <div class="lg-plan-pill" style="background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1)">
+          <div class="lg-plan-pill-name" style="color:#f0eef8">Business</div>
+          <div class="lg-plan-pill-desc" style="color:rgba(255,255,255,.35)">Premium · сургалт</div>
         </div>
       </div>
       <div class="lg-field">
-        <label>Таны нэр</label>
-        <input type="text" id="lg-name" placeholder="Нэрээ оруулна уу" maxlength="40" onkeydown="if(event.key==='Enter')document.getElementById('lg-pw').focus()" autocomplete="name">
+        <label style="color:rgba(255,255,255,.4)">Таны нэр</label>
+        <input type="text" id="lg-name" placeholder="Нэрээ оруулна уу" maxlength="40" onkeydown="if(event.key==='Enter')document.getElementById('lg-pw').focus()" autocomplete="name"
+          style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:#f0eef8"
+          onfocus="this.style.borderColor='#0071E3';this.style.boxShadow='0 0 0 3px rgba(0,113,227,.15)'" onblur="this.style.borderColor='rgba(255,255,255,.1)';this.style.boxShadow='none'">
       </div>
       <div class="lg-field">
-        <label>Нууц үг</label>
-        <input type="password" id="lg-pw" placeholder="PD-PXXXX-XXXXXX-XXXXX" maxlength="60" onkeydown="if(event.key==='Enter')doLogin()" autocomplete="off">
+        <label style="color:rgba(255,255,255,.4)">Нууц үг</label>
+        <input type="password" id="lg-pw" placeholder="PD-PXXXX-XXXXXX-XXXXX" maxlength="60" onkeydown="if(event.key==='Enter')doLogin()" autocomplete="off"
+          style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:#f0eef8"
+          onfocus="this.style.borderColor='#0071E3';this.style.boxShadow='0 0 0 3px rgba(0,113,227,.15)'" onblur="this.style.borderColor='rgba(255,255,255,.1)';this.style.boxShadow='none'">
       </div>
-      <button class="lg-submit" id="lg-btn" onclick="track('login_submit',{button:'login_modal'});doLogin()">🔑 Нэвтрэх</button>
-      <div class="lg-err" id="lg-err"></div>
-      <p class="lg-note">Үнэгүй ашиглах эрх байхгүй бол хамгийн дээр байрлах "Үнэгүй туршилт" товчоор хүсэлт илгээнэ үү. Баярлалаа</p>
+      <button class="lg-submit" id="lg-btn" style="background:linear-gradient(135deg,#0058C0,#0071E3);box-shadow:0 4px 20px rgba(0,113,227,.3)" onclick="track('login_submit',{button:'login_modal'});doLogin()">🔑 Нэвтрэх</button>
+      <div class="lg-err" id="lg-err" style="color:#fca5a5;background:rgba(220,38,38,.1);border-color:rgba(220,38,38,.2)"></div>
+      <p class="lg-note" style="color:rgba(255,255,255,.25)">Үнэгүй ашиглах эрх байхгүй бол хамгийн дээр байрлах "Үнэгүй туршилт" товчоор хүсэлт илгээнэ үү. Баярлалаа</p>
     </div>
   </div>
 </div>
 
 <!-- ANNOUNCEMENT BAR -->
+<div id="ann-bar" style="background:rgba(10,10,18,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(41,151,255,.15);text-align:center;padding:8px 40px 8px 16px;font-size:12px;font-weight:400;letter-spacing:.2px;color:rgba(240,238,248,.65);position:relative;z-index:99;line-height:1.4">
+  <span style="display:inline-flex;align-items:center;gap:8px">
+    <span style="width:5px;height:5px;border-radius:50%;background:#2997FF;box-shadow:0 0 8px rgba(41,151,255,.9);animation:annPulse 2.4s ease-in-out infinite;flex-shrink:0"></span>
+    Энэ сард <strong id="ann-count" style="color:#2997FF;font-weight:700">127</strong> хүн нэгдсэн &nbsp;·&nbsp; өнөөдөр <strong id="sp-count" style="color:#2997FF;font-weight:700">–</strong> бүртгүүлсэн &nbsp;·&nbsp; үнэгүй туршилт нээлттэй
+  </span>
+  <button onclick="this.parentElement.remove()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:rgba(240,238,248,.3);width:20px;height:20px;font-size:16px;cursor:pointer;line-height:1;transition:color .2s;display:flex;align-items:center;justify-content:center" onmouseover="this.style.color='rgba(240,238,248,.8)'" onmouseout="this.style.color='rgba(240,238,248,.3)'">×</button>
+</div>
 <style>
 @keyframes annPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.85)}}
-
-/* ── SITE HEADER WRAPPER ─────────────────────────────────
-   Single fixed container — ann-bar stacks above nav.
-   No JS height math needed. Zero gap guaranteed.
-──────────────────────────────────────────────────────── */
-#site-header{
-  position:fixed;
-  top:0;left:0;right:0;
-  z-index:200;
-  display:flex;
-  flex-direction:column;
-}
-
-/* Ann-bar lives inside wrapper — no longer fixed on its own */
-#ann-bar{
-  background:rgba(10,10,18,.85);
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(41,151,255,.15);
-  text-align:center;
-  padding:9px 40px 9px 16px;
-  font-size:12px;
-  font-weight:400;
-  letter-spacing:.2px;
-  color:rgba(240,238,248,.65);
-  line-height:1.4;
-  position:relative; /* inside flex column, not fixed */
-  width:100%;
-  transition:max-height .3s ease, opacity .3s ease, padding .3s ease;
-  overflow:hidden;
-}
-#ann-bar.dismissed{
-  max-height:0;
-  padding-top:0;
-  padding-bottom:0;
-  opacity:0;
-  border-bottom:none;
-}
-
-/* Nav is now simply the second child — sits flush below ann-bar */
-#main-nav{
-  position:relative !important; /* override old fixed */
-  top:auto !important;
-  left:auto;right:auto;
-  width:100%;
-}
-
-/* Hero padding-top = total header height, set by JS once */
-.hero-dark-wrap{
-  padding-top:0;
-  transition:padding-top .3s ease;
-}
-
-@media(max-width:640px){
-  #ann-bar{font-size:11px;padding:8px 32px 8px 12px}
-}
-@media(max-width:768px){
-  .nav-links{display:none!important}
-  .nav-hide-mob{display:none!important}
-  nav{padding:0 16px;grid-template-columns:1fr auto}
+@media(max-width:480px){
+  #ann-bar{font-size:11px;padding:9px 32px 9px 12px}
 }
 </style>
-<script>
-(function(){
-  /* Measure #site-header and apply as hero padding-top */
-  function syncHero(){
-    var hdr=document.getElementById('site-header');
-    var hero=document.querySelector('.hero-dark-wrap');
-    if(!hdr||!hero) return;
-    hero.style.paddingTop=hdr.offsetHeight+'px';
-  }
 
-  /* Dismiss ann-bar with smooth collapse */
-  function initDismiss(){
-    var btn=document.getElementById('ann-dismiss');
-    if(!btn) return;
-    btn.addEventListener('click',function(){
-      var bar=document.getElementById('ann-bar');
-      if(bar){
-        bar.style.maxHeight=bar.offsetHeight+'px'; /* snapshot for transition */
-        requestAnimationFrame(function(){
-          bar.classList.add('dismissed');
-        });
-      }
-      // Re-sync hero after transition
-      setTimeout(syncHero,350);
-    });
-  }
-
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded',function(){syncHero();initDismiss();});
-  } else {
-    syncHero();
-    initDismiss();
-  }
-  window.addEventListener('resize',syncHero);
-})();
-</script>
-
-<!-- SITE HEADER: ann-bar + nav stacked in one fixed wrapper -->
-<div id="site-header">
-  <!-- Announcement bar -->
-  <div id="ann-bar">
-    <span style="display:inline-flex;align-items:center;gap:8px">
-      <span style="width:5px;height:5px;border-radius:50%;background:#2997FF;box-shadow:0 0 8px rgba(41,151,255,.9);animation:annPulse 2.4s ease-in-out infinite;flex-shrink:0"></span>
-      Энэ сард <strong id="ann-count" style="color:#2997FF;font-weight:700">127</strong> хүн нэгдсэн &nbsp;·&nbsp; үнэгүй туршилт нээлттэй
-    </span>
-    <button id="ann-dismiss" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:rgba(240,238,248,.3);width:20px;height:20px;font-size:16px;cursor:pointer;line-height:1;transition:color .2s;display:flex;align-items:center;justify-content:center" onmouseover="this.style.color='rgba(240,238,248,.8)'" onmouseout="this.style.color='rgba(240,238,248,.3)'">×</button>
-  </div>
-
-  <!-- Nav sits flush below ann-bar, no gap -->
-  <nav id="main-nav">
+<!-- NAV -->
+<nav id="main-nav">
   <!-- LEFT: Logo -->
   <a class="logo" href="#">PRODUCT<span>DROP</span>.MN</a>
   <!-- CENTER: Nav links -->
@@ -2431,7 +2272,8 @@ footer{
     <a class="nav-cta primary" href="#" onclick="track('click_lite_free',{button:'nav_free'});goLiteFree();return false;">Үнэгүй эхлэх</a>
   </div>
 </nav>
-</div><!-- /#site-header -->
+
+<!-- HERO SPLIT -->
 <style>
 /* ── PREMIUM DARK HERO ── */
 /* ── HERO DARK WRAP ── */
@@ -2575,7 +2417,7 @@ footer{
   .hero-feat{padding:0 36px}
 }
 @media(max-width:640px){
-  .hero-stats-bar{padding:0 20px 32px}
+  .hero-stats-bar{padding:0 20px 64px}
   .hero-stats-inner{flex-direction:column;gap:32px;align-items:center;width:100%}
   .hero-stat-divider{width:80px;height:1px;background:linear-gradient(to right,transparent,rgba(255,255,255,.15),transparent)}
   .hero-stat-item{padding:0}
@@ -2635,115 +2477,225 @@ footer{
 /* trust pills below CTA */
 .hero-trust-pill{font-size:12.5px;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:6px}
 .hero-trust-pill span.dot{width:5px;height:5px;border-radius:50%;background:#2997FF;display:inline-block;flex-shrink:0;box-shadow:0 0 6px rgba(41,151,255,.5)}
-/* nav-dark removed — nav is always fully transparent */
+/* dark nav override */
+.nav-dark{background:rgba(9,9,11,.88)!important;border-bottom-color:rgba(255,255,255,.07)!important;backdrop-filter:blur(24px)!important}
+.nav-dark .logo{color:#fff!important}
+.nav-dark .logo span{color:#0071E3!important}
+.nav-dark .nav-links a{color:rgba(255,255,255,.5)!important}
+.nav-dark .nav-links a:hover{color:#fff!important}
+.nav-dark .nav-cta:not([style*="transparent"]){background:linear-gradient(135deg,#059669,#0071E3)!important;color:#fff!important;font-weight:700!important;border-color:transparent!important;box-shadow:0 2px 14px rgba(0,113,227,.3)!important}
 </style>
 <script>
-// NAV: always transparent, no class changes
+// Nav dark mode with hero
+(function(){
+  function syncNav(){
+    var nav=document.querySelector('nav');
+    if(!nav) return;
+    nav.classList.add('nav-dark');
+  }
+  document.addEventListener('DOMContentLoaded',syncNav);
+  if(document.readyState!=='loading') syncNav();
+})();
+// NAV SCROLL: transparent → frosted on scroll
+(function(){
+  var nav=document.getElementById('main-nav');
+  if(!nav) return;
+  function onScroll(){
+    if(window.scrollY>40){nav.classList.add('scrolled')}
+    else{nav.classList.remove('scrolled')}
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+})();
 </script>
 <div class="hero-dark-wrap">
-<canvas id="hero-canvas-aurora" style="display:none"></canvas>
+<canvas id="hero-canvas-aurora"></canvas>
 <script>
 (function(){
   var cv=document.getElementById('hero-canvas-aurora');
   var ctx=cv.getContext('2d');
-  var W,H,t=0,stars=[];
+  var W,H,t=0,stars=[],particles=[],raf;
+  var isMobile=window.innerWidth<768;
+  var STAR_COUNT=isMobile?50:90;
+  var PARTICLE_COUNT=isMobile?28:55;
+  var MAX_DIST=isMobile?100:150;
+
   function initStars(){
     stars=[];
-    for(var i=0;i<90;i++) stars.push({
-      x:Math.random(),y:Math.random()*.55,
-      r:Math.random()*1.1+.2,
+    for(var i=0;i<STAR_COUNT;i++) stars.push({
+      x:Math.random(),y:Math.random()*.7,
+      r:Math.random()*.9+.15,
       p:Math.random()*Math.PI*2,
-      s:Math.random()*.35+.08
+      s:Math.random()*.3+.06
     });
   }
+
+  function initParticles(){
+    particles=[];
+    for(var i=0;i<PARTICLE_COUNT;i++){
+      particles.push({
+        x:Math.random()*W,
+        y:Math.random()*H,
+        vx:(Math.random()-.5)*.28,
+        vy:(Math.random()-.5)*.18,
+        r:Math.random()*1.6+.6,
+        a:Math.random()*.55+.15,
+        hue:200+Math.random()*30
+      });
+    }
+  }
+
   function resize(){
     var p=cv.parentElement;
-    var dpr=window.devicePixelRatio||1;
+    var dpr=Math.min(window.devicePixelRatio||1,2);
     var lw=p.offsetWidth||window.innerWidth;
     var lh=p.offsetHeight||window.innerHeight;
-    if(lw<10||lh<10) return; // not ready yet
+    if(lw<10||lh<10) return;
+    isMobile=lw<768;
+    STAR_COUNT=isMobile?50:90;
+    PARTICLE_COUNT=isMobile?28:55;
+    MAX_DIST=isMobile?100:150;
     cv.width=Math.round(lw*dpr);
     cv.height=Math.round(lh*dpr);
-    // CSS inset:0;width:100%;height:100% handles visual size — don't override with style
     ctx.setTransform(dpr,0,0,dpr,0,0);
     W=lw; H=lh;
     initStars();
+    initParticles();
   }
-  // bands: y offset, alpha, hue, x-frequency, amplitude, time-phase
+
+  // Aurora bands — blue/indigo theme
   var bands=[
-    {y:.42,a:.13,h:212,f:.005,am:.085,tp:0,   sp:.016},
-    {y:.52,a:.10,h:218,f:.008,am:.068,tp:1.3,  sp:.012},
-    {y:.34,a:.07,h:205,f:.006,am:.055,tp:2.8,  sp:.009},
-    {y:.60,a:.06,h:224,f:.004,am:.048,tp:.7,   sp:.014},
-    {y:.26,a:.04,h:208,f:.007,am:.038,tp:4.1,  sp:.011},
+    {y:.48,a:.11,h:214,f:.0048,am:.09, tp:0,   sp:.014},
+    {y:.58,a:.085,h:220,f:.007, am:.07, tp:1.4, sp:.010},
+    {y:.37,a:.065,h:208,f:.0055,am:.058,tp:2.9, sp:.008},
+    {y:.66,a:.05, h:226,f:.0038,am:.046,tp:.8,  sp:.012},
+    {y:.28,a:.035,h:210,f:.006, am:.036,tp:4.2, sp:.009},
   ];
-  function draw(){
-    ctx.fillStyle='rgba(0,0,0,.22)';
-    ctx.fillRect(0,0,W,H);
-    // Stars
-    stars.forEach(function(s){
-      var tw=Math.sin(t*s.s*.016+s.p);
-      var alpha=Math.max(0,.12+tw*.22);
-      ctx.beginPath();
-      ctx.arc(s.x*W,s.y*H,s.r*(1+tw*.15),0,Math.PI*2);
-      ctx.fillStyle='rgba(255,255,255,'+alpha+')';
-      ctx.fill();
-    });
-    // Aurora bands
+
+  function drawAurora(){
     bands.forEach(function(b,bi){
       var yBase=b.y*H;
       ctx.beginPath();
       ctx.moveTo(0,H);
-      for(var x=0;x<=W;x+=2){
+      for(var x=0;x<=W;x+=3){
         var xn=x/W;
         var wave=
-          Math.sin(xn*b.f*W*.01+t*b.sp+b.tp)*b.am*H+
-          Math.sin(xn*b.f*W*.018-t*b.sp*.7+b.tp*1.4)*b.am*.38*H+
-          Math.cos(xn*b.f*W*.008+t*b.sp*.5+bi)*b.am*.2*H;
+          Math.sin(xn*b.f*W+t*b.sp+b.tp)*b.am*H+
+          Math.sin(xn*b.f*W*1.8-t*b.sp*.65+b.tp*1.5)*b.am*.35*H+
+          Math.cos(xn*b.f*W*.75+t*b.sp*.48+bi*1.3)*b.am*.18*H;
         ctx.lineTo(x,yBase+wave);
       }
       ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();
-      var g=ctx.createLinearGradient(0,yBase-b.am*H,0,yBase+b.am*H*2.5);
-      g.addColorStop(0,'hsla('+b.h+',88%,60%,'+b.a+')');
-      g.addColorStop(.35,'hsla('+b.h+',80%,48%,'+(b.a*.5)+')');
+      var g=ctx.createLinearGradient(0,yBase-b.am*H*1.2,0,yBase+b.am*H*3);
+      g.addColorStop(0,'hsla('+b.h+',90%,62%,'+b.a+')');
+      g.addColorStop(.4,'hsla('+b.h+',82%,50%,'+(b.a*.45)+')');
       g.addColorStop(1,'transparent');
       ctx.fillStyle=g;ctx.fill();
-      // Bright shimmer edge on first 2 bands
-      if(bi<2){
+      // Shimmer edge
+      if(bi<3){
         ctx.beginPath();
         var first=true;
-        for(var x2=0;x2<=W;x2+=2){
+        for(var x2=0;x2<=W;x2+=3){
           var xn2=x2/W;
-          var yw=yBase+Math.sin(xn2*b.f*W*.01+t*b.sp+b.tp)*b.am*H+Math.sin(xn2*b.f*W*.018-t*b.sp*.7+b.tp*1.4)*b.am*.38*H;
+          var yw=yBase+Math.sin(xn2*b.f*W+t*b.sp+b.tp)*b.am*H+Math.sin(xn2*b.f*W*1.8-t*b.sp*.65+b.tp*1.5)*b.am*.35*H;
           if(first){ctx.moveTo(x2,yw);first=false;}else ctx.lineTo(x2,yw);
         }
-        ctx.strokeStyle='rgba(41,151,255,'+(b.a*.8)+')';
-        ctx.lineWidth=bi===0?1.2:.7;
+        var edgeA=bi===0?b.a*.9:bi===1?b.a*.65:b.a*.4;
+        ctx.strokeStyle='hsla('+b.h+',100%,72%,'+edgeA+')';
+        ctx.lineWidth=bi===0?1.1:.65;
         ctx.stroke();
       }
     });
-    // Blue radial glow — upper right (Apple vibe)
-    var rg=ctx.createRadialGradient(W*.78,H*.08,0,W*.78,H*.08,W*.42);
-    rg.addColorStop(0,'rgba(0,113,227,.08)');
+  }
+
+  function drawParticles(){
+    // Update
+    particles.forEach(function(p){
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<-10) p.x=W+10;
+      if(p.x>W+10) p.x=-10;
+      if(p.y<-10) p.y=H+10;
+      if(p.y>H+10) p.y=-10;
+    });
+    // Draw connections
+    for(var i=0;i<particles.length;i++){
+      for(var j=i+1;j<particles.length;j++){
+        var dx=particles[i].x-particles[j].x;
+        var dy=particles[i].y-particles[j].y;
+        var dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<MAX_DIST){
+          var alpha=(1-dist/MAX_DIST)*0.14;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x,particles[i].y);
+          ctx.lineTo(particles[j].x,particles[j].y);
+          ctx.strokeStyle='rgba(41,151,255,'+alpha+')';
+          ctx.lineWidth=.7;
+          ctx.stroke();
+        }
+      }
+    }
+    // Draw nodes
+    particles.forEach(function(p){
+      var pulse=Math.sin(t*.022+p.a*10)*.25;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r*(1+pulse*.15),0,Math.PI*2);
+      ctx.fillStyle='hsla('+p.hue+',85%,72%,'+(p.a+pulse*.08)+')';
+      ctx.fill();
+    });
+  }
+
+  function draw(){
+    // Deep fade trail
+    ctx.fillStyle='rgba(6,6,10,.3)';
+    ctx.fillRect(0,0,W,H);
+
+    // Stars
+    stars.forEach(function(s){
+      var tw=Math.sin(t*s.s*.014+s.p);
+      var alpha=Math.max(0,.08+tw*.18);
+      ctx.beginPath();
+      ctx.arc(s.x*W,s.y*H,s.r*(1+tw*.12),0,Math.PI*2);
+      ctx.fillStyle='rgba(255,255,255,'+alpha+')';
+      ctx.fill();
+    });
+
+    drawAurora();
+    drawParticles();
+
+    // Radial glows — brand blue
+    var rg=ctx.createRadialGradient(W*.75,H*.12,0,W*.75,H*.12,W*.44);
+    rg.addColorStop(0,'rgba(0,113,227,.07)');
     rg.addColorStop(1,'transparent');
     ctx.fillStyle=rg;ctx.fillRect(0,0,W,H);
-    // Second softer glow left
-    var rg2=ctx.createRadialGradient(W*.18,H*.5,0,W*.18,H*.5,W*.3);
-    rg2.addColorStop(0,'rgba(41,151,255,.05)');
+
+    var rg2=ctx.createRadialGradient(W*.15,H*.55,0,W*.15,H*.55,W*.32);
+    rg2.addColorStop(0,'rgba(41,151,255,.045)');
     rg2.addColorStop(1,'transparent');
     ctx.fillStyle=rg2;ctx.fillRect(0,0,W,H);
+
+    // Center hero glow
+    var rg3=ctx.createRadialGradient(W*.5,H*.45,0,W*.5,H*.45,W*.38);
+    rg3.addColorStop(0,'rgba(0,88,192,.04)');
+    rg3.addColorStop(1,'transparent');
+    ctx.fillStyle=rg3;ctx.fillRect(0,0,W,H);
+
     t++;
-    requestAnimationFrame(draw);
+    raf=requestAnimationFrame(draw);
   }
-  window.addEventListener('resize',function(){resize();});
-  // First call — might be 0 height if content not rendered yet
+
+  // Pause when tab hidden (battery/perf)
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden){cancelAnimationFrame(raf);}
+    else{raf=requestAnimationFrame(draw);}
+  });
+
+  window.addEventListener('resize',function(){resize();},{ passive:true });
   resize();
   draw();
-  // Re-sync after content renders (catches the common case where offsetHeight=0 initially)
-  setTimeout(resize, 0);
-  setTimeout(resize, 80);
-  setTimeout(resize, 300);
-  window.addEventListener('load', function(){ resize(); setTimeout(resize,100); });
+  setTimeout(resize,0);
+  setTimeout(resize,80);
+  setTimeout(resize,350);
+  window.addEventListener('load',function(){resize();setTimeout(resize,120);});
 })();
 </script>
 <div class="hero-noise"></div>
@@ -2753,12 +2705,26 @@ footer{
 
   <!-- LEFT: text -->
   <div class="hs-left">
+    <div class="hero-live-bar">
+      <div class="hero-live-dot"></div>
+      <span><strong class="hero-live-count" id="live-viewer-count">41</strong> хүн одоо үзэж байна</span>
+    </div>
     <div class="hero-badge"><span class="hero-badge-dot"></span>24 цаг үнэгүй · картгүй</div>
     <h1 style="margin-top:16px">Онлайн дэлгүүр нээж<br><span class="grad">ашигтай ажиллах</span> хамгийн хялбар арга</h1>
     <p class="hero-sub">Аль барааг зарвал ашигтай вэ — бид судалсан. Та зөвхөн сонгоод зарна.</p>
     <div class="hero-btns" style="flex-direction:column;align-items:flex-start;gap:20px">
       <a class="btn-primary btn-primary-glow" href="#" onclick="track('click_lite_free',{button:'hero_free_start'});goLiteFree();return false;">Үнэгүй туршаад үз →</a>
       <div style="font-size:13px;color:rgba(255,255,255,.55)">Аль хэдийн гишүүн үү? <a href="#" onclick="track('click_login',{button:'hero_login_text'});openLoginModal();return false;" style="color:#2997FF;font-weight:600;text-decoration:none">Нэвтрэх →</a></div>
+    </div>
+    <div class="hero-countdown">
+      <div class="hero-countdown-label">Дараагийн бараа нэмэгдэх хүртэл</div>
+      <div class="hero-cd-wrap">
+        <div class="hero-cd-unit"><span class="hero-cd-num" id="cd-days">–</span><div class="hero-cd-label">Өдөр</div></div>
+        <div class="hero-cd-sep">:</div>
+        <div class="hero-cd-unit"><span class="hero-cd-num" id="cd-hrs">––</span><div class="hero-cd-label">Цаг</div></div>
+        <div class="hero-cd-sep">:</div>
+        <div class="hero-cd-unit"><span class="hero-cd-num" id="cd-min">––</span><div class="hero-cd-label">Мин</div></div>
+      </div>
     </div>
   </div>
 
@@ -3032,7 +2998,7 @@ footer{
         <li>Web дэлгүүр — нэг товчоор бэлэн 🏪</li>
       </ul>
       <button class="pricing-btn" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border:none;box-shadow:0 8px 28px rgba(37,99,235,.35);font-size:15px;font-weight:800;letter-spacing:-.2px" onclick="track('click_buy_starter',{button:'pricing_buy_starter'});openRequestModal('starter')">Одоо эхлэх →</button>
-      <div style="margin-top:10px;font-size:11px;color:var(--muted);text-align:center;line-height:1.6">3 сараар авбал → <strong style="color:var(--accent)">₮37,800 хэмнэнэ</strong></div>
+      <div style="margin-top:10px;font-size:11px;color:var(--muted);text-align:center;line-height:1.6">Энэ сард <strong id="urgency-count" style="color:#2997FF">–</strong> хүн нэгдсэн · 3 сараар авбал → <strong style="color:var(--accent)">₮37,800 хэмнэнэ</strong></div>
     </div>
     <div class="pricing-card featured" style="background:linear-gradient(155deg,#0c1a0e 0%,#0f2214 50%,#111f13 100%);border-color:rgba(0,113,227,.3);box-shadow:0 8px 48px rgba(0,113,227,.2),0 0 0 1px rgba(0,113,227,.15)">
       <div class="pricing-badge" style="background:linear-gradient(90deg,#059669,#2997FF);color:#09090B;border:none;box-shadow:0 4px 20px rgba(0,113,227,.4)">⭐ Хамгийн их сонгогддог</div>
@@ -3204,7 +3170,7 @@ footer{
 </div>
 
 <!-- CTA -->
-<div class="cta-section" style="background:linear-gradient(160deg,#060A14 0%,#08102A 50%,#060A14 100%);position:relative;overflow:hidden">
+<div class="cta-section" style="background:linear-gradient(160deg,#080f09 0%,#0e1d10 50%,#111f13 100%);position:relative;overflow:hidden">
   <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:700px;height:600px;background:radial-gradient(circle,rgba(0,113,227,.1) 0%,transparent 65%);pointer-events:none"></div>
   <div style="position:relative;z-index:1">
     <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,113,227,.1);border:1px solid rgba(41,151,255,.28);border-radius:20px;padding:6px 18px;margin-bottom:24px">
@@ -3218,7 +3184,7 @@ footer{
       <div style="font-size:13px;color:rgba(255,255,255,.45)">Аль хэдийн гишүүн үү? <a href="#" onclick="track('click_login',{button:'bottom_login'});openLoginModal();return false;" style="color:#2997FF;font-weight:700;text-decoration:none">Нэвтрэх →</a></div>
     </div>
   </div>
-</div>
+</div><!-- /cta-section -->
 
 <!-- TRUST STRIP -->
 <div class="trust-strip">
@@ -3319,6 +3285,7 @@ footer{
         </div>
       </div>
 
+      <!-- CTA -->
       <button class="pay-cta" onclick="track('payment_confirmed',{button:'payment_ok'});closePayment()">Ойлголоо →</button>
       <div class="pay-footer-note">Асуулт байвал Instagram DM-аар холбогдоорой</div>
     </div>
@@ -3444,17 +3411,17 @@ document.querySelectorAll('.modal-overlay').forEach(function(m){
 
 /* ── PAYMENT MODAL ───────────────────────── */
 var PLANS = {
-  lite:    {name:'Lite Plan',    price:'₮0'},
-  starter: {name:'Starter Plan', price:'₮29,900/1 сар'},
-  pro:     {name:'Pro Plan',     price:'₮49,900/3 сар'},
-  business:{name:'Business Plan',price:'₮99,900/сар'}
+  lite:    {name:'Lite Plan',    amount:'₮0',      period:''},
+  starter: {name:'Starter Plan', amount:'₮29,900', period:'/1 сар'},
+  pro:     {name:'Pro Plan',     amount:'₮49,900', period:'/3 сар'},
+  business:{name:'Business Plan',amount:'₮99,900', period:'/сар'}
 };
 
 function openPayment(planKey){
   var p = PLANS[planKey] || PLANS.pro;
   document.getElementById('pay-plan-name').textContent  = p.name;
-  document.getElementById('pay-plan-price').innerHTML   = p.price+'<span style="font-size:13px;color:#5a5a72;font-weight:400">/3 сар</span>';
-  document.getElementById('pay-amount').textContent     = p.price;
+  document.getElementById('pay-plan-price').innerHTML   = p.amount+(p.period?'<span style="font-size:13px;color:#5a5a72;font-weight:400">'+p.period+'</span>':'');
+  document.getElementById('pay-amount').textContent     = p.amount;
   var btn = document.getElementById('copy-acc-btn');
   btn.textContent='ХУУЛАХ'; btn.className='pay-copy-btn';
   document.getElementById('pay-modal').classList.add('open');
@@ -3467,11 +3434,24 @@ function closePayment(){
 }
 
 function copyAccount(){
-  navigator.clipboard.writeText('5018953118').then(function(){
-    var btn=document.getElementById('copy-acc-btn');
+  var text = '5018953118';
+  var btn = document.getElementById('copy-acc-btn');
+  function onCopied(){
     btn.textContent='✓ ХУУЛАГДЛАА'; btn.classList.add('copied');
     setTimeout(function(){ btn.textContent='ХУУЛАХ'; btn.classList.remove('copied'); },2500);
-  });
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(onCopied).catch(function(){
+      fallbackCopy(text); onCopied();
+    });
+  } else { fallbackCopy(text); onCopied(); }
+}
+function fallbackCopy(text){
+  var ta = document.createElement('textarea');
+  ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try{ document.execCommand('copy'); }catch(e){}
+  document.body.removeChild(ta);
 }
 
 document.getElementById('pay-modal').addEventListener('click',function(e){
@@ -3627,10 +3607,11 @@ function togglePw(id, icon) {
 }
 
 function copyAcc2(btn) {
-  navigator.clipboard.writeText('5018953118').then(function() {
-    btn.textContent = '✓ ХУУЛАГДЛАА'; btn.style.background = '#15803d';
-    setTimeout(function(){ btn.textContent = 'ХУУЛАХ'; btn.style.background = 'var(--accent)'; }, 2000);
-  }).catch(function() { btn.textContent = '5018953118'; setTimeout(function(){ btn.textContent = 'ХУУЛАХ'; }, 2000); });
+  var text = '5018953118';
+  function onCopied(){ btn.textContent = '✓ ХУУЛАГДЛАА'; btn.style.background = '#15803d'; setTimeout(function(){ btn.textContent = 'ХУУЛАХ'; btn.style.background = 'var(--accent)'; }, 2000); }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(onCopied).catch(function(){ fallbackCopy(text); onCopied(); });
+  } else { fallbackCopy(text); onCopied(); }
 }
 
 function toggleFaq(el) {
@@ -3696,9 +3677,11 @@ function showWelcome(name, plan) {
   // Show overlay
   var ov = document.getElementById('welcome-overlay');
   ov.classList.add('show');
-  // iOS Safari scroll lock fix
+  // iOS Safari scroll lock fix — save scroll position to avoid jump
+  var scrollY = window.scrollY;
   document.body.style.overflow = 'hidden';
   document.body.style.position = 'fixed';
+  document.body.style.top = '-' + scrollY + 'px';
   document.body.style.width = '100%';
 
   // Staggered entrance animation
@@ -3748,9 +3731,12 @@ function showWelcome(name, plan) {
   // Redirect
   track('plan_redirect', {plan: plan, button: 'welcome_redirect'});
   setTimeout(function(){
+    var savedScroll = parseInt(document.body.style.top || '0') * -1;
     document.body.style.overflow = '';
     document.body.style.position = '';
+    document.body.style.top = '';
     document.body.style.width = '';
+    window.scrollTo(0, savedScroll);
     window.location.href = PLAN_PAGES[plan] || 'lite.html';
   }, 3400);
 }
@@ -3948,11 +3934,11 @@ function verifyPW(pw) {
     if(shown || dismissed) return;
     if(e.clientY <= 5){
       shown = true;
-      var _scrollY = window.scrollY;
+      var scrollY = window.scrollY;
       document.getElementById('exit-intent').classList.add('show');
-      document.body.style.top = '-'+_scrollY+'px';
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
+      document.body.style.top = '-' + scrollY + 'px';
       document.body.style.width = '100%';
       track('exit_intent_show', {trigger:'mouse_leave'});
     }
@@ -3964,11 +3950,10 @@ function verifyPW(pw) {
     var cur = window.scrollY;
     if(lastScroll - cur > 120 && cur < 300 && !shown && !dismissed){
       shown = true;
-      var _scrollY2 = window.scrollY;
       document.getElementById('exit-intent').classList.add('show');
-      document.body.style.top = '-'+_scrollY2+'px';
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
+      document.body.style.top = '-' + cur + 'px';
       document.body.style.width = '100%';
       track('exit_intent_show', {trigger:'scroll_up'});
     }
@@ -3977,13 +3962,13 @@ function verifyPW(pw) {
 })();
 
 function closeExitIntent(){
+  var savedScroll = parseInt(document.body.style.top || '0') * -1;
   document.getElementById('exit-intent').classList.remove('show');
-  var scrollY = parseInt(document.body.style.top || '0') * -1;
   document.body.style.overflow = '';
   document.body.style.position = '';
   document.body.style.top = '';
   document.body.style.width = '';
-  window.scrollTo(0, scrollY);
+  window.scrollTo(0, savedScroll);
   sessionStorage.setItem('ei_dismissed','1');
 }
 </script>
@@ -4432,143 +4417,43 @@ h1 .grad {
   z-index:0;
   pointer-events:none;
   display:block;
+  will-change:transform;
+  transform:translateZ(0);
+  image-rendering:auto;
 }
 .hero-dark-wrap .hero-split{position:relative;z-index:2;}
 .hero-dark-wrap .hero-bottom-fade{z-index:3;}
 .hero-dark-wrap .hero-stats-bar{position:relative;z-index:4;}
 
-/* ══════════════════════════════════════════
-   VIDEO BG CONTRAST FIXES — text readability
-═══════════════════════════════════════════ */
+/* ── TOUCH & MOBILE POLISH ── */
+.btn-primary:active{transform:scale(.97) translateY(1px)!important;box-shadow:0 2px 12px rgba(0,113,227,.2)!important}
+.btn-secondary:active{transform:scale(.97)!important}
+.pricing-btn:active{opacity:.82}
+.nav-cta:active{opacity:.75}
+.feature-card{transition:border-color .22s,box-shadow .22s,transform .22s ease}
+.pricing-card{transition:box-shadow .22s,transform .22s ease}
 
-/* Hero badge — видео дээр харагдахуйц */
-.hero-badge{
-  background:rgba(0,0,0,.55)!important;
-  border:1px solid rgba(255,255,255,.18)!important;
-  backdrop-filter:blur(12px)!important;
-  -webkit-backdrop-filter:blur(12px)!important;
-  color:#fff!important;
-}
-.hero-badge-dot{ background:#2997FF!important; }
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.22,1,.36,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
 
-/* Section headings text-shadow — видео-г дайрч унших */
-.section-title,
-.section-label,
-h1,h2,h3{
-  text-shadow:0 1px 8px rgba(0,0,0,.85),0 2px 24px rgba(0,0,0,.7)!important;
+/* ── MOBILE SECTION POLISH ── */
+@media(max-width:600px){
+  section{padding:52px 18px!important}
+  .how-wrap{padding:32px 20px!important}
+  .steps{gap:24px}
+  .steps::before{display:none!important}
+  .features-grid{grid-template-columns:1fr!important;gap:12px}
+  .pricing-grid{grid-template-columns:1fr!important;gap:14px}
+  .testimonial{flex:0 0 88vw!important;max-width:320px}
+  .hero-stats-inner{gap:16px;flex-wrap:wrap;padding:16px 18px}
+  .hero-stat-divider{display:none}
+  .fomo-toast{left:12px;right:12px;max-width:none}
 }
-/* gradient text (ti) — webkit-text-fill-color байвал text-shadow ажиллахгүй тул drop-shadow ашиглана */
-.section-title .ti,
-h1 .grad{
-  text-shadow:none!important;
-  filter:drop-shadow(0 1px 6px rgba(0,0,0,.8)) drop-shadow(0 2px 16px rgba(0,0,0,.6))!important;
-}
-
-/* Hero sub & section sub */
-.hero-sub,
-.hero-dark-wrap .hero-sub,
-.section-sub,
-.step p,
-.feature-card p{
-  text-shadow:0 1px 6px rgba(0,0,0,.9),0 2px 16px rgba(0,0,0,.7)!important;
-}
-
-/* Section-outer — видео дээр тавигдах section-д нимгэн dark scrim */
-.section-outer{
-  position:relative;
-  z-index:1;
-}
-.section-outer::before{
-  content:'';
-  position:absolute;inset:0;
-  background:rgba(0,0,0,.32);
-  pointer-events:none;
-  z-index:0;
-}
-.section-outer > *{
-  position:relative;
-  z-index:1;
-}
-
-/* Store builder — subtitle харагдахуйц болгох */
-.section-outer section [style*="rgba(0,0,0,.32)"],
-.section-outer section div[style*="background:rgba(0,113,227,.04)"]{
-  background:rgba(0,0,0,.55)!important;
-  border-color:rgba(0,113,227,.35)!important;
-  backdrop-filter:blur(8px)!important;
-  -webkit-backdrop-filter:blur(8px)!important;
-}
-
-/* Feature pills (✓ Домэйн шаардахгүй гэх мэт) */
-.section-outer section span[style*="background:rgba(255,255,255,.05)"]{
-  background:rgba(0,0,0,.5)!important;
-  border-color:rgba(255,255,255,.18)!important;
-  color:rgba(255,255,255,.85)!important;
-}
-
-/* Feature cards */
-.feature-card{
-  background:rgba(0,0,0,.45)!important;
-  backdrop-filter:blur(16px)!important;
-  -webkit-backdrop-filter:blur(16px)!important;
-  border:1px solid rgba(255,255,255,.1)!important;
-}
-.feature-card h3{
-  color:#fff!important;
-}
-.feature-card p{
-  color:rgba(255,255,255,.7)!important;
-}
-
-/* How-wrap steps */
-.how-wrap{
-  background:rgba(0,0,0,.45)!important;
-  backdrop-filter:blur(16px)!important;
-  -webkit-backdrop-filter:blur(16px)!important;
-  border-color:rgba(255,255,255,.1)!important;
-}
-.step h3{color:#fff!important;}
-.step p{color:rgba(255,255,255,.7)!important;}
-.step-num{
-  background:rgba(0,0,0,.5)!important;
-  color:#2997FF!important;
-  border-color:rgba(41,151,255,.35)!important;
-}
-
-/* Testimonial cards */
-.testimonial{
-  background:rgba(0,0,0,.5)!important;
-  backdrop-filter:blur(16px)!important;
-  -webkit-backdrop-filter:blur(16px)!important;
-  border-color:rgba(255,255,255,.1)!important;
-}
-
-/* Pricing cards */
-.pricing-card{
-  background:rgba(0,0,0,.5)!important;
-  backdrop-filter:blur(16px)!important;
-  -webkit-backdrop-filter:blur(16px)!important;
-}
-.pricing-card.featured{
-  background:rgba(0,30,80,.6)!important;
-}
-
-/* FAQ items */
-.faq-item{
-  background:rgba(0,0,0,.45)!important;
-  backdrop-filter:blur(14px)!important;
-  -webkit-backdrop-filter:blur(14px)!important;
-  border-color:rgba(255,255,255,.09)!important;
-}
-
-/* Mobile-specific: scrim арай хүчтэй */
-@media(max-width:768px){
-  .section-outer::before{
-    background:rgba(0,0,0,.42)!important;
-  }
-  .hero-badge{
-    background:rgba(0,0,0,.65)!important;
-  }
+@media(max-width:380px){
+  h1{font-size:clamp(28px,8.5vw,40px)!important;letter-spacing:-1.5px!important}
+  .hero-badge{font-size:10.5px}
+  .hs-center{width:132px!important}
 }
 
 </style>
@@ -4671,6 +4556,32 @@ h1 .grad{
   var spots=5+(seed%11); // 5-15 spots
   var els=document.querySelectorAll('#spots-left');
   els.forEach(function(el){el.textContent=spots});
+})();
+</script>
+
+<script>
+// ── SCROLL REVEAL ──
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
+    });
+  },{threshold:.12,rootMargin:'0px 0px -32px 0px'});
+  function addReveal(){
+    var targets=['.feature-card','.step','.pricing-card','.faq-item','.testimonial'];
+    targets.forEach(function(sel){
+      document.querySelectorAll(sel).forEach(function(el,i){
+        if(!el.classList.contains('reveal')){
+          el.classList.add('reveal');
+          el.style.transitionDelay=(i%4*0.08)+'s';
+          io.observe(el);
+        }
+      });
+    });
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',addReveal);}
+  else{addReveal();}
 })();
 </script>
 </body></html>
