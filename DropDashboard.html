@@ -6608,8 +6608,7 @@ function exportCSV(type){
       'Ямар зүйлд анхаарах хэрэгтэй вэ? Хамгийн яаралтай 2-3 зүйлийг дурдаж, урамшуулалтай дуусга.';
 
     try{
-      var gasUrl=GAS_URL()+'?action=claude&prompt='+encodeURIComponent(prompt);
-      var res=await fetch(gasUrl);
+      var res=await fetch(GAS_URL()+'?action=claude&prompt='+encodeURIComponent(prompt.substring(0,800)));
       var data=await res.json();
       var text=data.text||'';
       if(!text) throw new Error('empty');
@@ -8451,9 +8450,10 @@ function injectReminderBtns(){
   }
 
   async function callClaude(userMsg){
-    var url = GAS_URL() + '?action=claude'
-      + '&prompt=' + encodeURIComponent(userMsg)
-      + '&system=' + encodeURIComponent('Та ProductDrop.MN-ийн AI бизнесийн зөвлөгч. Монгол хэлээр хариулна. Товч, практик зөвлөмж өг. Яаралтай, чухал, боломж гэж ангилж хариулна уу.');
+    var url = GAS_URL()
+      + '?action=claude'
+      + '&prompt=' + encodeURIComponent(userMsg.substring(0, 800))
+      + '&system=' + encodeURIComponent('Та ProductDrop.MN-ийн AI зөвлөгч. Монгол хэлээр хариулна. Яаралтай/чухал/боломж гэж ангилж өг.');
     var resp = await fetch(url);
     var d = await resp.json();
     if(!d.ok) throw new Error(d.error || 'GAS алдаа');
