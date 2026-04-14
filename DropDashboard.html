@@ -8474,7 +8474,12 @@ function injectReminderBtns(){
       inner.innerHTML = '<div class="ai-loading"><div class="ai-spinner"></div><span>Claude шинжилж байна...</span></div>';
       var prompt = ctx + '\n\nДараах байдлаар шинжилж өгнө үү:\n🔴 Яаралтай (өнөөдөр хийх 1-2 зүйл)\n🟡 Blind spot (анзааралгүй алдагдаж буй зүйл)\n🟢 Энэ долоо хоногт хийх боломж';
       var text = await callClaude(prompt);
-      inner.textContent = text;
+      inner.innerHTML = text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/^## (.+)$/gm,'<br><strong style="font-size:14px">$1</strong>')
+    .replace(/^- (.+)$/gm,'&nbsp;&nbsp;· $1')
+    .replace(/\n/g,'<br>');
     } catch(e) {
       inner.textContent = '⚠️ Алдаа гарлаа: ' + e.message;
     }
