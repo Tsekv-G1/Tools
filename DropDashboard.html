@@ -8450,11 +8450,9 @@ function injectReminderBtns(){
   }
 
   async function callClaude(userMsg){
-    var url = GAS_URL()
-      + '?action=claude'
-      + '&prompt=' + encodeURIComponent(userMsg.substring(0, 800))
-      + '&system=' + encodeURIComponent('Та ProductDrop.MN-ийн AI зөвлөгч. Монгол хэлээр хариулна. Яаралтай/чухал/боломж гэж ангилж өг.');
+    var url = GAS_URL() + '?action=claude&q=' + encodeURIComponent(userMsg.substring(0, 300));
     var resp = await fetch(url);
+    if(!resp.ok) throw new Error('HTTP ' + resp.status);
     var d = await resp.json();
     if(!d.ok) throw new Error(d.error || 'GAS алдаа');
     return d.text;
