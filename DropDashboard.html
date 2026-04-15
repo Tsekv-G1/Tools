@@ -2242,6 +2242,14 @@ html.theme-tr .pipe-table tbody tr{
         .ai-ask-btn:hover{opacity:.8}
         .ai-ask-btn:disabled{opacity:.5;cursor:not-allowed}
         .ai-hist-wrap{margin-top:18px}
+        .ctx-row{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:background .15s;margin-bottom:3px;border:1px solid transparent}
+        .ctx-done{background:rgba(52,199,89,0.06);border-color:rgba(52,199,89,0.12)}
+        .ctx-done:hover{background:rgba(52,199,89,0.12)}
+        .ctx-todo{background:rgba(255,59,48,0.05);border-color:rgba(255,59,48,0.1)}
+        .ctx-todo:hover{background:rgba(255,59,48,0.1)}
+        .ctx-check{font-size:14px;flex-shrink:0}
+        .ctx-item{font-size:12px;color:var(--text);flex:1;line-height:1.4}
+        .ctx-cat{font-size:10px;color:var(--text4);background:var(--bg4);padding:2px 6px;border-radius:4px;white-space:nowrap}
         .ai-hist-item{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:10px}
         .ai-hist-q{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:7px}
         .ai-hist-a{font-size:12px;color:var(--text);line-height:1.7;white-space:pre-wrap}
@@ -2260,8 +2268,11 @@ html.theme-tr .pipe-table tbody tr{
             <div class="ai-ctx-item"><span class="ai-ctx-lbl">GA4 хэрэглэгч</span><span class="ai-ctx-val">308/сар</span></div>
             <div class="ai-ctx-item"><span class="ai-ctx-lbl">Lite дарна</span><span class="ai-ctx-val" style="color:var(--green)">74.7%</span></div>
             <div class="ai-ctx-item"><span class="ai-ctx-lbl">Lead capture</span><span class="ai-ctx-val" style="color:var(--red)">0%</span></div>
-            <div class="ai-ctx-item"><span class="ai-ctx-lbl">Гишүүд</span><span class="ai-ctx-val" id="ai-ctx-members">—</span></div>
+            <div class="ai-ctx-item"><span class="ai-ctx-lbl">Идэвхтэй гишүүд</span><span class="ai-ctx-val" id="ai-ctx-members">—</span></div>
             <div class="ai-ctx-item"><span class="ai-ctx-lbl">7 хоногт дуусах</span><span class="ai-ctx-val" id="ai-ctx-expiring">—</span></div>
+            <div class="ai-ctx-item"><span class="ai-ctx-lbl">Сарын орлого</span><span class="ai-ctx-val" id="ai-ctx-revenue" style="color:var(--green)">—</span></div>
+            <div class="ai-ctx-item"><span class="ai-ctx-lbl">Хүлээгдэж байгаа</span><span class="ai-ctx-val" id="ai-ctx-pending">—</span></div>
+            <div class="ai-ctx-item"><span class="ai-ctx-lbl">Энэ сарын шинэ</span><span class="ai-ctx-val" id="ai-ctx-new">—</span></div>
           </div>
         </div>
 
@@ -2275,6 +2286,12 @@ html.theme-tr .pipe-table tbody tr{
         <div class="ai-resp-card" id="ai-resp-card">
           <div class="ai-section-lbl">AI шинжилгээ</div>
           <div class="ai-resp-inner" id="ai-resp-inner"></div>
+        </div>
+
+        <!-- Context editor -->
+        <div class="ai-custom-wrap" style="margin-top:16px" id="ai-ctx-editor-wrap">
+          <div class="ai-section-lbl">📋 Хийгдсэн / Хийгдэх — Sheets-тэй синхрончлогдоно</div>
+          <div id="ai-ctx-editor"><div class="ai-loading"><div class="ai-spinner"></div><span>Ачааллаж байна...</span></div></div>
         </div>
 
         <!-- Custom question -->
@@ -3262,8 +3279,8 @@ function saveAll(){
 }
 
 /* ── NAVIGATION ── */
-var PAGES=['kanban','drops','content','analytics','users','admin','focus','finance','checkin','roadmap'];
-var PAGE_IDX={kanban:0,drops:1,content:2,analytics:3,users:4,admin:5,focus:6,finance:7,checkin:8,roadmap:9};
+var PAGES=['kanban','drops','content','analytics','users','admin','focus','finance','checkin','roadmap','ai'];
+var PAGE_IDX={kanban:0,drops:1,content:2,analytics:3,users:4,admin:5,focus:6,finance:7,checkin:8,roadmap:9,ai:10};
 function showPage(name,sidebarEl){
   PAGES.forEach(function(p){document.getElementById('page-'+p).classList.remove('active');});
   document.getElementById('page-'+name).classList.add('active');
@@ -8415,42 +8432,126 @@ function injectReminderBtns(){
 (function(){
   var CLAUDE_KEY = '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';
 
-  // GAS-аас гишүүдийн өгөгдөл татаж ctx row-г шинэчлэх
+  // GAS getStats + getContext татаж UI шинэчлэх
+  var _ctxCache = { done: [], todo: [] };
+
   async function loadAIContext(){
     try {
-      var res = await fetch(GAS_URL() + '?action=list');
-      var data = await res.json();
-      var members = Array.isArray(data) ? data : (data.members || []);
-      var today = new Date();
-      var active = 0, expiring = 0;
-      members.forEach(function(m){
-        var exp = new Date(m.expiry || m[5]);
-        if(exp > today){ active++; }
-        var diff = (exp - today) / 86400000;
-        if(diff > 0 && diff <= 7) expiring++;
-      });
-      var mEl = document.getElementById('ai-ctx-members');
-      var eEl = document.getElementById('ai-ctx-expiring');
-      if(mEl) mEl.textContent = active + ' идэвхтэй';
-      if(eEl){ eEl.textContent = expiring + ' хүн'; if(expiring > 0) eEl.style.color = 'var(--red)'; }
-      return { active: active, expiring: expiring };
+      // Stats + Context хавтгай дуудна
+      var [statsRes, ctxRes] = await Promise.all([
+        fetch(GAS_URL() + '?action=getStats'),
+        fetch(GAS_URL() + '?action=getContext')
+      ]);
+      var s = await statsRes.json();
+      var ctx = await ctxRes.json();
+      _ctxCache = ctx;
+
+      var set = function(id, val, warn){
+        var el = document.getElementById(id);
+        if(!el) return;
+        el.textContent = val;
+        if(warn) el.style.color = 'var(--red)';
+      };
+      set('ai-ctx-members',  (s.activeMembers||0) + ' хүн');
+      set('ai-ctx-expiring', (s.expiringSoon||0)  + ' хүн', s.expiringSoon > 0);
+      set('ai-ctx-revenue',  '₮' + (s.monthlyRevenue||0).toLocaleString());
+      set('ai-ctx-pending',  (s.pendingCount||0)  + ' хүн', s.pendingCount > 0);
+      set('ai-ctx-new',      (s.newThisMonth||0)  + ' шинэ');
+
+      renderContextEditor(ctx);
+
+      return {
+        active:         s.activeMembers  || 0,
+        expired:        s.expiredMembers || 0,
+        expiring:       s.expiringSoon   || 0,
+        expiring3:      s.expiring3Days  || 0,
+        newThisMonth:   s.newThisMonth   || 0,
+        pendingCount:   s.pendingCount   || 0,
+        planCount:      s.planCount      || {},
+        monthlyRevenue: s.monthlyRevenue || 0,
+        ctxDone:        (ctx.done||[]).map(function(x){ return x.item; }),
+        ctxTodo:        (ctx.todo||[]).map(function(x){ return x.item; })
+      };
     } catch(e) {
-      return { active: '?', expiring: '?' };
+      return { active:'?', expiring:'?', expiring3:0, newThisMonth:0, pendingCount:0, planCount:{}, monthlyRevenue:0, ctxDone:[], ctxTodo:[] };
     }
   }
 
+  function renderContextEditor(ctx){
+    var wrap = document.getElementById('ai-ctx-editor');
+    if(!wrap) return;
+    var done = ctx.done || [], todo = ctx.todo || [];
+    var html = '<div class="ai-section-lbl" style="margin-top:0">✅ Хийгдсэн <span style="color:var(--text4);font-weight:400">— дарж TODO болгоно</span></div>';
+    done.forEach(function(x){
+      html += '<div class="ctx-row ctx-done" data-row="'+x.row+'" data-status="DONE" onclick="toggleCtx(this)">'
+        + '<span class="ctx-check">✅</span><span class="ctx-item">'+x.item+'</span>'
+        + '<span class="ctx-cat">'+x.category+'</span></div>';
+    });
+    html += '<div class="ai-section-lbl" style="margin-top:14px">❌ Хийгдэх <span style="color:var(--text4);font-weight:400">— дарж DONE болгоно</span></div>';
+    todo.forEach(function(x){
+      html += '<div class="ctx-row ctx-todo" data-row="'+x.row+'" data-status="TODO" onclick="toggleCtx(this)">'
+        + '<span class="ctx-check">⬜</span><span class="ctx-item">'+x.item+'</span>'
+        + '<span class="ctx-cat">'+x.category+'</span></div>';
+    });
+    html += '<div style="display:flex;gap:8px;margin-top:12px">'
+      + '<input id="ctx-new-inp" class="ai-custom-ta" style="min-height:0;padding:8px 12px;flex:1;font-size:12px" placeholder="Шинэ зүйл нэмэх...">'
+      + '<button class="ai-ask-btn" onclick="addCtxItem()" style="white-space:nowrap">+ Нэмэх</button></div>';
+    wrap.innerHTML = html;
+  }
+
+  window.toggleCtx = async function(el){
+    var row = el.getAttribute('data-row');
+    var cur = el.getAttribute('data-status');
+    var next = cur === 'DONE' ? 'TODO' : 'DONE';
+    el.style.opacity = '0.4';
+    try {
+      await fetch(GAS_URL() + '?action=updateContext&row='+row+'&status='+next);
+      await loadAIContext();
+      if(typeof toast === 'function') toast(next === 'DONE' ? '✅ Хийгдсэн болголоо' : '↩️ TODO болголоо');
+    } catch(e) {
+      el.style.opacity = '1';
+    }
+  };
+
+  window.addCtxItem = async function(){
+    var inp = document.getElementById('ctx-new-inp');
+    var item = (inp ? inp.value : '').trim();
+    if(!item){ if(typeof toast==='function') toast('⚠️ Зүйл бичнэ үү'); return; }
+    try {
+      await fetch(GAS_URL() + '?action=addContext&item='+encodeURIComponent(item)+'&status=TODO&category=custom');
+      inp.value = '';
+      await loadAIContext();
+      if(typeof toast==='function') toast('✅ Нэмэгдлээ');
+    } catch(e) {
+      if(typeof toast==='function') toast('⚠️ Алдаа гарлаа');
+    }
+  };
+
   function buildContext(stats){
-    return 'ProductDrop.MN бизнесийн мэдээлэл:\n'
-      + 'ГИШҮҮД: ' + stats.active + ' идэвхтэй\n'
-      + '7 ХОНОГТ ДУУСАХ: ' + stats.expiring + ' хүн\n'
-      + 'GA4: Сарын 308 хэрэглэгч, 74.68% Lite дарна → 0 бүртгэл\n'
-      + 'Pro товч: <2% дарна\n'
-      + 'Login: ~15 хуучин гишүүн\n'
-      + 'ГОЛ АСУУДАЛ: Lead capture байхгүй, 230 lead/сар алдагдана';
+    var pc = stats.planCount || {};
+    var doneList = (stats.ctxDone || []);
+    var todoList = (stats.ctxTodo || []);
+    var ctx = '=== ProductDrop.MN бизнесийн мэдээлэл ===\n'
+      + 'ГИШҮҮД: ' + stats.active + ' идэвхтэй, ' + (stats.expired||0) + ' дууссан\n'
+      + 'ТӨЛӨВЛӨГӨӨ: Pro=' + (pc.Pro||0) + ' · Starter=' + (pc.Starter||0) + ' · Business=' + (pc.Business||0) + '\n'
+      + 'САРЫН ОРЛОГО: ₮' + (stats.monthlyRevenue||0).toLocaleString() + '\n'
+      + 'ХУГАЦАА ДУУСАХ: ' + stats.expiring + ' хүн 7 хоногт, ' + (stats.expiring3||0) + ' хүн 3 хоногт\n'
+      + 'ЭНЭ САР: ' + (stats.newThisMonth||0) + ' шинэ гишүүн, ' + (stats.pendingCount||0) + ' хүлээгдэж байгаа\n'
+      + 'GA4: 308/сар, 74.68% Lite дарна, Pro товч <2%\n\n';
+    if(doneList.length > 0){
+      ctx += '=== ХИЙГДСЭН (давтаж санал болгохгүй) ===\n';
+      doneList.forEach(function(item){ ctx += '✅ ' + item + '\n'; });
+      ctx += '\n';
+    }
+    if(todoList.length > 0){
+      ctx += '=== ХИЙГДЭХ (эндээс санал болго) ===\n';
+      todoList.forEach(function(item){ ctx += '❌ ' + item + '\n'; });
+    }
+    return ctx;
   }
 
   async function callClaude(userMsg){
-    var url = GAS_URL() + '?action=claude&q=' + encodeURIComponent(userMsg.substring(0, 300));
+    var url = GAS_URL() + '?action=claude&q=' + encodeURIComponent(userMsg.substring(0, 800));
     var resp = await fetch(url);
     if(!resp.ok) throw new Error('HTTP ' + resp.status);
     var d = await resp.json();
