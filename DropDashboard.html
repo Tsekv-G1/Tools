@@ -2273,10 +2273,10 @@ html.theme-tr .pipe-table tbody tr{
         <div class="ai-ctx-card">
           <div class="ai-section-lbl">Одоогийн контекст</div>
           <div class="ai-ctx-row" id="ai-ctx-row">
-            <div class="ai-ctx-item"><span class="ai-ctx-lbl">GA4 хэрэглэгч</span><span class="ai-ctx-val">308/сар</span></div>
+            <div class="ai-ctx-item" title="GA4-с гараар шинэчлэх" style="cursor:pointer" onclick="promptGA4Update()"><span class="ai-ctx-lbl">GA4 хэрэглэгч ✎</span><span class="ai-ctx-val" id="ai-ctx-ga4">308/сар</span></div>
             <div class="ai-ctx-item"><span class="ai-ctx-lbl">Lite бүртгэл</span><span class="ai-ctx-val" id="ai-ctx-lite">—</span></div>
             <div class="ai-ctx-item"><span class="ai-ctx-lbl">Lite дарна</span><span class="ai-ctx-val" style="color:var(--green)">74.7%</span></div>
-            <div class="ai-ctx-item"><span class="ai-ctx-lbl">Lead capture</span><span class="ai-ctx-val" style="color:var(--red)">0%</span></div>
+            <div class="ai-ctx-item"><span class="ai-ctx-lbl">Lead capture</span><span class="ai-ctx-val" id="ai-ctx-leadcap" style="color:var(--green)">идэвхтэй ✓</span></div>
             <div class="ai-ctx-item"><span class="ai-ctx-lbl">Идэвхтэй гишүүд</span><span class="ai-ctx-val" id="ai-ctx-members">—</span></div>
             <div class="ai-ctx-item"><span class="ai-ctx-lbl">7 хоногт дуусах</span><span class="ai-ctx-val" id="ai-ctx-expiring">—</span></div>
             <div class="ai-ctx-item"><span class="ai-ctx-lbl">Сарын орлого</span><span class="ai-ctx-val" id="ai-ctx-revenue" style="color:var(--green)">—</span></div>
@@ -2574,6 +2574,17 @@ const SALT='PD2026MN';
 const TELEGRAM_BOT_TOKEN='8695289865:AAGGjH1TLin2_W8AzHkIT7rtYLR6VIZxxTo';
 const TELEGRAM_CHAT_ID='5877604772';
 function GAS_URL(){return localStorage.getItem('pd_gas_url')||'https://script.google.com/macros/s/AKfycbyd3iPFcE8EhSd-fgpDotiDc1TonWUqAUxBVQVDLWcjbqR97OI2tUEsGTuJngVp7g8s/exec';}
+
+// GA4 гараар шинэчлэх (хэрэглэгч GA4-с авсан тоогоо оруулна)
+function promptGA4Update(){
+  var cur = localStorage.getItem('pd_ga4_monthly') || '308';
+  var val = prompt('GA4-ийн сарын хэрэглэгчийн тоо оруулна уу (одоо: ' + cur + '):', cur);
+  if (val && !isNaN(parseInt(val))) {
+    localStorage.setItem('pd_ga4_monthly', parseInt(val));
+    var el = document.getElementById('ai-ctx-ga4');
+    if (el) el.textContent = parseInt(val) + '/сар';
+  }
+}
 
 /* ── SUPABASE ── */
 var SB_URL='https://xpxotgpqxrupkgcppzmn.supabase.co';
@@ -8670,7 +8681,9 @@ function injectReminderBtns(){
       + 'САРЫН ОРЛОГО: ₮' + (stats.monthlyRevenue||0).toLocaleString() + '\n'
       + 'ХУГАЦАА ДУУСАХ: ' + stats.expiring + ' хүн 7 хоногт, ' + (stats.expiring3||0) + ' хүн 3 хоногт\n'
       + 'ЭНЭ САР: ' + (stats.newThisMonth||0) + ' шинэ гишүүн, ' + (stats.pendingCount||0) + ' хүлээгдэж байгаа\n'
-      + 'GA4: 308/сар, 74.68% Lite дарна, Pro товч <2%\n\n';
+      + 'GA4: ' + (localStorage.getItem('pd_ga4_monthly')||'308') + '/сар · 74.68% Lite дарна\n'
+      + 'LEAD CAPTURE: exit_intent + lite_gate + lite_modal замаар идэвхтэй\n'
+      + 'АНХААРУУЛГА: Sheet1-ийн active гишүүд = БОДИТ ТӨЛӨГЧ (pro/starter), Leads sheet = туршилтын хэрэглэгчид\n\n';
     if(doneList.length > 0){
       ctx += '=== ХИЙГДСЭН (давтаж санал болгохгүй) ===\n';
       doneList.forEach(function(item){ ctx += '✅ ' + item + '\n'; });
