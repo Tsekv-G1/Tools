@@ -2274,6 +2274,7 @@ html.theme-tr .pipe-table tbody tr{
           <div class="ai-section-lbl">Одоогийн контекст</div>
           <div class="ai-ctx-row" id="ai-ctx-row">
             <div class="ai-ctx-item"><span class="ai-ctx-lbl">GA4 хэрэглэгч</span><span class="ai-ctx-val">308/сар</span></div>
+            <div class="ai-ctx-item"><span class="ai-ctx-lbl">Lite бүртгэл</span><span class="ai-ctx-val" id="ai-ctx-lite">—</span></div>
             <div class="ai-ctx-item"><span class="ai-ctx-lbl">Lite дарна</span><span class="ai-ctx-val" style="color:var(--green)">74.7%</span></div>
             <div class="ai-ctx-item"><span class="ai-ctx-lbl">Lead capture</span><span class="ai-ctx-val" style="color:var(--red)">0%</span></div>
             <div class="ai-ctx-item"><span class="ai-ctx-lbl">Идэвхтэй гишүүд</span><span class="ai-ctx-val" id="ai-ctx-members">—</span></div>
@@ -2294,6 +2295,30 @@ html.theme-tr .pipe-table tbody tr{
         <div class="ai-resp-card" id="ai-resp-card">
           <div class="ai-section-lbl">AI шинжилгээ</div>
           <div class="ai-resp-inner" id="ai-resp-inner"></div>
+        </div>
+
+        <!-- AI → Kanban tasks -->
+        <div id="ai-tasks-box" style="display:none;margin-bottom:16px">
+          <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">
+            📋 Kanban-д нэмэх — тус тусдаа нэмнэ
+          </div>
+          <div id="ai-tasks-list" style="display:flex;flex-direction:column;gap:8px"></div>
+        </div>
+
+        <!-- Sheets save button -->
+        <div id="sheets-save-box" style="display:none;margin-bottom:12px">
+          <button onclick="saveAnalysisToSheets()" id="sheets-save-btn"
+            style="padding:8px 16px;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;font-size:12px;font-weight:600;color:var(--text2);font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s">
+            📊 Sheets-д хадгалах
+          </button>
+        </div>
+
+        <!-- Save to Sheets button -->
+        <div style="margin-bottom:10px;display:flex;gap:8px;align-items:center">
+          <button id="ai-save-sheets-btn" onclick="saveAIToSheets()" style="display:none;align-items:center;gap:6px;padding:8px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:600;color:var(--text2);font-family:inherit;cursor:pointer;transition:all .15s">
+            📊 Sheets-д хадгалах
+          </button>
+          <span id="ai-sheets-status" style="font-size:12px;color:var(--green);display:none"></span>
         </div>
 
         <!-- Calendar confirm box -->
@@ -3327,6 +3352,9 @@ var PAGE_IDX={kanban:0,drops:1,content:2,analytics:3,users:4,admin:5,focus:6,fin
 function showPage(name,sidebarEl){
   PAGES.forEach(function(p){document.getElementById('page-'+p).classList.remove('active');});
   document.getElementById('page-'+name).classList.add('active');
+  // Scroll to top when switching pages (prevents ghost content on mobile)
+  var contentEl=document.querySelector('.content');
+  if(contentEl) contentEl.scrollTop=0;
   // Sidebar sync
   var nis=document.querySelectorAll('.ni');
   nis.forEach(function(n){n.classList.remove('active');});
@@ -5143,7 +5171,7 @@ function closeMobSidebar(){
 function mobNav(page){
   closeMobSidebar();
   showPage(page,null);
-  var pageOrder=['kanban','drops','content','analytics','users','admin','focus','finance','checkin','roadmap'];
+  var pageOrder=['kanban','drops','content','analytics','users','admin','focus','finance','checkin','roadmap','ai'];
   document.querySelectorAll('.mob-nav-item').forEach(function(el,i){
     el.classList.toggle('active', pageOrder[i]===page);
   });
@@ -5650,17 +5678,51 @@ function _renderCntCal(){
 
 /* ── REVENUE CHART ── */
 var _revChartMode='week';
-// Seeded pseudo-random so data stays stable across re-renders
-function _seededRand(seed){var x=Math.sin(seed+1)*10000;return x-Math.floor(x);}
 var _revChartCache={};
+var _dailyRevData={}; // Sheets-аас ирсэн бодит өгөгдөл {YYYY-MM-DD: amount}
+
+// GAS-аас бодит dailyRevenue ачаалах
+async function loadDailyRevenue(){
+  var gasUrl = GAS_URL();
+  if(!gasUrl || gasUrl.indexOf('script.google.com') === -1) return;
+  try{
+    var r=await fetch(gasUrl+'?action=getStats');
+    if(!r.ok) return;
+    var d=await r.json();
+    if(d.dailyRevenue) _dailyRevData=d.dailyRevenue;
+    if(d.liteRegistrations!==undefined){
+      var el=document.getElementById('ai-ctx-lite');
+      if(el) el.textContent=d.liteRegistrations+' бүртгэл';
+    }
+    _revChartCache={};
+    renderRevChart();
+  }catch(e){ /* Network unavailable — chart shows empty data */ }
+}
+
+// AI context-аас dailyRevenue шинэчлэх (давхар fetch хийхгүй)
+function updateDailyRevFromStats(statsData){
+  if(!statsData) return;
+  if(statsData.dailyRevenue) _dailyRevData=statsData.dailyRevenue;
+  if(statsData.liteRegistrations!==undefined){
+    var el=document.getElementById('ai-ctx-lite');
+    if(el) el.textContent=statsData.liteRegistrations+' бүртгэл';
+  }
+  _revChartCache={};
+  renderRevChart();
+}
+
+function _getDayRev(dateObj){
+  var k=dateObj.getFullYear()+'-'+String(dateObj.getMonth()+1).padStart(2,'0')+'-'+String(dateObj.getDate()).padStart(2,'0');
+  return _dailyRevData[k]||0;
+}
+
 var _revChartData={
   week:function(){
     if(_revChartCache.week)return _revChartCache.week.map(function(d){return{lbl:d.lbl,val:d.val};});
     var days=[]; var now=new Date();
     for(var i=6;i>=0;i--){
       var d=new Date(now);d.setDate(now.getDate()-i);
-      var seed=d.getFullYear()*10000+d.getMonth()*100+d.getDate();
-      days.push({lbl:(d.getMonth()+1)+'/'+(d.getDate()),val:Math.round(_seededRand(seed)*180000+50000)});
+      days.push({lbl:(d.getMonth()+1)+'/'+(d.getDate()),val:_getDayRev(d)});
     }
     _revChartCache.week=days;
     return days.map(function(d){return{lbl:d.lbl,val:d.val};});
@@ -5670,8 +5732,13 @@ var _revChartData={
     var months=['1сар','2сар','3сар','4сар','5сар','6сар','7сар','8сар','9сар','10сар','11сар','12сар'];
     var now=new Date(); var result=[];
     for(var i=3;i>=0;i--){
-      var idx=(now.getMonth()-i+12)%12;
-      result.push({lbl:months[idx],val:Math.round(_seededRand(idx*37+now.getFullYear())*400000+100000)});
+      var d2=new Date(now.getFullYear(),now.getMonth()-i,1);
+      var monthTotal=0;
+      Object.keys(_dailyRevData).forEach(function(k){
+        var kd=new Date(k);
+        if(kd.getFullYear()===d2.getFullYear()&&kd.getMonth()===d2.getMonth()) monthTotal+=_dailyRevData[k];
+      });
+      result.push({lbl:months[(now.getMonth()-i+12)%12],val:monthTotal});
     }
     _revChartCache.month=result;
     return result.map(function(d){return{lbl:d.lbl,val:d.val};});
@@ -5681,8 +5748,13 @@ var _revChartData={
     var months=['1с','2с','3с','4с','5с','6с','7с','8с','9с','10с','11с','12с'];
     var now=new Date(); var result=[];
     for(var i=5;i>=0;i--){
-      var idx=(now.getMonth()-i+12)%12;
-      result.push({lbl:months[idx],val:Math.round(_seededRand(idx*53+now.getFullYear())*600000+200000)});
+      var d3=new Date(now.getFullYear(),now.getMonth()-i,1);
+      var m6Total=0;
+      Object.keys(_dailyRevData).forEach(function(k){
+        var kd=new Date(k);
+        if(kd.getFullYear()===d3.getFullYear()&&kd.getMonth()===d3.getMonth()) m6Total+=_dailyRevData[k];
+      });
+      result.push({lbl:months[(now.getMonth()-i+12)%12],val:m6Total});
     }
     _revChartCache['6mo']=result;
     return result.map(function(d){return{lbl:d.lbl,val:d.val};});
@@ -6453,9 +6525,8 @@ function exportCSV(type){
   /* Spin animation for PTR */
   '@keyframes spin{to{transform:rotate(360deg)}}'+
   /* Page transition */
-  '.page{transition:opacity .18s ease;}'+
-  '.page:not(.active){opacity:0;pointer-events:none;}'+
-  '.page.active{opacity:1;}'+
+  '.page{display:none;}'+
+  '.page.active{display:block;}'+
   /* Active touch states */
   '.fab-main:active{transform:scale(0.94);}'+
   '.mbn-item:active{opacity:.7;}'+
@@ -8504,6 +8575,9 @@ function injectReminderBtns(){
       set('ai-ctx-pending',  (s.pendingCount||0)  + ' хүн', s.pendingCount > 0);
       set('ai-ctx-new',      (s.newThisMonth||0)  + ' шинэ');
 
+      // Chart-г бодит өгөгдлөөр шинэчлэх (давхар fetch хийхгүй)
+      if(typeof updateDailyRevFromStats === 'function') updateDailyRevFromStats(s);
+
       renderContextEditor(ctx);
 
       return {
@@ -8527,18 +8601,31 @@ function injectReminderBtns(){
     var wrap = document.getElementById('ai-ctx-editor');
     if(!wrap) return;
     var done = ctx.done || [], todo = ctx.todo || [];
-    var html = '<div class="ai-section-lbl" style="margin-top:0">✅ Хийгдсэн <span style="color:var(--text4);font-weight:400">— дарж TODO болгоно</span></div>';
+    var html = '';
+    // TODO section — always visible
+    html += '<div class="ai-section-lbl" style="margin-top:0">❌ Хийгдэх <span style="color:var(--text4);font-weight:400">— дарж DONE болгоно</span></div>';
+    if(todo.length === 0){
+      html += '<div style="font-size:12px;color:var(--text3);padding:8px 10px">Хийгдэх ажил байхгүй 🎉</div>';
+    } else {
+      todo.forEach(function(x){
+        html += '<div class="ctx-row ctx-todo" data-row="'+x.row+'" data-status="TODO" onclick="toggleCtx(this)">'
+          + '<span class="ctx-check">⬜</span><span class="ctx-item">'+x.item+'</span>'
+          + '<span class="ctx-cat">'+x.category+'</span></div>';
+      });
+    }
+        // DONE section — collapsed by default
+    var doneId = 'done-list-' + Date.now();
+    html += '<div style="margin-top:12px">'
+      + '<button onclick="var d=document.getElementById(\'' + doneId + '\');d.style.display=d.style.display===\'none\'?\'block\':\'none\';this.innerHTML=d.style.display===\'none\'?\'▶ Хийгдсэн (' + done.length + ')\' : \'▼ Хийгдсэн (' + done.length + ')\'" '
+      + 'style="background:none;border:none;font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;font-family:inherit;padding:0;text-transform:uppercase;letter-spacing:.5px">'
+      + '▶ Хийгдсэн (' + done.length + ')</button>'
+      + '<div id="' + doneId + '" style="display:none;margin-top:6px">';
     done.forEach(function(x){
       html += '<div class="ctx-row ctx-done" data-row="'+x.row+'" data-status="DONE" onclick="toggleCtx(this)">'
         + '<span class="ctx-check">✅</span><span class="ctx-item">'+x.item+'</span>'
         + '<span class="ctx-cat">'+x.category+'</span></div>';
     });
-    html += '<div class="ai-section-lbl" style="margin-top:14px">❌ Хийгдэх <span style="color:var(--text4);font-weight:400">— дарж DONE болгоно</span></div>';
-    todo.forEach(function(x){
-      html += '<div class="ctx-row ctx-todo" data-row="'+x.row+'" data-status="TODO" onclick="toggleCtx(this)">'
-        + '<span class="ctx-check">⬜</span><span class="ctx-item">'+x.item+'</span>'
-        + '<span class="ctx-cat">'+x.category+'</span></div>';
-    });
+    html += '</div></div>';
     html += '<div style="display:flex;gap:8px;margin-top:12px">'
       + '<input id="ctx-new-inp" class="ai-custom-ta" style="min-height:0;padding:8px 12px;flex:1;font-size:12px" placeholder="Шинэ зүйл нэмэх...">'
       + '<button class="ai-ask-btn" onclick="addCtxItem()" style="white-space:nowrap">+ Нэмэх</button></div>';
@@ -8614,6 +8701,8 @@ function injectReminderBtns(){
     btn.innerHTML = '<div class="ai-spinner"></div><span>Шинжилж байна...</span>';
     card.classList.add('show');
     inner.innerHTML = '<div class="ai-loading"><div class="ai-spinner"></div><span>Өгөгдөл татаж байна...</span></div>';
+    var _tb=document.getElementById('ai-tasks-box'); if(_tb) _tb.style.display='none';
+    var _cb=document.getElementById('cal-confirm-box'); if(_cb) _cb.style.display='none';
 
     try {
       var stats = await loadAIContext();
@@ -8627,6 +8716,10 @@ function injectReminderBtns(){
     .replace(/^## (.+)$/gm,'<br><strong style="font-size:14px">$1</strong>')
     .replace(/^- (.+)$/gm,'&nbsp;&nbsp;· $1')
     .replace(/\n/g,'<br>');
+
+      // Show Sheets save button
+      document.getElementById('sheets-save-box').style.display = 'block';
+      window._lastAnalysisText = text;
 
       // Calendar confirm box populate
       (function(){
@@ -8649,11 +8742,173 @@ function injectReminderBtns(){
         window._calDesc = text.substring(0, 300);
         document.getElementById('cal-confirm-box').style.display = 'block';
       })();
+      // Parse AI text into individual kanban tasks (window scope)
+      if(typeof window.showAITasks === 'function') window.showAITasks(text);
+      // Show save-to-sheets button
+      var saveBtn = document.getElementById('ai-save-sheets-btn');
+      if(saveBtn){ saveBtn.style.display='inline-flex'; saveBtn.disabled=false; saveBtn.textContent='📊 Sheets-д хадгалах'; }
     } catch(e) {
       inner.textContent = '⚠️ Алдаа гарлаа: ' + e.message;
     }
     btn.disabled = false;
     btn.innerHTML = '<span>Дахин шинжлэх</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+  };
+
+  window.saveAnalysisToSheets = async function(){
+    var btn = document.getElementById('sheets-save-btn');
+    var text = window._lastAnalysisText || '';
+    if(!text){ if(typeof toast==='function') toast('⚠️ Шинжилгээ байхгүй'); return; }
+    btn.textContent = '...'; btn.style.opacity = '0.6';
+    function safeEnc(s){ try{return encodeURIComponent(String(s||''));}catch(e){return encodeURIComponent(String(s||'').replace(/[^\x00-\x7F\u0400-\u04FF]/g,''));} }
+    try {
+      var today = new Date().toLocaleDateString('mn-MN');
+      var url = GAS_URL() + '?action=saveAnalysis&date=' + safeEnc(today) + '&text=' + safeEnc(text.substring(0,800));
+      var res = await fetch(url);
+      var data = await res.json();
+      if(data.ok){
+        btn.textContent = '✓ Хадгалагдлаа';
+        btn.style.background = 'rgba(52,199,89,0.1)';
+        btn.style.borderColor = 'rgba(52,199,89,0.3)';
+        btn.style.color = 'var(--green)';
+        if(typeof toast==='function') toast('📊 Sheets-д хадгалагдлаа!');
+      } else {
+        btn.textContent = '📊 Sheets-д хадгалах';
+        btn.style.opacity = '1';
+        if(typeof toast==='function') toast('⚠️ ' + (data.msg||'Алдаа'));
+      }
+    } catch(e) {
+      btn.textContent = '📊 Sheets-д хадгалах';
+      btn.style.opacity = '1';
+      if(typeof toast==='function') toast('⚠️ ' + e.message);
+    }
+  };
+
+  // ── AI → Kanban task parser ─────────────────────────────
+  window.parseAITasks = function(text){
+    var tasks = [];
+    // Match lines starting with 🔴 🟡 🟢 📌 ### or numbered
+    var lines = text.split('\n');
+    lines.forEach(function(line){
+      line = line.trim();
+      if(!line) return;
+      // Priority icons
+      var p = 'me'; // default
+      if(line.match(/^🔴/)) p = 'urgent';
+      else if(line.match(/^🟡/)) p = 'mid';
+      else if(line.match(/^🟢/)) p = 'me';
+      else if(line.match(/^📌/)) p = 'me';
+      else if(line.match(/^###/)) p = 'me';
+      else return; // skip non-task lines
+
+      // Clean the line
+      var name = line
+        .replace(/^[🔴🟡🟢📌#\s]+/,'')
+        .replace(/^\d+\.\s*/,'')
+        .replace(/\*\*/g,'')
+        .replace(/ЯАРАЛТАЙ\s*:?\s*/,'')
+        .replace(/АНХААРУУЛГА\s*:?\s*/,'')
+        .replace(/ЭНЭ 7 ХОНОГТ\s*:?\s*/,'')
+        .replace(/ТОО\s*:?\s*/,'')
+        .trim();
+
+      if(name.length > 5 && name.length < 120){
+        tasks.push({ name: name, p: p });
+      }
+    });
+    return tasks;
+  }
+
+  window.showAITasks = function(text){
+    var parsed = window.parseAITasks(text);
+    var box = document.getElementById('ai-tasks-box');
+    var list = document.getElementById('ai-tasks-list');
+    if(!box || !list || parsed.length === 0) return;
+
+    list.innerHTML = '';
+    parsed.forEach(function(task, idx){
+      var priLabel = task.p === 'urgent' ? '🔴 Яаралтай' : task.p === 'mid' ? '🟡 Дундаж' : '🟢 Энгийн';
+      var priColor = task.p === 'urgent' ? 'var(--red)' : task.p === 'mid' ? 'var(--amber)' : 'var(--green)';
+      var card = document.createElement('div');
+      card.id = 'ai-task-card-' + idx;
+      card.style.cssText = 'background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px;';
+      card.innerHTML =
+        '<div style="flex:1;min-width:0">' +
+          '<div style="font-size:11px;font-weight:700;color:' + priColor + ';margin-bottom:3px">' + priLabel + '</div>' +
+          '<div style="font-size:13px;color:var(--text);font-weight:600;line-height:1.4;word-break:break-word">' + task.name.replace(/</g,'&lt;') + '</div>' +
+        '</div>' +
+        '<button onclick="addAITaskToKanban(' + idx + ')" ' +
+          'style="flex-shrink:0;padding:7px 14px;background:var(--text);color:var(--bg);border:none;border-radius:7px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;transition:all .15s">' +
+          '+ Нэмэх' +
+        '</button>';
+      list.appendChild(card);
+    });
+
+    window._aiParsedTasks = parsed;
+    box.style.display = 'block';
+  }
+
+  window.addAITaskToKanban = function(idx){
+    var task = (window._aiParsedTasks || [])[idx];
+    if(!task) return;
+    var btn = document.querySelector('#ai-task-card-' + idx + ' button');
+
+    // Map priority
+    var priMap = { urgent: 'urgent', mid: 'mid', me: 'me' };
+    var newTask = {
+      id: (typeof nid !== 'undefined' ? nid++ : Date.now()),
+      name: task.name,
+      sub: 'AI-аас нэмэгдсэн',
+      p: priMap[task.p] || 'me',
+      status: 'todo',
+      due: '',
+      prog: 0,
+      stages: []
+    };
+
+    if(typeof tasks !== 'undefined'){
+      tasks.push(newTask);
+      if(typeof saveAll === 'function') saveAll();
+      if(typeof render === 'function') render();
+    }
+
+    // Visual feedback
+    if(btn){
+      btn.textContent = '✓ Нэмэгдлээ';
+      btn.style.background = 'var(--green)';
+      btn.disabled = true;
+    }
+    if(typeof toast === 'function') toast('✓ "' + task.name.substring(0,30) + '" Kanban-д нэмэгдлээ!');
+
+    // Supabase sync
+    if(typeof sbTaskInsert === 'function'){
+      sbTaskInsert(newTask).then(function(row){
+        if(row && row.id){ newTask.id = row.id; if(typeof saveAll==='function') saveAll(); }
+      }).catch(function(){});
+    }
+  };
+
+  window.saveAIToSheets = async function(){
+    var btn = document.getElementById('ai-save-sheets-btn');
+    var status = document.getElementById('ai-sheets-status');
+    var text = window._calDesc || '';
+    if(!text.trim()){ if(typeof toast==='function') toast('⚠️ Эхлээд шинжилгээ авна уу'); return; }
+    btn.disabled = true; btn.textContent = '...';
+    try {
+      var res = await fetch(GAS_URL() + '?action=saveAILog&text=' + encodeURIComponent(text.substring(0,500)));
+      var data = await res.json();
+      if(data.ok){
+        status.textContent = '✓ Sheets-д хадгалагдлаа';
+        status.style.display = 'inline';
+        btn.textContent = '✓ Хадгалагдлаа';
+        if(typeof toast==='function') toast('📊 Sheets-д хадгалагдлаа!');
+      } else {
+        btn.disabled = false; btn.textContent = '📊 Sheets-д хадгалах';
+        if(typeof toast==='function') toast('⚠️ ' + (data.msg||'Алдаа'));
+      }
+    } catch(e) {
+      btn.disabled = false; btn.textContent = '📊 Sheets-д хадгалах';
+      if(typeof toast==='function') toast('⚠️ Алдаа: ' + e.message);
+    }
   };
 
   window.calendarAddConfirm = async function(){
@@ -8667,13 +8922,14 @@ function injectReminderBtns(){
     var sH = start.split(':')[0], sM = start.split(':')[1]||'00';
     var eH = end.split(':')[0],   eM = end.split(':')[1]||'00';
     btn.disabled = true; btn.textContent = '...';
+    function safeEnc(s){ try{return encodeURIComponent(String(s||''));}catch(e){return String(s||'').replace(/[^\x20-\x7E]/g,'');} }
     try {
       var url = GAS_URL() + '?action=addToCalendar'
-        + '&title='  + encodeURIComponent(title)
-        + '&date='   + encodeURIComponent(date)
+        + '&title='  + safeEnc(title)
+        + '&date='   + safeEnc(date)
         + '&startH=' + sH + '&startM=' + sM
         + '&endH='   + eH + '&endM='   + eM
-        + '&desc='   + encodeURIComponent((window._calDesc||'').substring(0,200));
+        ;
       var res  = await fetch(url);
       var data = await res.json();
       if(data.ok){
@@ -8726,11 +8982,8 @@ function injectReminderBtns(){
   };
 
   // AI page-д орох үед автоматаар context ачаална
-  var _origSP2 = window.showPage;
-  window.showPage = function(p, el){
-    if(_origSP2) _origSP2(p, el);
-    if(p === 'ai') setTimeout(loadAIContext, 100);
-  };
+  // (showPage override is handled in the main boot section below)
+  window._aiPageCallback = function(){ setTimeout(loadAIContext, 100); };
 })();
 // ─────────────────────────────────────────────────────
 function addSwipe(){
@@ -8801,12 +9054,13 @@ if(kb){
   }).observe(kb,{childList:true,subtree:true});
 }
 
-// Override showPage
+// Override showPage — single unified override
 var _oSP=window.showPage;
 window.showPage=function(p,el){
   if(_oSP)_oSP(p,el);
   if(p==='analytics')setTimeout(function(){injectForecastChart();drawForecastChart();},120);
   if(p==='kanban')setTimeout(function(){runInjections();injectGoalWidget();refreshGoalWidget();},120);
+  if(p==='ai'&&typeof window._aiPageCallback==='function') window._aiPageCallback();
 };
 
 // Override render
@@ -8830,6 +9084,7 @@ setTimeout(function(){
     sb.appendChild(badge);
   }
   if(typeof toast==='function')toast('🚀 ProductDrop v2.0 идэвхжлээ!');
+  setTimeout(loadDailyRevenue, 1500);
 },1200);
 
 })();
