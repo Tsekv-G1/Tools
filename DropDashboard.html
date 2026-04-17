@@ -327,8 +327,9 @@ body{
 .tpv{font-size:11px;color:var(--text2);font-weight:700;margin-left:auto;}
 .ttrack{height:5px;background:var(--bg4);border-radius:99px;overflow:hidden;margin-bottom:9px;}
 .tfill{height:100%;border-radius:99px;transition:width .4s ease;}
-.tdue{font-size:11px;color:var(--text3);margin-bottom:9px;display:flex;align-items:center;gap:4px;font-weight:500;}
-.tdue svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;}
+.tdue{font-size:11px;color:var(--text3);margin-bottom:9px;display:flex;align-items:center;gap:5px;font-weight:500;}
+.tdue svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;}
+.tdue-badge{padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;line-height:1.6;}
 .tfoot{display:flex;align-items:center;gap:5px;}
 .ssel{flex:1;font-size:10px;border:1px solid var(--border2);border-radius:8px;padding:4px 7px;background:var(--bg4);color:var(--text2);cursor:pointer;font-family:inherit;outline:none;transition:border-color .15s;font-weight:600;appearance:none;-webkit-appearance:none;}
 .ssel:hover,.ssel:focus{border-color:var(--blue);}
@@ -436,7 +437,7 @@ select.fi3{appearance:none;-webkit-appearance:none;}
 .btn-del:hover{background:var(--redbg);color:var(--red);}
 
 /* MODAL */
-.moverlay{position:fixed;inset:0;background:rgba(0,0,0,0.32);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:center;z-index:9999;}
+.moverlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:9999;}
 .mbox{background:var(--bg2);border:1px solid var(--border2);border-radius:22px;padding:28px;width:480px;max-width:96vw;box-shadow:0 40px 80px rgba(0,0,0,0.15);animation:aup .22s cubic-bezier(.25,.46,.45,.94);}
 @keyframes aup{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
 .mbox h2{font-size:18px;font-weight:800;margin-bottom:20px;color:var(--text);letter-spacing:-.3px;}
@@ -520,7 +521,7 @@ select.fi3{appearance:none;-webkit-appearance:none;}
 .cnt-sr{background:var(--amberbg);color:var(--amber);}
 .cnt-sp{background:var(--greenbg);color:var(--green);}
 /* CONTENT SIDE PANEL */
-.cnt-overlay{position:fixed;inset:0;background:rgba(0,0,0,.28);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:8000;display:none;}
+.cnt-overlay{position:fixed;inset:0;background:rgba(0,0,0,.28);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:8000;display:none;}
 .cnt-overlay.open{display:block;}
 .cnt-panel{position:fixed;top:0;right:0;bottom:0;width:520px;max-width:98vw;background:var(--bg2);border-left:1px solid var(--border2);z-index:8001;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 40px rgba(0,0,0,.12);}
 .cnt-panel.open{transform:translateX(0);}
@@ -618,6 +619,17 @@ html.theme-tr .pipe-table tbody tr{
 /* ══ TOAST REDESIGN ══ */
 .toast{position:fixed;bottom:24px;right:24px;background:var(--text);color:#fff;border-radius:14px;padding:12px 18px 12px 14px;font-size:13px;font-weight:600;box-shadow:0 8px 32px rgba(0,0,0,0.28);z-index:99999;animation:toastIn .28s cubic-bezier(.34,1.56,.64,1);pointer-events:none;display:flex;align-items:center;gap:10px;max-width:320px;line-height:1.4;}
 [data-theme="dark"] .toast{background:var(--bg2);border:1px solid var(--border2);}
+/* ── Dark mode: Calendar widget ── */
+[data-theme="dark"] #dash-cal-wrap{border-color:rgba(255,255,255,0.09);}
+[data-theme="dark"] #dcal-title,
+[data-theme="dark"] #dcal-date,
+[data-theme="dark"] #dcal-start,
+[data-theme="dark"] #dcal-end{
+  background:rgba(255,255,255,0.06)!important;
+  border-color:rgba(255,255,255,0.11)!important;
+  color:var(--text)!important;
+  color-scheme:dark;
+}
 .toast-icon{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
 .toast.toast-ok{background:var(--green);}
 .toast.toast-err{background:var(--red);}
@@ -831,6 +843,21 @@ html.theme-tr .pipe-table tbody tr{
   #cal-confirm-box input[type="time"]{font-size:16px;} /* Prevent iOS zoom */
   #cal-confirm-box > div[style*="flex"]{flex-direction:column;}
   #cal-yes-btn{width:100%;padding:12px;font-size:14px;}
+}
+
+/* ── Very small screens (≤375px) ── */
+@media(max-width:375px){
+  .stats{gap:5px;}
+  .scard{padding:9px 8px;}
+  .sc-val{font-size:15px;}
+  .sc-label{font-size:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .sc-icon{width:24px;height:24px;font-size:11px;}
+  .greet h1{font-size:15px;}
+  .greet p{font-size:11px;}
+  .content{padding:8px;padding-bottom:72px;}
+  #dash-cal-wrap{margin-bottom:12px;}
+  #dcal-title,#dcal-date,#dcal-start,#dcal-end{padding:7px 10px!important;font-size:12px!important;}
+  .tdue-badge{font-size:9px;padding:1px 6px;}
 }
 .mob-menu-btn{display:none;width:36px;height:36px;border-radius:10px;border:1px solid var(--border2);background:var(--bg4);cursor:pointer;align-items:center;justify-content:center;color:var(--text2);}
 .mob-menu-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;}
@@ -1294,6 +1321,53 @@ html.theme-tr .pipe-table tbody tr{
         <div class="scard"><div class="sc-icon" style="background:var(--amberbg);"><svg viewBox="0 0 24 24" stroke="var(--amber)"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div><div class="sc-label">Хянагдаж байна</div><div class="sc-val" id="st-rv" style="color:var(--amber);">0</div><div class="sc-sub">Хяналтад</div></div>
         <div class="scard"><div class="sc-icon" style="background:var(--greenbg);"><svg viewBox="0 0 24 24" stroke="var(--green)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="sc-label">Дуусгасан</div><div class="sc-val" id="st-dn" style="color:var(--green);">0</div><div class="sc-sub">Амжилттай</div></div>
       </div>
+
+      <!-- ── GOOGLE CALENDAR DIRECT ADD ── -->
+      <div id="dash-cal-wrap" style="margin-bottom:18px;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);">
+        <!-- Header — always visible, click to toggle body -->
+        <div onclick="(function(){var b=document.getElementById('dash-cal-body');var a=document.getElementById('dash-cal-arrow');if(b.style.display==='none'){b.style.display='block';a.style.transform='rotate(180deg)';}else{b.style.display='none';a.style.transform='rotate(0deg)';}})();"
+          style="display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;user-select:none;">
+          <div style="width:32px;height:32px;border-radius:10px;background:rgba(0,122,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" style="width:16px;height:16px;"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+          </div>
+          <span style="font-size:13px;font-weight:700;color:var(--text);flex:1;">📅 Google Calendar-д нэмэх</span>
+          <svg id="dash-cal-arrow" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2.5" style="width:14px;height:14px;transition:transform .2s;transform:rotate(180deg);flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <!-- Body — open by default -->
+        <div id="dash-cal-body" style="padding:0 16px 16px;border-top:1px solid var(--border);">
+          <div style="height:12px;"></div>
+          <!-- Title -->
+          <div style="margin-bottom:10px;">
+            <label style="font-size:11px;font-weight:700;color:var(--text3);display:block;margin-bottom:4px;">Ажлын нэр</label>
+            <input id="dcal-title" type="text" placeholder="Жишээ: ProductDrop content хийх" style="width:100%;background:var(--bg3);border:1.5px solid var(--border2);border-radius:9px;padding:9px 12px;font-size:13px;font-family:inherit;color:var(--text);outline:none;transition:border-color .15s;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border2)'">
+          </div>
+          <!-- Date + Time row -->
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+            <div style="flex:1.5;min-width:130px;">
+              <label style="font-size:11px;font-weight:700;color:var(--text3);display:block;margin-bottom:4px;">Огноо</label>
+              <input id="dcal-date" type="date" style="width:100%;background:var(--bg3);border:1.5px solid var(--border2);border-radius:9px;padding:9px 12px;font-size:13px;font-family:inherit;color:var(--text);outline:none;transition:border-color .15s;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border2)'">
+            </div>
+            <div style="flex:1;min-width:100px;">
+              <label style="font-size:11px;font-weight:700;color:var(--text3);display:block;margin-bottom:4px;">Эхлэх</label>
+              <input id="dcal-start" type="time" value="09:00" style="width:100%;background:var(--bg3);border:1.5px solid var(--border2);border-radius:9px;padding:9px 12px;font-size:13px;font-family:inherit;color:var(--text);outline:none;transition:border-color .15s;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border2)'">
+            </div>
+            <div style="flex:1;min-width:100px;">
+              <label style="font-size:11px;font-weight:700;color:var(--text3);display:block;margin-bottom:4px;">Дуусах</label>
+              <input id="dcal-end" type="time" value="10:00" style="width:100%;background:var(--bg3);border:1.5px solid var(--border2);border-radius:9px;padding:9px 12px;font-size:13px;font-family:inherit;color:var(--text);outline:none;transition:border-color .15s;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border2)'">
+            </div>
+          </div>
+          <!-- Buttons -->
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button id="dcal-submit-btn" onclick="dashCalAdd()" style="padding:9px 22px;background:var(--blue);color:#fff;border:none;border-radius:9px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;gap:6px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px;"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+              Calendar-д нэмэх
+            </button>
+            <button onclick="(function(){document.getElementById('dcal-title').value='';document.getElementById('dcal-date').value='';document.getElementById('dcal-start').value='09:00';document.getElementById('dcal-end').value='10:00';document.getElementById('dcal-status').style.display='none';})()" style="padding:9px 14px;background:transparent;border:1.5px solid var(--border2);border-radius:9px;font-size:12px;color:var(--text3);font-family:inherit;cursor:pointer;">Цэвэрлэх</button>
+            <span id="dcal-status" style="font-size:12px;color:var(--green);display:none;margin-left:4px;font-weight:600;"></span>
+          </div>
+        </div>
+      </div>
+
       <div class="sh"><span class="sh-t">Хурдан нэвтрэх</span><span class="sh-l" onclick="openAddLink()">+ Нэмэх</span></div>
       <div class="fgrid" id="fgrid"></div>
       <div class="vbar">
@@ -2262,6 +2336,50 @@ html.theme-tr .pipe-table tbody tr{
         .ai-hist-q{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:7px}
         .ai-hist-a{font-size:12px;color:var(--text);line-height:1.7;white-space:pre-wrap}
         .ai-hist-ts{font-size:10px;color:var(--text4);margin-top:6px}
+        /* ── AI page: Mobile fixes ── */
+        @media(max-width:768px){
+          .ai-wrap{padding:12px 12px 90px;}
+          .ai-custom-wrap{padding:12px 14px;}
+          .ai-ctx-card{padding:12px 14px;}
+          /* iOS zoom prevention — font-size must be ≥16px on inputs */
+          .ai-custom-ta,
+          #ai-cp-focus,
+          #ai-pr-input,
+          #ctx-new-inp{font-size:16px!important;}
+          /* Larger touch targets */
+          .ai-ask-btn{min-height:44px;padding:10px 18px;font-size:14px;width:100%;}
+          .ai-run-btn{min-height:50px;font-size:15px;}
+          /* Stack input+button rows vertically */
+          #ai-content-plan-wrap > div[style*="flex"],
+          #ai-prod-research-wrap > div[style*="flex"]{flex-direction:column!important;}
+          #ai-cp-focus,#ai-pr-input{width:100%!important;min-width:unset!important;}
+          #ai-cp-btn,#ai-pr-btn{width:100%!important;min-height:44px;}
+          /* Context items: 2-column grid on small screens */
+          .ai-ctx-row{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+          .ai-ctx-item{min-width:unset;}
+          /* Prevent horizontal scroll in response */
+          .ai-resp-inner,.ai-hist-a,.ai-cp-text,.ai-pr-text{
+            word-break:break-word;overflow-wrap:break-word;
+            white-space:pre-wrap;overflow-x:hidden;}
+          /* Calendar inputs stacked */
+          #cal-confirm-box > div[style*="flex"]{flex-direction:column!important;gap:8px!important;}
+          #cal-date-input,#cal-start-input,#cal-end-input,#cal-title-input{
+            font-size:16px!important;width:100%!important;}
+          #cal-yes-btn{width:100%;min-height:44px;}
+          /* Context editor new item row */
+          #ctx-new-wrap{flex-direction:column!important;gap:8px!important;}
+          #ctx-new-inp{font-size:16px!important;width:100%!important;}
+          /* History items */
+          .ai-hist-item{padding:11px 12px;}
+          /* Sheets save buttons */
+          #sheets-save-btn,#ai-save-sheets-btn{width:100%;justify-content:center;min-height:40px;}
+        }
+        @media(max-width:375px){
+          .ai-ctx-row{grid-template-columns:repeat(2,1fr);gap:6px;}
+          .ai-ctx-item{padding:6px 8px;}
+          .ai-ctx-val{font-size:13px;}
+          .ai-header h1{font-size:17px;}
+        }
       </style>
       <div class="ai-wrap">
         <div class="ai-header">
@@ -2367,6 +2485,46 @@ html.theme-tr .pipe-table tbody tr{
           <div class="ai-section-lbl">Өөрийн асуулт</div>
           <textarea class="ai-custom-ta" id="ai-custom-q" placeholder="Жишээ: Энэ долоо хоногт юуг эхлэх вэ? / Lead capture-г яаж засах вэ?"></textarea>
           <button class="ai-ask-btn" id="ai-ask-btn" onclick="runAICustom()">Асуух ↗</button>
+        </div>
+
+        <!-- ── CONTENT PLAN ─────────────────────────────────── -->
+        <div class="ai-custom-wrap" style="margin-top:16px" id="ai-content-plan-wrap">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div class="ai-section-lbl" style="margin-bottom:0">📅 Сарын контент план</div>
+            <span style="font-size:10px;color:var(--text4);background:var(--bg4);padding:2px 8px;border-radius:6px;font-weight:600;">AI</span>
+          </div>
+          <p style="font-size:12px;color:var(--text3);margin:0 0 12px;line-height:1.6;">4 долоо хоног × 5 пост = 20 пост. TOFU/MOFU/BOFU харьцаа, hook санааг багтаана.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+            <input id="ai-cp-focus" type="text" placeholder="Онцлох сэдэв (заавал биш): Жишээ: Эхлэгчдэд" class="ai-custom-ta" style="min-height:unset;height:36px;padding:6px 12px;resize:none;flex:1;min-width:160px;margin:0;">
+            <button class="ai-ask-btn" id="ai-cp-btn" onclick="runContentPlan()" style="white-space:nowrap;">📅 План гарга</button>
+          </div>
+          <div id="ai-cp-resp" style="display:none;background:var(--bg3);border-radius:10px;padding:14px;margin-top:8px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;" id="ai-cp-month"></span>
+              <button onclick="copyContentPlan()" style="padding:3px 10px;background:var(--bg4);border:1px solid var(--border2);border-radius:6px;font-size:11px;color:var(--text2);cursor:pointer;font-family:inherit;">📋 Хуулах</button>
+            </div>
+            <div id="ai-cp-text" style="font-size:12px;color:var(--text);line-height:1.8;white-space:pre-wrap;max-height:420px;overflow-y:auto;"></div>
+          </div>
+        </div>
+
+        <!-- ── PRODUCT RESEARCH ───────────────────────────── -->
+        <div class="ai-custom-wrap" style="margin-top:16px" id="ai-prod-research-wrap">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div class="ai-section-lbl" style="margin-bottom:0">🔍 Бараа судалгаа</div>
+            <span style="font-size:10px;color:var(--text4);background:var(--bg4);padding:2px 8px;border-radius:6px;font-weight:600;">AI</span>
+          </div>
+          <p style="font-size:12px;color:var(--text3);margin:0 0 12px;line-height:1.6;">Монголд зарах барааны давуу/сул тал, үнийн судалгаа, зорилтот аудитори, маркетинг стратеги.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
+            <input id="ai-pr-input" type="text" placeholder="Жишээ: Posture Corrector, LED face mask, Fitness tracker..." class="ai-custom-ta" style="min-height:unset;height:36px;padding:6px 12px;resize:none;flex:1;min-width:180px;margin:0;">
+            <button class="ai-ask-btn" id="ai-pr-btn" onclick="runProductResearch()" style="white-space:nowrap;">🔍 Шинжлэх</button>
+          </div>
+          <div id="ai-pr-resp" style="display:none;background:var(--bg3);border-radius:10px;padding:14px;margin-top:8px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;" id="ai-pr-product-lbl"></span>
+              <button onclick="copyProductResearch()" style="padding:3px 10px;background:var(--bg4);border:1px solid var(--border2);border-radius:6px;font-size:11px;color:var(--text2);cursor:pointer;font-family:inherit;">📋 Хуулах</button>
+            </div>
+            <div id="ai-pr-text" style="font-size:12px;color:var(--text);line-height:1.8;white-space:pre-wrap;max-height:480px;overflow-y:auto;"></div>
+          </div>
         </div>
 
         <!-- History -->
@@ -3422,7 +3580,24 @@ function cardH(t){
   var bc=t.p==='hi'?'bhi':t.p==='me'?'bme':'blo';
   var bl=t.p==='hi'?'Өндөр':t.p==='me'?'Дунд':'Бага';
   var due='';
-  if(t.due){var d=new Date(t.due);var ov=d<new Date()&&t.status!=='done';due='<div class="tdue" style="'+(ov?'color:var(--red);':'')+'"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>'+d.toLocaleDateString('mn-MN',{month:'short',day:'numeric'})+(ov?' ⚠':'')+'</div>';}
+  if(t.due){
+    var d=new Date(t.due);
+    var now=new Date();now.setHours(0,0,0,0);
+    var dCopy=new Date(d);dCopy.setHours(0,0,0,0);
+    var diff=Math.round((dCopy-now)/(1000*60*60*24));
+    var isDone=t.status==='done';
+    var dLabel,dColor,dBg;
+    if(isDone){dLabel=d.toLocaleDateString('mn-MN',{month:'short',day:'numeric'});dColor='var(--text4)';dBg='transparent';}
+    else if(diff<0){dLabel='Хоцорсон '+Math.abs(diff)+' өдөр';dColor='var(--red)';dBg='var(--redbg)';}
+    else if(diff===0){dLabel='Өнөөдөр дуусна';dColor='#d97706';dBg='rgba(245,158,11,0.12)';}
+    else if(diff<=7){dLabel=diff+' өдөр үлдсэн';dColor='#d97706';dBg='rgba(245,158,11,0.12)';}
+    else{dLabel=diff+' өдөр үлдсэн';dColor='var(--green)';dBg='rgba(34,197,94,0.10)';}
+    due='<div class="tdue"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>'
+      +(isDone
+        ?'<span style="color:'+dColor+';">'+dLabel+'</span>'
+        :'<span class="tdue-badge" style="color:'+dColor+';background:'+dBg+';">'+dLabel+'</span>')
+      +'</div>';
+  }
 
   // STAGES vs legacy progress
   var progSection='';
@@ -5362,6 +5537,18 @@ function _updateOnlineStatus(){
 window.addEventListener('online',function(){ _updateOnlineStatus(); toast('Интернэт холбогдлоо','ok'); });
 window.addEventListener('offline',function(){ _updateOnlineStatus(); toast('Интернэт тасарлаа — офлайн горим','warn'); });
 _updateOnlineStatus();
+
+/* ── DASHBOARD CALENDAR: өнөөдрийн огноог auto-set ── */
+(function(){
+  var dateEl = document.getElementById('dcal-date');
+  if(dateEl && !dateEl.value){
+    var today = new Date();
+    var y = today.getFullYear();
+    var m = String(today.getMonth()+1).padStart(2,'0');
+    var d = String(today.getDate()).padStart(2,'0');
+    dateEl.value = y+'-'+m+'-'+d;
+  }
+})();
 
 /* ── PWA INSTALL PROMPT ── */
 var _pwaDeferred=null;
@@ -7315,7 +7502,7 @@ var _hookPomo=setInterval(function(){
 
 <style>
 /* ── 1. COMMAND PALETTE ── */
-#cmd-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.52);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:99995;display:flex;align-items:flex-start;justify-content:center;padding-top:110px;animation:fadeIn .15s ease;}
+#cmd-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.52);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:99995;display:flex;align-items:flex-start;justify-content:center;padding-top:110px;animation:fadeIn .15s ease;}
 #cmd-overlay.hidden{display:none!important;}
 #cmd-box{width:560px;max-width:calc(100vw - 24px);background:var(--bg2);border:1px solid var(--border2);border-radius:20px;box-shadow:0 28px 80px rgba(0,0,0,0.38);overflow:hidden;animation:mboxIn .18s cubic-bezier(.25,.46,.45,.94);}
 #cmd-input-row{display:flex;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid var(--border);}
@@ -7349,7 +7536,7 @@ var _hookPomo=setInterval(function(){
 .tt-time{font-family:'DM Mono',monospace;font-size:10px;}
 
 /* ── 4. EXPORT / IMPORT ── */
-#export-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:99994;display:flex;align-items:center;justify-content:center;}
+#export-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:99994;display:flex;align-items:center;justify-content:center;}
 #export-overlay.hidden{display:none!important;}
 #export-box{width:440px;max-width:calc(100vw - 24px);background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:24px;box-shadow:var(--shadow-lg);animation:mboxIn .2s cubic-bezier(.25,.46,.45,.94);}
 .exp-title{font-size:17px;font-weight:800;color:var(--text);margin-bottom:5px;}
@@ -7367,7 +7554,7 @@ var _hookPomo=setInterval(function(){
 .exp-close-btn{padding:10px 18px;border-radius:99px;border:1px solid var(--border2);background:var(--bg4);color:var(--text2);font-size:12px;cursor:pointer;font-family:inherit;font-weight:600;}
 
 /* ── 5. GOAL TRACKER ── */
-#goals-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:99993;display:flex;align-items:center;justify-content:center;}
+#goals-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:99993;display:flex;align-items:center;justify-content:center;}
 #goals-overlay.hidden{display:none!important;}
 #goals-box{width:520px;max-width:calc(100vw - 24px);background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:24px;box-shadow:var(--shadow-lg);max-height:90vh;overflow-y:auto;animation:mboxIn .2s cubic-bezier(.25,.46,.45,.94);}
 .gmod-title{font-size:17px;font-weight:800;color:var(--text);margin-bottom:4px;}
@@ -8452,113 +8639,11 @@ function injectReminderBtns(){
   }
   function _delay(ms){ return new Promise(function(r){ setTimeout(r,ms); }); }
 })();
-(function(){
-  var BOT_TOKEN = TELEGRAM_BOT_TOKEN;
-  var _seg = 'tg_leads';
-  var _recipients = []; // [{chat_id, label}]
-
-  window.massSetSeg = function(btn, seg){
-    document.querySelectorAll('.mass-seg-btn').forEach(function(b){ b.classList.remove('active'); });
-    btn.classList.add('active');
-    _seg = seg;
-    massLoadLeads();
-  };
-
-  window.massLoadLeads = async function(){
-    var lbl = document.getElementById('mass-count-label');
-    if(lbl) lbl.textContent = '⏳ Ачааллаж байна...';
-    _recipients = [];
-    try {
-      // Load from GAS
-      var res = await fetch(GAS_URL() + '?action=listLeads&seg=' + _seg);
-      var data = await res.json();
-      // Expected: [{chat_id, phone, name, plan, status}]
-      if(Array.isArray(data)){
-        _recipients = data.filter(function(r){ return r.chat_id; });
-      }
-    } catch(e) {
-      // Fallback: load from known users table for active/expired
-      if(_seg === 'active_users' || _seg === 'expired' || _seg === 'all'){
-        try {
-          var r2 = await fetch(GAS_URL() + '?action=list');
-          var users = await r2.json();
-          if(Array.isArray(users)){
-            _recipients = users.filter(function(u){
-              if(!u.chat_id) return false;
-              if(_seg === 'active_users') return u.status === 'active';
-              if(_seg === 'expired') return u.status === 'expired';
-              return true;
-            }).map(function(u){ return {chat_id: u.chat_id, label: u.phone || u.name || u.uid}; });
-          }
-        } catch(e2){}
-      }
-    }
-    if(lbl){
-      if(_recipients.length > 0){
-        lbl.innerHTML = '<span style="color:var(--green);font-weight:700">✓ ' + _recipients.length + ' хүн</span> илгээхэд бэлэн';
-      } else {
-        lbl.innerHTML = '<span style="color:var(--amber);">⚠️ Telegram chat_id бүртгэгдсэн хүн олдсонгүй.</span> Хэрэглэгчид <b>@productdropmn_bot</b>-д /start бичих хэрэгтэй.';
-      }
-    }
-  };
-
-  window.massPreview = function(){
-    var txt = (document.getElementById('mass-msg-text')||{}).value || '';
-    if(!txt.trim()){ if(typeof toast==='function') toast('⚠️ Мессеж хоосон байна'); return; }
-    alert('PREVIEW:\n\n' + txt + '\n\n→ ' + (_recipients.length||'?') + ' хүнд явуулна');
-  };
-
-  window.massSend = async function(){
-    var txt = (document.getElementById('mass-msg-text')||{}).value || '';
-    if(!txt.trim()){ if(typeof toast==='function') toast('⚠️ Мессеж бичнэ үү'); return; }
-    if(_recipients.length === 0){ if(typeof toast==='function') toast('⚠️ Хүлээн авагч 0 байна. Leads ачааллаарай.'); return; }
-    if(!confirm(_recipients.length + ' хүнд мессеж явуулах уу?\n\n' + txt.substring(0,80) + '...')) return;
-
-    var wrap = document.getElementById('mass-progress-wrap');
-    var progBar = document.getElementById('mass-prog-bar');
-    var progTxt = document.getElementById('mass-prog-txt');
-    var logEl = document.getElementById('mass-result-log');
-    var sendBtn = document.getElementById('mass-send-btn');
-    if(wrap) wrap.style.display = 'block';
-    if(sendBtn){ sendBtn.disabled = true; sendBtn.textContent = '⏳ Явуулж байна...'; }
-    if(logEl) logEl.innerHTML = '';
-
-    var ok = 0, fail = 0, total = _recipients.length;
-
-    for(var i = 0; i < total; i++){
-      var r = _recipients[i];
-      try {
-        var resp = await fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage', {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({chat_id: r.chat_id, text: txt, parse_mode: 'Markdown'})
-        });
-        var result = await resp.json();
-        if(result.ok){ ok++; if(logEl) logEl.innerHTML += '✅ ' + (r.label||r.chat_id) + '\n'; }
-        else { fail++; if(logEl) logEl.innerHTML += '❌ ' + (r.label||r.chat_id) + ' — ' + (result.description||'error') + '\n'; }
-      } catch(e) {
-        fail++;
-        if(logEl) logEl.innerHTML += '❌ ' + (r.label||r.chat_id) + ' — network error\n';
-      }
-      // Update progress
-      var pct = Math.round(((i+1)/total)*100);
-      if(progBar) progBar.style.width = pct + '%';
-      if(progTxt) progTxt.textContent = (i+1) + ' / ' + total;
-      if(logEl) logEl.scrollTop = logEl.scrollHeight;
-      // Rate limit: 80ms delay = ~12 msg/sec (Telegram allows 30/sec max)
-      await new Promise(function(res){ setTimeout(res, 80); });
-    }
-
-    if(sendBtn){ sendBtn.disabled = false; sendBtn.textContent = '📤 Илгээх'; }
-    if(typeof toast==='function') toast('✓ ' + ok + ' амжилттай · ' + fail + ' алдаа');
-    if(logEl) logEl.innerHTML += '\n─── Дууслаа: ' + ok + ' ✅  ' + fail + ' ❌ ───\n';
-  };
-})();
 // ─────────────────────────────────────────────────────
 // AI ЗӨВЛӨГЧ — ProductDrop Dashboard
 // ─────────────────────────────────────────────────────
 (function(){
-  var CLAUDE_KEY = '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';
+  // API key removed — calls go through GAS proxy
 
   // GAS getStats + getContext татаж UI шинэчлэх
   var _ctxCache = { done: [], todo: [] };
@@ -8684,6 +8769,36 @@ function injectReminderBtns(){
       + 'GA4: ' + (localStorage.getItem('pd_ga4_monthly')||'308') + '/сар · 74.68% Lite дарна\n'
       + 'LEAD CAPTURE: exit_intent + lite_gate + lite_modal замаар идэвхтэй\n'
       + 'АНХААРУУЛГА: Sheet1-ийн active гишүүд = БОДИТ ТӨЛӨГЧ (pro/starter), Leads sheet = туршилтын хэрэглэгчид\n\n';
+
+    // ── Kanban board tasks (глобал tasks массиваас) ──
+    try {
+      var allTasks = (typeof tasks !== 'undefined' && Array.isArray(tasks)) ? tasks : [];
+      if(allTasks.length > 0){
+        var statusMap = {
+          'todo':       '⬜ Эхлээгүй',
+          'inprogress': '🔵 Хийгдэж байна',
+          'review':     '🟡 Хянагдаж байна',
+          'done':       '✅ Дууссан'
+        };
+        var statusOrder = ['inprogress','review','todo','done'];
+        ctx += '=== КАНБАН САМБАР (Ажлын үе шат) ===\n';
+        statusOrder.forEach(function(st){
+          var list = allTasks.filter(function(t){ return t.status === st; });
+          if(list.length === 0) return;
+          ctx += '\n[' + (statusMap[st]||st) + '] — ' + list.length + ' ажил\n';
+          list.forEach(function(t){
+            var line = '  • ' + (t.name||'');
+            if(t.p && t.p !== 'normal') line += ' [' + t.p + ']';
+            if(t.due) line += ' | Дуусах: ' + t.due;
+            if(typeof t.prog === 'number') line += ' | ' + t.prog + '% дууссан';
+            if(t.sub) line += '\n    → ' + t.sub;
+            ctx += line + '\n';
+          });
+        });
+        ctx += '\n';
+      }
+    } catch(e){ /* tasks байхгүй бол алгасна */ }
+
     if(doneList.length > 0){
       ctx += '=== ХИЙГДСЭН (давтаж санал болгохгүй) ===\n';
       doneList.forEach(function(item){ ctx += '✅ ' + item + '\n'; });
@@ -8697,7 +8812,7 @@ function injectReminderBtns(){
   }
 
   async function callClaude(userMsg){
-    var url = GAS_URL() + '?action=claude&q=' + encodeURIComponent(userMsg.substring(0, 800));
+    var url = GAS_URL() + '?action=claude&q=' + encodeURIComponent(userMsg.substring(0, 2400));
     var resp = await fetch(url);
     if(!resp.ok) throw new Error('HTTP ' + resp.status);
     var d = await resp.json();
@@ -8966,6 +9081,60 @@ function injectReminderBtns(){
     }
   };
 
+  // ── DASHBOARD DIRECT CALENDAR ADD ──
+  window.dashCalAdd = async function(){
+    var title = (document.getElementById('dcal-title')||{}).value || 'ProductDrop Task';
+    var date  = (document.getElementById('dcal-date')||{}).value;
+    var start = (document.getElementById('dcal-start')||{}).value || '09:00';
+    var end   = (document.getElementById('dcal-end')||{}).value || '10:00';
+    var btn   = document.getElementById('dcal-submit-btn');
+    var status= document.getElementById('dcal-status');
+    if(!date){ if(typeof toast==='function') toast('⚠️ Огноо сонгоно уу'); return; }
+    var sH = start.split(':')[0], sM = start.split(':')[1]||'00';
+    var eH = end.split(':')[0],   eM = end.split(':')[1]||'00';
+    btn.disabled = true;
+    btn.innerHTML = '<div class="ai-spinner" style="width:13px;height:13px;margin-right:4px;"></div> Нэмж байна...';
+    function safeEnc(s){ try{return encodeURIComponent(String(s||''));}catch(e){return String(s||'').replace(/[^\x20-\x7E]/g,'');} }
+    status.style.display = 'none';
+    try {
+      var url = GAS_URL() + '?action=addToCalendar'
+        + '&title='  + safeEnc(title)
+        + '&date='   + safeEnc(date)
+        + '&startH=' + sH + '&startM=' + sM
+        + '&endH='   + eH + '&endM='   + eM;
+      var res  = await fetch(url);
+      var data = await res.json();
+      if(data.ok){
+        status.textContent = '✓ ' + (data.msg || 'Нэмэгдлээ!');
+        status.style.display = 'inline';
+        status.style.color = 'var(--green)';
+        btn.innerHTML = '✓ Нэмэгдлээ';
+        if(typeof toast==='function') toast('📅 Calendar-д нэмэгдлээ!');
+        setTimeout(function(){
+          btn.disabled = false;
+          btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px;"><path d="M12 5v14M5 12l7 7 7-7"/></svg> Calendar-д нэмэх';
+          document.getElementById('dcal-title').value = '';
+          document.getElementById('dcal-date').value = '';
+          document.getElementById('dcal-start').value = '09:00';
+          document.getElementById('dcal-end').value = '10:00';
+          status.style.display = 'none';
+        }, 3000);
+      } else {
+        status.textContent = '⚠️ ' + (data.msg || 'Алдаа гарлаа');
+        status.style.color = 'var(--red)';
+        status.style.display = 'inline';
+        btn.disabled = false;
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px;"><path d="M12 5v14M5 12l7 7 7-7"/></svg> Calendar-д нэмэх';
+      }
+    } catch(e) {
+      status.textContent = '⚠️ Алдаа: ' + e.message;
+      status.style.color = 'var(--red)';
+      status.style.display = 'inline';
+      btn.disabled = false;
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px;"><path d="M12 5v14M5 12l7 7 7-7"/></svg> Calendar-д нэмэх';
+    }
+  };
+
   window.runAICustom = async function(){
     var q = (document.getElementById('ai-custom-q')||{}).value || '';
     if(!q.trim()){ if(typeof toast==='function') toast('⚠️ Асуулт бичнэ үү'); return; }
@@ -8992,6 +9161,80 @@ function injectReminderBtns(){
       if(typeof toast==='function') toast('⚠️ ' + e.message);
     }
     if(btn){ btn.disabled = false; btn.textContent = 'Асуух ↗'; }
+  };
+
+  // ── Сарын контент план ──────────────────────────────────────
+  window.runContentPlan = async function(){
+    var focus = (document.getElementById('ai-cp-focus')||{}).value || '';
+    var btn   = document.getElementById('ai-cp-btn');
+    var resp  = document.getElementById('ai-cp-resp');
+    var txtEl = document.getElementById('ai-cp-text');
+    var monEl = document.getElementById('ai-cp-month');
+    if(btn){ btn.disabled = true; btn.textContent = 'Боловсруулж байна...'; }
+
+    try {
+      var url = GAS_URL() + '?action=contentPlan'
+        + (focus ? '&focus=' + encodeURIComponent(focus) : '');
+      var r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body: 'action=contentPlan' + (focus ? '&focus=' + encodeURIComponent(focus) : '') });
+      var data = await r.json();
+      if(data.ok){
+        if(resp)  resp.style.display = 'block';
+        if(txtEl) txtEl.textContent  = data.text || '';
+        if(monEl) monEl.textContent  = (data.month || '') + ' — контент план';
+        if(typeof toast==='function') toast('✅ Контент план бэлэн боллоо');
+      } else {
+        if(typeof toast==='function') toast('⚠️ ' + (data.error || 'Алдаа гарлаа'));
+      }
+    } catch(e){
+      if(typeof toast==='function') toast('⚠️ ' + e.message);
+    }
+    if(btn){ btn.disabled = false; btn.textContent = '📅 План гарга'; }
+  };
+
+  window.copyContentPlan = function(){
+    var t = (document.getElementById('ai-cp-text')||{}).textContent || '';
+    if(!t) return;
+    navigator.clipboard.writeText(t).then(function(){
+      if(typeof toast==='function') toast('📋 Хуулагдлаа');
+    }).catch(function(){ if(typeof toast==='function') toast('⚠️ Хуулж чадсангүй'); });
+  };
+
+  // ── Бараа судалгаа ───────────────────────────────────────────
+  window.runProductResearch = async function(){
+    var prod  = ((document.getElementById('ai-pr-input')||{}).value||'').trim();
+    if(!prod){ if(typeof toast==='function') toast('⚠️ Бараа оруулна уу'); return; }
+    var btn   = document.getElementById('ai-pr-btn');
+    var resp  = document.getElementById('ai-pr-resp');
+    var txtEl = document.getElementById('ai-pr-text');
+    var lblEl = document.getElementById('ai-pr-product-lbl');
+    if(btn){ btn.disabled = true; btn.textContent = 'Шинжилж байна...'; }
+
+    try {
+      var r = await fetch(GAS_URL(), { method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body: 'action=productResearch&product=' + encodeURIComponent(prod) });
+      var data = await r.json();
+      if(data.ok){
+        if(resp)  resp.style.display = 'block';
+        if(txtEl) txtEl.textContent  = data.text || '';
+        if(lblEl) lblEl.textContent  = '🛍 ' + (data.product || prod) + ' — шинжилгээ';
+        if(typeof toast==='function') toast('✅ Шинжилгээ бэлэн боллоо');
+      } else {
+        if(typeof toast==='function') toast('⚠️ ' + (data.error || 'Алдаа гарлаа'));
+      }
+    } catch(e){
+      if(typeof toast==='function') toast('⚠️ ' + e.message);
+    }
+    if(btn){ btn.disabled = false; btn.textContent = '🔍 Шинжлэх'; }
+  };
+
+  window.copyProductResearch = function(){
+    var t = (document.getElementById('ai-pr-text')||{}).textContent || '';
+    if(!t) return;
+    navigator.clipboard.writeText(t).then(function(){
+      if(typeof toast==='function') toast('📋 Хуулагдлаа');
+    }).catch(function(){ if(typeof toast==='function') toast('⚠️ Хуулж чадсангүй'); });
   };
 
   // AI page-д орох үед автоматаар context ачаална
