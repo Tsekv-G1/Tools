@@ -1173,7 +1173,7 @@ html.theme-tr .pipe-table tbody tr{
       <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       <div class="ni-badge" id="reg-ni-dot" style="display:none;"></div>
     </div>
-    <div class="ni" onclick="showPage('admin',this)" title="Admin">
+    <div class="ni" onclick="showPage('admin',this);setTimeout(wqInit,80);" title="Admin">
       <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
     </div>
     <div class="ni" onclick="showPage('focus',this)" title="Focus Zone">
@@ -1565,8 +1565,7 @@ html.theme-tr .pipe-table tbody tr{
       <div class="admin-grid" style="grid-template-columns:1fr;">
         <!-- Password generator -->
         <div class="a-card">
-          <div class="a-label">🔑 Нууц үг үүсгэх</div>
-          <div class="info-box"><span style="flex-shrink:0">🕐</span><div><strong>12 цагийн session</strong> — нэвтэрсэн цагаасаа 12 цаг хандах боломжтой.</div></div>
+          <div class="a-label">🔑 Нууц үг үүсгэх</div>          <div class="info-box"><span style="flex-shrink:0">🕐</span><div><strong>12 цагийн session</strong> — нэвтэрсэн цагаасаа 12 цаг хандах боломжтой.</div></div>
           <label class="lbl">Хэрэглэгчийн нэр</label>
           <input class="fi3" id="f-name" placeholder="Билгүүн"/>
           <label class="lbl">Утас / ID</label>
@@ -1606,6 +1605,98 @@ html.theme-tr .pipe-table tbody tr{
           <div class="sync-st" id="sync-status"></div>
         </div>
 
+      </div>
+
+      <!-- ── WINNING PRODUCT → FREE CHANNEL ── -->
+      <div class="a-card-full" style="margin-bottom:16px;">
+        <div class="a-label">
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Өдрийн Winning Бараа → Free Channel
+        </div>
+        <div class="info-box" style="margin-bottom:14px;"><span style="flex-shrink:0">📢</span><div>Мэдээллийг бөглөөд <strong>Free Channel руу илгээх</strong> дарна. Бараа нь <a href="https://t.me/ProductDropFree" target="_blank" style="color:var(--blue);">@ProductDropFree</a> channel-д автоматаар нийтлэгдэнэ.</div></div>
+
+        <button onclick="ppOpen(0,'dp')" style="width:100%;padding:10px;border-radius:11px;border:1.5px solid var(--blue);background:var(--bluebg,rgba(0,122,255,.08));color:var(--blue);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:6px;">📦 Pro-оос бараа сонгох <span style="font-size:11px;opacity:.7;">(нэр · үнэ · зураг · supplier auto-fill)</span></button>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:0;">
+          <div>
+            <label class="lbl">📦 Бараа нэр</label>
+            <input class="fi3" id="dp-name" placeholder="LED Strip Light 5м"/>
+          </div>
+          <div>
+            <label class="lbl">🏷 Ангилал</label>
+            <select class="fi3" id="dp-cat">
+              <option>Гэр · Home</option>
+              <option>Гоо сайхан · Beauty</option>
+              <option>Эрүүл мэнд · Health</option>
+              <option>Хүүхэд · Kids</option>
+              <option>Бараа · Goods</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:0;margin-top:10px;">
+          <div>
+            <label class="lbl">💰 AliExpress үнэ (₮)</label>
+            <input class="fi3" id="dp-buy" type="number" placeholder="12000" oninput="dpCalc()"/>
+          </div>
+          <div>
+            <label class="lbl">💵 Зарах үнэ (₮)</label>
+            <input class="fi3" id="dp-sell" type="number" placeholder="35000" oninput="dpCalc()"/>
+          </div>
+        </div>
+
+        <!-- Margin preview -->
+        <div id="dp-margin-preview" style="display:none;background:var(--greenbg);border:1px solid rgba(52,199,89,0.2);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--green);font-weight:700;margin-bottom:10px;margin-top:-4px;">
+          📈 Ашиг: <span id="dp-profit-val">—</span>₮/ш · Margin <span id="dp-margin-val">—</span>%
+        </div>
+
+        <label class="lbl" style="margin-top:4px;">🔗 Supplier линк (AliExpress URL)</label>
+        <input class="fi3" id="dp-supplier" placeholder="https://www.aliexpress.com/item/..."/>
+
+        <label class="lbl">✨ Яагаад winning вэ? (товч тайлбар)</label>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+          <span style="font-size:11px;color:var(--text3);">Бараа сонгосны дараа автомат үүсгэх боломжтой</span>
+          <button id="dp-ai-btn" onclick="dpGenAI()" style="padding:4px 12px;border-radius:8px;border:1.5px solid var(--purple);background:var(--purplebg);color:var(--purple);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s;">🤖 AI үүсгэх</button>
+        </div>
+        <textarea class="fi3" id="dp-reason" rows="3" style="resize:vertical;min-height:72px;line-height:1.6;" placeholder="Монголд ороогүй бараа, TikTok viral болсон, margin 65%+, impulse buy..."></textarea>
+
+        <label class="lbl">🖼 Зураг URL (заавал биш)</label>
+        <input class="fi3" id="dp-img" placeholder="https://... (AliExpress/Cloudinary зураг)" oninput="dpImgPreviewFn(this.value)"/>
+        <!-- Image preview -->
+        <div id="dp-img-preview-wrap" style="display:none;margin-top:8px;margin-bottom:4px;border-radius:12px;overflow:hidden;border:1.5px solid var(--border);background:var(--bg4);max-height:220px;">
+          <img id="dp-img-preview" src="" style="width:100%;max-height:220px;object-fit:contain;display:block;" onerror="this.parentElement.style.display='none'">
+        </div>
+
+        <!-- Preview -->
+        <div id="dp-preview-wrap" style="display:none;margin-bottom:12px;">
+          <div class="a-label" style="margin-bottom:8px;">👁 Preview</div>
+          <div id="dp-preview-box" style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px;font-size:12px;line-height:1.9;white-space:pre-wrap;color:var(--text2);font-family:'DM Mono',monospace;"></div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:4px;">
+          <button class="btn-add" onclick="dpPreview()" style="flex:1;justify-content:center;">👁 Preview харах</button>
+          <button class="btn-green" id="dp-send-btn" onclick="dpSend()" style="flex:2;justify-content:center;">📤 Free Channel руу илгээх</button>
+        </div>
+        <div id="dp-status" style="font-size:11px;margin-top:8px;text-align:right;color:var(--text3);"></div>
+      </div>
+
+      <!-- ── 7 ХОНОГИЙН QUEUE ── -->
+      <div class="a-card-full" style="margin-bottom:16px;">
+        <div class="a-label">
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          7 Хоногийн Бараа Queue
+        </div>
+        <div class="info-box" style="margin-bottom:14px;"><span style="flex-shrink:0">💡</span><div>7 өдрийн бараагаа урьдчилж бөглөөд нэг дор хадгалснаар GAS өдөр бүр 08:00 цагт <strong>@ProductDropFree</strong> channel-д автоматаар нийтлэнэ. Зургийг <strong>Cloudinary URL</strong> ашиглах нь хамгийн найдвартай.</div></div>
+
+        <div id="wq-week-label" style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;"></div>
+
+        <div id="wq-slots" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
+
+        <div style="display:flex;gap:8px;">
+          <button class="btn-add" onclick="wqLoad()" style="flex:1;justify-content:center;font-size:12px;">↻ Sheet-ээс ачаалах</button>
+          <button class="btn-green" id="wq-save-btn" onclick="wqSave()" style="flex:2;justify-content:center;">📅 Queue-д хадгалах (GAS)</button>
+        </div>
+        <div id="wq-status" style="font-size:11px;margin-top:8px;text-align:right;color:var(--text3);"></div>
       </div>
 
       <!-- Pending registrations moved to admin -->
@@ -2564,7 +2655,7 @@ html.theme-tr .pipe-table tbody tr{
 </div>
 
 <!-- TASK MODAL -->
-<div class="moverlay hidden" id="mov" onclick="if(event.target===this)closeM()">
+<div class="moverlay hidden" id="mov">
   <div class="mbox" style="width:520px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
       <h2 style="margin:0;" id="m-title">Шинэ Даалгавар</h2>
@@ -2729,9 +2820,40 @@ html.theme-tr .pipe-table tbody tr{
 <script>
 /* ── CONFIG ── */
 const SALT='PD2026MN';
-const TELEGRAM_BOT_TOKEN='8695289865:AAGGjH1TLin2_W8AzHkIT7rtYLR6VIZxxTo';
-const TELEGRAM_CHAT_ID='5877604772';
-function GAS_URL(){return localStorage.getItem('pd_gas_url')||'https://script.google.com/macros/s/AKfycbyd3iPFcE8EhSd-fgpDotiDc1TonWUqAUxBVQVDLWcjbqR97OI2tUEsGTuJngVp7g8s/exec';}
+var TELEGRAM_BOT_TOKEN='8695289865:AAGGjH1TLin2_W8AzHkIT7rtYLR6VIZxxTo';
+var TELEGRAM_CHAT_ID='5877604772';
+function GAS_URL(){
+  var saved = localStorage.getItem('pd_gas_url');
+  if(saved && saved.indexOf('script.google.com') !== -1) return saved;
+  var url = prompt(
+    '⚙️ GAS Deployment URL тохируулах\n\nGAS Editor → Deploy → Manage deployments → URL хуулна уу:\n(https://script.google.com/macros/s/.../exec)',
+    saved || ''
+  );
+  if(url && url.indexOf('script.google.com') !== -1){
+    localStorage.setItem('pd_gas_url', url.trim());
+    return url.trim();
+  }
+  return '';
+}
+
+// ── GAS fetch wrapper — CORS + timeout засвар ──────────────────
+// Google Apps Script redirect-ийн CORS асуудлыг credentials:'omit' + timeout-оор засна
+async function gasFetch(url, opts) {
+  var ctrl = new AbortController();
+  var tid = setTimeout(function(){ ctrl.abort(); }, 58000); // 58s timeout (Claude API response time)
+  try {
+    var finalOpts = Object.assign({ credentials: 'omit', signal: ctrl.signal }, opts || {});
+    var r = await fetch(url, finalOpts);
+    clearTimeout(tid);
+    return r;
+  } catch(e) {
+    clearTimeout(tid);
+    var errMsg = e.name === 'AbortError'
+      ? 'GAS хоцорлоо (timeout). Дахин оролдоно уу.'
+      : 'GAS холбогдсонгүй. Интернет болон GAS URL шалгана уу.';
+    throw new Error(errMsg);
+  }
+}
 
 // GA4 гараар шинэчлэх (хэрэглэгч GA4-с авсан тоогоо оруулна)
 function promptGA4Update(){
@@ -2844,7 +2966,7 @@ async function loadContents(){
 
 /* ── STATE ── */
 var tasks=[],drops=[],contents=[],analytics={pro:0,starter:0,visit:0,lite:0,extra:0};
-var nid=1,ndid=1,ncid=1,mopen=false,dmopen=false;
+var nid=1,ndid=1,ncid=1,mopen=false,dmopen=false,_editTaskId=null;
 var cc={todo:'#AEAEB2',inprogress:'#007AFF',review:'#FF9500',done:'#34C759'};
 
 var DEFAULT_CONTENTS = [
@@ -3719,7 +3841,7 @@ function setStageCount(n,btn){
 }
 
 function openM(def){
-  _curPri='me'; _stageCount=0;
+  _curPri='me'; _stageCount=0; _editTaskId=null;
   document.getElementById('fn').value='';
   document.getElementById('fs').value='';
   document.getElementById('fst').value=def||'todo';
@@ -3740,6 +3862,8 @@ function openM(def){
   var z=document.querySelector('.stage-count-btn[data-n="0"]');if(z)z.classList.add('active');
   document.getElementById('stage-inputs').innerHTML='';
   document.getElementById('stage-hint').innerHTML='💡 Үе шат сонгохгүй бол уламжлалт явц (0–5) хэрэглэнэ';
+  var saveBtn=document.getElementById('save-btn-final');
+  if(saveBtn) saveBtn.textContent='Нэмэх ✓';
   document.getElementById('mov').classList.remove('hidden');
   mopen=true;
   setTimeout(function(){document.getElementById('fn').focus();},50);
@@ -3758,10 +3882,27 @@ function saveT(){
       stages.push({name:nm,done:false});
     }
   }
-  var newTask={id:nid++,name:name,sub:document.getElementById("fs").value.trim(),p:_curPri,status:document.getElementById("fst").value,due:document.getElementById("fd").value,prog:0,stages:stages};
-  tasks.push(newTask);
-  saveAll();closeM();render();toast("✓ Даалгавар нэмэгдлээ!");
-  sbTaskInsert(newTask).then(function(row){if(row&&row.id){newTask.id=row.id;saveAll();}}).catch(function(){});
+  if(_editTaskId!==null){
+    // ── EDIT MODE: existing task-г шинэчлэнэ ──
+    var t=tasks.find(function(a){return a.id===_editTaskId;});
+    if(t){
+      t.name=name;
+      t.sub=document.getElementById('fs').value.trim();
+      t.p=_curPri;
+      t.status=document.getElementById('fst').value;
+      t.due=document.getElementById('fd').value;
+      if(stages.length>0) t.stages=stages;
+      saveAll();closeM();render();toast('✓ Даалгавар засагдлаа!','ok');
+      sbTaskUpdate(t).catch(function(){});
+    }
+    _editTaskId=null;
+  } else {
+    // ── NEW MODE: шинэ task нэмнэ ──
+    var newTask={id:nid++,name:name,sub:document.getElementById("fs").value.trim(),p:_curPri,status:document.getElementById("fst").value,due:document.getElementById("fd").value,prog:0,stages:stages};
+    tasks.push(newTask);
+    saveAll();closeM();render();toast("✓ Даалгавар нэмэгдлээ!");
+    sbTaskInsert(newTask).then(function(row){if(row&&row.id){newTask.id=row.id;saveAll();}}).catch(function(){});
+  }
 }
 
 function toggleStage(taskId,stageIdx){
@@ -3999,7 +4140,7 @@ function renderAnalytics(){
 function loadUsers(){
   var tbody=document.getElementById('users-table-body');
   tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:28px;">⏳ Уншиж байна...</td></tr>';
-  fetch(GAS_URL()+'?action=list')
+  gasFetch(GAS_URL()+'?action=list')
     .then(function(r){return r.json();})
     .then(function(data){
       if(!data||!data.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:28px;">Хэрэглэгч олдсонгүй</td></tr>';updateUserStats([]);return;}
@@ -4044,7 +4185,7 @@ function updateUserStats(data){
 
 function delUser(pw){
   if(!confirm('Энэ хэрэглэгчийг устгах уу?'))return;
-  fetch(GAS_URL()+'?action=delete&pw='+encodeURIComponent(pw))
+  gasFetch(GAS_URL()+'?action=delete&pw='+encodeURIComponent(pw))
     .then(function(){loadUsers();toast('✓ Хэрэглэгч устгагдлаа');})
     .catch(function(){toast('⚠ Устгаж чадсангүй');});
 }
@@ -4053,7 +4194,7 @@ function delUser(pw){
 function loadRegistrations(){
   var tbody=document.getElementById('regs-table-body');
   tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:24px;">⏳ Уншиж байна...</td></tr>';
-  fetch(GAS_URL()+'?action=listRegistrations')
+  gasFetch(GAS_URL()+'?action=listRegistrations')
     .then(function(r){return r.json();})
     .then(function(regs){
       if(!regs||!regs.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:24px;">Бүртгэл байхгүй</td></tr>';updatePendingBadge(0);return;}
@@ -4096,7 +4237,7 @@ function updatePendingBadge(count){
 
 async function approveReg(phone,pw,plan,idx){
   var expiry=Date.now()+30*86400000;var uid=phone.replace(/\D/g,'');
-  try{await fetch(GAS_URL()+'?action=approveAndAdd&phone='+encodeURIComponent(phone)+'&pw='+encodeURIComponent(pw)+'&plan='+encodeURIComponent(plan)+'&uid='+encodeURIComponent(uid)+'&expiry='+expiry+'&days=30',{mode:'no-cors'});}catch(e){}
+  try{await gasFetch(GAS_URL()+'?action=approveAndAdd&phone='+encodeURIComponent(phone)+'&pw='+encodeURIComponent(pw)+'&plan='+encodeURIComponent(plan)+'&uid='+encodeURIComponent(uid)+'&expiry='+expiry+'&days=30',{mode:'no-cors'});}catch(e){}
   // Telegram мэдэгдэл
   var msg='✅ Бүртгэл баталгаажлаа!\n\n📞 Утас: '+phone+'\n🔑 Нууц үг: '+pw+'\n📦 Plan: '+plan.toUpperCase()+'\n🕐 Хугацаа: 30 хоног\n\n👉 Хэрэглэгч рүү дамжуулна уу:\n🔗 https://productdrops.netlify.app/landing';
   try{await fetch('https://api.telegram.org/bot'+TELEGRAM_BOT_TOKEN+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:TELEGRAM_CHAT_ID,text:msg})});}catch(e){}
@@ -4106,9 +4247,281 @@ async function approveReg(phone,pw,plan,idx){
 
 async function rejectReg(phone,idx){
   if(!confirm(phone+' бүртгэлийг устгахдаа итгэлтэй байна уу?'))return;
-  try{await fetch(GAS_URL()+'?action=deleteReg&phone='+encodeURIComponent(phone));}catch(e){}
+  try{await gasFetch(GAS_URL()+'?action=deleteReg&phone='+encodeURIComponent(phone));}catch(e){}
   toast('Бүртгэл устгагдлаа');
   setTimeout(loadRegistrations,800);
+}
+
+/* ── ADMIN — 7 ХОНОГИЙН QUEUE ── */
+var WQ_DAYS=['Даваа','Мягмар','Лхагва','Пүрэв','Баасан','Бямба','Ням'];
+var WQ_CAT=['Гэр · Home','Гоо сайхан · Beauty','Эрүүл мэнд · Health','Хүүхэд · Kids','Бараа · Goods'];
+
+function wqNextMonday(){
+  var d=new Date(); d.setHours(0,0,0,0);
+  var dow=d.getDay(); // 0=Sun
+  var diff=dow===1?0:(dow===0?1:8-dow);
+  d.setDate(d.getDate()+diff);
+  return d;
+}
+
+function wqFmtDate(d){
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+// Week-based storage key → refresh хийхэд алдагдахгүй, долоо хоног өөрчлөгдөхөд автоматаар шинэ хуудас
+function wqStorageKey(){
+  return 'wq_week_'+wqFmtDate(wqNextMonday());
+}
+
+function wqAutoSave(){
+  try{ localStorage.setItem(wqStorageKey(), JSON.stringify(wqCollect())); } catch(e){}
+}
+
+function wqInit(){
+  var container=document.getElementById('wq-slots');
+  if(!container) return;
+
+  var start=wqNextMonday();
+  var label=document.getElementById('wq-week-label');
+  if(label) label.textContent='Долоо хоног: '+start.toLocaleDateString('mn-MN',{month:'long',day:'numeric'})+' — '+new Date(start.getTime()+6*86400000).toLocaleDateString('mn-MN',{month:'long',day:'numeric'});
+
+  // Week key-гээр уншина — тухайн долоо хоногийн мэдээлэл хадгалагдсан байвал ачаалах
+  var saved=[];
+  try{ saved=JSON.parse(localStorage.getItem(wqStorageKey())||'[]'); } catch(e){}
+
+  container.innerHTML='';
+
+  for(var i=0;i<7;i++){
+    var date=new Date(start.getTime()+i*86400000);
+    var dateStr=wqFmtDate(date);
+    var s=saved[i]||{};
+    var isWeekend=i>=5;
+    var sentMark=s.sent?'<span style="color:var(--green);font-size:10px;font-weight:700;margin-left:6px;">✅ Явсан</span>':'';
+
+    container.innerHTML+='<div style="background:var(--bg3);border:1px solid '+(isWeekend?'rgba(255,149,0,0.2)':'var(--border)')+';border-radius:12px;padding:12px 14px;">'
+      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">'
+      +'<span style="font-size:11px;font-weight:800;color:'+(isWeekend?'var(--amber)':'var(--blue)')+';">'+WQ_DAYS[i]+'</span>'
+      +'<span style="font-size:11px;color:var(--text3);">'+date.toLocaleDateString('mn-MN',{month:'short',day:'numeric'})+'</span>'
+      +sentMark
+      +'<input type="hidden" id="wq-date-'+i+'" value="'+dateStr+'">'
+      +'<button onclick="ppOpen('+i+',\'wq\')" style="margin-left:auto;padding:4px 10px;border-radius:8px;border:1.5px solid var(--blue);background:var(--bluebg,rgba(0,122,255,.08));color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">📦 Бараа сонгох</button>'
+      +'</div>'
+      +'<div style="display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;">'
+      +(s.img_url?'<img id="wq-thumb-'+i+'" src="'+x(s.img_url)+'" style="width:64px;height:64px;border-radius:8px;object-fit:cover;flex-shrink:0;border:1px solid var(--border);" onerror="this.style.display=\'none\'">':'<img id="wq-thumb-'+i+'" src="" style="width:64px;height:64px;border-radius:8px;object-fit:cover;flex-shrink:0;border:1px solid var(--border);display:none;" onerror="this.style.display=\'none\'">')
+      +'<div style="flex:1;min-width:0;">'
+      +'<div style="display:grid;grid-template-columns:2fr 1fr;gap:6px;margin-bottom:6px;">'
+      +'<input class="fi3" id="wq-name-'+i+'" placeholder="Бараа нэр" value="'+x(s.product_name||'')+'" style="margin-bottom:0;font-size:12px;" oninput="wqAutoSave()">'
+      +'<select class="fi3" id="wq-cat-'+i+'" style="margin-bottom:0;font-size:12px;" onchange="wqAutoSave()">'
+      +WQ_CAT.map(function(c){return '<option'+(s.category===c?' selected':'')+'>'+c+'</option>';}).join('')
+      +'</select></div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">'
+      +'<input class="fi3" id="wq-buy-'+i+'" type="number" placeholder="Buy ₮" value="'+(s.buy_price||'')+'" style="margin-bottom:0;font-size:12px;" oninput="wqCalc('+i+');wqAutoSave()">'
+      +'<input class="fi3" id="wq-sell-'+i+'" type="number" placeholder="Sell ₮" value="'+(s.sell_price||'')+'" style="margin-bottom:0;font-size:12px;" oninput="wqCalc('+i+');wqAutoSave()">'
+      +'</div>'
+      +'</div>'
+      +'</div>'
+      +'<div id="wq-margin-'+i+'" style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;display:'+(s.buy_price&&s.sell_price?'block':'none')+'">'
+      +(s.buy_price&&s.sell_price?'📈 Margin: '+Math.round(((s.sell_price-s.buy_price)/s.sell_price)*100)+'% · '+Math.round(s.sell_price-s.buy_price).toLocaleString('mn-MN')+'₮/ш':'')
+      +'</div>'
+      +'<input class="fi3" id="wq-supplier-'+i+'" placeholder="Supplier URL (auto-fill)" value="'+x(s.supplier_url||'')+'" style="margin-bottom:6px;font-size:12px;" oninput="wqAutoSave()">'
+      +'<input class="fi3" id="wq-img-'+i+'" placeholder="🖼 Зураг URL (auto-fill)" value="'+x(s.img_url||'')+'" style="margin-bottom:6px;font-size:12px;" oninput="var th=document.getElementById(\'wq-thumb-'+i+'\');if(th){th.src=this.value;th.style.display=this.value?\'block\':\'none\';}wqAutoSave()">'
+      +'<textarea class="fi3" id="wq-reason-'+i+'" rows="2" placeholder="✨ Яагаад winning вэ? (бараа сонгоход auto-fill болно)" style="margin-bottom:0;font-size:12px;resize:none;" oninput="wqAutoSave()">'+x(s.reason||'')+'</textarea>'
+      +'</div>';
+  }
+}
+
+function wqCalc(i){
+  var buy=parseFloat(document.getElementById('wq-buy-'+i).value)||0;
+  var sell=parseFloat(document.getElementById('wq-sell-'+i).value)||0;
+  var el=document.getElementById('wq-margin-'+i);
+  if(buy>0&&sell>buy){
+    var profit=sell-buy;
+    var m=Math.round((profit/sell)*100);
+    el.textContent='📈 Margin: '+m+'% · '+Math.round(profit).toLocaleString('mn-MN')+'₮/ш';
+    el.style.display='block';
+  } else { el.style.display='none'; }
+}
+
+function wqCollect(){
+  var items=[];
+  for(var i=0;i<7;i++){
+    var nameEl=document.getElementById('wq-name-'+i);
+    if(!nameEl) continue;
+    items.push({
+      date:       document.getElementById('wq-date-'+i).value,
+      product_name: nameEl.value.trim(),
+      category:   document.getElementById('wq-cat-'+i).value,
+      buy_price:  document.getElementById('wq-buy-'+i).value||'0',
+      sell_price: document.getElementById('wq-sell-'+i).value||'0',
+      supplier_url:document.getElementById('wq-supplier-'+i).value.trim(),
+      img_url:    document.getElementById('wq-img-'+i).value.trim(),
+      reason:     document.getElementById('wq-reason-'+i).value.trim()
+    });
+  }
+  return items;
+}
+
+async function wqSave(){
+  var items=wqCollect();
+  var filled=items.filter(function(it){return it.product_name;});
+  if(filled.length===0){toast('Ядаж 1 бараа оруулна уу','warn');return;}
+
+  // Week key-гээр localStorage-д хадгалах
+  wqAutoSave();
+
+  var btn=document.getElementById('wq-save-btn');
+  var st=document.getElementById('wq-status');
+  btn.disabled=true; btn.textContent='⏳ Хадгалж байна...'; st.textContent='';
+
+  try{
+    var r=await gasFetch(GAS_URL()+'?action=save_weekly_queue&queue='+encodeURIComponent(JSON.stringify(filled)));
+    var j=await r.json();
+    if(j.ok){
+      toast('✅ '+filled.length+' бараа queue-д хадгалагдлаа!','ok');
+      st.style.color='var(--green)';
+      st.textContent='✓ Нэмэгдсэн: '+j.added+' · Шинэчлэгдсэн: '+j.updated+(j.skipped?' · Алгасагдсан (явсан): '+j.skipped:'');
+    } else {
+      toast('Алдаа: '+(j.error||''),'err');
+      st.style.color='var(--red)'; st.textContent='✗ '+(j.error||'');
+    }
+  } catch(e){
+    toast('GAS холбогдсонгүй','err');
+    st.style.color='var(--red)'; st.textContent='✗ '+e.message;
+  } finally {
+    btn.disabled=false; btn.textContent='📅 Queue-д хадгалах (GAS)';
+  }
+}
+
+function wqLoad(){
+  var saved=localStorage.getItem(wqStorageKey());
+  if(saved){ toast('✓ Хадгалсан өгөгдөл ачааллаа','ok'); wqInit(); }
+  else toast('Хадгалсан queue байхгүй','warn');
+}
+
+// ── wqInit дуудалтыг найдвартай болгох ──
+// 1) showPage hook
+document.addEventListener('DOMContentLoaded', function(){
+  if(typeof showPage==='function'){
+    var _orig=window.showPage;
+    window.showPage=function(name,el){
+      _orig.call(this,name,el);
+      if(name==='admin') setTimeout(wqInit,60);
+    };
+  }
+});
+// 2) Admin sidebar товч дээр шууд event нэмэх
+setTimeout(function(){
+  var adminNi=document.querySelector('.ni[onclick*="admin"]');
+  if(adminNi){
+    adminNi.addEventListener('click',function(){ setTimeout(wqInit,80); });
+  }
+  // Admin nav tab
+  document.querySelectorAll('.ttab').forEach(function(btn){
+    if(btn.textContent.trim().toLowerCase().indexOf('admin')>-1||btn.getAttribute('onclick')||''.indexOf('admin')>-1){
+      btn.addEventListener('click',function(){ setTimeout(wqInit,80); });
+    }
+  });
+},600);
+// 3) Хэрвээ аль хэдийн admin хуудас дээр байвал шууд init хийх
+setTimeout(function(){
+  var wqSlots=document.getElementById('wq-slots');
+  if(wqSlots&&wqSlots.children.length===0){
+    var adminCard=wqSlots.closest&&wqSlots.closest('.content-panel, [data-page]');
+    wqInit();
+  }
+},800);
+
+/* ── ADMIN — WINNING PRODUCT → FREE CHANNEL ── */
+function dpCalc(){
+  var buy=parseFloat(document.getElementById('dp-buy').value)||0;
+  var sell=parseFloat(document.getElementById('dp-sell').value)||0;
+  var prev=document.getElementById('dp-margin-preview');
+  if(buy>0&&sell>0&&sell>buy){
+    var profit=sell-buy;
+    var margin=Math.round((profit/sell)*100);
+    document.getElementById('dp-profit-val').textContent=Math.round(profit).toLocaleString('mn-MN');
+    document.getElementById('dp-margin-val').textContent=margin;
+    prev.style.display='block';
+  } else {
+    prev.style.display='none';
+  }
+}
+
+function dpBuildMsg(){
+  var buy=parseFloat(document.getElementById('dp-buy').value)||0;
+  var sell=parseFloat(document.getElementById('dp-sell').value)||0;
+  var profit=sell-buy;
+  var margin=buy>0?Math.round((profit/sell)*100):0;
+  var today=new Date().toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric'});
+  var supplier=document.getElementById('dp-supplier').value.trim();
+  var name=document.getElementById('dp-name').value.trim()||'—';
+  var cat=document.getElementById('dp-cat').value;
+  var reason=document.getElementById('dp-reason').value.trim()||'—';
+  var msg='🏆 Өдрийн Winning Бараа\n'
+    +'📅 '+today+'\n\n'
+    +'📦 '+name+'\n'
+    +'🏷 Ангилал: '+cat+'\n\n'
+    +'💰 AliExpress: ~'+Math.round(buy).toLocaleString('mn-MN')+'₮\n'
+    +'💵 Зарах үнэ: '+Math.round(sell).toLocaleString('mn-MN')+'₮\n'
+    +'📈 Ашиг: '+Math.round(profit).toLocaleString('mn-MN')+'₮/ш · Margin '+margin+'%\n\n'
+    +'✨ Яагаад winning вэ:\n'+reason+'\n\n'
+    +(supplier?'🔗 Supplier линк: '+supplier+'\n\n':'')
+    +'━━━━━━━━━━━━━━━━━\n'
+    +'📊 200+ бараа · бүтэн тоо баримт → productdrop.mn\n'
+    +'🔒 Pro эрх авснаар бүхий л мэдээлэл нээгдэнэ';
+  return msg;
+}
+
+function dpPreview(){
+  var box=document.getElementById('dp-preview-box');
+  var wrap=document.getElementById('dp-preview-wrap');
+  box.textContent=dpBuildMsg();
+  wrap.style.display='block';
+  wrap.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+async function dpSend(){
+  var name=document.getElementById('dp-name').value.trim();
+  if(!name){toast('Бараа нэр оруулна уу','warn');return;}
+  var sell=parseFloat(document.getElementById('dp-sell').value)||0;
+  if(!sell){toast('Зарах үнэ оруулна уу','warn');return;}
+
+  var btn=document.getElementById('dp-send-btn');
+  var st=document.getElementById('dp-status');
+  btn.disabled=true;btn.textContent='⏳ Илгээж байна...';
+  st.textContent='';
+
+  var params=new URLSearchParams({
+    action:'send_daily_product',
+    product_name:name,
+    category:document.getElementById('dp-cat').value,
+    buy_price:document.getElementById('dp-buy').value||'0',
+    sell_price:document.getElementById('dp-sell').value||'0',
+    supplier_url:document.getElementById('dp-supplier').value.trim(),
+    reason:document.getElementById('dp-reason').value.trim(),
+    img_url:document.getElementById('dp-img').value.trim()
+  });
+
+  try{
+    var r=await gasFetch(GAS_URL()+'?'+params.toString());
+    var j=await r.json();
+    if(j.ok){
+      toast('✅ Free Channel руу амжилттай илгэгдлээ!','ok');
+      st.style.color='var(--green)';
+      st.textContent='✓ '+new Date().toLocaleTimeString('mn-MN')+' илгэгдлээ → @ProductDropFree';
+      // Preview refresh
+      document.getElementById('dp-preview-box').textContent=dpBuildMsg();
+      document.getElementById('dp-preview-wrap').style.display='block';
+    } else {
+      toast('Алдаа: '+(j.error||'Тодорхойгүй'),'err');
+      st.style.color='var(--red)';st.textContent='✗ Алдаа: '+(j.error||'');
+    }
+  } catch(e){
+    toast('GAS холбогдсонгүй','err');
+    st.style.color='var(--red)';st.textContent='✗ '+e.message;
+  } finally {
+    btn.disabled=false;btn.textContent='📤 Free Channel руу илгээх';
+  }
 }
 
 /* ── ADMIN — PASSWORD GENERATOR ── */
@@ -4134,7 +4547,7 @@ function genPW(){
   // GAS save
   var btn=document.getElementById('gen-btn');btn.disabled=true;
   var st=document.getElementById('sync-status');st.className='sync-st';st.textContent='⏳ Sheets-т хадгалж байна...';
-  fetch(GAS_URL()+'?action=add&name='+encodeURIComponent(name)+'&uid='+encodeURIComponent(uid)+'&plan='+plan+'&pw='+encodeURIComponent(pw)+'&expiry='+expiry+'&days='+days)
+  gasFetch(GAS_URL()+'?action=add&name='+encodeURIComponent(name)+'&uid='+encodeURIComponent(uid)+'&plan='+plan+'&pw='+encodeURIComponent(pw)+'&expiry='+expiry+'&days='+days)
     .then(function(r){return r.json();})
     .then(function(){st.className='sync-st ok';st.textContent='✓ Амжилттай хадгалагдлаа';btn.disabled=false;btn.textContent='✨ Нууц үг үүсгэх';})
     .catch(function(){st.className='sync-st err';st.textContent='✗ Sheets холбогдсонгүй — нууц үг үүссэн боловч хадгалагдсангүй';btn.disabled=false;btn.textContent='✨ Нууц үг үүсгэх';});
@@ -5506,13 +5919,18 @@ function ctxSetStatus(s){
 function ctxEdit(){
   if(!_ctxTask) return;
   _closeCtxMenu();
-  // Open edit — reuse openM with prefill
+  _editTaskId=_ctxTask.id;
   openM(_ctxTask.status);
   setTimeout(function(){
     document.getElementById('fn').value=_ctxTask.name||'';
     document.getElementById('fs').value=_ctxTask.sub||'';
     document.getElementById('fd').value=_ctxTask.due||'';
     document.getElementById('fst').value=_ctxTask.status||'todo';
+    // Priority
+    if(_ctxTask.p) setPri(_ctxTask.p);
+    // Save button label → edit mode
+    var saveBtn=document.getElementById('save-btn-final');
+    if(saveBtn) saveBtn.textContent='Засварлах ✓';
   },60);
 }
 function ctxDelete(){
@@ -5884,7 +6302,7 @@ async function loadDailyRevenue(){
   var gasUrl = GAS_URL();
   if(!gasUrl || gasUrl.indexOf('script.google.com') === -1) return;
   try{
-    var r=await fetch(gasUrl+'?action=getStats');
+    var r=await gasFetch(gasUrl+'?action=getStats');
     if(!r.ok) return;
     var d=await r.json();
     if(d.dailyRevenue) _dailyRevData=d.dailyRevenue;
@@ -6940,7 +7358,7 @@ function exportCSV(type){
       'Ямар зүйлд анхаарах хэрэгтэй вэ? Хамгийн яаралтай 2-3 зүйлийг дурдаж, урамшуулалтай дуусга.';
 
     try{
-      var res=await fetch(GAS_URL()+'?action=claude&prompt='+encodeURIComponent(prompt.substring(0,800)));
+      var res=await gasFetch(GAS_URL()+'?action=claude&prompt='+encodeURIComponent(prompt.substring(0,800)));
       var data=await res.json();
       var text=data.text||'';
       if(!text) throw new Error('empty');
@@ -8484,7 +8902,7 @@ function injectReminderBtns(){
     if(smsLbl) smsLbl.textContent = '⏳ Ачааллаж байна...';
     _tgRecipients = []; _phoneList = [];
     try {
-      var res = await fetch(GAS_URL() + '?action=listLeads&seg=' + _seg);
+      var res = await gasFetch(GAS_URL() + '?action=listLeads&seg=' + _seg);
       var data = await res.json();
       if(Array.isArray(data)){
         data.forEach(function(r){
@@ -8495,7 +8913,7 @@ function injectReminderBtns(){
     } catch(e){
       // Fallback from users list
       try {
-        var r2 = await fetch(GAS_URL() + '?action=list');
+        var r2 = await gasFetch(GAS_URL() + '?action=list');
         var users = await r2.json();
         if(Array.isArray(users)){
           var filtered = users.filter(function(u){
@@ -8652,8 +9070,8 @@ function injectReminderBtns(){
     try {
       // Stats + Context хавтгай дуудна
       var [statsRes, ctxRes] = await Promise.all([
-        fetch(GAS_URL() + '?action=getStats'),
-        fetch(GAS_URL() + '?action=getContext')
+        gasFetch(GAS_URL() + '?action=getStats'),
+        gasFetch(GAS_URL() + '?action=getContext')
       ]);
       var s = await statsRes.json();
       var ctx = await ctxRes.json();
@@ -8734,7 +9152,7 @@ function injectReminderBtns(){
     var next = cur === 'DONE' ? 'TODO' : 'DONE';
     el.style.opacity = '0.4';
     try {
-      await fetch(GAS_URL() + '?action=updateContext&row='+row+'&status='+next);
+      await gasFetch(GAS_URL() + '?action=updateContext&row='+row+'&status='+next);
       await loadAIContext();
       if(typeof toast === 'function') toast(next === 'DONE' ? '✅ Хийгдсэн болголоо' : '↩️ TODO болголоо');
     } catch(e) {
@@ -8747,7 +9165,7 @@ function injectReminderBtns(){
     var item = (inp ? inp.value : '').trim();
     if(!item){ if(typeof toast==='function') toast('⚠️ Зүйл бичнэ үү'); return; }
     try {
-      await fetch(GAS_URL() + '?action=addContext&item='+encodeURIComponent(item)+'&status=TODO&category=custom');
+      await gasFetch(GAS_URL() + '?action=addContext&item='+encodeURIComponent(item)+'&status=TODO&category=custom');
       inp.value = '';
       await loadAIContext();
       if(typeof toast==='function') toast('✅ Нэмэгдлээ');
@@ -8812,8 +9230,14 @@ function injectReminderBtns(){
   }
 
   async function callClaude(userMsg){
-    var url = GAS_URL() + '?action=claude&q=' + encodeURIComponent(userMsg.substring(0, 2400));
-    var resp = await fetch(url);
+    // POST аргаар илгээнэ — Монгол URL encode хэт урт болохоос сэргийлнэ
+    var url = GAS_URL() + '?action=claude';
+    var body = 'q=' + encodeURIComponent(userMsg.substring(0, 2400));
+    var resp = await gasFetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body
+    });
     if(!resp.ok) throw new Error('HTTP ' + resp.status);
     var d = await resp.json();
     if(!d.ok) throw new Error(d.error || 'GAS алдаа');
@@ -8891,7 +9315,7 @@ function injectReminderBtns(){
     try {
       var today = new Date().toLocaleDateString('mn-MN');
       var url = GAS_URL() + '?action=saveAnalysis&date=' + safeEnc(today) + '&text=' + safeEnc(text.substring(0,800));
-      var res = await fetch(url);
+      var res = await gasFetch(url);
       var data = await res.json();
       if(data.ok){
         btn.textContent = '✓ Хадгалагдлаа';
@@ -8914,33 +9338,29 @@ function injectReminderBtns(){
   // ── AI → Kanban task parser ─────────────────────────────
   window.parseAITasks = function(text){
     var tasks = [];
-    // Match lines starting with 🔴 🟡 🟢 📌 ### or numbered
     var lines = text.split('\n');
+    var curP = 'me';
     lines.forEach(function(line){
       line = line.trim();
-      if(!line) return;
-      // Priority icons
-      var p = 'me'; // default
-      if(line.match(/^🔴/)) p = 'urgent';
-      else if(line.match(/^🟡/)) p = 'mid';
-      else if(line.match(/^🟢/)) p = 'me';
-      else if(line.match(/^📌/)) p = 'me';
-      else if(line.match(/^###/)) p = 'me';
-      else return; // skip non-task lines
+      if(!line || line === '---') return;
 
-      // Clean the line
-      var name = line
-        .replace(/^[🔴🟡🟢📌#\s]+/,'')
-        .replace(/^\d+\.\s*/,'')
-        .replace(/\*\*/g,'')
-        .replace(/ЯАРАЛТАЙ\s*:?\s*/,'')
-        .replace(/АНХААРУУЛГА\s*:?\s*/,'')
-        .replace(/ЭНЭ 7 ХОНОГТ\s*:?\s*/,'')
-        .replace(/ТОО\s*:?\s*/,'')
+      // Detect section priority — u flag маш чухал: emoji surrogate pair зөв таних
+      var stripped = line.replace(/^#+\s*/,'').trim();
+      if(/^🔴/u.test(stripped)) { curP = 'urgent'; }
+      else if(/^🟡/u.test(stripped)) { curP = 'mid'; }
+      else if(/^🟢/u.test(stripped)) { curP = 'me'; }
+      else { return; } // emoji-гүй мөрийг алгасна
+
+      // Emoji болон дараах зайг u flag-тайгаар зөв устгана (◆ алдаа гарахгүй)
+      var name = stripped
+        .replace(/^(?:🔴|🟡|🟢)\s*/u, '')
+        .replace(/\*\*/g, '')
+        .replace(/^(ЯАРАЛТАЙ|Blind\s*[Ss]pot|Боломж)\s*[:\-–]?\s*/iu, '')
+        .replace(/→.*$/,'')   // → Шийдэл: хэсгийг таслана
         .trim();
 
       if(name.length > 5 && name.length < 120){
-        tasks.push({ name: name, p: p });
+        tasks.push({ name: name, p: curP });
       }
     });
     return tasks;
@@ -9022,7 +9442,7 @@ function injectReminderBtns(){
     if(!text.trim()){ if(typeof toast==='function') toast('⚠️ Эхлээд шинжилгээ авна уу'); return; }
     btn.disabled = true; btn.textContent = '...';
     try {
-      var res = await fetch(GAS_URL() + '?action=saveAILog&text=' + encodeURIComponent(text.substring(0,500)));
+      var res = await gasFetch(GAS_URL() + '?action=saveAILog&text=' + encodeURIComponent(text.substring(0,500)));
       var data = await res.json();
       if(data.ok){
         status.textContent = '✓ Sheets-д хадгалагдлаа';
@@ -9058,7 +9478,7 @@ function injectReminderBtns(){
         + '&startH=' + sH + '&startM=' + sM
         + '&endH='   + eH + '&endM='   + eM
         ;
-      var res  = await fetch(url);
+      var res  = await gasFetch(url);
       var data = await res.json();
       if(data.ok){
         status.textContent = '✓ ' + data.msg;
@@ -9102,7 +9522,7 @@ function injectReminderBtns(){
         + '&date='   + safeEnc(date)
         + '&startH=' + sH + '&startM=' + sM
         + '&endH='   + eH + '&endM='   + eM;
-      var res  = await fetch(url);
+      var res  = await gasFetch(url);
       var data = await res.json();
       if(data.ok){
         status.textContent = '✓ ' + (data.msg || 'Нэмэгдлээ!');
@@ -9211,7 +9631,7 @@ function injectReminderBtns(){
     if(btn){ btn.disabled = true; btn.textContent = 'Шинжилж байна...'; }
 
     try {
-      var r = await fetch(GAS_URL(), { method:'POST',
+      var r = await gasFetch(GAS_URL(), { method:'POST',
         headers:{'Content-Type':'application/x-www-form-urlencoded'},
         body: 'action=productResearch&product=' + encodeURIComponent(prod) });
       var data = await r.json();
@@ -9345,5 +9765,326 @@ setTimeout(function(){
 
 })();
 </script>
+<!-- ── PRODUCT PICKER MODAL ── -->
+<div id="prod-picker-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:19999;align-items:center;justify-content:center;padding:12px;">
+  <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:20px;width:100%;max-width:960px;height:min(92vh,780px);display:flex;flex-direction:column;box-shadow:0 32px 80px rgba(0,0,0,.4);overflow:hidden;">
+    <!-- Header -->
+    <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;background:var(--bg2);">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:14px;font-weight:800;color:var(--text);">📦 Бараа сонгох</div>
+        <div id="pp-slot-label" style="font-size:11px;color:var(--text3);font-weight:600;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
+      </div>
+      <button onclick="ppClose()" style="width:32px;height:32px;border-radius:10px;border:none;background:var(--bg4);cursor:pointer;font-size:14px;color:var(--text3);flex-shrink:0;transition:background .15s;" onmouseover="this.style.background='var(--redbg)';this.style.color='var(--red)'" onmouseout="this.style.background='var(--bg4)';this.style.color='var(--text3)'">✕</button>
+    </div>
+    <!-- Search + Filter bar -->
+    <div style="padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap;background:var(--bg3);">
+      <input id="pp-search" placeholder="🔍 Бараа хайх..." oninput="ppFilter()" style="flex:1;min-width:140px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--border2);background:var(--bg2);color:var(--text);font-size:13px;font-family:inherit;outline:none;transition:border-color .15s;" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border2)'">
+      <div id="pp-cats" style="display:flex;gap:5px;flex-wrap:wrap;">
+        <button class="pp-cat active" onclick="ppSetCat('',this)">Бүгд</button>
+        <button class="pp-cat" onclick="ppSetCat('Home',this)">🏠 Гэр</button>
+        <button class="pp-cat" onclick="ppSetCat('Beauty',this)">💄 Гоо</button>
+        <button class="pp-cat" onclick="ppSetCat('Health',this)">💊 Эрүүл</button>
+        <button class="pp-cat" onclick="ppSetCat('Kids',this)">🧒 Хүүхэд</button>
+        <button class="pp-cat" onclick="ppSetCat('Goods',this)">📦 Бараа</button>
+      </div>
+      <div id="pp-count" style="font-size:11px;color:var(--text3);white-space:nowrap;margin-left:auto;font-weight:600;"></div>
+    </div>
+    <!-- Product grid — scrollable -->
+    <div id="pp-grid" style="overflow-y:auto;padding:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;flex:1;-webkit-overflow-scrolling:touch;"></div>
+  </div>
+</div>
+<!-- Image zoom overlay -->
+<div id="pp-img-zoom" onclick="this.style.display='none'" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:29999;align-items:center;justify-content:center;cursor:zoom-out;">
+  <img id="pp-img-zoom-img" style="max-width:90vw;max-height:88vh;border-radius:14px;object-fit:contain;box-shadow:0 24px 80px rgba(0,0,0,.6);" src="">
+  <div style="position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-size:12px;color:rgba(255,255,255,.6);background:rgba(0,0,0,.4);padding:6px 14px;border-radius:99px;pointer-events:none;">Хаахын тулд дарна уу</div>
+</div>
+
+<style>
+.pp-cat{padding:5px 12px;border-radius:8px;border:1.5px solid var(--border2);background:var(--bg2);color:var(--text3);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;}
+.pp-cat.active,.pp-cat:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.pp-card{position:relative;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .18s cubic-bezier(.25,.46,.45,.94);background:var(--bg2);display:flex;flex-direction:column;}
+.pp-card:hover{border-color:var(--blue);transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,122,255,.2);}
+.pp-card-img-wrap{position:relative;width:100%;padding-top:100%;overflow:hidden;background:var(--bg4);flex-shrink:0;}
+.pp-card-img-wrap .pp-zoom-btn{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:8px;background:rgba(0,0,0,.5);border:none;color:#fff;font-size:13px;cursor:pointer;display:none;align-items:center;justify-content:center;transition:background .15s;z-index:2;backdrop-filter:blur(4px);}
+.pp-card:hover .pp-zoom-btn{display:flex;}
+.pp-card img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .25s;}
+.pp-card:hover img{transform:scale(1.04);}
+.pp-card-body{padding:8px 10px 10px;flex:1;display:flex;flex-direction:column;gap:3px;}
+.pp-card-name{font-size:11px;font-weight:700;color:var(--text);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.pp-card-meta{display:flex;align-items:center;justify-content:space-between;margin-top:2px;}
+.pp-card-mg{font-size:11px;font-weight:800;color:var(--green);}
+.pp-card-cat{font-size:10px;color:var(--text3);font-weight:600;background:var(--bg4);padding:1px 6px;border-radius:5px;}
+.pp-card-price{font-size:10px;color:var(--text3);margin-top:1px;}
+.pp-card-select-btn{margin-top:auto;padding:5px;background:var(--bluebg);color:var(--blue);border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;display:none;}
+.pp-card:hover .pp-card-select-btn{display:block;}
+.pp-card:hover .pp-card-select-btn:hover{background:var(--blue);color:#fff;}
+@media(max-width:600px){
+  #pp-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))!important;}
+  .pp-card-img-wrap .pp-zoom-btn{display:flex!important;}
+}
+</style>
+
+<script>
+/* ── PRODUCT PICKER ── */
+var _ppProducts=[], _ppFiltered=[], _ppCat='', _ppSlot=-1, _ppTarget='wq'; // target: 'wq' | 'dp'
+
+var CAT_MAP={'Home':'Гэр · Home','Beauty':'Гоо сайхан · Beauty','Health':'Эрүүл мэнд · Health','Kids':'Хүүхэд · Kids','Goods':'Бараа · Goods'};
+
+async function ppLoad(){
+  if(_ppProducts.length>0) return; // cached
+  // Try sessionStorage cache
+  var cached=sessionStorage.getItem('pp_products');
+  if(cached){ try{ _ppProducts=JSON.parse(cached); return; }catch(e){} }
+
+  // Fetch Pro.html from same domain
+  var ppStatus=document.getElementById('pp-grid');
+  ppStatus.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text3);font-size:13px;">⏳ Бараа татаж байна...</div>';
+
+  try{
+    // Try multiple possible paths
+    var paths=['/Pro.html','/pro.html','./Pro.html','Pro.html'];
+    var html='';
+    for(var pi=0;pi<paths.length;pi++){
+      try{
+        var resp=await fetch(paths[pi],{credentials:'omit'});
+        if(resp.ok){ html=await resp.text(); break; }
+      }catch(fe){}
+    }
+    if(!html) throw new Error('Pro.html татаж чадсангүй');
+
+    // Extract PRODUCTS array
+    var startIdx=html.indexOf('const PRODUCTS = [');
+    if(startIdx===-1) startIdx=html.indexOf('var PRODUCTS = [');
+    if(startIdx===-1) throw new Error('PRODUCTS array олдсонгүй');
+    var arrStart=html.indexOf('[',startIdx);
+
+    // Find matching closing bracket
+    var depth=0, endIdx=-1;
+    for(var ci=arrStart;ci<html.length;ci++){
+      if(html[ci]==='[') depth++;
+      else if(html[ci]===']'){ depth--; if(depth===0){endIdx=ci;break;} }
+    }
+    var arrStr=html.substring(arrStart,endIdx+1);
+    _ppProducts=JSON.parse(arrStr);
+    sessionStorage.setItem('pp_products',JSON.stringify(_ppProducts));
+  }catch(err){
+    ppStatus.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--red);font-size:13px;">❌ '+err.message+'<br><small style="color:var(--text3);">Pro.html-г нэгэн зэрэг нээгээд дахин оролдоно уу</small></div>';
+    return;
+  }
+}
+
+function ppOpen(slotIdx, target){
+  _ppSlot=slotIdx;
+  _ppTarget=target||'wq';
+  var overlay=document.getElementById('prod-picker-overlay');
+  overlay.style.display='flex';
+  var lbl=document.getElementById('pp-slot-label');
+  if(target==='dp'){
+    lbl.textContent='Өдрийн winning бараа сонгох';
+  } else {
+    var days=['Даваа','Мягмар','Лхагва','Пүрэв','Баасан','Бямба','Ням'];
+    var dateEl=document.getElementById('wq-date-'+slotIdx);
+    lbl.textContent=(days[slotIdx]||'')+(dateEl?' · '+dateEl.value:'');
+  }
+  ppLoad().then(function(){ ppFilter(); });
+}
+
+function ppClose(){
+  document.getElementById('prod-picker-overlay').style.display='none';
+}
+
+function ppSetCat(cat,btn){
+  _ppCat=cat;
+  document.querySelectorAll('.pp-cat').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  ppFilter();
+}
+
+function ppFilter(){
+  var q=(document.getElementById('pp-search').value||'').toLowerCase().trim();
+  _ppFiltered=_ppProducts.filter(function(p){
+    var matchCat=!_ppCat||(p.mc||'')=== _ppCat;
+    var matchQ=!q||(p.n||'').toLowerCase().indexOf(q)>-1||(p.desc||'').toLowerCase().indexOf(q)>-1;
+    return matchCat&&matchQ;
+  });
+  document.getElementById('pp-count').textContent=_ppFiltered.length+' бараа';
+  ppRender();
+}
+
+function ppRender(){
+  var grid=document.getElementById('pp-grid');
+  if(_ppFiltered.length===0){
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:var(--text3);"><div style="font-size:32px;margin-bottom:8px;">📦</div><div style="font-size:13px;font-weight:600;">Бараа олдсонгүй</div></div>';
+    return;
+  }
+  grid.innerHTML=_ppFiltered.map(function(p){
+    var gIdx=_ppProducts.indexOf(p);
+    var mg=p.mg||Math.round(((p.pN-(p.tcN||p.cN||0))/p.pN)*100)||0;
+    var imgSrc=p.imgUrl||'';
+    var hasImg=imgSrc&&imgSrc.indexOf('http')===0;
+    return '<div class="pp-card" onclick="ppSelect('+gIdx+')">'
+      +'<div class="pp-card-img-wrap">'
+      +(hasImg?'<img src="'+x(imgSrc)+'" loading="lazy" onerror="this.parentElement.style.background=\'var(--bg4)\';this.style.display=\'none\'">':'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--text4);">📦</div>')
+      +'<button class="pp-zoom-btn" onclick="event.stopPropagation();ppZoomImg(\''+x(imgSrc)+'\')" title="Зургийг бүтнээр харах">🔍</button>'
+      +'</div>'
+      +'<div class="pp-card-body">'
+      +'<div class="pp-card-name">'+x(p.n||'')+'</div>'
+      +'<div class="pp-card-meta"><span class="pp-card-mg">'+mg+'%</span><span class="pp-card-cat">'+x(p.mc||'')+'</span></div>'
+      +'<div class="pp-card-price">'+Math.round(p.tcN||p.cN||0).toLocaleString('mn-MN')+'₮ → '+Math.round(p.pN||0).toLocaleString('mn-MN')+'₮</div>'
+      +'<button class="pp-card-select-btn">✓ Сонгох</button>'
+      +'</div></div>';
+  }).join('');
+}
+
+function ppZoomImg(url){
+  if(!url) return;
+  var ov=document.getElementById('pp-img-zoom');
+  var img=document.getElementById('pp-img-zoom-img');
+  if(!ov||!img) return;
+  img.src=url;
+  ov.style.display='flex';
+}
+
+function ppSelect(globalIdx){
+  var p=_ppProducts[globalIdx];
+  if(!p) return;
+  var catMapped=CAT_MAP[p.mc]||p.mc||'Бараа · Goods';
+  var buyPrice=p.tcN||p.cN||0; // Total cost (shipping included)
+  var sellPrice=p.pN||0;
+  var reason=(p.hook||p.aiReason||'').substring(0,200);
+
+  if(_ppTarget==='dp'){
+    // Single product sender
+    var setV=function(id,v){var el=document.getElementById(id);if(el)el.value=v;};
+    setV('dp-name',p.n||'');
+    setV('dp-buy',Math.round(buyPrice));
+    setV('dp-sell',Math.round(sellPrice));
+    setV('dp-supplier',p.aliUrl||'');
+    setV('dp-img',p.imgUrl||'');
+    setV('dp-reason',reason);
+    // Show image preview
+    if(typeof dpImgPreviewFn==='function') dpImgPreviewFn(p.imgUrl||'');
+    // Category select
+    var catSel=document.getElementById('dp-cat');
+    if(catSel) for(var oi=0;oi<catSel.options.length;oi++){ if(catSel.options[oi].text===catMapped){catSel.selectedIndex=oi;break;} }
+    dpCalc();
+    ppClose();
+    toast('✓ '+p.n+' сонгогдлоо','ok');
+  } else {
+    // Weekly queue slot
+    var i=_ppSlot;
+    var setWQ=function(id,v){var el=document.getElementById(id);if(el)el.value=v;};
+    setWQ('wq-name-'+i,p.n||'');
+    setWQ('wq-buy-'+i,Math.round(buyPrice));
+    setWQ('wq-sell-'+i,Math.round(sellPrice));
+    setWQ('wq-supplier-'+i,p.aliUrl||'');
+    setWQ('wq-img-'+i,p.imgUrl||'');
+    setWQ('wq-reason-'+i,reason);
+    // Category select
+    var catEl=document.getElementById('wq-cat-'+i);
+    if(catEl) for(var oj=0;oj<catEl.options.length;oj++){ if(catEl.options[oj].text===catMapped){catEl.selectedIndex=oj;break;} }
+    wqCalc(i);
+    // Update thumbnail
+    var thumb=document.getElementById('wq-thumb-'+i);
+    if(thumb&&p.imgUrl){ thumb.src=p.imgUrl; thumb.style.display='block'; }
+    // Auto-save immediately
+    setTimeout(wqAutoSave, 50);
+    ppClose();
+    toast('✓ '+p.n+' сонгогдлоо','ok');
+  }
+}
+
+// Close on overlay click
+document.getElementById('prod-picker-overlay').addEventListener('click',function(e){
+  if(e.target===this) ppClose();
+});
+
+// ── IMAGE PREVIEW for dp-img ──
+function dpImgPreviewFn(url) {
+  var wrap = document.getElementById('dp-img-preview-wrap');
+  var img = document.getElementById('dp-img-preview');
+  if(!wrap || !img) return;
+  if(url && (url.startsWith('http://') || url.startsWith('https://'))) {
+    img.src = url;
+    wrap.style.display = 'block';
+  } else {
+    wrap.style.display = 'none';
+  }
+}
+
+// ── AI WINNING REASONS GENERATOR ──
+async function dpGenAI() {
+  var btn = document.getElementById('dp-ai-btn');
+  var name = (document.getElementById('dp-name')||{}).value||'';
+  var cat  = (document.getElementById('dp-cat')||{}).value||'';
+  var buy  = parseFloat((document.getElementById('dp-buy')||{}).value)||0;
+  var sell = parseFloat((document.getElementById('dp-sell')||{}).value)||0;
+  name = name.trim();
+  if(!name){ if(typeof toast==='function') toast('Эхлээд бараа сонгоно уу','err'); return; }
+  btn.textContent = '⏳ Боловсруулж байна...';
+  btn.disabled = true;
+  try {
+    var params = new URLSearchParams({
+      action:       'gen_winning_reasons',
+      product_name: name,
+      category:     cat,
+      buy_price:    Math.round(buy),
+      sell_price:   Math.round(sell)
+    });
+    var r = await gasFetch(GAS_URL() + '?' + params.toString());
+    var j = await r.json();
+    if(j.ok && j.text && j.text.trim()){
+      document.getElementById('dp-reason').value = j.text.trim();
+      if(typeof toast==='function') toast('✓ AI winning шалтгаан бэлэн боллоо', 'ok');
+    } else {
+      if(typeof toast==='function') toast('AI алдаа: '+(j.error||'Хариу хоосон'),'err');
+    }
+  } catch(e) {
+    if(typeof toast==='function') toast('AI алдаа: '+e.message, 'err');
+  }
+  btn.textContent = '🤖 AI үүсгэх';
+  btn.disabled = false;
+}
+
+// Clear sessionStorage cache to re-fetch when needed
+function ppClearCache(){ sessionStorage.removeItem('pp_products'); _ppProducts=[]; toast('Cache цэвэрлэгдлээ — дараагийн удаа дахин татна','ok'); }
+
+// ── AI WINNING REASONS — Weekly Queue ──
+async function wqGenAI(idx) {
+  var btn = document.getElementById('wq-ai-btn-'+idx);
+  var name = (document.getElementById('wq-name-'+idx)||{}).value||'';
+  var cat  = (document.getElementById('wq-cat-'+idx)||{}).value||'';
+  var buy  = parseFloat((document.getElementById('wq-buy-'+idx)||{}).value)||0;
+  var sell = parseFloat((document.getElementById('wq-sell-'+idx)||{}).value)||0;
+  name = name.trim();
+  if(!name){ if(typeof toast==='function') toast('Эхлээд бараа нэр оруулна уу','err'); return; }
+  if(btn){ btn.textContent='⏳'; btn.disabled=true; }
+  try {
+    var params = new URLSearchParams({
+      action:       'gen_winning_reasons',
+      product_name: name,
+      category:     cat,
+      buy_price:    Math.round(buy),
+      sell_price:   Math.round(sell)
+    });
+    var r = await gasFetch(GAS_URL() + '?' + params.toString());
+    var j = await r.json();
+    if(j.ok && j.text && j.text.trim()){
+      var ta = document.getElementById('wq-reason-'+idx);
+      if(ta){ ta.value = j.text.trim(); wqAutoSave(); }
+      if(typeof toast==='function') toast('✓ AI winning шалтгаан бэлэн боллоо','ok');
+    } else {
+      if(typeof toast==='function') toast('AI алдаа: '+(j.error||'Хариу хоосон'),'err');
+    }
+  } catch(e) {
+    if(typeof toast==='function') toast('AI алдаа: '+e.message,'err');
+  }
+  if(btn){ btn.textContent='🤖 AI'; btn.disabled=false; }
+}
+
+// ── Хуудас хаахын өмнө автоматаар хадгалах ──
+window.addEventListener('beforeunload', function(){ try{ wqAutoSave(); }catch(e){} });
+</script>
+
 </body>
 </html>
