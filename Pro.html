@@ -183,6 +183,19 @@ body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font
 .supp-v.blue{color:var(--blue)}.supp-v.red{color:var(--red)}
 .supp-note{margin-top:12px;font-size:11px;color:#92400e;background:#fffbeb;border:1px solid #fed7aa;border-radius:12px;padding:8px;line-height:1.6}
 .supp-disclaimer{margin-top:8px;font-size:10px;color:var(--muted2);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px;line-height:1.6}
+.smsg-wrap{margin-top:12px}
+.smsg-toggle{width:100%;background:var(--accent-bg);border:1.5px solid var(--accent);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:inherit}
+.smsg-toggle .smsg-arrow{font-size:11px;transition:transform .2s;color:var(--muted)}
+.smsg-body{display:none;margin-top:8px;display:flex;flex-direction:column;gap:10px}
+.smsg-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.smsg-head{padding:10px 14px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.smsg-step{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);font-family:var(--mono)}
+.smsg-title{font-size:13px;font-weight:700;color:var(--text);flex:1}
+.smsg-copy{padding:4px 10px;background:var(--accent);border:none;border-radius:6px;font-size:11px;font-weight:700;color:#000;cursor:pointer;white-space:nowrap;font-family:inherit;transition:opacity .15s}
+.smsg-copy:active{opacity:.7}
+.smsg-copy.copied{background:#22c55e;color:#fff}
+.smsg-note{padding:8px 14px;font-size:11px;color:var(--muted);background:rgba(200,255,0,.04);border-bottom:1px solid var(--border);line-height:1.5}
+.smsg-text{padding:12px 14px;font-size:12px;color:var(--text2);line-height:1.8;font-family:var(--mono);white-space:pre-wrap;word-break:break-word}
 
 /* CALC */
 .calc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
@@ -364,17 +377,6 @@ body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font
 @keyframes dbounce{0%,80%,100%{transform:translateY(0);opacity:.3}40%{transform:translateY(-5px);opacity:1}}
 .script-saved{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--accent);font-weight:700;padding:2px 8px;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:4px;margin-left:6px}
 
-/* BEST SELLER MODAL in panel */
-.bs-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
-.bs-modal.open{display:flex;animation:tut-bg-in .2s ease}
-.bs-box{background:var(--white);border-radius:16px;max-width:520px;width:100%;box-shadow:var(--shadow-lg);overflow:hidden;animation:tut-scale-in .24s cubic-bezier(.34,1.1,.64,1)}
-.bs-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.bs-body{padding:20px 24px;max-height:60vh;overflow-y:auto}
-.bs-item{display:flex;align-items:flex-start;gap:12px;padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;cursor:pointer;text-decoration:none;transition:all .15s}
-.bs-item:hover{border-color:var(--accent);background:var(--accent-bg)}
-.bs-num{font-size:12px;font-weight:800;color:var(--accent);width:20px;flex-shrink:0;padding-top:1px}
-.bs-info h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
-.bs-info p{font-size:11px;color:var(--muted)}
 
 /* TARGET FIELDS */
 .target-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
@@ -755,8 +757,6 @@ body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font
 [data-theme="dark"] .lg-form,
 [data-theme="dark"] .tb-dropdown,
 [data-theme="dark"] .cf-box,
-[data-theme="dark"] .bs-box,
-[data-theme="dark"] .bs-modal .bs-box,
 [data-theme="dark"] .pc-box,
 [data-theme="dark"] .cs-box,
 [data-theme="dark"] .se-box { background:var(--white) !important; border-color:var(--border) !important; }
@@ -2748,28 +2748,6 @@ body.locked{overflow:hidden;position:fixed;width:100%;height:100%}
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
 <!-- BEST SELLER MODAL -->
-<div class="bs-modal" id="bs-modal">
-  <div class="bs-box">
-    <div class="bs-header">
-      <div><div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:2px">Онлайн бизнес каталог</div><h3 style="font-size:16px;font-weight:800">🌍 Дэлхийн Best Seller</h3></div>
-      <button style="background:none;border:1px solid var(--border);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:14px" onclick="document.getElementById('bs-modal').classList.remove('open');bodyUnlock()">✕</button>
-    </div>
-    <div class="bs-body" style="padding:40px 24px;text-align:center">
-      <div style="font-size:52px;margin-bottom:16px">🌍</div>
-      <h3 style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:10px">Онлайн бизнес бараанууд</h3>
-      <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:24px">Дэлхийн хамгийн их зарагддаг Онлайн бизнес бараануудын<br>жагсаалтыг тун удахгүй энд нэмнэ.</p>
-      <div style="display:inline-flex;align-items:center;gap:6px;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:20px;padding:8px 20px;font-size:12px;font-weight:700;color:var(--accent);margin-bottom:24px">
-        ⏳ Тун удахгүй...
-      </div>
-      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:12px;color:var(--muted);text-align:left;line-height:1.8">
-        📦 Шилдэг Онлайн бизнес бараанууд<br>
-        💰 Ашгийн margin шинжилгээтэй<br>
-        🔗 Alibaba нийлүүлэгчийн холбоостой<br>
-        📊 Борлуулалтын статистиктай
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- PROFIT CALCULATOR MODAL -->
 <div class="pc-modal" id="pc-modal" onclick="if(event.target===this){this.classList.remove('open');bodyUnlock();}">
@@ -3151,7 +3129,6 @@ body.locked{overflow:hidden;position:fixed;width:100%;height:100%}
     <div class="sidebar-section-lbl">Хэрэгсэл</div>
     <div class="sidebar-item" onclick="openPCModal()" title="Ашгийн тооцоолол"><span class="sidebar-item-icon">💰</span><span>Ашгийн тооцоолол</span></div>
     <div class="sidebar-item" onclick="openAdMetric(this)" title="Ad Metric"><span class="sidebar-item-icon">📊</span><span>Ad Metric</span></div>
-    <div class="sidebar-item" onclick="document.getElementById('bs-modal').classList.add('open');bodyLock();" title="Best Seller"><span class="sidebar-item-icon">🌍</span><span>Дэлхийн Best Seller</span></div>
     <div class="sidebar-item" onclick="openLessons()" title="Business Хичээл"><span class="sidebar-item-icon">🎓</span><span>Business Хичээл</span></div>
   </div>
   
@@ -3372,6 +3349,143 @@ body.locked{overflow:hidden;position:fixed;width:100%;height:100%}
           <div class="supp-grid" id="supp-grid"></div>
           <div class="supp-note" id="supp-note"></div>
           <div class="supp-disclaimer">⚠️ <b>Анхаар:</b> ProductDrop нь зөвхөн судалгааны платформ. Бараа захиалахдаа Alibaba.com дээр шууд нэвтэрч, тэнд дэх нийлүүлэгчтэй харилцаарай.</div>
+
+          <!-- SUPPLIER MESSAGE TEMPLATES -->
+          <div class="smsg-wrap">
+            <button class="smsg-toggle" onclick="toggleSupMsg(this)">
+              <span>📋 Нийлүүлэгчтэй харилцах мессеж загвар</span>
+              <span class="smsg-arrow" id="smsg-arrow">▼</span>
+            </button>
+            <div class="smsg-body" id="smsg-body" style="display:none">
+
+              <!-- 1. Анхны холбоо барих -->
+              <div class="smsg-card">
+                <div class="smsg-head">
+                  <div><div class="smsg-step">Алхам 1</div><div class="smsg-title">Анхны холбоо барих</div></div>
+                  <button class="smsg-copy" onclick="copyMsg(this,'msg1')">Хуулах</button>
+                </div>
+                <div class="smsg-note">💡 Alibaba дээр supplier-н "Contact Supplier" товч дарж энэ мессежийг илгээнэ. Мессежийн эхэнд барааны нэрийг орлуулаарай.</div>
+                <div class="smsg-text" id="msg1">Hello,
+
+I found your product on Alibaba and I am interested in placing an order.
+
+Could you please provide the following information:
+1. Product price per unit (MOQ and bulk price)
+2. Minimum Order Quantity (MOQ)
+3. Available colors and sizes
+4. Sample availability and sample cost
+5. Production lead time
+6. Shipping options to Mongolia (UB)
+
+I am a reseller based in Mongolia and plan to order regularly if the quality meets our requirements.
+
+Looking forward to your reply.
+
+Best regards</div>
+              </div>
+
+              <!-- 2. Sample захиалах -->
+              <div class="smsg-card">
+                <div class="smsg-head">
+                  <div><div class="smsg-step">Алхам 2</div><div class="smsg-title">Sample захиалах</div></div>
+                  <button class="smsg-copy" onclick="copyMsg(this,'msg2')">Хуулах</button>
+                </div>
+                <div class="smsg-note">💡 Хариу ирсний дараа sample захиалахад ашиглана. Ихэвчлэн нийт бараа + хүргэлтийн зардлыг урьдчилж төлнө.</div>
+                <div class="smsg-text" id="msg2">Hello,
+
+Thank you for your quick response.
+
+I would like to order 1–2 samples to test the product quality before placing a bulk order.
+
+Could you please confirm:
+1. Sample price (including shipping to Mongolia/Ulaanbaatar)
+2. Shipping method and estimated delivery time
+3. Payment method for sample order (PayPal / Alibaba Trade Assurance)
+
+If the sample quality is good, I plan to place a larger order of [XX] units.
+
+Please send me a proforma invoice for the sample.
+
+Thank you!</div>
+              </div>
+
+              <!-- 3. MOQ багасгах -->
+              <div class="smsg-card">
+                <div class="smsg-head">
+                  <div><div class="smsg-step">Алхам 3</div><div class="smsg-title">MOQ багасгах хүсэлт</div></div>
+                  <button class="smsg-copy" onclick="copyMsg(this,'msg3')">Хуулах</button>
+                </div>
+                <div class="smsg-note">💡 MOQ хэт өндөр байвал энэ мессежийг ашиглана. Ихэнх supplier нь жижиг захиалгад зөвшөөрдөг — шаардахаас бүү ай.</div>
+                <div class="smsg-text" id="msg3">Hello,
+
+I am very interested in your product, but the MOQ of [XXX] units is too high for my first order.
+
+As a new customer testing the Mongolian market, I would like to start with a smaller quantity — around [XX–XX] units — to verify demand before scaling up.
+
+If the first order goes well, I am committed to placing larger orders every [30–60] days.
+
+Could you please make an exception and allow a smaller trial order this time?
+
+I am ready to proceed with payment immediately if we can agree on this.
+
+Thank you for your understanding!</div>
+              </div>
+
+              <!-- 4. Үнэ тохиролцох -->
+              <div class="smsg-card">
+                <div class="smsg-head">
+                  <div><div class="smsg-step">Алхам 4</div><div class="smsg-title">Үнэ тохиролцох</div></div>
+                  <button class="smsg-copy" onclick="copyMsg(this,'msg4')">Хуулах</button>
+                </div>
+                <div class="smsg-note">💡 Alibaba дээрх үнэ ихэвчлэн тохиролцох боломжтой. 10–20% хямдрал хүсэх нь боломжтой — ялангуяа дахин дахин захиалах амлалт өгвэл.</div>
+                <div class="smsg-text" id="msg4">Hello,
+
+Thank you for your quote. Your product looks great.
+
+I have received quotes from a few other suppliers for similar products at a lower price. However, I prefer to work with your company based on your reviews and product quality.
+
+Could you offer a better price for an order of [XX] units? I am looking for a price around $[X.XX] per unit.
+
+If we can agree on pricing, I am ready to place the order today and can become a long-term repeat customer.
+
+Please let me know your best price.
+
+Best regards</div>
+              </div>
+
+              <!-- 5. Захиалга баталгаажуулах -->
+              <div class="smsg-card">
+                <div class="smsg-head">
+                  <div><div class="smsg-step">Алхам 5</div><div class="smsg-title">Захиалга баталгаажуулах</div></div>
+                  <button class="smsg-copy" onclick="copyMsg(this,'msg5')">Хуулах</button>
+                </div>
+                <div class="smsg-note">💡 Үнэ, тоо хэмжээ тохирсны дараа ашиглана. Trade Assurance ашиглах нь хамгийн найдвартай.</div>
+                <div class="smsg-text" id="msg5">Hello,
+
+We have agreed on the following order details. Please confirm:
+
+- Product: [PRODUCT NAME]
+- Quantity: [XX] units
+- Unit price: $[X.XX]
+- Total: $[XXX]
+- Color/Size/Spec: [SPECIFY]
+- Shipping method: [Air / Sea / Express]
+- Shipping to: Ulaanbaatar, Mongolia
+
+Payment method: Alibaba Trade Assurance (preferred for buyer protection)
+
+Please send me a Trade Assurance order link so I can proceed with payment.
+
+After payment, please share:
+1. Order confirmation
+2. Tracking number once shipped
+3. Packing list / invoice
+
+Thank you! I look forward to a long-term business relationship.</div>
+              </div>
+
+            </div>
+          </div>
         </div>
 
         <!-- PROFIT CALC -->
@@ -8096,6 +8210,8 @@ let activeProduct=null;
 
 function fmtN(n){return '₮'+Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,',')}
 function fmtInp(el){const pos=el.selectionStart;const raw=el.value.replace(/[^\d]/g,'');const fmt=raw?Number(raw).toLocaleString():'';el.value=fmt;}
+function toggleSupMsg(btn){const body=document.getElementById('smsg-body');const arrow=document.getElementById('smsg-arrow');const open=body.style.display==='flex';body.style.display=open?'none':'flex';arrow.textContent=open?'▼':'▲';}
+function copyMsg(btn,id){const el=document.getElementById(id);if(!el)return;const txt=el.textContent||el.innerText;navigator.clipboard.writeText(txt).then(()=>{btn.textContent='✓ Хуулагдлаа';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Хуулах';btn.classList.remove('copied');},2000);}).catch(()=>{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);btn.textContent='✓ Хуулагдлаа';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Хуулах';btn.classList.remove('copied');},2000);});}
 function getInpVal(id){return parseInt((document.getElementById(id).value||'0').replace(/[^\d]/g,''))||0;}
 
 function replaceGalleryImages(input){
@@ -10059,7 +10175,6 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElement
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('um-modal').classList.contains('open'))closeUserModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('cf-modal').classList.contains('open'))closeFeedback();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('pc-modal').classList.contains('open')){document.getElementById('pc-modal').classList.remove('open');bodyUnlock();}});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('bs-modal').classList.contains('open')){document.getElementById('bs-modal').classList.remove('open');bodyUnlock();}});
 
 /* ══════════════════════════════════════════════════════
    STORE BUILDER — 1-Page Sales Web Generator
