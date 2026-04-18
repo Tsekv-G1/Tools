@@ -9045,29 +9045,41 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElement
 /* ── Mobile swipe-down to close panel ── */
 (function(){
   var panel=document.getElementById('panel');
-  var startY=0, startScrollTop=0, isDragging=false;
+  var startY=0, startTime=0, startScrollTop=0, isDragging=false, peakScrollTop=0;
   panel.addEventListener('touchstart',function(e){
     startY=e.touches[0].clientY;
+    startTime=Date.now();
     startScrollTop=panel.scrollTop;
+    peakScrollTop=panel.scrollTop;
     isDragging=false;
   },{passive:true});
   panel.addEventListener('touchmove',function(e){
+    var currentScrollTop=panel.scrollTop;
+    if(currentScrollTop>peakScrollTop) peakScrollTop=currentScrollTop;
     var dy=e.touches[0].clientY-startY;
-    // Only trigger close swipe when at top of scroll AND swiping down
-    if(dy>0 && panel.scrollTop===0 && startScrollTop===0){
+    // Only trigger if: started at top, never scrolled down, and strong pull-down gesture
+    if(dy>20 && startScrollTop===0 && peakScrollTop===0 && currentScrollTop===0){
       isDragging=true;
-      var progress=Math.min(dy/200,1);
-      panel.style.transform='translateY('+Math.min(dy*0.4,80)+'px)';
+      var progress=Math.min(dy/300,1);
+      panel.style.transform='translateY('+Math.min(dy*0.35,100)+'px)';
       panel.style.opacity=1-progress*0.3;
+    } else if(dy<=0 || currentScrollTop>0){
+      // User scrolling up into content — reset visual state, never close
+      isDragging=false;
+      panel.style.transform='';
+      panel.style.opacity='';
     }
   },{passive:true});
   panel.addEventListener('touchend',function(e){
-    if(!isDragging){panel.style.transform='';panel.style.opacity='';return;}
-    var dy=e.changedTouches[0].clientY-startY;
     panel.style.transform='';
     panel.style.opacity='';
+    if(!isDragging){isDragging=false;return;}
+    var dy=e.changedTouches[0].clientY-startY;
+    var dt=Date.now()-startTime;
+    var velocity=dy/dt; // px/ms
     isDragging=false;
-    if(dy>90) closePanel();
+    // Require either big drag (160px) OR fast swipe (velocity>0.5) with decent drag (80px)
+    if(dy>160 || (dy>80 && velocity>0.5)) closePanel();
   },{passive:true});
 })();
 
