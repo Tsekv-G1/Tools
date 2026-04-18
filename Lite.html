@@ -71,7 +71,7 @@ html:not([data-theme="dark"]) .card-price-val.cost{color:#888 !important}
 html:not([data-theme="dark"]) .card-price-val.sell{color:#111 !important}
 html:not([data-theme="dark"]) ::-webkit-scrollbar-track{background:#f0f0f0}
 html:not([data-theme="dark"]) ::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15)}
-html:not([data-theme="dark"]) .panel,html:not([data-theme="dark"]) .cf-box,html:not([data-theme="dark"]) .um-box,html:not([data-theme="dark"]) .bs-box,html:not([data-theme="dark"]) .pc-box,html:not([data-theme="dark"]) .cs-box{background:#fff !important;color:#1a1a1a !important}
+html:not([data-theme="dark"]) .panel,html:not([data-theme="dark"]) .cf-box,html:not([data-theme="dark"]) .um-box,html:not([data-theme="dark"]) .pc-box,html:not([data-theme="dark"]) .cs-box{background:#fff !important;color:#1a1a1a !important}
 html:not([data-theme="dark"]) .p-hero,html:not([data-theme="dark"]) .p-section,html:not([data-theme="dark"]) .p-links{background:#fff !important}
 html:not([data-theme="dark"]) .p-stat{background:#fff !important}
 html:not([data-theme="dark"]) .p-hero-stats{background:#e5e7eb !important}
@@ -313,7 +313,7 @@ body.locked{overflow:hidden;position:fixed;width:100%;height:100%}
 /* PANEL OVERLAY */
 #panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:20px 0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain}
 #panel-overlay.open{display:flex}
-.panel{background:var(--white);width:min(900px,100%);min-height:auto;position:relative;box-shadow:0 24px 80px rgba(0,0,0,.2);border-radius:16px;margin:auto;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;max-height:calc(100vh - 40px)}
+.panel{background:var(--white);width:min(900px,100%);min-height:auto;position:relative;box-shadow:0 24px 80px rgba(0,0,0,.2);border-radius:16px;margin:auto;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;max-height:calc(100dvh - 40px)}
 @media(max-width:768px){
   #panel-overlay{align-items:flex-start;padding:0}
   .panel{width:100%;border-radius:0;min-height:100dvh;margin:0;overflow-y:auto;max-height:none;padding-bottom:env(safe-area-inset-bottom)}
@@ -410,7 +410,7 @@ body.locked{overflow:hidden;position:fixed;width:100%;height:100%}
 /* USER MODAL (Settings + Subscription) */
 .um-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:700;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
 .um-modal.open{display:flex}
-.um-box{background:#fff;border-radius:16px;width:min(560px,100%);max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.18);animation:cf-in .22s cubic-bezier(.34,1.2,.64,1)}
+.um-box{background:#fff;border-radius:16px;width:min(560px,100%);max-height:90dvh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.18);animation:cf-in .22s cubic-bezier(.34,1.2,.64,1)}
 .um-topbar{display:flex;align-items:center;padding:0 6px 0 4px;border-bottom:1px solid var(--border);gap:0}
 .um-tab{padding:14px 18px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;background:none;border-left:none;border-right:none;border-top:none;font-family:'Inter',sans-serif;white-space:nowrap}
 .um-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
@@ -537,17 +537,6 @@ body.locked{overflow:hidden;position:fixed;width:100%;height:100%}
 @keyframes dbounce{0%,80%,100%{transform:translateY(0);opacity:.3}40%{transform:translateY(-5px);opacity:1}}
 .script-saved{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--accent);font-weight:700;padding:2px 8px;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:4px;margin-left:6px}
 
-/* BEST SELLER MODAL in panel */
-.bs-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;padding:16px}
-.bs-modal.open{display:flex}
-.bs-box{background:#fff;border-radius:16px;max-width:520px;width:100%;box-shadow:var(--shadow-lg);overflow:hidden}
-.bs-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.bs-body{padding:20px 24px;max-height:60vh;overflow-y:auto}
-.bs-item{display:flex;align-items:flex-start;gap:12px;padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;cursor:pointer;text-decoration:none;transition:all .15s}
-.bs-item:hover{border-color:var(--accent);background:var(--accent-bg)}
-.bs-num{font-size:12px;font-weight:800;color:var(--muted);width:20px;flex-shrink:0;padding-top:1px}
-.bs-info h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
-.bs-info p{font-size:11px;color:var(--muted)}
 
 /* TARGET FIELDS */
 .target-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
@@ -783,8 +772,7 @@ body.locked{overflow:hidden;position:fixed;width:100%;height:100%}
 [data-theme="dark"] .demand-chart svg text { fill:var(--muted) !important; }
 [data-theme="dark"] .gauge-svg text { fill:var(--text) !important; }
 [data-theme="dark"] .calc-r-row { border-color:var(--border) !important; }
-[data-theme="dark"] .bs-box,
-[data-theme="dark"] .bs-modal .bs-box { background:var(--white) !important; }
+
 
 
 /* ── DARK MODE PANEL INTERNALS ──────────────────────────── */
@@ -996,14 +984,6 @@ a,button,input,select,textarea,
   .am-mc{padding:12px 10px}
   .am-mv{font-size:20px}
 
-  .bs-modal{padding:0 !important;align-items:flex-start !important}
-  .bs-box{
-    width:100% !important;border-radius:0 !important;
-    max-height:100dvh !important;height:100dvh;
-    display:flex;flex-direction:column;margin:0 !important;
-  }
-  .bs-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
-  .bs-header{position:sticky;top:0;z-index:10;background:var(--white)}
 
   .um-modal{padding:0 !important;align-items:flex-start !important}
   .um-box{
@@ -1021,9 +1001,11 @@ a,button,input,select,textarea,
   .pc-modal{padding:0 !important;align-items:flex-end !important}
   .pc-box{
     width:100% !important;border-radius:16px 16px 0 0 !important;
-    max-height:90dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;
-    padding-bottom:env(safe-area-inset-bottom);
+    max-height:90dvh;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+    padding-bottom:env(safe-area-inset-bottom);box-sizing:border-box;
   }
+  .pc-body{padding:16px !important}
+  .pc-grid{gap:8px !important}
 
   .cs-modal{padding:12px !important}
   .cs-box{width:100% !important;border-radius:16px !important}
@@ -1056,7 +1038,7 @@ a,button,input,select,textarea,
 
   /* ── Tap targets минимум 44px ── */
   .tb-icon-btn,#dm-toggle,.panel-close,
-  .am-close,.bs-header button,.um-close{
+  .am-close,.um-close{
     min-width:44px !important;min-height:44px !important;
   }
   .fb{min-height:36px !important}
@@ -1064,7 +1046,7 @@ a,button,input,select,textarea,
   .card-btn{min-height:44px !important}
 
   /* ── Scroll performance ── */
-  .panel,.am-body,.bs-body,.um-box,.cf-box,.pc-box{
+  .panel,.am-body,.um-box,.cf-box,.pc-box{
     -webkit-overflow-scrolling:touch;
     overscroll-behavior:contain;
   }
@@ -1089,6 +1071,152 @@ a,button,input,select,textarea,
   .p-stat-lbl{font-size:8px !important}
   .p-stat{padding:8px 4px !important}
 }
+
+/* ── TUTORIAL MODAL (from Pro) ── */
+.ac-tags{display:flex;gap:6px;flex-wrap:wrap}
+.ac-tag{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;border:1.5px solid}
+.ac-tag-green{color:var(--accent);border-color:var(--accent-border);background:var(--accent-bg)}
+.ac-tag-blue{color:var(--blue);border-color:#bfdbfe;background:#eff6ff}
+.ac-tag-orange{color:var(--orange);border-color:#fed7aa;background:#fff7ed}
+.ac-tag-purple{color:#7c3aed;border-color:#ddd6fe;background:#f5f3ff}
+.ac-tag-pink{color:#be185d;border-color:#fbcfe8;background:#fdf2f8}
+.ac-tag-fire{color:#dc2626;border-color:#fecaca;background:#fef2f2}
+/* Watch button */
+.ac-watch-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;background:var(--accent);border:none;border-radius:9px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s}
+.ac-watch-btn:hover{background:#15803d;transform:translateY(-1px);box-shadow:0 4px 12px rgba(22,163,74,.3)}
+.ac-watch-btn.locked{background:var(--muted2);cursor:default}
+.ac-watch-btn.locked:hover{transform:none;box-shadow:none;background:var(--muted2)}
+/* Thumbnail */
+.ac-thumb{width:200px;height:120px;border-radius:12px;overflow:hidden;flex-shrink:0;background:linear-gradient(135deg,#0f172a,#1e3a5f);position:relative;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.ac-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.ac-thumb-fallback{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,#0f172a,#1e3a5f)}
+.ac-thumb-fallback span{font-size:26px}
+.ac-thumb-fallback small{font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;font-family:'DM Mono',monospace}
+.ac-thumb-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.3);opacity:0;transition:all .2s}
+.ac-thumb:hover .ac-thumb-play{opacity:1}
+.ac-thumb-play-icon{width:42px;height:42px;background:rgba(255,255,255,.95);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.3);transform:scale(.9);transition:transform .2s}
+.ac-thumb:hover .ac-thumb-play-icon{transform:scale(1)}
+.ac-lesson-actions{display:flex;align-items:center;gap:8px;margin-top:12px}
+.ac-admin-btn:hover{background:#15803d}
+.ac-empty{padding:50px 20px;text-align:center;color:var(--muted);font-size:13px}
+/* ── TUTORIAL MODAL ── */
+.tut-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:900;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.tut-modal.open{display:flex;animation:tut-bg-in .22s ease}
+@keyframes tut-bg-in{from{opacity:0}to{opacity:1}}
+@media(min-width:640px){.tut-modal{align-items:center}}
+.tut-box{background:var(--white);border-radius:20px 20px 0 0;width:100%;max-width:720px;max-height:92dvh;display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--shadow-lg);animation:tut-slide-up .28s cubic-bezier(.34,1.1,.64,1)}
+@keyframes tut-slide-up{from{opacity:0;transform:translateY(28px) scale(.98)}to{opacity:1;transform:none}}
+@media(min-width:640px){.tut-box{border-radius:20px;animation:tut-scale-in .26s cubic-bezier(.34,1.1,.64,1)}}
+@keyframes tut-scale-in{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:none}}
+@media(min-width:640px){.tut-box{border-radius:20px;max-height:88dvh}}
+.tut-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.tut-header-left{}
+.tut-header-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:2px}
+.tut-header-title{font-size:17px;font-weight:800;color:var(--text)}
+.tut-close{width:32px;height:32px;background:var(--bg);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--muted);transition:all .15s}
+.tut-close:hover{background:var(--border);color:var(--text)}
+.tut-hero{padding:20px 24px;background:linear-gradient(135deg,#f0fdf4 0%,#fff8f0 100%);border-bottom:1px solid var(--border)}
+.tut-hero-title{font-size:18px;font-weight:800;color:var(--text);margin-bottom:5px}
+.tut-hero-sub{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+.tut-hero-badges{display:flex;gap:8px;flex-wrap:wrap}
+.tut-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.tut-badge-green{background:var(--accent-bg);color:var(--accent);border:1.5px solid var(--accent-border)}
+.tut-badge-blue{background:#eff6ff;color:var(--blue);border:1.5px solid #bfdbfe}
+.tut-badge-orange{background:#fff7ed;color:var(--orange);border:1.5px solid #fed7aa}
+.tut-body{flex:1;overflow-y:auto;padding:0 24px 24px}
+.tut-section-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:20px 0 10px;border-bottom:1px solid var(--border);margin-bottom:0}
+.tut-lesson{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start;padding:18px 0;border-bottom:1px solid var(--border);transition:background .12s}
+.tut-lesson.no-thumb{grid-template-columns:1fr}
+.tut-lesson:last-child{border-bottom:none}
+@media(max-width:500px){.tut-lesson{grid-template-columns:1fr;gap:12px}}
+.tut-lesson-num{font-size:10px;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
+.tut-lesson-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px;line-height:1.4}
+.tut-lesson-desc{font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:10px}
+.tut-lesson-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.tut-duration{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted)}
+.tut-tags{display:flex;gap:5px;flex-wrap:wrap}
+.tut-tag{padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.tut-watch-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--accent);border:none;border-radius:8px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s}
+.tut-watch-btn:hover{background:#15803d;transform:translateY(-1px);box-shadow:0 4px 12px rgba(22,163,74,.25)}
+.tut-watch-btn.coming-soon{background:var(--bg);color:var(--muted);border:1.5px solid var(--border);cursor:default}
+.tut-watch-btn.coming-soon:hover{transform:none;box-shadow:none}
+.tut-thumb{width:150px;height:90px;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,#0f172a,#1a3a5c);position:relative;cursor:pointer;flex-shrink:0}
+.tut-thumb.coming-soon-thumb{background:linear-gradient(135deg,#1a1a1a,#2d2d2d);cursor:default}
+.tut-thumb img{width:100%;height:100%;object-fit:cover}
+.tut-thumb-fallback{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.tut-thumb-fallback span{font-size:22px}
+.tut-thumb-fallback small{font-size:8px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:1px}
+.tut-thumb-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);opacity:0;transition:all .2s}
+.tut-thumb:not(.coming-soon-thumb):hover .tut-thumb-play{opacity:1}
+.tut-thumb-play-icon{width:36px;height:36px;background:rgba(255,255,255,.95);border-radius:50%;display:flex;align-items:center;justify-content:center}
+/* ── ШУУД АШИГЛАХ ACTION BOX ── */
+.tut-action-box{margin-top:10px;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:12px 14px}
+.tut-action-box.prompt-box{background:#fef9c3;border-color:#fde047}
+.tut-action-lbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#15803d;margin-bottom:5px}
+.tut-action-box.prompt-box .tut-action-lbl{color:#a16207}
+.tut-action-sub{font-size:11px;color:#374151;margin-bottom:7px}
+.tut-prompt-txt{background:#fff;border:1px solid #fde047;border-radius:7px;padding:10px 12px;font-size:11.5px;line-height:1.75;color:#713f12;white-space:pre-wrap;font-family:'Outfit',sans-serif}
+.tut-act-row{display:flex;gap:7px;margin-top:4px}
+.tut-act-inp{flex:1;min-width:0;padding:7px 10px;border:1.5px solid #d1d5db;border-radius:8px;font-size:16px;font-family:'Outfit',sans-serif;outline:none;color:#111827;background:#fff}
+.tut-act-inp:focus{border-color:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.12)}
+.tut-act-sbtn{padding:7px 12px;background:#111827;color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap;transition:background .15s;flex-shrink:0}
+.tut-act-sbtn:hover{background:#16a34a}
+.tut-act-btns{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.tut-act-cpbtn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;background:#111827;color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:background .15s}
+.tut-act-cpbtn:hover{background:#16a34a}
+.tut-act-lnk{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;background:#fff;color:#374151;border:1.5px solid #d1d5db;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;text-decoration:none}
+.tut-act-lnk:hover{border-color:#16a34a;color:#16a34a}
+.tut-act-fullbtn{width:100%;padding:9px 14px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:background .15s;text-align:left}
+.tut-act-fullbtn:hover{background:#15803d}
+.tut-act-fullbtn2{width:100%;margin-top:7px;padding:9px 14px;background:#fff;color:#374151;border:1.5px solid #d1d5db;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;text-align:left}
+.tut-act-fullbtn2:hover{border-color:#16a34a;color:#16a34a}
+.tut-url-result{display:none;margin-top:8px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 12px;animation:tut-fade-in .2s ease}
+@keyframes tut-fade-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+[data-theme="dark"] .tut-action-box{background:#0d2a1a;border-color:rgba(22,163,74,.5)}
+[data-theme="dark"] .tut-action-box.prompt-box{background:#2a2000;border-color:#a16207}
+[data-theme="dark"] .tut-action-lbl{color:#4ade80}
+[data-theme="dark"] .tut-action-box.prompt-box .tut-action-lbl{color:#fbbf24}
+[data-theme="dark"] .tut-action-sub{color:var(--muted)}
+[data-theme="dark"] .tut-prompt-txt{background:#1a1500;border-color:#a16207;color:#fde68a}
+[data-theme="dark"] .tut-act-inp{background:var(--input-bg);border-color:var(--border2);color:var(--text)}
+[data-theme="dark"] .tut-act-sbtn{background:var(--text)}
+[data-theme="dark"] .tut-act-cpbtn{background:var(--text)}
+[data-theme="dark"] .tut-act-lnk{background:var(--white);border-color:var(--border2);color:var(--muted)}
+[data-theme="dark"] .tut-act-fullbtn2{background:var(--white);border-color:var(--border2);color:var(--muted)}
+[data-theme="dark"] .tut-url-result{background:rgba(22,163,74,.1);border-color:rgba(22,163,74,.3)}
+/* YouTube video player modal */
+.yt-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1000;align-items:center;justify-content:center;padding:20px;flex-direction:column;gap:14px}
+.yt-modal.open{display:flex}
+.yt-modal-header{width:min(900px,100%);display:flex;justify-content:space-between;align-items:center}
+.yt-modal-title{font-size:15px;font-weight:700;color:#fff}
+.yt-close{width:36px;height:36px;background:rgba(255,255,255,.12);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:18px;transition:all .15s}
+.yt-close:hover{background:rgba(255,255,255,.22)}
+.yt-frame-wrap{width:min(900px,100%);aspect-ratio:16/9;background:#000;border-radius:14px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.yt-frame-wrap iframe{width:100%;height:100%;border:none;display:block}
+
+
+
+/* ── TUTORIAL DARK MODE ── */
+[data-theme="dark"] .tut-box { background:var(--white) !important; }
+[data-theme="dark"] .tut-header { border-color:var(--border) !important; }
+[data-theme="dark"] .tut-header-title { color:var(--text) !important; }
+[data-theme="dark"] .tut-hero { background:linear-gradient(135deg,#1a2d1a 0%,#1e2028 100%) !important; border-color:var(--border) !important; }
+[data-theme="dark"] .tut-hero-title { color:var(--text) !important; }
+[data-theme="dark"] .tut-hero-sub { color:var(--muted) !important; }
+[data-theme="dark"] .tut-badge-green { background:rgba(22,163,74,.15) !important; border-color:rgba(22,163,74,.3) !important; }
+[data-theme="dark"] .tut-badge-blue { background:rgba(37,99,235,.15) !important; border-color:rgba(37,99,235,.3) !important; }
+[data-theme="dark"] .tut-badge-orange { background:rgba(234,88,12,.15) !important; border-color:rgba(234,88,12,.3) !important; }
+[data-theme="dark"] .tut-body { background:var(--white) !important; }
+[data-theme="dark"] .tut-section-lbl { color:var(--muted) !important; border-color:var(--border) !important; }
+[data-theme="dark"] .tut-lesson { border-color:var(--border) !important; }
+[data-theme="dark"] .tut-lesson-num { color:var(--muted2) !important; }
+[data-theme="dark"] .tut-lesson-title { color:var(--text) !important; }
+[data-theme="dark"] .tut-lesson-desc { color:var(--muted) !important; }
+[data-theme="dark"] .tut-duration { color:var(--muted) !important; }
+[data-theme="dark"] .tut-watch-btn.coming-soon { background:rgba(255,255,255,.06) !important; border-color:var(--border) !important; color:var(--muted) !important; }
+[data-theme="dark"] .tut-close { background:rgba(255,255,255,.07) !important; border-color:var(--border) !important; }
+[data-theme="dark"] .tut-close:hover { background:rgba(255,255,255,.13) !important; }
+[data-theme="dark"] .tut-cta-box { background:rgba(22,163,74,.12) !important; border-color:rgba(22,163,74,.25) !important; }
 </style>
 </head>
 <body>
@@ -1161,28 +1289,6 @@ a,button,input,select,textarea,
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
 <!-- BEST SELLER MODAL -->
-<div class="bs-modal" id="bs-modal">
-  <div class="bs-box">
-    <div class="bs-header">
-      <div><div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:2px">Дропшиппинг каталог</div><h3 style="font-size:16px;font-weight:800">🌍 Дэлхийн Best Seller</h3></div>
-      <button style="background:none;border:1px solid var(--border);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:14px" onclick="document.getElementById('bs-modal').classList.remove('open')">✕</button>
-    </div>
-    <div class="bs-body" style="padding:40px 24px;text-align:center">
-      <div style="font-size:52px;margin-bottom:16px">🌍</div>
-      <h3 style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:10px">Дропшиппинг бараанууд</h3>
-      <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:24px">Дэлхийн хамгийн их зарагддаг дропшиппинг бараануудын<br>жагсаалтыг тун удахгүй энд нэмнэ.</p>
-      <div style="display:inline-flex;align-items:center;gap:6px;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:20px;padding:8px 20px;font-size:12px;font-weight:700;color:var(--accent);margin-bottom:24px">
-        ⏳ Тун удахгүй...
-      </div>
-      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:12px;color:var(--muted);text-align:left;line-height:1.8">
-        📦 Шилдэг дропшиппинг бараанууд<br>
-        💰 Ашгийн margin шинжилгээтэй<br>
-        🔗 Alibaba нийлүүлэгчийн холбоостой<br>
-        📊 Борлуулалтын статистиктай
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- PROFIT CALCULATOR MODAL -->
 <div class="pc-modal" id="pc-modal" onclick="if(event.target===this)this.classList.remove('open')">
@@ -1437,8 +1543,8 @@ a,button,input,select,textarea,
     <div class="sidebar-section-lbl">Хэрэгсэл</div>
     <div class="sidebar-item" onclick="openPCModal()" title="Ашгийн тооцоолол"><span class="sidebar-item-icon">💰</span><span>Ашгийн тооцоолол</span></div>
     <div class="sidebar-item" onclick="openAdMetric(this)" title="Ad Metric"><span class="sidebar-item-icon">📊</span><span>Ad Metric</span></div>
-    <div class="sidebar-item" onclick="document.getElementById('bs-modal').classList.add('open')" title="Best Seller"><span class="sidebar-item-icon">🌍</span><span>Дэлхийн Best Seller</span></div>
     <div class="sidebar-item" onclick="document.getElementById('lessons-modal').classList.add('open')" title="Хичээл"><span class="sidebar-item-icon">🎓</span><span>Хичээл</span></div>
+    <div class="sidebar-item" onclick="openTutorial(this)" title="Ашиглах Заавар"><span class="sidebar-item-icon">📹</span><span>Ашиглах Заавар</span></div>
   </div>
   
   <div class="sidebar-section">
@@ -1671,6 +1777,19 @@ a,button,input,select,textarea,
 
 
 </script><script>
+function bodyLock(){
+  var sy=window.scrollY||document.documentElement.scrollTop;
+  document.body.dataset.scrollY=sy;
+  document.body.classList.add('locked');
+  document.body.style.top='-'+sy+'px';
+}
+function bodyUnlock(){
+  document.body.classList.remove('locked');
+  document.body.style.top='';
+  var sy=parseInt(document.body.dataset.scrollY||'0');
+  window.scrollTo(0,sy);
+}
+
 /* ── DARK MODE ────────────────────────────────────────────── */
 (function(){
   var DM_KEY = 'pd_dark_mode';
@@ -4517,7 +4636,272 @@ function amAnalyze(){
   document.getElementById('am-results').className='am-results on';
   setTimeout(()=>document.getElementById('am-results').scrollIntoView({behavior:'smooth',block:'nearest'}),80);
 }
+
+
+/* ── TUTORIAL MODAL (from Pro) ── */
+/* ── TUTORIAL MODAL ─── */
+var TUT_TAG_COLORS={
+  '📋 Website заавар':'background:#eff6ff;color:#2563eb;border:1.5px solid #bfdbfe',
+  '📊 Ads шинжилгээ':'background:#fff7ed;color:#ea580c;border:1.5px solid #fed7aa',
+  '✍️ Content':'background:#f5f3ff;color:#7c3aed;border:1.5px solid #ddd6fe',
+  '📦 Alibaba':'background:#f0fdf4;color:#16a34a;border:1.5px solid rgba(22,163,74,.2)',
+  '🔧 Tools':'background:#fdf2f8;color:#be185d;border:1.5px solid #fbcfe8',
+  '🔥 Must Watch':'background:#fef2f2;color:#dc2626;border:1.5px solid #fecaca',
+  'Dropshipping':'background:#f0fdf4;color:#16a34a;border:1.5px solid rgba(22,163,74,.2)',
+  'Marketing':'background:#fff7ed;color:#ea580c;border:1.5px solid #fed7aa'
+};
+var TUT_DEFAULT=[
+  {id:1,title:'ProductDrop.MN \u041f\u043b\u0430\u0442\u0444\u043e\u0440\u043c \u2014 \u0411\u04af\u0442\u044d\u043d \u0417\u0430\u0430\u0432\u0430\u0440',desc:'\u041d\u044d\u0432\u0442\u0440\u044d\u0445\u044d\u044d\u0441 \u044d\u0445\u043b\u044d\u044d\u0434 \u0431\u0430\u0440\u0430\u0430 \u043e\u043b\u0436, \u0430\u0448\u0433\u0430\u0430 \u0442\u043e\u043e\u0446\u043e\u043e\u043b\u0436, supplier-\u0442\u044d\u0439 \u0445\u043e\u043b\u0431\u043e\u0433\u0434\u043e\u0445 \u0445\u04af\u0440\u0442\u044d\u043b\u0445 \u0431\u04af\u0445 \u0430\u043b\u0445\u043c\u044b\u0433 \u043d\u044d\u0433 \u0431\u0438\u0447\u043b\u044d\u0433\u0442 \u0445\u0430\u0440\u0443\u0443\u043b\u0441\u0430\u043d.',duration:'~5:15 \u043c\u0438\u043d\u0443\u0442',ytid:'FjND959v7JM',thumb:'https://res.cloudinary.com/di0nven1w/image/upload/v1775975093/hf_20260412_062157_00278083-61ad-4f34-858d-c4e871d813c7_yb1qzl.png',tags:['\ud83d\udccb Website \u0437\u0430\u0430\u0432\u0430\u0440','\ud83d\udd25 Must Watch']},
+  {id:2,title:'\u0425\u044d\u0441\u044d\u0433 01 \u00b7 Dashboard & Navigation \u0422\u0430\u043d\u0438\u043b\u0446\u0443\u0443\u043b\u0433\u0430',desc:'Sidebar, search bar, sort \u0444\u0443\u043d\u043a\u0446 \u0431\u043e\u043b\u043e\u043d \u043d\u0438\u0439\u0442 \u0431\u0430\u0440\u0430\u0430\u043d\u0443\u0443\u0434 \u0445\u044d\u0440\u0445\u044d\u043d \u0431\u0430\u0439\u0440\u043b\u0430\u0436 \u0431\u0430\u0439\u0433\u0430\u0430\u0433 \u0445\u0430\u0440\u0443\u0443\u043b\u043d\u0430.',duration:'30 \u0441\u0435\u043a \u00b7 0:15\u20130:45',ytid:'TxPPhCEWXjw',thumb:'https://res.cloudinary.com/di0nven1w/image/upload/v1775975867/hf_20260412_061319_aa38fc16-f35c-4dca-92f3-85f2bac47f83_ypfnkc.png',tags:['\ud83d\udccb Website \u0437\u0430\u0430\u0432\u0430\u0440']},
+  {id:3,title:'\u0425\u044d\u0441\u044d\u0433 02 \u00b7 \u0411\u0430\u0440\u0430\u0430 \u0414\u044d\u043b\u0433\u044d\u0440\u044d\u043d\u0433\u04af\u0439 & \u0410\u0448\u0433\u0438\u0439\u043d \u0422\u043e\u043e\u0446\u043e\u043e\u043b\u0443\u0443\u0440',desc:'Side panel \u043d\u044d\u044d\u0445, \u0430\u0432\u0430\u0445/\u0437\u0430\u0440\u0430\u0445 \u04af\u043d\u044d, \u0445\u04af\u0440\u0433\u044d\u043b\u0442, \u0433\u0430\u0430\u043b\u044c, \u0446\u044d\u0432\u044d\u0440 \u0430\u0448\u0433 \u0431\u043e\u043b\u043e\u043d margin \u0445\u044d\u0440\u0445\u044d\u043d \u0442\u043e\u0445\u0438\u0440\u0443\u0443\u043b\u0430\u0445. Star \u0445\u0438\u0439\u0436 \u0445\u0430\u0434\u0433\u0430\u043b\u0430\u0445.',duration:'60 \u0441\u0435\u043a \u00b7 0:45\u20131:45',ytid:'5JRfoCKogtA',thumb:'https://res.cloudinary.com/di0nven1w/image/upload/v1775976188/hf_20260412_061323_ce2a6ef5-39b0-41e0-9da9-514d5240d7c1_aof6ia.png',tags:['\ud83d\udccb Website \u0437\u0430\u0430\u0432\u0430\u0440']},
+  {id:4,title:'\u0425\u044d\u0441\u044d\u0433 03 \u00b7 Supplier \041b\0438\043d\043a \2014 Alibaba',desc:'Supplier \u043b\u0438\u043d\u043a \u0434\u0430\u0440\u0436 \u0431\u0430\u0440\u0430\u0430 \u043d\u0438\u0439\u043b\u04af\u04af\u043b\u044d\u0433\u0447\u0438\u0439\u043d \u0445\u0443\u0443\u0434\u0430\u0441 \u0440\u0443\u0443 \u0445\u044d\u0440\u0445\u044d\u043d \u0448\u0438\u043b\u0436\u0438\u0445, \u0437\u0430\u0445\u0438\u0430\u043b\u0433\u0430 \u04e9\u0433\u04e9\u0445 \u043f\u0440\u043e\u0446\u0435\u0441\u0441\u0438\u0439\u0433 \u0445\u0430\u0440\u0443\u0443\u043b\u043d\u0430.',duration:'30 \u0441\u0435\u043a \u00b7 1:45\u20132:15',ytid:'LeXAC3DdxHQ',thumb:'https://res.cloudinary.com/di0nven1w/image/upload/v1775976183/hf_20260412_061330_a9d99c8e-902f-4e75-84c2-326cabb8321e_tahgzf.png',tags:['\ud83d\udce6 Alibaba']},
+  {id:5,title:'\u0425\u044d\u0441\u044d\u0433 04 \u00b7 Content Script + ChatGPT Prompt',desc:'\u0411\u0430\u0440\u0430\u0430\u043d\u044b \u0431\u044d\u043b\u044d\u043d content script \u0430\u0432\u0430\u0445, \u0445\u0443\u0443\u043b\u0436 ChatGPT-\u0434 \u04e9\u0433\u04e9\u0445 \u0430\u0440\u0433\u0430. \u0421\u0430\u0439\u0436\u0440\u0443\u0443\u043b\u0430\u0445 prompt: \"\u0414\u0430\u0440\u0430\u0430\u0445 TikTok/Instagram script-\u0438\u0439\u0433 \u0438\u043b\u04af\u04af engaging \u0431\u043e\u043b\u0433\u043e\u0436, hook-\u0438\u0439\u0433 \u0445\u04af\u0447\u0442\u044d\u0439 \u0431\u043e\u043b\u0433\u043e, CTA \u043d\u044d\u043c\u0436 \u04e9\u0433:\" \u0433\u044d\u0436 \u0431\u0438\u0447\u044d\u044d\u0434 paste \u0445\u0438\u0439.',duration:'60 \u0441\u0435\u043a \u00b7 2:15\u20133:15',ytid:'XBUhn5GnQAQ',thumb:'https://res.cloudinary.com/di0nven1w/image/upload/v1775976183/hf_20260412_061821_a7f33658-63d7-46d6-b19e-ffebdc656a7c_cjjfln.png',tags:['\u270d\ufe0f Content','\ud83d\udd27 Tools']},
+  {id:6,title:'\u0425\u044d\u0441\u044d\u0433 05 \u00b7 \u0414\u044d\u043b\u0433\u04af\u04af\u0440 \u041d\u044d\u044d\u0445 + TinyURL \u0425\u043e\u043b\u0431\u043e\u043e\u0441',desc:'ProductDrop.MN \u0434\u044d\u044d\u0440\u0445 \u0434\u044d\u043b\u0433\u04af\u04af\u0440 \u043d\u044d\u044d\u0445 \u0430\u043b\u0445\u043c\u0443\u0443\u0434\u044b\u0433 \u0442\u0430\u0439\u043b\u0431\u0430\u0440\u043b\u0430\u043d\u0430. TinyURL.com \u0430\u0448\u0438\u0433\u043b\u0430\u043d \u0443\u0440\u0442 \u0445\u043e\u043b\u0431\u043e\u043e\u0441\u043e\u043e \u0431\u043e\u0433\u0438\u043d\u043e \u0431\u043e\u043b\u0433\u043e\u0445 \u0430\u0440\u0433\u0430: tinyurl.com \u0440\u0443\u0443 \u043e\u0440\u0436 URL paste \u0445\u0438\u0439\u0433\u044d\u044d\u0434 \u0431\u043e\u0433\u0438\u043d\u043e \u0445\u043e\u043b\u0431\u043e\u043e\u0441 \u0430\u0432\u043d\u0430.',duration:'45 \u0441\u0435\u043a \u00b7 3:15\u20134:00',ytid:'iQkfsEIXMZw',thumb:'https://res.cloudinary.com/di0nven1w/image/upload/v1775976172/hf_20260412_061828_c637ec98-5d28-4ca3-8830-35577f414583_tknq3r.png',tags:['\ud83d\udccb Website \u0437\u0430\u0430\u0432\u0430\u0440']},
+  {id:7,title:'\u0425\u044d\u0441\u044d\u0433 06 \u00b7 \u0410\u0448\u0433\u0438\u0439\u043d \u0422\u043e\u043e\u0446\u043e\u043e\u043b\u043e\u043b & Ad Analyzer & \u0421\u0430\u043d\u0430\u043b \u0425\u04af\u0441\u044d\u043b\u0442',desc:'Sidebar-\u043d \u0410\u0448\u0433\u0438\u0439\u043d \u0442\u043e\u043e\u0446\u043e\u043e\u043b\u043e\u043b, Ad Metric Analyzer \u0445\u044d\u0440\u044d\u0433\u0441\u043b\u04af\u04af\u0434\u0438\u0439\u0433 \u0445\u044d\u0440\u0445\u044d\u043d \u0430\u0448\u0438\u0433\u043b\u0430\u0445. \u0421\u0430\u043d\u0430\u043b \u0445\u04af\u0441\u044d\u043b\u0442 \u0438\u043b\u0433\u044d\u044d\u0445 \u0445\u044d\u0441\u044d\u0433\u0442 \u0431\u0430\u0440\u0430\u0430\u043d\u044b \u0445\u04af\u0441\u044d\u043b\u0442, \u0430\u043b\u0434\u0430\u0430\u043d\u044b \u043c\u044d\u0434\u044d\u0433\u0434\u044d\u043b \u0438\u043b\u0433\u044d\u044d\u0436 \u0431\u043e\u043b\u043d\u043e.',duration:'60 \u0441\u0435\u043a \u00b7 4:00\u20135:00',ytid:'',thumb:'',tags:['\ud83d\udcca Ads \u0448\u0438\u043d\u0436\u0438\u043b\u0433\u044d\u044d','\ud83d\udd27 Tools']}
+];
+var _tutorials = null;
+fetch('tutorials.json?v=' + Date.now())
+  .then(function(r){ if(!r.ok) throw new Error('not found'); return r.json(); })
+  .then(function(data){ if(Array.isArray(data)&&data.length){ _tutorials=data; } })
+  .catch(function(){ /* Файл олдохгүй бол TUT_DEFAULT ашиглана */ });
+function getTutorials(){
+  return _tutorials || TUT_DEFAULT;
+}
+/* ── ШУУД АШИГЛАХ ФУНКЦУУД ── */
+function tutGetAction(id){
+  if(id===4){
+    return '<div class="tut-action-box">'
+      +'<div class="tut-action-lbl">⚡ Шууд ашиглах — Alibaba хайлт</div>'
+      +'<div class="tut-action-sub">Барааны нэр оруулаад нийлүүлэгч хай</div>'
+      +'<div class="tut-act-row">'
+      +'<input class="tut-act-inp" id="tut-ali" placeholder="Ж.нь: LED strip light, yoga mat...">'
+      +'<button class="tut-act-sbtn" onclick="tutAli()">🔍 Alibaba ↗</button>'
+      +'</div>'
+      +'</div>';
+  }
+  if(id===5){
+    return '<div class="tut-action-box prompt-box">'
+      +'<div class="tut-action-lbl">⚡ Шууд ашиглах — ChatGPT Prompt</div>'
+      +'<div class="tut-prompt-txt">Дараах TikTok/Instagram script-ийг илүү engaging болгож, hook-ийг хүчтэй болго, CTA нэмж өг:\n\n[Барааны Content Script-ийг энд paste хий]</div>'
+      +'<div class="tut-act-btns">'
+      +'<button class="tut-act-cpbtn" id="tut-cp-btn" onclick="tutCopyPrompt()">📋 Prompt хуулах</button>'
+      +'<a class="tut-act-lnk" href="https://chat.openai.com" target="_blank">🤖 ChatGPT нээх ↗</a>'
+      +'</div>'
+      +'</div>';
+  }
+  if(id===6){
+    return '<div class="tut-action-box">'
+      +'<div class="tut-action-lbl">⚡ Шууд ашиглах — URL богиносгох</div>'
+      +'<div class="tut-act-row">'
+      +'<input class="tut-act-inp" id="tut-url" placeholder="https://productdrop.mn/...">'
+      +'<button class="tut-act-sbtn" id="tut-url-btn" onclick="tutTiny()">⚡ Богиносгох</button>'
+      +'</div>'
+      +'<div class="tut-url-result" id="tut-url-res">'
+      +'<div style="font-size:10px;font-weight:700;color:#15803d;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">✓ Богиносгосон холбоос</div>'
+      +'<div id="tut-url-short" style="font-size:13px;font-weight:700;color:var(--text);word-break:break-all"></div>'
+      +'<button onclick="tutCopyURL()" id="tut-url-cp" style="margin-top:7px;font-size:10px;font-weight:700;padding:4px 12px;background:#16a34a;color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:Outfit,sans-serif">📋 Хуулах</button>'
+      +'</div>'
+      +'</div>';
+  }
+  if(id===7){
+    return '<div class="tut-action-box">'
+      +'<div class="tut-action-lbl">⚡ Шууд ашиглах</div>'
+      +'<button class="tut-act-fullbtn" onclick="closeTutorial();setTimeout(function(){openAdMetric()},300)">📊 Ad Metric Analyzer нээх →</button>'
+      +'<button class="tut-act-fullbtn2" onclick="closeTutorial();setTimeout(function(){var c=document.querySelector(\'.card\');if(c)c.click();},300)">💰 Ашгийн тооцоолуур харах →</button>'
+      +'</div>';
+  }
+  return '';
+}
+function tutCopyPrompt(){
+  var txt='Дараах TikTok/Instagram script-ийг илүү engaging болгож, hook-ийг хүчтэй болго, CTA нэмж өг:\n\n[Барааны Content Script-ийг энд paste хий]';
+  var btn=document.getElementById('tut-cp-btn');
+  navigator.clipboard.writeText(txt).then(function(){
+    if(btn){btn.textContent='✅ Хуулагдлаа!';setTimeout(function(){btn.textContent='📋 Prompt хуулах';},2000);}
+  }).catch(function(){
+    var t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();
+    if(btn){btn.textContent='✅ Хуулагдлаа!';setTimeout(function(){btn.textContent='📋 Prompt хуулах';},2000);}
+  });
+}
+function tutAli(){
+  var inp=document.getElementById('tut-ali');
+  if(!inp||!inp.value.trim()){if(inp)inp.focus();return;}
+  window.open('https://www.alibaba.com/trade/search?SearchText='+encodeURIComponent(inp.value.trim()),'_blank');
+}
+function tutTiny(){
+  var inp=document.getElementById('tut-url');
+  if(!inp||!inp.value.trim()){if(inp){inp.focus();inp.style.borderColor='#dc2626';setTimeout(function(){inp.style.borderColor='';},1200);}return;}
+  var url=inp.value.trim();
+  if(!url.startsWith('http'))url='https://'+url;
+  var btn=document.getElementById('tut-url-btn');
+  var res=document.getElementById('tut-url-res');
+  var sh=document.getElementById('tut-url-short');
+  if(btn){btn.textContent='⏳ Уншиж байна...';btn.disabled=true;}
+  if(res) res.style.display='none';
+  fetch('https://tinyurl.com/api-create.php?url='+encodeURIComponent(url))
+    .then(function(r){
+      if(!r.ok) throw new Error('API error');
+      return r.text();
+    })
+    .then(function(s){
+      if(!s||!s.startsWith('http')) throw new Error('Invalid response');
+      if(sh){sh.textContent=s;sh.dataset.url=s;}
+      if(res){res.style.display='block';}
+    })
+    .catch(function(){
+      /* CORS эсвэл network алдаа — хэрэглэгчид заавар өгнө */
+      if(sh){sh.innerHTML='<span style="color:#dc2626;font-size:11px">CORS хязгаарлалтаас болж браузер дотроос direct хийж чадахгүй байна.</span><br><span style="font-size:11px;color:var(--muted)">👉 <a href="https://tinyurl.com" target="_blank" style="color:var(--accent)">tinyurl.com</a> руу орж URL-ийг paste хийнэ үү.</span>';}
+      if(res){res.style.display='block';}
+    })
+    .finally(function(){if(btn){btn.textContent='⚡ Богиносгох';btn.disabled=false;}});
+}
+function tutCopyURL(){
+  var sh=document.getElementById('tut-url-short');
+  if(!sh) return;
+  var txt=(sh.dataset.url||sh.textContent||'').trim();
+  if(!txt||!txt.startsWith('http')) return;
+  var btn=document.getElementById('tut-url-cp');
+  navigator.clipboard.writeText(txt).then(function(){
+    if(btn){btn.textContent='✅ Хуулагдлаа!';setTimeout(function(){btn.textContent='📋 Хуулах';},2000);}
+  }).catch(function(){
+    var t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();
+    if(btn){btn.textContent='✅ Хуулагдлаа!';setTimeout(function(){btn.textContent='📋 Хуулах';},2000);}
+  });
+}
+var _tutRendered = false;
+function renderTutorials(){
+  if(_tutRendered) return;
+  var list=getTutorials();
+  var el=document.getElementById('tut-lessons-list'); if(!el) return;
+  if(!list||!list.length){
+    el.innerHTML='<div style="padding:40px 0;text-align:center;color:var(--muted);font-size:13px">📭 Заавар бичлэг тун удахгүй нэмэгдэнэ.</div>';
+    return;
+  }
+  var html='<div class="tut-section-lbl">Заавар бичлэгүүд</div>';
+  list.forEach(function(l,i){
+    var hasVideo=!!l.ytid;
+    var thumb=l.thumb||(hasVideo?'https://img.youtube.com/vi/'+l.ytid+'/mqdefault.jpg':'');
+    var tags=(l.tags||[]).map(function(t){
+      var st=TUT_TAG_COLORS[t]||'background:var(--accent-bg);color:var(--accent);border:1.5px solid var(--accent-border)';
+      return '<span class="tut-tag" style="'+st+'">'+t+'</span>';
+    }).join('');
+    var watchBtn=hasVideo
+      ?'<button class="tut-watch-btn" onclick="openTutorialVideo(\''+l.ytid+'\',\''+l.title.replace(/'/g,"\\'")+'\')">'
+        +'<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Үзэх</button>'
+      :'<button class="tut-watch-btn coming-soon" disabled>'
+        +'<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Тун удахгүй...</button>';
+    var lessonNumLabel = (i+1<10?'0'+(i+1):i+1);
+    var thumbHtml = hasVideo
+      ?'<div class="tut-thumb" onclick="openTutorialVideo(\''+l.ytid+'\',\''+l.title.replace(/'/g,"\\'")+'\')" style="cursor:pointer;width:150px;flex-shrink:0">'
+        +'<img src="'+thumb+'" alt="'+l.title+'" onerror="this.style.display=\'none\'">'
+        +'<div class="tut-thumb-play"><div class="tut-thumb-play-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="#15803d"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div>'
+        +'</div>'
+      : '';
+    html+='<div class="tut-lesson'+(hasVideo?'':' no-thumb')+'">'
+      +'<div>'
+        +'<div class="tut-lesson-num">Заавар #'+lessonNumLabel+'</div>'
+        +'<div class="tut-lesson-title">'+l.title+'</div>'
+        +'<div class="tut-lesson-desc">'+l.desc+'</div>'
+        +'<div class="tut-lesson-meta">'
+          +(l.duration?'<span class="tut-duration"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> '+l.duration+'</span>':'')
+          +(tags?'<div class="tut-tags">'+tags+'</div>':'')
+        +'</div>'
+        +watchBtn
+        +tutGetAction(l.id)
+      +'</div>'
+      +(hasVideo ? thumbHtml : '')
+    +'</div>';
+  });
+  el.innerHTML=html;
+  _tutRendered=true;
+}
+function openTutorial(el){
+  document.querySelectorAll('.sidebar-item').forEach(function(i){i.classList.remove('active')});
+  if(el) el.classList.add('active');
+  renderTutorials();
+  document.getElementById('tutorial-modal').classList.add('open');
+  bodyLock();
+}
+function closeTutorial(){
+  document.getElementById('tutorial-modal').classList.remove('open');
+  bodyUnlock();
+  document.querySelectorAll('.sidebar-item').forEach(function(i){i.classList.remove('active')});
+  var cat=document.querySelector('.sidebar-item[onclick*="setNav"]');
+  if(cat) cat.classList.add('active');
+}
+function openTutorialVideo(ytId,title){
+  if(!ytId||ytId==='') return;
+  document.getElementById('yt-modal-title').textContent=title||'Заавар үзэх';
+  document.getElementById('yt-iframe').src='https://www.youtube.com/embed/'+ytId+'?autoplay=1';
+  document.getElementById('yt-modal').classList.add('open');
+}
+
+/* ── YOUTUBE PLAYER ─── */
+function playLesson(id){
+  const l = lessons.find(x=>x.id===id); if(!l||!l.ytid) return;
+  document.getElementById('yt-modal-title').textContent = l.title;
+  document.getElementById('yt-iframe').src = `https://www.youtube.com/embed/${l.ytid}?autoplay=1&rel=0&modestbranding=1`;
+  document.getElementById('yt-modal').classList.add('open');
+  bodyLock();
+}
+function closeYT(){
+  document.getElementById('yt-modal').classList.remove('open');
+  document.getElementById('yt-iframe').src = '';
+  bodyUnlock();
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeYT(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && document.getElementById('tutorial-modal').classList.contains('open')) closeTutorial(); });
+
+
 </script>
+
+
+<!-- TUTORIAL MODAL -->
+<div class="tut-modal" id="tutorial-modal" onclick="if(event.target===this)closeTutorial()">
+  <div class="tut-box">
+    <div class="tut-header">
+      <div class="tut-header-left">
+        <div class="tut-header-lbl">Платформ заавар</div>
+        <div class="tut-header-title">📹 Ашиглах Заавар</div>
+      </div>
+      <button class="tut-close" onclick="closeTutorial()">✕</button>
+    </div>
+    <div class="tut-hero">
+      <div class="tut-hero-title">ProductDrop.MN — Алхам алхмаар заавар</div>
+      <div class="tut-hero-sub">Платформыг яаж ашиглах, бараа хайх, ашгаа тооцоолох, supplier холбогдох бүх процессийг энд харна уу.</div>
+      <div class="tut-hero-badges">
+        <span class="tut-badge tut-badge-green"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><polygon points="5 3 19 12 5 21 5 3"/></svg> Видео заавар</span>
+        <span class="tut-badge tut-badge-blue">⏱ ~5:15 минут</span>
+        <span class="tut-badge tut-badge-orange">⭐ Pro хэрэглэгчдэд</span>
+      </div>
+    </div>
+    <div class="tut-body">
+      <!-- dynamically rendered from pd_tutorials localStorage -->
+      <div id="tut-lessons-list"></div>
+
+      <!-- CTA -->
+      <div class="tut-cta-box" style="margin-top:20px;padding:18px;background:var(--accent-bg);border:1.5px solid var(--accent-border);border-radius:12px;text-align:center">
+        <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:5px">Асуух зүйл байна уу?</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Instagram DM-аар шууд холбогдоорой — 30 минутын дотор хариулна.</div>
+        <a href="https://instagram.com/productdrop.mn" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:9px 20px;background:var(--text);border-radius:9px;font-size:12px;font-weight:700;color:#fff;text-decoration:none;transition:background .15s" onmouseover="this.style.background='var(--accent)'" onmouseout="this.style.background='var(--text)'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          @productdrop.mn
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- YOUTUBE PLAYER MODAL -->
+<div class="yt-modal" id="yt-modal" onclick="if(event.target===this)closeYT()">
+  <div class="yt-modal-header">
+    <div class="yt-modal-title" id="yt-modal-title">Хичээл үзэх</div>
+    <button class="yt-close" onclick="closeYT()">✕</button>
+  </div>
+  <div class="yt-frame-wrap">
+    <iframe id="yt-iframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</div>
+
 
 </body>
 </html>
