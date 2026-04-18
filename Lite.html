@@ -4142,9 +4142,24 @@ function toggleDarkMode(){
 
 function openProUpgrade(){
   document.getElementById('pro-upgrade-modal').style.display='flex';
+  if(!document.body.classList.contains('locked')){
+    const sy=window.scrollY||document.documentElement.scrollTop;
+    document.body.dataset.scrollY=sy;
+    document.body.style.top='-'+sy+'px';
+    document.body.classList.add('locked');
+    document.body.dataset.upgradeLockedBody='1';
+  }
 }
 function closeProUpgrade(){
   document.getElementById('pro-upgrade-modal').style.display='none';
+  // Only unlock body if WE locked it and session-expired is not showing
+  if(document.body.dataset.upgradeLockedBody==='1' && !document.getElementById('session-expired').classList.contains('show')){
+    document.body.classList.remove('locked');
+    document.body.style.top='';
+    const sy=parseInt(document.body.dataset.scrollY||'0');
+    window.scrollTo(0,sy);
+    delete document.body.dataset.upgradeLockedBody;
+  }
 }
 function copyLiteProAcct(){
   navigator.clipboard.writeText('5018953118').catch(()=>{});
@@ -4157,7 +4172,7 @@ function copyLiteProAcct(){
 </div><!-- end app-layout -->
 
 <!-- PRO UPGRADE MODAL -->
-<div id="pro-upgrade-modal" onclick="if(event.target===this)closeProUpgrade()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:900;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px);overflow-y:auto">
+<div id="pro-upgrade-modal" onclick="if(event.target===this)closeProUpgrade()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:10000;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px);overflow-y:auto">
   <div style="background:#fff;border-radius:16px;width:100%;max-width:480px;margin:auto;box-shadow:0 24px 80px rgba(0,0,0,.2);overflow:hidden">
     <!-- Header -->
     <div style="padding:20px 20px 0;display:flex;align-items:flex-start;justify-content:space-between">
