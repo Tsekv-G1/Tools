@@ -52,6 +52,9 @@ body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font
 .pd-toast.error{background:#dc2626}
 .pd-toast.warn{background:#d97706}
 @keyframes toast-in{from{opacity:0;transform:translateY(12px) scale(.95)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sct-tab{flex:1;background:transparent;border:none;border-radius:6px;padding:7px 8px;font-size:12px;font-weight:600;font-family:'Outfit',sans-serif;color:var(--muted);cursor:pointer;transition:all .18s}
+.sct-tab.active{background:var(--accent);color:#fff;}
 @keyframes toast-out{to{opacity:0;transform:translateY(8px) scale(.95)}}
 
 
@@ -3577,19 +3580,55 @@ Thank you! I look forward to a long-term business relationship.</div>
           <div class="social-tags" id="social-tags"></div>
         </div>
 
-        <!-- CONTENT SCRIPT -->
+        <!-- CONTENT SCRIPT — AI GENERATE -->
         <div class="p-section" id="script-section">
           <div class="p-sec-lbl">✍️ Контент</div>
-          <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Тухайн бараанд тохирсон <strong>Hook + BOFU</strong> борлуулалтын script</div>
-          <div id="ai-hook-box" style="display:none" class="script-hook-box">
-            <div class="script-hook-lbl">🎯 Hook</div>
-            <div id="ai-hook-text"></div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Тухайн бараанд тохирсон AI-р үүсгэсэн <strong>15с / 30с / 60с</strong> script</div>
+
+          <!-- IDLE STATE -->
+          <div id="script-idle" style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 16px;background:var(--bg);border:1.5px dashed var(--border);border-radius:12px;text-align:center">
+            <div style="font-size:28px">✍️</div>
+            <div style="font-size:13px;font-weight:600;color:var(--text)">AI Script үүсгэх</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.6">Барааны мэдээлэл дээр тулгуурлан<br>15с / 30с / 60с 3 хувилбар гарна</div>
+            <button id="script-gen-btn" onclick="generateAIScripts()" style="margin-top:4px;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px;transition:opacity .2s">
+              <span>🤖</span> Script үүсгэх
+            </button>
           </div>
-      <div id="ai-script-body" style="display:none" class="script-body-box"></div>
-      <div id="ai-script-actions" style="display:none">
-        <button class="copy-btn" id="ai-copy-btn" onclick="copyAIScript()">📋 Бүтэн script хуулах</button>
-      </div>
-    </div>
+
+          <!-- LOADING STATE -->
+          <div id="script-loading" style="display:none;flex-direction:column;align-items:center;gap:10px;padding:28px 16px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;text-align:center">
+            <div style="width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite"></div>
+            <div style="font-size:12px;color:var(--muted)" id="script-load-txt">Script үүсгэж байна...</div>
+          </div>
+
+          <!-- RESULT STATE -->
+          <div id="script-result" style="display:none">
+            <!-- TABS -->
+            <div style="display:flex;gap:4px;margin-bottom:10px;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:4px">
+              <button class="sct-tab active" id="sct-tab-15" onclick="switchScriptTab('15')">⚡ 15с</button>
+              <button class="sct-tab" id="sct-tab-30" onclick="switchScriptTab('30')">🎬 30с</button>
+              <button class="sct-tab" id="sct-tab-60" onclick="switchScriptTab('60')">🎥 60с</button>
+            </div>
+
+            <!-- HOOK -->
+            <div class="script-hook-box" id="sct-hook"></div>
+
+            <!-- BODY -->
+            <div class="script-body-box" id="sct-body" style="min-height:80px"></div>
+
+            <!-- ACTIONS -->
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="copy-btn" id="ai-copy-btn" onclick="copyAIScript()">📋 Хуулах</button>
+              <button onclick="generateAIScripts(true)" style="background:transparent;border:1px solid var(--border);border-radius:7px;padding:6px 12px;font-size:12px;color:var(--muted);font-family:'Outfit',sans-serif;cursor:pointer">🔄 Дахин үүсгэх</button>
+            </div>
+          </div>
+
+          <!-- ERROR STATE -->
+          <div id="script-error" style="display:none;padding:14px;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;font-size:12px;color:#dc2626;text-align:center">
+            <div style="margin-bottom:6px">⚠️ Алдаа гарлаа. Дахин оролдоно уу.</div>
+            <button onclick="generateAIScripts()" style="background:#dc2626;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;font-family:'Outfit',sans-serif;cursor:pointer">Дахин оролдох</button>
+          </div>
+        </div>
       </div><!-- end right panel-col -->
     </div><!-- end panel-body -->
   </div><!-- end panel -->
@@ -8235,49 +8274,131 @@ function replaceGalleryImages(input){
 }
 
 let aiScripts = {};
+let _activeScriptTab = '15';
 
-function getProductScript(p) {
-  const price = fmtN(p.pN);
-  const name  = p.n;
-  if (p.hook && p.script) {
-    return { hook: p.hook, script: p.script };
+function switchScriptTab(t) {
+  _activeScriptTab = t;
+  ['15','30','60'].forEach(x => {
+    document.getElementById('sct-tab-'+x).classList.toggle('active', x===t);
+  });
+  const cache = activeProduct && aiScripts[activeProduct.n];
+  if (cache) renderScriptTab(cache, t);
+}
+
+function renderScriptTab(data, t) {
+  const hookEl = document.getElementById('sct-hook');
+  const bodyEl = document.getElementById('sct-body');
+  const map = { '15': data.s15, '30': data.s30, '60': data.s60 };
+  const s = map[t] || {};
+  hookEl.innerHTML = '<div class="script-hook-lbl">🎯 Hook</div>' + (s.hook || '');
+  bodyEl.textContent = s.body || '';
+}
+
+async function generateAIScripts(force) {
+  if (!activeProduct) return;
+  const p = activeProduct;
+  const name = p.n;
+
+  // Cache hit
+  if (!force && aiScripts[name]) {
+    showScriptResult(aiScripts[name]);
+    return;
   }
-  // fallback
-  return {
-    hook: name + ' — танд яг хэрэгтэй зүйл.',
-    script: name + '\n\n✅ Чанартай\n✅ Монголд хүргэнэ\n\n' + price + '\n\nDM-ээр захиалаарай.'
-  };
+
+  // UI: loading
+  document.getElementById('script-idle').style.display = 'none';
+  document.getElementById('script-result').style.display = 'none';
+  document.getElementById('script-error').style.display = 'none';
+  document.getElementById('script-loading').style.display = 'flex';
+
+  const price = fmtN(p.pN);
+  const desc = p.desc || '';
+  const cat = p.cat || '';
+
+  const prompt = `Та Монголын онлайн бизнес нийгэмлэлд зориулсан борлуулалтын скрипт бичигч мэргэжилтэн.
+
+Дараах барааны мэдээлэл дээр тулгуурлаад TikTok/Instagram Reels-д зориулсан 3 хувилбар скрипт бичнэ үү.
+
+БАРАА:
+- Нэр: ${name}
+- Ангилал: ${cat}
+- Тайлбар: ${desc}
+- Үнэ: ₮${price}
+
+ШААРДЛАГА:
+- Монгол ярианы хэлээр — бичгийн хэлгүй, камерт ярихад зохимжтой
+- Hook нь 10 үгнээс хэтрэхгүй, шууд татах
+- Body нь тодорхой, асуудал → шийдэл бүтэц
+- CTA нь нэг үйлдэл — DM "АВНА" эсвэл Bio линк
+- Urgency/social proof байж болно
+
+Дараах JSON хэлбэрээр ЗӨВХӨН JSON буцаана (markdown, тайлбар огт байхгүй):
+{
+  "s15": { "hook": "...", "body": "..." },
+  "s30": { "hook": "...", "body": "..." },
+  "s60": { "hook": "...", "body": "..." }
+}
+
+s15 = 15 секундын скрипт (hook 3с, body 10с, CTA 2с)
+s30 = 30 секундын скрипт (hook 3с, body 20с, CTA 5с — асуудал+шийдэл+social proof)
+s60 = 60 секундын скрипт (hook 3с, story 10с, demo 25с, proof 10с, CTA 7с)`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await res.json();
+    const raw = data.content?.[0]?.text || '';
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+
+    aiScripts[name] = parsed;
+    showScriptResult(parsed);
+
+  } catch(e) {
+    document.getElementById('script-loading').style.display = 'none';
+    document.getElementById('script-error').style.display = 'block';
+  }
+}
+
+function showScriptResult(data) {
+  document.getElementById('script-loading').style.display = 'none';
+  document.getElementById('script-idle').style.display = 'none';
+  document.getElementById('script-error').style.display = 'none';
+  document.getElementById('script-result').style.display = 'block';
+  _activeScriptTab = '15';
+  ['15','30','60'].forEach(x => {
+    document.getElementById('sct-tab-'+x).classList.toggle('active', x==='15');
+  });
+  renderScriptTab(data, '15');
 }
 
 function showProductScript(p) {
-  const hookBox = document.getElementById('ai-hook-box');
-  const hookText = document.getElementById('ai-hook-text');
-  const bodyBox = document.getElementById('ai-script-body');
-  const actions = document.getElementById('ai-script-actions');
-
-  const { hook, script } = getProductScript(p);
-
-  if (hook) {
-    hookText.textContent = hook;
-    hookBox.style.display = 'block';
+  // Reset to idle when switching product
+  document.getElementById('script-result').style.display = 'none';
+  document.getElementById('script-loading').style.display = 'none';
+  document.getElementById('script-error').style.display = 'none';
+  if (aiScripts[p.n]) {
+    showScriptResult(aiScripts[p.n]);
+  } else {
+    document.getElementById('script-idle').style.display = 'flex';
   }
-  if (script) {
-    bodyBox.textContent = script;
-    bodyBox.style.display = 'block';
-  }
-  actions.style.display = 'block';
-
-  aiScripts[p.n] = { hook, script };
 }
 
-
 function copyAIScript() {
-  const hook = document.getElementById('ai-hook-text').textContent;
-  const body = document.getElementById('ai-script-body').textContent;
-  const full = (hook ? 'HOOK:\n' + hook + '\n\n' : '') + body;
+  const hook = document.getElementById('sct-hook')?.textContent || '';
+  const body = document.getElementById('sct-body')?.textContent || '';
+  const full = (hook ? 'HOOK:\n' + hook.replace('🎯 Hook','').trim() + '\n\n' : '') + body;
   const btn = document.getElementById('ai-copy-btn');
   const doFeedback = () => {
-    if(btn){btn.textContent='✅ Хуулагдлаа!';btn.style.background='var(--accent)';btn.style.color='#fff';setTimeout(()=>{btn.textContent='📋 Бүтэн script хуулах';btn.style.background='';btn.style.color='';},2000);}
+    if(btn){btn.textContent='✅ Хуулагдлаа!';btn.style.background='var(--accent)';btn.style.color='#fff';setTimeout(()=>{btn.textContent='📋 Хуулах';btn.style.background='';btn.style.color='';},2000);}
   };
   if(navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(full).then(doFeedback).catch(()=>{
