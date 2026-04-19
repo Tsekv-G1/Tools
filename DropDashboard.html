@@ -1768,7 +1768,7 @@ html.theme-tr .pipe-table tbody tr{
         <!-- Shared: message textarea + send -->
         <label class="lbl" style="margin-top:6px;">Мессеж</label>
         <textarea id="mass-msg-text" class="fi2" style="min-height:100px;resize:vertical;font-size:13px;line-height:1.6;font-family:inherit;"
-          placeholder="👋 Сайн байна уу?&#10;&#10;ProductDrop Pro-д шинэ 100 бараа нэмэгдлээ 🔥&#10;Одоо нэгдэх: https://productdrop.mn"></textarea>
+          placeholder="👋 Сайн байна уу?&#10;&#10;ProductDrop Pro-д шинэ 100 бараа нэмэгдлээ 🔥&#10;Одоо нэгдэх: https://productdrops.netlify.app/landing"></textarea>
         <div style="font-size:11px;color:var(--text4);margin-top:5px;" id="mass-sms-char-count"></div>
         <div style="display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap;">
           <button class="btn-green" id="mass-send-btn" onclick="massSend()" style="flex:1;min-width:140px;justify-content:center;">📤 Илгээх</button>
@@ -3343,7 +3343,7 @@ var DEFAULT_CONTENTS = [
     "hooks": "1. ₮49,900 гэдэг бараа биш — гарын авлага биш\n2. Ганц нэвтрэх нууц үг. Дотор нь бүгд.\n3. Бараа хайхад 8 цаг зарцуулдаг байсан — одоо 20 минут.",
     "script": "[HOOK] ₮49,900 гэдэг бараа биш — гарын авлага биш.\n\n[БИЕ] ProductDrop.MN бол платформ. Нэвтэрхэд л — 200 гаруй судалгаа хийгдсэн бараа харагдана. Тус бүрт нь Alibaba supplier линк, авах үнэ, зарах үнэ, цэвэр ашиг — бэлэн. Profit calculator бий. Reel script байна.\n\n[CTA] Мэдээлэл авах бол 1 гэж бичээрэй.",
     "caption": "ProductDrop.MN бол платформ.\n\nНэвтэрхэд л:\n→ 200+ судалгаа хийгдсэн бараа\n→ Alibaba supplier линк\n→ Profit calculator\n→ Reel script бэлэн\n\nМэдээлэл авах бол 1 гэж бичээрэй 👇",
-    "dm1": "Сайн уу! 📦 ProductDrop.MN бол бараа судалгааны платформ. Туршихыг хүсвэл Lite план үнэгүй. Линк: productdrop.mn",
+    "dm1": "Сайн уу! 📦 ProductDrop.MN бол бараа судалгааны платформ. Туршихыг хүсвэл Lite план үнэгүй. Линк: productdrops.netlify.app/landing",
     "dm2": "Онлайн бизнес эхлүүлж байна уу, эсвэл аль хэдийн зарж байна уу?",
     "notes": "Дэлгэцэнд: ProductDrop платформын screen record"
   },
@@ -3356,7 +3356,7 @@ var DEFAULT_CONTENTS = [
     "hooks": "1. Alibaba хайхад 3 цаг. Энэ линк дарахад 3 секунд.\n2. Ийм холбоос байхгүй бол цаг алдана\n3. Supplier хайдаг хүн байна, хайхгүй хүн байна.",
     "script": "[HOOK] Alibaba хайхад 3 цаг. Энэ линк дарахад 3 секунд.\n\n[БИЕ] ProductDrop-д нэвтэрхэд бараа бүрт нэг товч байна. Тэр товч дарахад — яг тэр барааны Alibaba хуудас нээгдэнэ. Supplier аль хэдийн шалгагдсан.\n\nМэдэхгүй хүн 3 цаг хайна. Мэдэх хүн 3 минутад шийддэг.\n\n[CTA] Мэдээлэл авах бол 1 гэж бичээрэй.",
     "caption": "ProductDrop-д нэвтэрхэд бараа бүрт Alibaba supplier линк байна.\n\nМэдэхгүй хүн 3 цаг хайна. Мэдэх хүн 3 минутад шийддэг.\n\nМэдээлэл авах бол 1 гэж бичээрэй 👇",
-    "dm1": "Сайн уу! 🔗 ProductDrop-д бараа бүрт Alibaba supplier линк байна. Lite план үнэгүй туршиж болно. Линк: productdrop.mn",
+    "dm1": "Сайн уу! 🔗 ProductDrop-д бараа бүрт Alibaba supplier линк байна. Lite план үнэгүй туршиж болно. Линк: productdrops.netlify.app/landing",
     "dm2": "Alibaba дээр өмнө нь бараа хайж үзсэн үү?",
     "notes": "Дэлгэцэнд: ProductDrop → бараа дарна → supplier линк → Alibaba нээгдэнэ"
   },
@@ -3369,7 +3369,7 @@ var DEFAULT_CONTENTS = [
     "hooks": "1. ₮30,000 ашиг гэж бодоод — гааль, хүргэлт орохоор ₮8,000 болдог.\n2. Ашгаа тооцоолохгүйгээр зарна гэдэг — харанхуйд алхна.\n3. 10 секундэд цэвэр ашгаа мэдэх боломж байна.",
     "script": "[HOOK] ₮30,000 ашиг гэж бодоод — гааль, хүргэлт орохоор ₮8,000 болдог.\n\n[БИЕ] ProductDrop-д profit calculator байна. Авах үнэ оруулна — хүргэлт, гааль 3%, тогтмол зардал автоматаар нэмнэ. Цэвэр ашиг, margin секундэд гарна.\n\nБуруу тооцоотой бараа = мөнгөө голдоо хийнэ. Зөв тооцоотой = ашигтай.\n\n[CTA] Мэдээлэл авах бол 1 гэж бичээрэй.",
     "caption": "ProductDrop-д profit calculator байна.\n\nАвах үнэ оруулна →\n✓ Хүргэлт автоматаар нэмнэ\n✓ Гааль 3% тооцоолно\n✓ Цэвэр ашиг — секундэд гарна\n\nМэдээлэл авах бол 1 гэж бичээрэй 👇",
-    "dm1": "Сайн уу! 🧮 ProductDrop-ийн profit calculator гааль, хүргэлт бүгдийг автоматаар тооцоолно. productdrop.mn",
+    "dm1": "Сайн уу! 🧮 ProductDrop-ийн profit calculator гааль, хүргэлт бүгдийг автоматаар тооцоолно. productdrops.netlify.app/landing",
     "dm2": "Одоо бараагаа зарахдаа гааль, хүргэлтийн зардлыг тооцоолж байна уу?",
     "notes": "Дэлгэцэнд: Profit calculator screen record"
   },
@@ -3382,7 +3382,7 @@ var DEFAULT_CONTENTS = [
     "hooks": "1. Бараа байна. Зар бичих мэдэхгүй. — Шийдэгдсэн.\n2. Reel script хайхад цаг алдана. Платформ дотор байна.\n3. Бараагаа юу гэж зарахаа мэдэхгүйгээр зар явуулж байна уу?",
     "script": "[HOOK] Бараа байна. Зар бичих мэдэхгүй. — Шийдэгдсэн.\n\n[БИЕ] ProductDrop-д нэвтэрхэд бараа бүрт content script байна. Hook, зохиол, caption — монгол ярианы хэлээр бэлэн. Аль platform-д зарах, хэнд чиглэх — script бүрт заасан.\n\nЧи зөвхөн уншаад reel хийнэ.\n\n[CTA] Мэдээлэл авах бол 1 гэж бичээрэй.",
     "caption": "ProductDrop-д нэвтэрхэд бараа бүрт reel script байна.\n\n→ Hook — монгол ярианы хэлээр\n→ Зохиол — camera-ready\n→ Caption — бэлэн\n\nМэдээлэл авах бол 1 гэж бичээрэй 👇",
-    "dm1": "Сайн уу! 🎬 ProductDrop-д бараа бүрт reel script байна. Lite планд үнэгүй туршиж болно: productdrop.mn",
+    "dm1": "Сайн уу! 🎬 ProductDrop-д бараа бүрт reel script байна. Lite планд үнэгүй туршиж болно: productdrops.netlify.app/landing",
     "dm2": "Одоо reel контент хэрхэн бэлддэг вэ?",
     "notes": "Дэлгэцэнд: ProductDrop → бараа → content script tab"
   },
@@ -3395,7 +3395,7 @@ var DEFAULT_CONTENTS = [
     "hooks": "1. Мөнгө төлөхгүйгээр туршиж болно — яагаад хийхгүй байна вэ?\n2. Үнэгүй нэвтэрч платформыг хар — дараа шийд.\n3. 25 бараа, supplier линк — үнэгүй.",
     "script": "[HOOK] Мөнгө төлөхгүйгээр туршиж болно — яагаад хийхгүй байна вэ?\n\n[БИЕ] ProductDrop-ийн Lite план үнэгүй. Нэвтэрхэд 25 судалгаа хийгдсэн бараа харагдана. Supplier линк, profit calculator, content script — бүгдийг туршиж үзнэ. Карт оруулах шаардлагагүй.\n\n[CTA] Мэдээлэл авах бол 1 гэж бичээрэй.",
     "caption": "ProductDrop Lite план — үнэгүй.\n\nНэвтэрхэд:\n→ 25 бараа\n→ Supplier линк\n→ Profit calculator\n→ Content script\n\nМэдээлэл авах бол 1 гэж бичээрэй 👇",
-    "dm1": "Сайн уу! 🆓 ProductDrop Lite план үнэгүй — productdrop.mn. 25 бараа, supplier, script бүгд байна. Туршаад хар!",
+    "dm1": "Сайн уу! 🆓 ProductDrop Lite план үнэгүй — productdrops.netlify.app/landing. 25 бараа, supplier, script бүгд байна. Туршаад хар!",
     "dm2": "Туршиж үзсэний дараа ямар категорийн бараа хамгийн их сонирхолтой санагдав?",
     "notes": "Дэлгэцэнд: Lite план нэвтрэх → каталог"
   },
@@ -3406,9 +3406,9 @@ var DEFAULT_CONTENTS = [
     "date": "2026-04-09",
     "status": "scr",
     "hooks": "1. 4 алхам. 30 минут. Дотор нь байна.\n2. Бүртгэл хэрхэн хийхийг мэдэхгүй байна уу?\n3. Энэ бол хамгийн хялбар бүртгэл.",
-    "script": "[HOOK] 4 алхам. 30 минут. Дотор нь байна.\n\n[БИЕ] 1. productdrop.mn-д мэдээллээ оруулна.\n2. Хаан банкны дансанд ₮49,900 шилжүүлнэ — утга: утасны дугаар.\n3. @productdrop.mn-д screenshot явуулна.\n4. 30 минутын дотор нууц үг ирнэ — нэвтэрнэ.\n\n[CTA] Мэдээлэл авах бол 1 гэж бичээрэй.",
-    "caption": "ProductDrop Pro бүртгэл — 4 алхам:\n\n1️⃣ productdrop.mn-д мэдээлэл оруулна\n2️⃣ Хаан банк → ₮49,900 шилжүүлнэ\n3️⃣ @productdrop.mn-д screenshot явуулна\n4️⃣ 30 минутад нууц үг ирнэ → нэвтэрнэ\n\nМэдээлэл авах бол 1 гэж бичээрэй 👇",
-    "dm1": "Сайн уу! ✅ Бүртгэлийн дэлгэрэнгүй: productdrop.mn → Хаан банк 5018953118-д ₮49,900 → @productdrop.mn-д screenshot → 30 минутад нууц үг. Асуулт байвал бичээрэй!",
+    "script": "[HOOK] 4 алхам. 30 минут. Дотор нь байна.\n\n[БИЕ] 1. productdrops.netlify.app/landing-д мэдээллээ оруулна.\n2. Хаан банкны дансанд ₮49,900 шилжүүлнэ — утга: утасны дугаар.\n3. @productdrops.netlify.app/landing-д screenshot явуулна.\n4. 30 минутын дотор нууц үг ирнэ — нэвтэрнэ.\n\n[CTA] Мэдээлэл авах бол 1 гэж бичээрэй.",
+    "caption": "ProductDrop Pro бүртгэл — 4 алхам:\n\n1️⃣ productdrops.netlify.app/landing-д мэдээлэл оруулна\n2️⃣ Хаан банк → ₮49,900 шилжүүлнэ\n3️⃣ @productdrops.netlify.app/landing-д screenshot явуулна\n4️⃣ 30 минутад нууц үг ирнэ → нэвтэрнэ\n\nМэдээлэл авах бол 1 гэж бичээрэй 👇",
+    "dm1": "Сайн уу! ✅ Бүртгэлийн дэлгэрэнгүй: productdrops.netlify.app/landing → Хаан банк 5018953118-д ₮49,900 → @productdrops.netlify.app/landing-д screenshot → 30 минутад нууц үг. Асуулт байвал бичээрэй!",
     "dm2": "Бүртгэлийн аль алхам дээр асуулт байна?",
     "notes": "Дэлгэцэнд: Landing → бүртгэл → payment → DM screenshot"
   },
@@ -3421,7 +3421,7 @@ var DEFAULT_CONTENTS = [
     "hooks": "1. ₮49,900 зарцуулна. ₮490,000 буцааж ирнэ — яаж?\n2. ₮49,900 хэзээ нөхөгдөх вэ?\n3. Нэг бараа зарж — платформын үнэ нөхнө.",
     "script": "[HOOK] ₮49,900 зарцуулна. ₮490,000 буцааж ирнэ — яаж?\n\n[БИЕ] ProductDrop-т нэвтэрхэд 200 гаруй бараа. Нэг бараа зарахад л ₮49,900 нөхөгдөнө. Зөвхөн нэг захиалга. 3 сарын хугацаанд нэг л winning product олбол хангалттай.\n\n₮49,900 нь зардал биш — 3 сарын хөрөнгө оруулалт.\n\n[CTA] Мэдээлэл авах бол 1 гэж бичээрэй.",
     "caption": "ProductDrop Pro — ₮49,900/3 сар.\n\nТооцоо:\n→ 200+ барааны дотроос нэг winning product\n→ Нэг бараа бүрт ₮25-50K цэвэр ашиг\n→ Нэг захиалгад л ₮49,900 нөхөгдөнө\n\nМэдээлэл авах бол 1 гэж бичээрэй 👇",
-    "dm1": "Сайн уу! 💰 ProductDrop Pro ₮49,900/3 сар. Туршихыг хүсвэл Lite үнэгүй байна: productdrop.mn",
+    "dm1": "Сайн уу! 💰 ProductDrop Pro ₮49,900/3 сар. Туршихыг хүсвэл Lite үнэгүй байна: productdrops.netlify.app/landing",
     "dm2": "Сард хэдэн захиалга авах зорилготой байна? ₮1M / ₮2M / ₮3M+",
     "notes": "Дэлгэцэнд: Платформ дотор profit calculator screen record"
   },
@@ -3434,7 +3434,7 @@ var DEFAULT_CONTENTS = [
     "hooks": "1. 25 бараа vs 200 бараа — ялгаа нь мэдэгдэнэ.\n2. Үнэгүй план хангалттай юу — шалгацгаая.\n3. Lite туршаад Pro руу яагаад шилждэг вэ?",
     "script": "[HOOK] 25 бараа vs 200 бараа — ялгаа нь мэдэгдэнэ.\n\n[БИЕ] Lite — үнэгүй. 25 бараа. Supplier линк, profit calculator, content script — бүгд байна.\nPro — ₮49,900/3 сар. 200+ бараа. 10 хоног бүр шинэ бараа. Шүүлтүүр. Weekly featured.\n\nLite-р эхэл. Дотроос нь харж мэд. Дараа шийд.\n\n[CTA] Мэдээлэл авах бол 1 гэж бичээрэй.",
     "caption": "ProductDrop Lite vs Pro:\n\n🆓 LITE — үнэгүй, 25 бараа\n💚 PRO — ₮49,900/3 сар, 200+ бараа\n\nLite-р туршиж эхэл.\nМэдээлэл авах бол 1 гэж бичээрэй 👇",
-    "dm1": "Сайн уу! 📊 Lite план үнэгүй — productdrop.mn. Туршаад Pro руу шилжих эсэхээ шийд!",
+    "dm1": "Сайн уу! 📊 Lite план үнэгүй — productdrops.netlify.app/landing. Туршаад Pro руу шилжих эсэхээ шийд!",
     "dm2": "Lite туршсаны дараа ямар асуулт байна?",
     "notes": "Дэлгэцэнд: Lite vs Pro split screen comparison"
   },
@@ -3447,7 +3447,7 @@ var DEFAULT_CONTENTS = [
     "hooks": "1. AliExpress дээр 3 цаг гулгаад — бараа олоогүй.\n2. Бараа хайхад 8 цаг. Энд 20 минут.\n3. Цаг = мөнгө. Ийм тооцоог хийж байна уу?",
     "script": "[HOOK] AliExpress дээр 3 цаг гулгаад — бараа олоогүй.\n\n[БИЕ] Winning product гараар хийвэл нэг барааны тулд 5-8 цаг. ProductDrop-д нэвтэрхэд — бүгд хийгдсэн байна. 20 минут.\n\nСард 30+ цаг хэмнэнэ. Тэр цагаа бизнестээ зарцуул.\n\n[CTA] Мэдээлэл авах бол 1 гэж бичээрэй.",
     "caption": "Winning product гараар: 5-8 цаг нэг барааны тулд.\nProductDrop-д: 20 минут.\n\nСард 30+ цаг хэмнэнэ.\n\nМэдээлэл авах бол 1 гэж бичээрэй 👇",
-    "dm1": "Сайн уу! ⏱ ProductDrop-д бараа бүрт margin, supplier, script бэлэн. Lite үнэгүй туршиж болно: productdrop.mn",
+    "dm1": "Сайн уу! ⏱ ProductDrop-д бараа бүрт margin, supplier, script бэлэн. Lite үнэгүй туршиж болно: productdrops.netlify.app/landing",
     "dm2": "Одоо бараа хайхад долоо хоногт хэдэн цаг зарцуулж байна?",
     "notes": "Дэлгэцэнд: AliExpress scroll vs ProductDrop каталог"
   },
@@ -3460,7 +3460,7 @@ var DEFAULT_CONTENTS = [
     "hooks": "1. 10 хоног тутам 100 шинэ бараа — яагаад ийм байдаг вэ?\n2. Монголд trend хурдан ханадаг. Тийм учраас —\n3. Нэг л бараагаар 3 сар зарна гэж бодвол — буруу.",
     "script": "[HOOK] Монголд trend хурдан ханадаг. Тийм учраас —\n\n[БИЕ] ProductDrop Pro-д 10 хоног бүр 100 гаруй шинэ бараа нэмнэ. 3 сарын хугацаанд 300 гаруй бараа харна. Тус бүрт margin, saturation, supplier — шалгагдсан.\n\nБараа дутахгүй. Цаг дутна. 3 сарын Pro нэвтрэлт — ₮49,900.\n\n[CTA] Мэдээлэл авах бол 1 гэж бичээрэй.",
     "caption": "ProductDrop Pro-д:\n→ 10 хоног бүр 100+ шинэ бараа\n→ 3 сарт 300+ бараа харна\n→ Тус бүрт margin, supplier, script\n\n₮49,900/3 сар. Нэг winning product олоход л нөхөгдөнө.\n\nМэдээлэл авах бол 1 гэж бичээрэй 👇",
-    "dm1": "Сайн уу! 🔄 ProductDrop Pro-д 10 хоног бүр 100+ шинэ бараа нэмнэ. Lite үнэгүй туршиж болно: productdrop.mn",
+    "dm1": "Сайн уу! 🔄 ProductDrop Pro-д 10 хоног бүр 100+ шинэ бараа нэмнэ. Lite үнэгүй туршиж болно: productdrops.netlify.app/landing",
     "dm2": "Ямар категорийн бараа хамгийн их сонирхолтой байна?",
     "notes": "Дэлгэцэнд: Каталог дотор шинэ бараа нэмэгдэж байгаа screen record"
   }
@@ -4325,7 +4325,7 @@ function wqInit(){
       +'</div>'
       +'<input class="fi3" id="wq-supplier-'+i+'" placeholder="Supplier URL (auto-fill)" value="'+x(s.supplier_url||'')+'" style="margin-bottom:6px;font-size:12px;" oninput="wqAutoSave()">'
       +'<input class="fi3" id="wq-img-'+i+'" placeholder="🖼 Зураг URL (auto-fill)" value="'+x(s.img_url||'')+'" style="margin-bottom:6px;font-size:12px;" oninput="var th=document.getElementById(\'wq-thumb-'+i+'\');if(th){th.src=this.value;th.style.display=this.value?\'block\':\'none\';}wqAutoSave()">'
-      +'<textarea class="fi3" id="wq-reason-'+i+'" rows="2" placeholder="✨ Яагаад winning вэ? (бараа сонгоход auto-fill болно)" style="margin-bottom:0;font-size:12px;resize:none;" oninput="wqAutoSave()">'+x(s.reason||'')+'</textarea>'
+      +'<div style="display:flex;align-items:flex-start;gap:6px;margin-bottom:0;">'+'<textarea class="fi3" id="wq-reason-'+i+'" rows="2" placeholder="✨ Яагаад winning вэ?" style="margin-bottom:0;font-size:12px;resize:none;flex:1;min-width:0;" oninput="wqAutoSave()">'+x(s.reason||'')+'</textarea>'+'<button id="wq-ai-btn-'+i+'" onclick="wqGenAI('+i+')" style="flex-shrink:0;padding:5px 9px;border-radius:8px;border:1.5px solid var(--purple);background:var(--purplebg);color:var(--purple);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s;align-self:flex-start;margin-top:0;">🤖 AI</button>'+'</div>'
       +'</div>';
   }
 }
@@ -4374,18 +4374,20 @@ async function wqSave(){
   btn.disabled=true; btn.textContent='⏳ Хадгалж байна...'; st.textContent='';
 
   try{
-    var r=await gasFetch(GAS_URL()+'?action=save_weekly_queue&queue='+encodeURIComponent(JSON.stringify(filled)));
-    var j=await r.json();
-    if(j.ok){
-      toast('✅ '+filled.length+' бараа queue-д хадгалагдлаа!','ok');
-      st.style.color='var(--green)';
-      st.textContent='✓ Нэмэгдсэн: '+j.added+' · Шинэчлэгдсэн: '+j.updated+(j.skipped?' · Алгасагдсан (явсан): '+j.skipped:'');
-    } else {
-      toast('Алдаа: '+(j.error||''),'err');
-      st.style.color='var(--red)'; st.textContent='✗ '+(j.error||'');
-    }
+    var gasUrl=GAS_URL();
+    if(!gasUrl){toast('GAS URL тохируулаагүй байна','err');return;}
+    // POST + no-cors → CORS алдааг тойрно (response уншиж чадахгүй ч Sheet-д бичнэ)
+    await fetch(gasUrl+'?action=save_weekly_queue',{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({queue:filled})
+    });
+    toast('✅ '+filled.length+' бараа queue-д илгэгдлээ — Telegram шалгана уу','ok');
+    st.style.color='var(--green)';
+    st.textContent='✓ '+filled.length+' бараа GAS-т илгэгдлээ';
   } catch(e){
-    toast('GAS холбогдсонгүй','err');
+    toast('GAS холбогдсонгүй: '+e.message,'err');
     st.style.color='var(--red)'; st.textContent='✗ '+e.message;
   } finally {
     btn.disabled=false; btn.textContent='📅 Queue-д хадгалах (GAS)';
@@ -4467,7 +4469,7 @@ function dpBuildMsg(){
     +'✨ Яагаад winning вэ:\n'+reason+'\n\n'
     +(supplier?'🔗 Supplier линк: '+supplier+'\n\n':'')
     +'━━━━━━━━━━━━━━━━━\n'
-    +'📊 200+ бараа · бүтэн тоо баримт → productdrop.mn\n'
+    +'📊 200+ бараа · бүтэн тоо баримт → productdrops.netlify.app/landing\n'
     +'🔒 Pro эрх авснаар бүхий л мэдээлэл нээгдэнэ';
   return msg;
 }
@@ -9804,10 +9806,10 @@ setTimeout(function(){
 .pp-cat.active,.pp-cat:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
 .pp-card{position:relative;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .18s cubic-bezier(.25,.46,.45,.94);background:var(--bg2);display:flex;flex-direction:column;}
 .pp-card:hover{border-color:var(--blue);transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,122,255,.2);}
-.pp-card-img-wrap{position:relative;width:100%;padding-top:100%;overflow:hidden;background:var(--bg4);flex-shrink:0;}
+.pp-card-img-wrap{position:relative;width:100%;aspect-ratio:1;overflow:hidden;background:var(--bg4);flex-shrink:0;}
 .pp-card-img-wrap .pp-zoom-btn{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:8px;background:rgba(0,0,0,.5);border:none;color:#fff;font-size:13px;cursor:pointer;display:none;align-items:center;justify-content:center;transition:background .15s;z-index:2;backdrop-filter:blur(4px);}
 .pp-card:hover .pp-zoom-btn{display:flex;}
-.pp-card img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .25s;}
+.pp-card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .25s;}
 .pp-card:hover img{transform:scale(1.04);}
 .pp-card-body{padding:8px 10px 10px;flex:1;display:flex;flex-direction:column;gap:3px;}
 .pp-card-name{font-size:11px;font-weight:700;color:var(--text);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
@@ -9831,46 +9833,105 @@ var _ppProducts=[], _ppFiltered=[], _ppCat='', _ppSlot=-1, _ppTarget='wq'; // ta
 var CAT_MAP={'Home':'Гэр · Home','Beauty':'Гоо сайхан · Beauty','Health':'Эрүүл мэнд · Health','Kids':'Хүүхэд · Kids','Goods':'Бараа · Goods'};
 
 async function ppLoad(){
-  if(_ppProducts.length>0) return; // cached
-  // Try sessionStorage cache
+  if(_ppProducts.length>0) return;
   var cached=sessionStorage.getItem('pp_products');
-  if(cached){ try{ _ppProducts=JSON.parse(cached); return; }catch(e){} }
+  if(cached){ try{ _ppProducts=JSON.parse(cached); if(_ppProducts.length>0) return; }catch(e){} }
 
-  // Fetch Pro.html from same domain
-  var ppStatus=document.getElementById('pp-grid');
-  ppStatus.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text3);font-size:13px;">⏳ Бараа татаж байна...</div>';
+  var grid=document.getElementById('pp-grid');
+  grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text3);font-size:13px;">⏳ Бараа татаж байна...</div>';
 
+  // ── 1. GAS-аас татах (action=get_products) — 8s timeout ──
   try{
-    // Try multiple possible paths
-    var paths=['/Pro.html','/pro.html','./Pro.html','Pro.html'];
-    var html='';
+    var gasUrl=GAS_URL();
+    if(gasUrl){
+      var ctrl1=new AbortController();
+      var t1=setTimeout(function(){ctrl1.abort();},8000);
+      try{
+        var r=await fetch(gasUrl+'?action=get_products',{credentials:'omit',signal:ctrl1.signal});
+        clearTimeout(t1);
+        var j=await r.json();
+        if(j.ok && j.products && j.products.length>0){
+          _ppProducts=j.products;
+          sessionStorage.setItem('pp_products',JSON.stringify(_ppProducts));
+          return;
+        }
+      }catch(e1a){clearTimeout(t1);}
+    }
+  }catch(e1){}
+
+  // ── 2. Pro.html-с татах ──
+  try{
+    var paths=['https://productdrops.netlify.app/pro.html','/Pro.html','/pro.html','./Pro.html','Pro.html'];
+    var src='';
     for(var pi=0;pi<paths.length;pi++){
       try{
-        var resp=await fetch(paths[pi],{credentials:'omit'});
-        if(resp.ok){ html=await resp.text(); break; }
+        var ctrl2=new AbortController();
+        var t2=setTimeout(function(){ctrl2.abort();},8000);
+        var rp=await fetch(paths[pi],{credentials:'omit',signal:ctrl2.signal});
+        clearTimeout(t2);
+        if(rp.ok){src=await rp.text();break;}
       }catch(fe){}
     }
-    if(!html) throw new Error('Pro.html татаж чадсангүй');
-
-    // Extract PRODUCTS array
-    var startIdx=html.indexOf('const PRODUCTS = [');
-    if(startIdx===-1) startIdx=html.indexOf('var PRODUCTS = [');
-    if(startIdx===-1) throw new Error('PRODUCTS array олдсонгүй');
-    var arrStart=html.indexOf('[',startIdx);
-
-    // Find matching closing bracket
-    var depth=0, endIdx=-1;
-    for(var ci=arrStart;ci<html.length;ci++){
-      if(html[ci]==='[') depth++;
-      else if(html[ci]===']'){ depth--; if(depth===0){endIdx=ci;break;} }
+    if(src){
+      var si=src.indexOf('const PRODUCTS = [');
+      if(si===-1) si=src.indexOf('var PRODUCTS = [');
+      if(si===-1) si=src.indexOf('const PRODUCTS=[');
+      if(si===-1) si=src.indexOf('var PRODUCTS=[');
+      if(si===-1) si=src.indexOf('PRODUCTS = [');
+      if(si===-1) si=src.indexOf('PRODUCTS=[');
+      if(si>-1){
+        var as=src.indexOf('[',si);
+        var dep=0,ei=-1;
+        for(var ci=as;ci<src.length;ci++){
+          if(src[ci]==='[')dep++;
+          else if(src[ci]===']'){dep--;if(dep===0){ei=ci;break;}}
+        }
+        var parsed=JSON.parse(src.substring(as,ei+1));
+        if(parsed.length>0){
+          _ppProducts=parsed;
+          sessionStorage.setItem('pp_products',JSON.stringify(_ppProducts));
+          return;
+        }
+      }
     }
-    var arrStr=html.substring(arrStart,endIdx+1);
-    _ppProducts=JSON.parse(arrStr);
-    sessionStorage.setItem('pp_products',JSON.stringify(_ppProducts));
-  }catch(err){
-    ppStatus.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--red);font-size:13px;">❌ '+err.message+'<br><small style="color:var(--text3);">Pro.html-г нэгэн зэрэг нээгээд дахин оролдоно уу</small></div>';
-    return;
-  }
+  }catch(e2){}
+
+  // ── 3. Supabase products хүснэгтээс татах ──
+  try{
+    var sr=await fetch(SB_URL+'/rest/v1/products?order=id.asc&limit=500',{headers:_SBH});
+    if(sr.ok){
+      var rows=await sr.json();
+      if(rows&&rows.length>0){
+        _ppProducts=rows.map(function(r){
+          return{
+            n:r.name||r.n||'',
+            pN:parseFloat(r.sell_price||r.pN||0),
+            cN:parseFloat(r.buy_price||r.cN||0),
+            tcN:parseFloat(r.total_cost||r.tcN||r.buy_price||r.cN||0),
+            mc:r.category||r.mc||'',
+            imgUrl:r.img_url||r.imgUrl||'',
+            aliUrl:r.supplier_url||r.aliUrl||'',
+            hook:r.hook||'',
+            aiReason:r.ai_reason||r.aiReason||'',
+            mg:r.margin||r.mg||0
+          };
+        });
+        sessionStorage.setItem('pp_products',JSON.stringify(_ppProducts));
+        return;
+      }
+    }
+  }catch(e3){}
+
+  // ── Бүгд амжилтгүй — тайлбар гаргах ──
+  grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 20px;">'
+    +'<div style="font-size:28px;margin-bottom:10px;">📭</div>'
+    +'<div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">Бараа ачааллаж чадсангүй</div>'
+    +'<div style="font-size:12px;color:var(--text3);line-height:1.7;margin-bottom:14px;">'
+    +'GAS дээр <b>get_products</b> action нэмэх,<br>эсвэл Supabase-д <b>products</b> хүснэгт үүсгэх хэрэгтэй.</div>'
+    +'<button onclick="ppClearCache();ppLoad().then(function(){ppFilter();})" '
+    +'style="padding:7px 18px;border-radius:10px;border:1.5px solid var(--blue);background:var(--bluebg);'
+    +'color:var(--blue);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">🔄 Дахин оролдох</button>'
+    +'</div>';
 }
 
 function ppOpen(slotIdx, target){
@@ -9924,7 +9985,7 @@ function ppRender(){
     var hasImg=imgSrc&&imgSrc.indexOf('http')===0;
     return '<div class="pp-card" onclick="ppSelect('+gIdx+')">'
       +'<div class="pp-card-img-wrap">'
-      +(hasImg?'<img src="'+x(imgSrc)+'" loading="lazy" onerror="this.parentElement.style.background=\'var(--bg4)\';this.style.display=\'none\'">':'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--text4);">📦</div>')
+      +(hasImg?'<img src="'+x(imgSrc)+'" loading="lazy" onerror="this.parentElement.style.background=\'var(--bg4)\';this.style.display=\'none\'">':'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--text4);">📦</div>')
       +'<button class="pp-zoom-btn" onclick="event.stopPropagation();ppZoomImg(\''+x(imgSrc)+'\')" title="Зургийг бүтнээр харах">🔍</button>'
       +'</div>'
       +'<div class="pp-card-body">'
