@@ -334,6 +334,33 @@ h1 .word{
 }
 .hero-sub br+span,.hero-sub .line{display:inline-block}
 
+/* MAGIC FORMULA STRIP */
+.magic-offer-strip{
+  max-width:640px;margin:18px 0 26px;
+  opacity:0;animation:rise .7s .85s forwards;
+}
+.magic-label{
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--text2);font-family:var(--mono);font-weight:500;
+  margin-bottom:8px;
+}
+.magic-line{
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;
+  font-size:12px;font-family:var(--mono);color:rgba(242,240,250,.55);
+  line-height:1.6;
+}
+.mf-check{color:#4ade80;font-weight:700}
+.mf-bullet{color:rgba(242,240,250,.2);font-size:14px}
+.mf-hi{color:var(--text);font-weight:600;
+  background:rgba(255,255,255,.07);
+  padding:1px 8px;border-radius:3px;
+  border:1px solid rgba(255,255,255,.12);
+}
+@media(max-width:600px){
+  .magic-line{font-size:11px;gap:5px 8px}
+  .mf-bullet{display:none}
+}
+
 .hero-btns{
   display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:48px;
   opacity:0;animation:rise .7s 1.15s forwards;
@@ -1913,6 +1940,22 @@ footer{
     <span class="word">бид</span> <span class="word">судалсан</span>
   </h1>
 
+  <!-- MAGIC FORMULA OFFER STRIP -->
+  <div class="magic-offer-strip">
+    <div class="magic-label">GRAND SLAM OFFER</div>
+    <div class="magic-line">
+      <span class="mf-check">✓ Баталгаатай</span>
+      <span class="mf-bullet">·</span>
+      <span>Монгол Онлайн Бизнес Эрхлэгчдэд</span>
+      <span class="mf-bullet">·</span>
+      <span class="mf-hi">Анхны ₮1,000,000 Ашиг</span>
+      <span class="mf-bullet">·</span>
+      <span>90 Хоногт</span>
+      <span class="mf-bullet">·</span>
+      <span>E-Com Мэдэхгүй Ч Болно</span>
+    </div>
+  </div>
+
   <p class="hero-sub">
     3 хоногийн дотор:<br>
     <span class="line">— Ямар бараа зарах вэ гэдгээ олно</span><br>
@@ -1984,15 +2027,15 @@ footer{
       <p>Alibaba дахь шилдэг supplier-ийн линк бэлэн. Хайхад 2 цаг биш, дарахад 2 секунд.</p>
     </div>
     <div class="feature-card reveal" data-delay="3">
-      <span class="feat-badge">Онцгой</span>
+      <span class="feat-badge">AI</span>
       <div class="feat-icon">✍️</div>
-      <h3>Контент дээр гацахгүй</h3>
-      <p>218+ барааны Монгол скрипт бэлэн. Уншаад зогсоолд — видео болно.</p>
+      <h3>15с / 30с / 60с AI Script</h3>
+      <p>Бараа бүрд тохирсон Монгол reel script AI-р үүснэ. Hook, агуулга, CTA бүгд бэлэн — уншаад л буулгана.</p>
     </div>
     <div class="feature-card reveal" data-delay="4">
       <div class="feat-icon">📈</div>
-      <h3>Бараа бүрт тохирсон</h3>
-      <p>Trending, эрэлт ихтэй барааг мөн үү гэдгийг харна. Буруу бараа сонгохоос хамгаална.</p>
+      <h3>Trending бараа + Ad Metric</h3>
+      <p>Эрэлт ихтэй бараа мөн үү гэдгийг харна. CTR, ROAS, CPA-г нэг дороос шинжилж, зарын алдааг олно.</p>
     </div>
   </div>
 
@@ -2065,7 +2108,7 @@ footer{
     <div class="value-stack-label">Pro план — бүрэн bonus stack</div>
     <div class="vs-row"><span class="vs-l">✓ 218+ судалгаа хийсэн бараа</span><span class="vs-r">₮150,000</span></div>
     <div class="vs-row"><span class="vs-l">✓ Alibaba supplier шууд холбоос</span><span class="vs-r">₮80,000</span></div>
-    <div class="vs-row"><span class="vs-l">✓ Бэлэн TikTok/IG скрипт (218+)</span><span class="vs-r">₮60,000</span></div>
+    <div class="vs-row"><span class="vs-l">✓ Бэлэн AI Script 15с/30с/60с (218+ бараанд)</span><span class="vs-r">₮60,000</span></div>
     <div class="vs-row"><span class="vs-l">✓ Ашгийн автомат тооцоолуур</span><span class="vs-r">₮40,000</span></div>
     <div class="vs-row"><span class="vs-l">✓ 10 хоног тутам 100+ шинэ бараа</span><span class="vs-r">∞ үнэлгээ</span></div>
     <div class="vs-row" style="color:var(--accent)"><span class="vs-l">🎁 BONUS: Нийлүүлэгчтэй харилцах бэлэн мессеж загвар</span><span class="vs-r">₮25,000</span></div>
@@ -2087,7 +2130,7 @@ footer{
         <li>Ашгийн тооцоолуур ашиглана</li>
         <li>Өдөрт 5 бараа харах хязгаар</li>
         <li class="no">Бүх 200+ бараа</li>
-        <li class="no">Видео скрипт (200+)</li>
+        <li class="no">Видео AI Script (15с/30с/60с)</li>
         <li class="no">10 хоног бүр шинэ бараа</li>
       </ul>
       <a class="pricing-btn secondary" href="#" onclick="goLiteFree();return false;">Үнэгүй туршаад үз →</a>
@@ -2182,13 +2225,13 @@ footer{
 
   <div class="business-strip reveal">
     <div>
-      <div class="bs-label">Тун удахгүй</div>
+      <div class="bs-label" style="color:#f59e0b">⚡ Beta нээлт — Founding Member</div>
       <div class="bs-name">Business</div>
-      <div class="bs-sub">Premium — Influencer линк, Alibaba бүртгэл, Ads шинжилгээ</div>
+      <div class="bs-sub">12 хичээлийн Academy + Ad Metric шинжилгээ + Influencer линк + 1:1 Zoom mentorship</div>
     </div>
     <div>
-      <div class="bs-price">₮99,900<span style="font-size:14px;font-weight:400;color:var(--muted)">/сар</span></div>
-      <div class="bs-soon">Coming Soon</div>
+      <div class="bs-price">₮79,900<span style="font-size:14px;font-weight:400;color:var(--muted)">/сар</span></div>
+      <div class="bs-soon" style="background:rgba(245,158,27,.12);border-color:rgba(245,158,27,.3);color:#f59e0b">₮99,900 болохоос өмнө →</div>
     </div>
   </div>
 </section>
