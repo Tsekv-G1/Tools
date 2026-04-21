@@ -189,7 +189,7 @@ body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font
 .smsg-wrap{margin-top:12px}
 .smsg-toggle{width:100%;background:var(--accent-bg);border:1.5px solid var(--accent);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:inherit}
 .smsg-toggle .smsg-arrow{font-size:11px;transition:transform .2s;color:var(--muted)}
-.smsg-body{display:none;margin-top:8px;display:flex;flex-direction:column;gap:10px}
+.smsg-body{margin-top:8px;display:flex;flex-direction:column;gap:10px}
 .smsg-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .smsg-head{padding:10px 14px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px}
 .smsg-step{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);font-family:var(--mono)}
@@ -455,7 +455,7 @@ body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font
   .calc-inp{padding:9px 8px}
 
   /* TOPBAR */
-  .topbar{padding:0 10px;height:48px;gap:6px;overflow:hidden}
+  .topbar{padding:0 10px;height:48px;gap:6px}
   .topbar-title{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
   .topbar-badge{padding:3px 7px;font-size:10px;white-space:nowrap;flex-shrink:0}
   .tb-icon-btn{width:30px;height:30px;flex-shrink:0}
@@ -3585,47 +3585,37 @@ Thank you! I look forward to a long-term business relationship.</div>
           <div class="p-sec-lbl">✍️ Контент</div>
           <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Тухайн бараанд тохирсон AI-р үүсгэсэн <strong>15с / 30с / 60с</strong> script</div>
 
-          <!-- IDLE STATE -->
           <div id="script-idle" style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 16px;background:var(--bg);border:1.5px dashed var(--border);border-radius:12px;text-align:center">
             <div style="font-size:28px">✍️</div>
             <div style="font-size:13px;font-weight:600;color:var(--text)">AI Script үүсгэх</div>
             <div style="font-size:11px;color:var(--muted);line-height:1.6">Барааны мэдээлэл дээр тулгуурлан<br>15с / 30с / 60с 3 хувилбар гарна</div>
-            <button id="script-gen-btn" onclick="generateAIScripts()" style="margin-top:4px;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px;transition:opacity .2s">
+            <button onclick="generateAIScripts()" style="margin-top:4px;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px">
               <span>🤖</span> Script үүсгэх
             </button>
           </div>
 
-          <!-- LOADING STATE -->
           <div id="script-loading" style="display:none;flex-direction:column;align-items:center;gap:10px;padding:28px 16px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;text-align:center">
             <div style="width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite"></div>
-            <div style="font-size:12px;color:var(--muted)" id="script-load-txt">Script үүсгэж байна...</div>
+            <div style="font-size:12px;color:var(--muted)" id="script-load-txt">Шалгаж байна...</div>
           </div>
 
-          <!-- RESULT STATE -->
           <div id="script-result" style="display:none">
-            <!-- TABS -->
             <div style="display:flex;gap:4px;margin-bottom:10px;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:4px">
               <button class="sct-tab active" id="sct-tab-15" onclick="switchScriptTab('15')">⚡ 15с</button>
               <button class="sct-tab" id="sct-tab-30" onclick="switchScriptTab('30')">🎬 30с</button>
               <button class="sct-tab" id="sct-tab-60" onclick="switchScriptTab('60')">🎥 60с</button>
             </div>
-
-            <!-- HOOK -->
+            <div style="font-size:10px;color:var(--muted2);margin-bottom:8px" id="script-source-tag"></div>
             <div class="script-hook-box" id="sct-hook"></div>
-
-            <!-- BODY -->
             <div class="script-body-box" id="sct-body" style="min-height:80px"></div>
-
-            <!-- ACTIONS -->
             <div style="display:flex;gap:8px;flex-wrap:wrap">
               <button class="copy-btn" id="ai-copy-btn" onclick="copyAIScript()">📋 Хуулах</button>
               <button onclick="generateAIScripts(true)" style="background:transparent;border:1px solid var(--border);border-radius:7px;padding:6px 12px;font-size:12px;color:var(--muted);font-family:'Outfit',sans-serif;cursor:pointer">🔄 Дахин үүсгэх</button>
             </div>
           </div>
 
-          <!-- ERROR STATE -->
           <div id="script-error" style="display:none;padding:14px;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;font-size:12px;color:#dc2626;text-align:center">
-            <div style="margin-bottom:6px">⚠️ Алдаа гарлаа. Дахин оролдоно уу.</div>
+            <div style="margin-bottom:6px" id="script-error-msg">⚠️ Алдаа гарлаа</div>
             <button onclick="generateAIScripts()" style="background:#dc2626;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;font-family:'Outfit',sans-serif;cursor:pointer">Дахин оролдох</button>
           </div>
         </div>
@@ -8273,25 +8263,94 @@ function replaceGalleryImages(input){
   input.value='';
 }
 
+// ═══ AI SCRIPT CONFIG ═══
+const SUPA_URL = 'https://xpxotgpqxrupkgcppzmn.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhweG90Z3BxeHJ1cGtnY3Bwem1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyOTk4NTUsImV4cCI6MjA4ODg3NTg1NX0.7wtm3YXDj2lWL61y4pfZFud4LL2BkchAjGkTJMvhLqo';
+// Claude API key → Netlify Function-д нуусан (энд байхгүй)
+
 let aiScripts = {};
 let _activeScriptTab = '15';
 
-function switchScriptTab(t) {
-  _activeScriptTab = t;
-  ['15','30','60'].forEach(x => {
-    document.getElementById('sct-tab-'+x).classList.toggle('active', x===t);
+function _scriptState(show) {
+  ['idle','loading','result','error'].forEach(s => {
+    const el = document.getElementById('script-'+s);
+    if (!el) return;
+    el.style.display = s === show ? (s==='idle'||s==='loading' ? 'flex' : 'block') : 'none';
   });
-  const cache = activeProduct && aiScripts[activeProduct.n];
-  if (cache) renderScriptTab(cache, t);
 }
 
-function renderScriptTab(data, t) {
-  const hookEl = document.getElementById('sct-hook');
-  const bodyEl = document.getElementById('sct-body');
-  const map = { '15': data.s15, '30': data.s30, '60': data.s60 };
-  const s = map[t] || {};
-  hookEl.innerHTML = '<div class="script-hook-lbl">🎯 Hook</div>' + (s.hook || '');
-  bodyEl.textContent = s.body || '';
+function switchScriptTab(t) {
+  _activeScriptTab = t;
+  ['15','30','60'].forEach(x =>
+    document.getElementById('sct-tab-'+x).classList.toggle('active', x===t)
+  );
+  const cache = activeProduct && aiScripts[activeProduct.n];
+  if (cache) _renderTab(cache, t);
+}
+
+function _renderTab(data, t) {
+  const s = data['s'+t] || {};
+  document.getElementById('sct-hook').innerHTML =
+    '<div class="script-hook-lbl">🎯 Hook</div>' + (s.hook || '');
+  document.getElementById('sct-body').textContent = s.body || '';
+}
+
+async function _supaRead(name) {
+  try {
+    const r = await fetch(
+      SUPA_URL + '/rest/v1/product_scripts?product_name=eq.' + encodeURIComponent(name) + '&select=scripts&limit=1',
+      { headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY } }
+    );
+    const d = await r.json();
+    return d?.[0]?.scripts || null;
+  } catch { return null; }
+}
+
+async function _supaSave(name, scripts) {
+  try {
+    await fetch(SUPA_URL + '/rest/v1/product_scripts', {
+      method: 'POST',
+      headers: {
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + SUPA_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({ product_name: name, scripts })
+    });
+  } catch {}
+}
+
+async function _claudeGenerate(p) {
+  const price = fmtN(p.pN);
+  const prompt = `Та Монголын онлайн бизнес нийгэмлэлд зориулсан борлуулалтын скрипт бичигч мэргэжилтэн.
+
+БАРАА:
+- Нэр: ${p.n}
+- Ангилал: ${p.cat||''}
+- Тайлбар: ${p.desc||''}
+- Үнэ: ₮${price}
+
+Дараах 3 хувилбар скрипт бичнэ үү. Монгол ярианы хэлээр, камерт ярихад зохимжтой. Hook нь 10 үгнээс хэтрэхгүй. CTA нэг үйлдэл.
+
+ЗӨВХӨН JSON буцаана — markdown, тайлбар огт байхгүй:
+{
+  "s15": { "hook": "...", "body": "15с — hook 3с, body 10с, CTA 2с" },
+  "s30": { "hook": "...", "body": "30с — асуудал + шийдэл + social proof + CTA" },
+  "s60": { "hook": "...", "body": "60с — story 10с + demo 25с + proof 10с + CTA 7с" }
+}`;
+
+  // ← Netlify Function дамжуулна (API key нуугдсан)
+  const res = await fetch('/.netlify/functions/generate-script', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt })
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Алдаа');
+  const raw = data.content?.[0]?.text || '';
+  return JSON.parse(raw.replace(/```json|```/g, '').trim());
 }
 
 async function generateAIScripts(force) {
@@ -8299,114 +8358,68 @@ async function generateAIScripts(force) {
   const p = activeProduct;
   const name = p.n;
 
-  // Cache hit
   if (!force && aiScripts[name]) {
-    showScriptResult(aiScripts[name]);
+    _showResult(aiScripts[name], 'cache');
     return;
   }
 
-  // UI: loading
-  document.getElementById('script-idle').style.display = 'none';
-  document.getElementById('script-result').style.display = 'none';
-  document.getElementById('script-error').style.display = 'none';
-  document.getElementById('script-loading').style.display = 'flex';
+  _scriptState('loading');
+  document.getElementById('script-load-txt').textContent = 'Supabase шалгаж байна...';
 
-  const price = fmtN(p.pN);
-  const desc = p.desc || '';
-  const cat = p.cat || '';
+  if (!force) {
+    const saved = await _supaRead(name);
+    if (saved) {
+      aiScripts[name] = saved;
+      _showResult(saved, 'db');
+      return;
+    }
+  }
 
-  const prompt = `Та Монголын онлайн бизнес нийгэмлэлд зориулсан борлуулалтын скрипт бичигч мэргэжилтэн.
-
-Дараах барааны мэдээлэл дээр тулгуурлаад TikTok/Instagram Reels-д зориулсан 3 хувилбар скрипт бичнэ үү.
-
-БАРАА:
-- Нэр: ${name}
-- Ангилал: ${cat}
-- Тайлбар: ${desc}
-- Үнэ: ₮${price}
-
-ШААРДЛАГА:
-- Монгол ярианы хэлээр — бичгийн хэлгүй, камерт ярихад зохимжтой
-- Hook нь 10 үгнээс хэтрэхгүй, шууд татах
-- Body нь тодорхой, асуудал → шийдэл бүтэц
-- CTA нь нэг үйлдэл — DM "АВНА" эсвэл Bio линк
-- Urgency/social proof байж болно
-
-Дараах JSON хэлбэрээр ЗӨВХӨН JSON буцаана (markdown, тайлбар огт байхгүй):
-{
-  "s15": { "hook": "...", "body": "..." },
-  "s30": { "hook": "...", "body": "..." },
-  "s60": { "hook": "...", "body": "..." }
-}
-
-s15 = 15 секундын скрипт (hook 3с, body 10с, CTA 2с)
-s30 = 30 секундын скрипт (hook 3с, body 20с, CTA 5с — асуудал+шийдэл+social proof)
-s60 = 60 секундын скрипт (hook 3с, story 10с, demo 25с, proof 10с, CTA 7с)`;
-
+  document.getElementById('script-load-txt').textContent = 'AI script үүсгэж байна...';
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-
-    const data = await res.json();
-    const raw = data.content?.[0]?.text || '';
-    const clean = raw.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(clean);
-
-    aiScripts[name] = parsed;
-    showScriptResult(parsed);
-
+    const scripts = await _claudeGenerate(p);
+    aiScripts[name] = scripts;
+    _showResult(scripts, 'new');
+    _supaSave(name, scripts);
   } catch(e) {
-    document.getElementById('script-loading').style.display = 'none';
-    document.getElementById('script-error').style.display = 'block';
+    document.getElementById('script-error-msg').textContent = '⚠️ ' + (e.message || 'Алдаа гарлаа');
+    _scriptState('error');
   }
 }
 
-function showScriptResult(data) {
-  document.getElementById('script-loading').style.display = 'none';
-  document.getElementById('script-idle').style.display = 'none';
-  document.getElementById('script-error').style.display = 'none';
-  document.getElementById('script-result').style.display = 'block';
+function _showResult(data, source) {
+  _scriptState('result');
   _activeScriptTab = '15';
-  ['15','30','60'].forEach(x => {
-    document.getElementById('sct-tab-'+x).classList.toggle('active', x==='15');
-  });
-  renderScriptTab(data, '15');
+  ['15','30','60'].forEach(x =>
+    document.getElementById('sct-tab-'+x).classList.toggle('active', x==='15')
+  );
+  _renderTab(data, '15');
+  const tag = document.getElementById('script-source-tag');
+  const labels = { db:'💾 Supabase-с татсан', cache:'⚡ Session cache', new:'✨ Шинэ — Supabase-д хадгаллаа' };
+  tag.textContent = labels[source] || '';
 }
 
 function showProductScript(p) {
-  // Reset to idle when switching product
   document.getElementById('script-result').style.display = 'none';
   document.getElementById('script-loading').style.display = 'none';
   document.getElementById('script-error').style.display = 'none';
   if (aiScripts[p.n]) {
-    showScriptResult(aiScripts[p.n]);
+    _showResult(aiScripts[p.n], 'cache');
   } else {
     document.getElementById('script-idle').style.display = 'flex';
   }
 }
 
 function copyAIScript() {
-  const hook = document.getElementById('sct-hook')?.textContent || '';
+  const hook = (document.getElementById('sct-hook')?.textContent || '').replace('🎯 Hook','').trim();
   const body = document.getElementById('sct-body')?.textContent || '';
-  const full = (hook ? 'HOOK:\n' + hook.replace('🎯 Hook','').trim() + '\n\n' : '') + body;
+  const label = {'15':'15СЕК','30':'30СЕК','60':'60СЕК'}[_activeScriptTab];
+  const full = '['+label+' SCRIPT]\n\nHOOK:\n'+hook+'\n\n'+body;
   const btn = document.getElementById('ai-copy-btn');
-  const doFeedback = () => {
-    if(btn){btn.textContent='✅ Хуулагдлаа!';btn.style.background='var(--accent)';btn.style.color='#fff';setTimeout(()=>{btn.textContent='📋 Хуулах';btn.style.background='';btn.style.color='';},2000);}
-  };
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(full).then(doFeedback).catch(()=>{
-      var t=document.createElement('textarea');t.value=full;document.body.appendChild(t);t.select();try{document.execCommand('copy');}catch(e){}t.remove();doFeedback();
-    });
-  } else {
-    var t=document.createElement('textarea');t.value=full;document.body.appendChild(t);t.select();try{document.execCommand('copy');}catch(e){}t.remove();doFeedback();
-  }
+  const ok = () => { if(btn){btn.textContent='✅ Хуулагдлаа!';btn.style.background='var(--accent)';btn.style.color='#fff';setTimeout(()=>{btn.textContent='📋 Хуулах';btn.style.background='';btn.style.color='';},2000);} };
+  navigator.clipboard?.writeText(full).then(ok).catch(()=>{
+    var t=document.createElement('textarea');t.value=full;document.body.appendChild(t);t.select();try{document.execCommand('copy');}catch(e){}t.remove();ok();
+  });
 }
 
 
