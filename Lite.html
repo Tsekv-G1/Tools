@@ -2,14 +2,14 @@
 <html lang="mn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>ProductDrop.MN — Үнэгүй каталог (49 бараа)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0">
+<title>ProductDrop.MN — Үнэгүй каталог (25 бараа)</title>
 <meta name="description" content="Монголын #1 дропшиппинг бүтээгдэхүүн судалгааны платформ. Борлуулалт сайтай бүтээгдэхүүн олж, ашгаа тооцоол.">
 <link rel="icon" type="image/png" href="https://res.cloudinary.com/di0nven1w/image/upload/v1774793918/favicon_djarfu.png">
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://productdrop.mn/">
-<meta property="og:title" content="ProductDrop.MN — Үнэгүй каталог (49 бараа)">
+<meta property="og:title" content="ProductDrop.MN — Үнэгүй каталог (25 бараа)">
 <meta property="og:description" content="Монголын #1 дропшиппинг бүтээгдэхүүн судалгааны платформ. Борлуулалт сайтай бүтээгдэхүүн олж, ашгаа тооцоол.">
 <meta property="og:image" content="https://res.cloudinary.com/di0nven1w/image/upload/v1774493447/og_czmbkm.jpg">
 <meta property="og:image:width" content="1200">
@@ -18,7 +18,7 @@
 <meta property="og:site_name" content="ProductDrop.MN">
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="ProductDrop.MN — Үнэгүй каталог (49 бараа)">
+<meta name="twitter:title" content="ProductDrop.MN — Үнэгүй каталог (25 бараа)">
 <meta name="twitter:description" content="Монголын #1 дропшиппинг бүтээгдэхүүн судалгааны платформ. Борлуулалт сайтай бүтээгдэхүүн олж, ашгаа тооцоол.">
 <meta name="twitter:image" content="https://res.cloudinary.com/di0nven1w/image/upload/v1774493447/og_czmbkm.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -787,6 +787,14 @@ body.locked{overflow:hidden;position:fixed;width:100%;height:100%}
 [data-theme="dark"] .demand-chart svg line { stroke:var(--border) !important; }
 [data-theme="dark"] .gauge-svg text { fill:var(--text) !important; }
 [data-theme="dark"] .gauge-lbl { background:var(--white) !important; }
+/* Gauge SVG dark mode — mask elements match dark background */
+[data-theme="dark"] #gauge-wrap { background:var(--surface) !important; border-color:var(--border) !important; }
+[data-theme="dark"] .gauge-track { stroke:#252830 !important; }
+[data-theme="dark"] .gauge-mask-arc { stroke:var(--surface) !important; }
+[data-theme="dark"] .gauge-mask-rect { fill:var(--surface) !important; }
+[data-theme="dark"] .gauge-center-dot { fill:var(--surface) !important; }
+[data-theme="dark"] .gauge-needle-line { stroke:var(--text) !important; }
+[data-theme="dark"] .gauge-needle-dot { fill:var(--text) !important; }
 
 /* ── AdMetrics dark mode ── */
 [data-theme="dark"] .am-box { background:var(--white); }
@@ -1072,6 +1080,166 @@ a,button,input,select,textarea,
   .p-stat{padding:8px 4px !important}
 }
 
+/* ══════════════════════════════════════════
+   📱 MOBILE-FIRST НЭМЭЛТ ЗАСВАРУУД
+   Утасны 80% хэрэглэгчдэд зориулсан
+══════════════════════════════════════════ */
+
+/* Pro upgrade modal → bottom sheet */
+@media(max-width:768px){
+  #pro-upgrade-modal{
+    align-items:flex-end !important;
+    padding:0 !important;
+  }
+  #pro-upgrade-modal > div{
+    border-radius:20px 20px 0 0 !important;
+    max-height:92dvh !important;
+    overflow-y:auto !important;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+    padding-bottom:max(env(safe-area-inset-bottom),16px) !important;
+    width:100% !important;
+    max-width:100% !important;
+    background:var(--surface) !important;
+    animation:slide-up-modal .28s cubic-bezier(.34,1.1,.64,1);
+  }
+  @keyframes slide-up-modal{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
+  /* Drag handle */
+  #pro-upgrade-modal > div::before{
+    content:'';display:block;width:36px;height:4px;
+    background:var(--border2);border-radius:2px;
+    margin:12px auto 4px;
+  }
+}
+
+/* Session expired → mobile-friendly */
+@media(max-width:768px){
+  #session-expired{align-items:flex-end !important;padding:0 !important}
+  .se-box{
+    border-radius:20px 20px 0 0 !important;
+    padding:24px 20px max(env(safe-area-inset-bottom),24px) !important;
+    max-width:100% !important;
+    width:100% !important;
+    animation:slide-up-modal .3s cubic-bezier(.34,1.1,.64,1);
+  }
+}
+
+/* Countdown banner → very small screens */
+@media(max-width:480px){
+  .cd-text{display:none}
+  #countdown-banner{justify-content:center;gap:10px}
+  .cd-seg{min-width:32px;padding:3px 5px}
+  .cd-num{font-size:12px}
+  .cd-lbl{font-size:7px}
+  .cd-sep{font-size:12px}
+  .cd-cta{padding:7px 12px;font-size:11px}
+}
+@media(max-width:360px){
+  /* Маш жижиг утас — зөвхөн CTA харуулна */
+  .cd-timer{display:none}
+  .cd-cta{flex:1;justify-content:center}
+}
+
+/* Card blur supplier CTA → mobile */
+@media(max-width:768px){
+  /* Supplier blur текст хэтэрхий урт болохоос сэргийлэх */
+  .card [style*="filter:blur"]{
+    font-size:9px !important;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    max-width:120px;
+  }
+  /* AI script locked cards — mobile */
+  #script-section [style*="display:flex;gap:7px"] > div{
+    padding:8px 4px !important;
+  }
+  #script-section [style*="display:flex;gap:7px"] [style*="font-size:10px"]{
+    font-size:9px !important;
+  }
+}
+
+/* FOMO divider mobile */
+@media(max-width:480px){
+  /* Grid divider — стек болгох */
+  [style*="grid-column:1/-1"][onclick="openProUpgrade()"]{
+    flex-direction:column !important;
+    gap:8px !important;
+    text-align:center !important;
+  }
+}
+
+/* Mid-upsell popup — дэлгэцийн ёроолд найдвартай */
+@media(max-width:768px){
+  #lite-mid-upsell{
+    bottom:max(env(safe-area-inset-bottom),70px) !important;
+    left:12px !important;
+    right:12px !important;
+    width:auto !important;
+    max-width:none !important;
+    transform:none !important;
+  }
+}
+
+/* Panel locked sections — touch target томруулах */
+@media(max-width:768px){
+  [onclick="openProUpgrade()"][style*="dashed"]{
+    min-height:44px;
+  }
+  /* Calc locked rows */
+  .calc-result .calc-r-row{
+    padding:7px 0;
+  }
+  /* Script copy buttons */
+  .copy-btn{
+    min-height:44px !important;
+    font-size:13px !important;
+    padding:10px !important;
+  }
+  /* Qty preset buttons — томруулах */
+  .qty-preset-btn{
+    min-height:44px !important;
+  }
+}
+
+/* Pro upgrade modal dark mode */
+[data-theme="dark"] #pro-upgrade-modal > div{
+  background:var(--white) !important;
+  color:var(--text) !important;
+}
+[data-theme="dark"] #pro-upgrade-modal [style*="color:#111827"],
+[data-theme="dark"] #pro-upgrade-modal [style*="color:#374151"]{
+  color:var(--text) !important;
+}
+[data-theme="dark"] #pro-upgrade-modal [style*="color:#6b7280"],
+[data-theme="dark"] #pro-upgrade-modal [style*="color:#9ca3af"]{
+  color:var(--muted) !important;
+}
+[data-theme="dark"] #pro-upgrade-modal [style*="background:#f"],
+[data-theme="dark"] #pro-upgrade-modal [style*="background:#e"]{
+  background:var(--surface2) !important;
+  border-color:var(--border) !important;
+}
+[data-theme="dark"] #pro-upgrade-modal [style*="border:1.5px solid #e5e7eb"],
+[data-theme="dark"] #pro-upgrade-modal [style*="border:1px solid #e5e7eb"]{
+  border-color:var(--border) !important;
+}
+[data-theme="dark"] #pro-upgrade-modal [style*="border-bottom:1px solid #e5e7eb"]{
+  border-bottom-color:var(--border) !important;
+}
+
+/* ── AI Script locked cards ── */
+.ai-script-card{
+  flex:1;border:1.5px dashed var(--border2);border-radius:9px;
+  padding:9px 6px;text-align:center;cursor:pointer;
+  background:var(--surface2);transition:border-color .15s,background .15s;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.ai-script-card:hover,.ai-script-card:active{
+  border-color:var(--accent);background:var(--accent-bg);
+}
+
 /* ── TUTORIAL MODAL (from Pro) ── */
 .ac-tags{display:flex;gap:6px;flex-wrap:wrap}
 .ac-tag{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;border:1.5px solid}
@@ -1225,9 +1393,11 @@ a,button,input,select,textarea,
 <div id="countdown-banner">
   <div class="cd-left">
     <span class="cd-icon">⏱</span>
-    <span class="cd-text">Үнэгүй хандалт дуусахад:</span>
+    <span class="cd-text">Үнэгүй 3 хоногийн хандалт дуусахад:</span>
   </div>
   <div class="cd-timer">
+    <div class="cd-seg"><span class="cd-num" id="cd-d">00</span><span class="cd-lbl">өдөр</span></div>
+    <span class="cd-sep">:</span>
     <div class="cd-seg"><span class="cd-num" id="cd-h">00</span><span class="cd-lbl">цаг</span></div>
     <span class="cd-sep">:</span>
     <div class="cd-seg"><span class="cd-num" id="cd-m">00</span><span class="cd-lbl">мин</span></div>
@@ -1242,9 +1412,37 @@ a,button,input,select,textarea,
   <div class="se-box">
     <div class="se-icon">🔒</div>
     <div class="se-title">Хандалтын хугацаа дууслаа</div>
-    <div class="se-desc">Таны үнэгүй хандалт дууслаа.<br>Про багц авч бүрэн функционалыг тасралтгүй ашиглаарай.</div>
-    <button class="se-btn" onclick="location.reload()">🔄 Хуудсыг дахин ачааллах</button>
-    <button onclick="openProUpgrade()" class="se-btn-pro" style="cursor:pointer;border:none;font-family:Inter,sans-serif">🚀 Pro багц авах — ₮49,900/3 сар</button>
+    <div class="se-desc">Таны <strong>3 хоногийн үнэгүй хандалт</strong> дууслаа.<br>Дахин идэвхжүүлэх боломжгүй.</div>
+    <!-- Sunk cost: blurred locked products -->
+    <div style="margin:16px 0;position:relative;border-radius:12px;overflow:hidden">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;filter:blur(5px);opacity:.55;pointer-events:none;user-select:none">
+        <div style="background:#1a1a2e;border-radius:8px;padding:8px;border:1px solid rgba(255,255,255,.1)">
+          <div style="height:36px;background:rgba(200,255,0,.08);border-radius:5px;margin-bottom:5px"></div>
+          <div style="height:7px;background:rgba(255,255,255,.12);border-radius:3px;margin-bottom:3px;width:80%"></div>
+          <div style="height:7px;background:rgba(200,255,0,.2);border-radius:3px;width:55%"></div>
+        </div>
+        <div style="background:#1a2a1a;border-radius:8px;padding:8px;border:1px solid rgba(255,255,255,.1)">
+          <div style="height:36px;background:rgba(200,255,0,.06);border-radius:5px;margin-bottom:5px"></div>
+          <div style="height:7px;background:rgba(255,255,255,.12);border-radius:3px;margin-bottom:3px;width:75%"></div>
+          <div style="height:7px;background:rgba(200,255,0,.2);border-radius:3px;width:50%"></div>
+        </div>
+        <div style="background:#2a1a2e;border-radius:8px;padding:8px;border:1px solid rgba(255,255,255,.1)">
+          <div style="height:36px;background:rgba(200,255,0,.07);border-radius:5px;margin-bottom:5px"></div>
+          <div style="height:7px;background:rgba(255,255,255,.12);border-radius:3px;margin-bottom:3px;width:85%"></div>
+          <div style="height:7px;background:rgba(200,255,0,.2);border-radius:3px;width:60%"></div>
+        </div>
+      </div>
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
+        <div style="font-size:20px">🔒</div>
+        <div style="font-size:11px;font-weight:800;color:#fff;text-align:center">Таны хадгалсан <span style="color:#c8ff00">3 бараа</span> lock хийгдлээ</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.5)">Starter-д дахин нэвтэрнэ</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:rgba(255,255,255,.4);line-height:1.6;margin-bottom:16px;padding:10px 12px;background:rgba(255,255,255,.04);border-radius:8px;border:1px solid rgba(255,255,255,.07)">
+      📊 Таны судалсан <strong style="color:rgba(255,255,255,.7)">25 бараа</strong> болон тооцоолуурын тооцоо хадгалагдаагүй. Pro авснаар бүх өгөгдөл, 200+ бараа болон supplier шууд холбоос нэн даруй нэвтрэх боломжтой болно.
+    </div>
+    <button onclick="openProUpgrade()" class="se-btn">📊 Судалгаагаа хадгалах → Pro авах</button>
+    <button onclick="openProUpgrade()" class="se-btn-pro" style="cursor:pointer;border:none;font-family:Inter,sans-serif">🚀 Pro багц — ₮49,900/3 сар</button>
   </div>
 </div>
 
@@ -1254,13 +1452,13 @@ a,button,input,select,textarea,
   <div style="background:#111827;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:16px 18px;box-shadow:0 20px 60px rgba(0,0,0,.5);position:relative">
     <button onclick="document.getElementById('lite-mid-upsell').style.display='none'" style="position:absolute;top:10px;right:12px;background:none;border:none;color:rgba(255,255,255,.3);font-size:16px;cursor:pointer;line-height:1">✕</button>
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-      <div style="width:36px;height:36px;border-radius:50%;background:rgba(22,163,74,.15);border:1px solid rgba(22,163,74,.3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📦</div>
+      <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,180,0,.15);border:1px solid rgba(255,180,0,.3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">⏳</div>
       <div>
-        <div style="font-size:13px;font-weight:700;color:#fff">3 бараа үзлээ — санах зүйл байна!</div>
-        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:2px">Lite: 25 бараа · Pro: 218+ бараа</div>
+        <div style="font-size:13px;font-weight:700;color:#fff">1 хоног үлдлээ!</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:2px">Lite: 25 бараа · Pro: 200+ бараа</div>
       </div>
     </div>
-    <div style="font-size:12px;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:14px">Та одоо харж байгаа барааны дунд шилдэг нь байж болно — гэхдээ 25-аас цааш харахгүй. Pro-д <strong style="color:#fff">193 бараа нэмэлт</strong> байна.</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:14px">Судалгаагаа <strong style="color:#fff">хадгалахын тулд</strong> Pro авна уу — supplier шууд линк, 200+ бараа, 216+ script.</div>
     <button onclick="document.getElementById('lite-mid-upsell').style.display='none';openProUpgrade()" style="width:100%;padding:11px;background:linear-gradient(135deg,#16a34a,#15803d);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:800;cursor:pointer;font-family:Inter,sans-serif">🚀 Pro-г үзэх — ₮49,900/3 сар</button>
   </div>
 </div>
@@ -1268,8 +1466,8 @@ a,button,input,select,textarea,
 <div id="phone-gate" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9999;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(12px)">
   <div style="background:#13131a;border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:28px 24px;max-width:340px;width:100%;text-align:center">
     <div style="font-size:36px;margin-bottom:12px">📦</div>
-    <div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:8px">Үнэгүй 24 цаг эхлүүлэх</div>
-    <div style="font-size:13px;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:20px">218+ бараа, нийлүүлэгчийн холбоос,<br>ашиг тооцоолуур — бүгдийг үзнэ</div>
+    <div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:8px">Үнэгүй 3 хоног эхлүүлэх</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:20px">25 бараа каталог, ашиг тооцоолуур,<br>2 content script — үнэгүй үзнэ</div>
     <input id="pg-phone" type="tel" placeholder="Утасны дугаар (99001234)" maxlength="8"
       style="width:100%;padding:13px 16px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:12px;color:#fff;font-size:15px;font-family:inherit;text-align:center;margin-bottom:10px;outline:none;letter-spacing:1px"
       oninput="this.value=this.value.replace(/\D/g,'')"
@@ -1444,12 +1642,12 @@ a,button,input,select,textarea,
         </div>
 
         <div class="um-plan-features">
-          <div class="um-plan-feat"><span class="um-feat-check">✓</span>49 бараа каталог</div>
+          <div class="um-plan-feat"><span class="um-feat-check">✓</span>25 бараа каталог (Lite)</div>
           <div class="um-plan-feat"><span class="um-feat-check">✓</span>Ашгийн тооцоолуур & зардлын шинжилгээ</div>
-          <div class="um-plan-feat"><span class="um-feat-check">✓</span>Supplier линк (Alibaba, Taobao)</div>
-          <div class="um-plan-feat"><span class="um-feat-check" style="color:var(--muted2)">—</span><span style="color:var(--muted2)">Эрэлтийн шинжилгээ (Pro)</span></div>
-          <div class="um-plan-feat"><span class="um-feat-check" style="color:var(--muted2)">—</span><span style="color:var(--muted2)">Social targeting (Pro)</span></div>
-          <div class="um-plan-feat"><span class="um-feat-check" style="color:var(--muted2)">—</span><span style="color:var(--muted2)">Content Script (Pro)</span></div>
+          <div class="um-plan-feat"><span class="um-feat-check">✓</span>2 content script (TikTok & IG Reel)</div>
+          <div class="um-plan-feat"><span class="um-feat-check" style="color:var(--muted2)">—</span><span style="color:var(--muted2)">Supplier шууд линк (Pro)</span></div>
+          <div class="um-plan-feat"><span class="um-feat-check" style="color:var(--muted2)">—</span><span style="color:var(--muted2)">200+ бараа каталог (Pro)</span></div>
+          <div class="um-plan-feat"><span class="um-feat-check" style="color:var(--muted2)">—</span><span style="color:var(--muted2)">Bulk тооцоо & export (Pro)</span></div>
         </div>
 
         <button onclick="openProUpgrade()" style="display:block;width:100%;margin-top:16px;padding:12px;background:var(--accent);color:#111;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;text-align:center;font-family:Inter,sans-serif">🚀 Pro багц авах — ₮49,900/3 сар</button>
@@ -1570,7 +1768,7 @@ a,button,input,select,textarea,
   <div class="topbar">
     <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
     <div class="topbar-title">🛒 Үнэгүй каталог</div>
-    <span class="topbar-badge" id="nav-count">49 бараа</span>
+    <span class="topbar-badge" id="nav-count">25 бараа</span>
 
     <!-- Topbar right actions -->
     <div class="tb-actions">
@@ -1674,16 +1872,50 @@ a,button,input,select,textarea,
           <div class="supp-disclaimer">⚠️ <b>Анхаар:</b> ProductDrop нь зөвхөн судалгааны платформ. Бараа захиалахдаа Alibaba.com эсвэл Taobao.com дээр шууд нэвтэрч, тэнд дэх нийлүүлэгчтэй харилцаарай.</div>
         </div>
 
-        <!-- PROFIT CALC -->
         <div class="p-section" id="calc-section">
           <div class="p-sec-lbl">💰 Ашгийн тооцоолуур</div>
           <div class="calc-grid">
             <div class="calc-field"><label class="calc-label">Зарах үнэ ₮</label><input class="calc-inp" id="c-price" type="text" inputmode="numeric" placeholder="0" oninput="fmtInp(this);calcProfit()"></div>
-            <div class="calc-field"><label class="calc-label">Тоо ширхэг</label><input class="calc-inp" id="c-qty" type="text" inputmode="numeric" value="30" oninput="fmtInp(this);calcProfit()"></div>
             <div class="calc-field"><label class="calc-label">Авах үнэ ₮</label><input class="calc-inp" id="c-cost" type="text" inputmode="numeric" placeholder="0" oninput="fmtInp(this);calcProfit()"></div>
-            <div class="calc-field"><label class="calc-label">Хүргэлт & карго ₮</label><input class="calc-inp" id="c-ship" type="text" inputmode="numeric" value="4,000" oninput="fmtInp(this);calcProfit()"></div>
-            <div class="calc-field"><label class="calc-label">Маркетинг ₮</label><input class="calc-inp" id="c-mkt" type="text" inputmode="numeric" value="0" oninput="fmtInp(this);calcProfit()"></div>
-            <div class="calc-field"><label class="calc-label">Бусад зардал ₮</label><input class="calc-inp" id="c-other" type="text" inputmode="numeric" value="2,000" oninput="fmtInp(this);calcProfit()"></div>
+            <div class="calc-field" style="grid-column:1/-1"><label class="calc-label">Хүргэлт & карго ₮</label><input class="calc-inp" id="c-ship" type="text" inputmode="numeric" value="4,000" oninput="fmtInp(this);calcProfit()"></div>
+          </div>
+          <!-- Target margin slider -->
+          <div style="margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+              <label class="calc-label" style="margin-bottom:0">🎯 Зорилтот margin</label>
+              <span style="font-size:13px;font-weight:800;color:var(--accent)" id="c-mg-val">40%</span>
+            </div>
+            <input type="range" id="c-mg-slider" min="30" max="60" value="40" step="5"
+              style="width:100%;accent-color:var(--accent);cursor:pointer"
+              oninput="document.getElementById('c-mg-val').textContent=this.value+'%';calcProfit()">
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:2px"><span>30%</span><span>60%</span></div>
+          </div>
+          <!-- Qty presets -->
+          <div style="margin-bottom:12px">
+            <label class="calc-label">Тоо ширхэг</label>
+            <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+              <button onclick="setQty(10)" id="qty-10" class="qty-preset-btn" style="flex:1;padding:7px 4px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--text);font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;transition:all .15s">10 ш</button>
+              <button onclick="setQty(20)" id="qty-20" class="qty-preset-btn active" style="flex:1;padding:7px 4px;border:1.5px solid var(--accent);border-radius:8px;background:var(--accent);color:#111;font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;transition:all .15s">20 ш</button>
+              <button onclick="setQty(50)" id="qty-50" class="qty-preset-btn" style="flex:1;padding:7px 4px;border:1.5px solid var(--border2);border-radius:8px;background:var(--surface);color:var(--text);font-size:12px;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;transition:all .15s">50 ш</button>
+              <div onclick="openProUpgrade()" style="flex:1;padding:7px 4px;border:1.5px dashed var(--border2);border-radius:8px;background:transparent;color:var(--muted2);font-size:11px;font-weight:700;cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center;gap:3px">🔒 100+</div>
+            </div>
+          </div>
+          <!-- Locked: FB Ads -->
+          <div onclick="openProUpgrade()" style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--surface2);border:1.5px dashed var(--border2);border-radius:8px;margin-bottom:8px;cursor:pointer;opacity:.7">
+            <span style="font-size:12px">🔒</span>
+            <span style="font-size:11px;color:var(--muted);font-weight:600">FB Ads зардал оруулах — Pro-д нэвтрэх →</span>
+          </div>
+          <!-- Locked: Хугацааны тооцоо -->
+          <div onclick="openProUpgrade()" style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--surface2);border:1.5px dashed var(--border2);border-radius:8px;margin-bottom:8px;cursor:pointer;opacity:.7">
+            <span style="font-size:12px">🔒</span>
+            <span style="font-size:11px;color:var(--muted);font-weight:600">Нөөц барах хэдэн хоног (хугацааны тооцоо) — Pro-д →</span>
+          </div>
+          <!-- Locked: Хадгалах / Export -->
+          <div onclick="openProUpgrade()" style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--surface2);border:1.5px dashed var(--border2);border-radius:8px;margin-bottom:12px;cursor:pointer;opacity:.7">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:12px">🔒</span>
+              <span style="font-size:11px;color:var(--muted);font-weight:600">Тооцоо хадгалах / Excel export — Pro-д →</span>
+            </div>
           </div>
           <!-- Target Section -->
           <div style="border-top:1px solid var(--border);margin-bottom:12px;padding-top:12px">
@@ -1726,19 +1958,19 @@ a,button,input,select,textarea,
               <div style="font-size:10px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;text-align:center">Борлуулалт өндөртэй сарууд</div>
               <div class="demand-chart"><svg id="demand-svg" viewBox="0 0 300 120" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%"></svg></div>
             </div>
-            <div id="gauge-wrap" style="border:1px solid var(--border);border-radius:12px;padding:14px 16px 18px;display:flex;flex-direction:column;align-items:center;background:#fff">
+            <div id="gauge-wrap" style="border:1px solid var(--border);border-radius:12px;padding:14px 16px 18px;display:flex;flex-direction:column;align-items:center;background:var(--surface)">
               <div style="font-size:10px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;text-align:center">Монгол дахь өрсөлдөөн</div>
               <svg id="gauge-svg" viewBox="0 0 200 120" style="width:100%;max-width:260px;display:block;overflow:visible">
                 <defs><filter id="ndl-shadow3"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,.22)"/></filter></defs>
-                <path d="M20,105 A80,80 0 0,1 180,105" fill="none" stroke="#f1f5f9" stroke-width="22" stroke-linecap="butt"/>
+                <path d="M20,105 A80,80 0 0,1 180,105" fill="none" stroke="#f1f5f9" stroke-width="22" stroke-linecap="butt" class="gauge-track"/>
                 <path d="M20,105 A80,80 0 0,1 60,35.7"  fill="none" stroke="#22c55e" stroke-width="22" stroke-linecap="butt"/>
                 <path d="M60,35.7 A80,80 0 0,1 140,35.7" fill="none" stroke="#f59e0b" stroke-width="22" stroke-linecap="butt"/>
                 <path d="M140,35.7 A80,80 0 0,1 180,105" fill="none" stroke="#ef4444" stroke-width="22" stroke-linecap="butt"/>
-                <path d="M29,105 A71,71 0 0,1 171,105" fill="none" stroke="#fff" stroke-width="10"/>
-                <rect x="0" y="103" width="200" height="18" fill="#fff"/>
-                <g id="panel-gauge-needle"><line x1="100" y1="103" x2="100" y2="40" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round"/></g>
-                <circle cx="100" cy="105" r="7" fill="#1e293b"/>
-                <circle cx="100" cy="105" r="4" fill="#fff"/>
+                <path d="M29,105 A71,71 0 0,1 171,105" fill="none" stroke="#fff" stroke-width="10" class="gauge-mask-arc"/>
+                <rect x="0" y="103" width="200" height="18" fill="#fff" class="gauge-mask-rect"/>
+                <g id="panel-gauge-needle"><line x1="100" y1="103" x2="100" y2="40" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round" class="gauge-needle-line"/></g>
+                <circle cx="100" cy="105" r="7" fill="#1e293b" class="gauge-needle-dot"/>
+                <circle cx="100" cy="105" r="4" fill="#fff" class="gauge-center-dot"/>
                 <text x="12"  y="120" font-size="9" fill="#16a34a" font-weight="700" font-family="Inter,sans-serif">Бага●</text>
                 <text x="188" y="120" font-size="9" fill="#ef4444" font-weight="700" font-family="Inter,sans-serif" text-anchor="end">●Өндөр</text>
               </svg>
@@ -1755,17 +1987,75 @@ a,button,input,select,textarea,
           <div class="social-tags" id="social-tags"></div>
         </div>
 
-        <!-- CONTENT SCRIPT -->
+        <!-- CONTENT SCRIPT — 2 үнэгүй скрипт -->
         <div class="p-section" id="script-section">
-          <div class="p-sec-lbl">✍️ Контент</div>
-          <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Тухайн бараанд тохирсон <strong>Hook + BOFU</strong> борлуулалтын script</div>
-          <div id="ai-hook-box" style="display:none" class="script-hook-box">
-            <div class="script-hook-lbl">🎯 Hook</div>
-            <div id="ai-hook-text"></div>
+          <div class="p-sec-lbl">✍️ 2 Үнэгүй скрипт</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Бараа бүрд тохирсон <strong>2 бэлэн скрипт</strong> — камерт шууд уншихад бэлэн</div>
+
+          <!-- SCRIPT 1: TikTok Hook+Problem+Solution -->
+          <div style="margin-bottom:12px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <div style="background:#ff0050;color:#fff;font-size:9px;font-weight:800;padding:2px 8px;border-radius:20px;letter-spacing:.5px">▶ TikTok · 30 сек</div>
+              <span style="font-size:11px;font-weight:700;color:var(--text)">Скрипт 1 — Hook + Problem + Solution</span>
+            </div>
+            <div id="ls1-hook" class="script-hook-box" style="display:none">
+              <div class="script-hook-lbl">🎯 HOOK</div>
+              <div id="ls1-hook-text" style="font-size:12px;line-height:1.7"></div>
+            </div>
+            <div id="ls1-body" class="script-body-box" style="display:none;font-size:12px;line-height:1.8"></div>
+            <button class="copy-btn" id="ls1-copy" onclick="copyScript(1)" style="margin-top:6px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Script 1 хуулах</button>
           </div>
-          <div id="ai-script-body" style="display:none" class="script-body-box"></div>
-          <div id="ai-script-actions" style="display:none">
-            <button class="copy-btn" id="ai-copy-btn" onclick="copyAIScript()">📋 Бүтэн script хуулах</button>
+
+          <!-- SCRIPT 2: IG Reel Before/After -->
+          <div style="margin-bottom:14px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <div style="background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:#fff;font-size:9px;font-weight:800;padding:2px 8px;border-radius:20px;letter-spacing:.5px">◉ IG Reel · 15 сек</div>
+              <span style="font-size:11px;font-weight:700;color:var(--text)">Скрипт 2 — Before / After</span>
+            </div>
+            <div id="ls2-body" class="script-body-box" style="display:none;font-size:12px;line-height:1.8"></div>
+            <button class="copy-btn" id="ls2-copy" onclick="copyScript(2)" style="margin-top:6px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Script 2 хуулах</button>
+          </div>
+
+          <!-- LOCKED: AI Script хугацааны сонголт -->
+          <div style="margin-bottom:10px">
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:8px">⚡ AI скрипт үзэх — хугацаагаар</div>
+            <div style="display:flex;gap:7px">
+              <div onclick="openProUpgrade()" class="ai-script-card">
+                <div style="font-size:16px;margin-bottom:3px">🔒</div>
+                <div style="font-size:10px;font-weight:800;color:var(--text)">Богино</div>
+                <div style="font-size:9px;color:var(--muted);margin-top:1px">Хурдан hook</div>
+              </div>
+              <div onclick="openProUpgrade()" class="ai-script-card">
+                <div style="font-size:16px;margin-bottom:3px">🔒</div>
+                <div style="font-size:10px;font-weight:800;color:var(--text)">Ads тохиромжтой</div>
+                <div style="font-size:9px;color:var(--muted);margin-top:1px">CTA + urgency</div>
+              </div>
+              <div onclick="openProUpgrade()" class="ai-script-card">
+                <div style="font-size:16px;margin-bottom:3px">🔒</div>
+                <div style="font-size:10px;font-weight:800;color:var(--text)">Тайлбарласан</div>
+                <div style="font-size:9px;color:var(--muted);margin-top:1px">Demo + заавар</div>
+              </div>
+            </div>
+            <div style="margin-top:6px;font-size:10px;color:var(--muted2);text-align:center">Pro-д 216+ скрипт · хугацаа, төрөл, платформоор шүүнэ</div>
+          </div>
+
+          <!-- LOCKED: 216+ Pro scripts -->
+          <div onclick="openProUpgrade()" style="border:1.5px dashed var(--border2);border-radius:10px;padding:12px 14px;cursor:pointer;position:relative;overflow:hidden">
+            <div style="filter:blur(2.5px);pointer-events:none;user-select:none;opacity:.55">
+              <div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:7px">БУСАД СКРИПТИЙН ЖАГСААЛТ</div>
+              <div style="display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--muted)">
+                <div>📌 Testimonial загвар · 45 сек</div>
+                <div>📌 Demo + Заавар · 60 сек</div>
+                <div>📌 Urgency / Sale · 20 сек</div>
+                <div>📌 Comparison · 30 сек</div>
+                <div>📌 Authority / Expert · 45 сек</div>
+              </div>
+            </div>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(0,0,0,.04)">
+              <div style="font-size:18px">🔒</div>
+              <div style="font-size:12px;font-weight:800;color:var(--text)">+ 216 скрипт <span style="color:var(--accent)">Pro-д</span></div>
+              <div style="font-size:10px;color:var(--muted)">Скриптийн жагсаалт харагдах ч download хийхгүй</div>
+            </div>
           </div>
         </div>
       </div><!-- end right panel-col -->
@@ -1838,7 +2128,7 @@ function bodyUnlock(){
    tab/browser хаагаад нээхэд ч ажилладаг.
    ══════════════════════════════════════════════ */
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyd3iPFcE8EhSd-fgpDotiDc1TonWUqAUxBVQVDLWcjbqR97OI2tUEsGTuJngVp7g8s/exec';
-const SESSION_DURATION = 12 * 60 * 60 * 1000; // 12 цаг ms
+const SESSION_DURATION = 3 * 24 * 60 * 60 * 1000; // 3 хоног ms
 const LS_TIME  = 'pd_login_time';
 const LS_TOKEN = 'pd_session_token';
 const LS_USER  = 'pd_user_name';
@@ -1918,25 +2208,36 @@ function startCountdown() {
     const remaining = SESSION_DURATION - elapsed;
     if (remaining <= 0) { expireSession(); return; }
 
-    const h = Math.floor(remaining / 3600000);
+    const d = Math.floor(remaining / 86400000);
+    const h = Math.floor((remaining % 86400000) / 3600000);
     const m = Math.floor((remaining % 3600000) / 60000);
     const s = Math.floor((remaining % 60000) / 1000);
 
     const pad = n => String(n).padStart(2, '0');
+    const dEl = document.getElementById('cd-d');
     const hEl = document.getElementById('cd-h');
     const mEl = document.getElementById('cd-m');
     const sEl = document.getElementById('cd-s');
+    if (dEl) dEl.textContent = pad(d);
     if (hEl) hEl.textContent = pad(h);
     if (mEl) mEl.textContent = pad(m);
     if (sEl) sEl.textContent = pad(s);
 
+    // Сүүлийн 1 хоногт (24 цаг) mid-upsell popup харуулна — нэг удаа
+    if (remaining <= 24 * 3600000 && remaining > 23.9 * 3600000 && !sessionStorage.getItem('pd_day2_upsell')) {
+      sessionStorage.setItem('pd_day2_upsell','1');
+      setTimeout(function(){
+        var el=document.getElementById('lite-mid-upsell');
+        if(el) el.style.display='flex';
+      }, 2000);
+    }
     // Сүүлийн 1 цагт улаан болгох
     if (remaining < 3600000) {
       banner.style.background = 'linear-gradient(135deg,#7f1d1d 0%,#991b1b 100%)';
     }
     // Сүүлийн 10 минутад анхааруулах
     if (remaining < 600000 && remaining > 599000) {
-      banner.querySelector('.cd-text').textContent = '⚠️ 10 минут үлдлээ! Pro авч тасралтгүй хэрэглэ:';
+      banner.querySelector('.cd-text').textContent = '⚠️ 10 минут үлдлээ! Pro авч судалгаагаа хадгал:';
     }
   }
 
@@ -1982,7 +2283,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (gate) gate.style.display = 'flex';
   }
 
-  // LITE НЭЭЛТТЭЙ ХАНДАЛТ — нэвтрэлгүй шууд орно, 12 цагийн limit хэвээр
+  // LITE НЭЭЛТТЭЙ ХАНДАЛТ — нэвтрэлгүй шууд орно, 3 хоногийн limit хэвээр
   const ssName = sessionStorage.getItem('pd_name');
   const displayName = ssName || 'Зочин';
 
@@ -1995,7 +2296,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Нэр харуулах
   updateUserDisplay(displayName);
 
-  // 12 цагийн хязгаар — эхний орсон цагийг хадгална, буцаж ороход үргэлжилнэ
+  // 3 хоногийн хязгаар — эхний орсон цагийг хадгална, буцаж ороход үргэлжилнэ
   if (!localStorage.getItem(LS_TIME)) {
     localStorage.setItem(LS_TIME, Date.now().toString());
   }
@@ -3459,42 +3760,207 @@ DM-ээр захиалаарай — хурдан хариу өгнө.`
   };
 }
 
-function showProductScript(p) {
-  const hookBox = document.getElementById('ai-hook-box');
-  const hookText = document.getElementById('ai-hook-text');
-  const bodyBox = document.getElementById('ai-script-body');
-  const actions = document.getElementById('ai-script-actions');
-
-  const { hook, script } = getProductScript(p);
-
-  if (hook) {
-    hookText.textContent = hook;
-    hookBox.style.display = 'block';
+/* ══════════════════════════════════════════════
+   LITE SCRIPTS — 25 барааны 2 скрипт тус бүрт
+   S1: Hook+Problem+Solution (TikTok 30с)
+   S2: Before/After (IG Reel 15с)
+   ══════════════════════════════════════════════ */
+const LITE_SCRIPTS = {
+  "Соронзон цонх цэвэрлэгч": {
+    s1h: "Монгол хүн Соронзон цонх цэвэрлэгч хайгаад байх шалтгаан нь — давхар шилний гадна тал цэвэрлэж чадахгүй байдаг...",
+    s1b: "⚠️ АСУУДАЛ:\nЦонхны гадна тал хамгийн их бохирддог — өндөрт авирах, гарт хүрэх айдас.\n\n✅ ШИЙДЭЛ:\nХос магнит — дотроос нь барихад гадна тал нь хамт хөдөлнө. Ямар ч өндөрт аюулгүй.\n✅ 18–28 мм зузааны шилэнд тохирно\n✅ Нэг дамжуулалтаар бүрэн цэвэр\n✅ Гарт хүрэх, өндөрт авирах шаардлагагүй\n\n💬 \"Цонхны сойз авмаар\" гэж DM илгээнэ үү → ₮20,500",
+    s2: "😩 ӨМНӨ НЬ:\nЦонхны гадна тал бохир — гарт хүрэхгүй, өндөрт авирах айдастай.\n\n✨ ОДОО:\nСоронзон цэвэрлэгч — дотроос нь барихад хоёр тал хамт хөдөлнө.\n\n✅ 5 минутад бүрэн цэвэр\n✅ Ямар ч давхарт аюулгүй\n\n₮20,500 — DM-ээр захиалаарай ☝️"
+  },
+  "Хоёр талт RC бартаат машин (4WD)": {
+    s1h: "Монгол хүн 4WD машин хайгаад байх шалтгаан нь — ердийн RC машин унасны дараа эргэж чаддаггүй...",
+    s1b: "⚠️ АСУУДАЛ:\nUнасан RC машин зогсдог — эргүүлэхийн тулд яаран очдог. Хана, тавилга руу мөргөдөг.\n\n✅ ШИЙДЭЛ:\nХоёр талт 4WD — ямар ч талаасаа яваад л байна.\n✅ 360° нэг газрын эргэлт — өрөөний хаана ч явна\n✅ Унасан ч эргүүлэх шаардлагагүй\n✅ 2.4GHz — 30 метр хүртэл алсын удирдлага\n\n💬 \"4WD машин авмаар\" гэж DM бичнэ үү → ₮93,000",
+    s2: "😩 ӨМНӨ НЬ:\nRC машин уначихаад зогсдог — яаран очиж эргүүлдэг байсан.\n\n✨ ОДОО:\nХоёр талт 4WD — ямар ч талаасаа тоглосоор байна.\n\n✅ Унасан ч тоглосоор\n✅ 360° нэг газрын эргэлт\n\n₮93,000 — DM-ээр захиалаарай ☝️"
+  },
+  "Нугасдаг утасгүй гар (keyboard)": {
+    s1h: "Монгол хүн Нугасдаг гар хайгаад байх шалтгаан нь — утсаараа бичих удаан, зөөврийн компьютер авч явхад хүнд...",
+    s1b: "⚠️ АСУУДАЛ:\nУтасны дэлгэц дээр бичихэд алдаатай, удаан. Компьютер авч явхад хүнд.\n\n✅ ШИЙДЭЛ:\nНугасдаг Bluetooth гар — цүнхний жижиг халаасанд багтана, нээхэд л бүтэн гар.\n✅ 3 төхөөрөмжтэй нэгэн зэрэг холбогдоно\n✅ 60 цагийн батарей — нэг цэнэглэлтээр\n✅ Нугасдаг хэмжээ 19×9 см\n\n💬 \"Нугасдаг гар авмаар\" гэж DM бичнэ үү → ₮85,000",
+    s2: "😩 ӨМНӨ НЬ:\nУтсаараа удаан бичиж, компьютер авч явхад хүнд санагддаг байсан.\n\n✨ ОДОО:\nНугасдаг гар — халааснаасаа гаргаад л бичиж эхэлнэ.\n\n✅ 3 төхөөрөмжтэй нэгэн зэрэг\n✅ 60 цагийн батарей\n\n₮85,000 — DM-ээр захиалаарай ☝️"
+  },
+  "Автомат холигчтой протейн шейкер": {
+    s1h: "Монгол хүн Автомат протейн шейкер хайгаад байх шалтгаан нь — гараар сэгсрэхэд протейн уусдаггүй, бөөрөнхийлдөг...",
+    s1b: "⚠️ АСУУДАЛ:\nГараар сэгсэрхэд протейн жигд уусдаггүй — ёроолд нь бөөрөнхийлж үлддэг.\n\n✅ ШИЙДЭЛ:\nАвтомат самбар — товч дарахад 10 секундэд жигд уусна.\n✅ USB цэнэглэлт — 7 хоног хүрдэг\n✅ 300ml — яг нэг тунгийн хэмжээ\n✅ Дулаан ус ч болно\n\n💬 \"Shaker авмаар\" гэж DM бичнэ үү → ₮29,000",
+    s2: "😩 ӨМНӨ НЬ:\nПротейн бөөрөнхийлж, амт нь тааруу байсан.\n\n✨ ОДОО:\nАвтомат шейкер — товч дарахад 10 секундэд бүрэн жигд.\n\n✅ USB цэнэглэлттэй\n✅ 7 хоногийн батарей\n\n₮29,000 — DM-ээр захиалаарай ☝️"
+  },
+  "USB халдаг өвдөгний хамгаалалт": {
+    s1h: "Монгол хүн USB халдаг өвдөгний хамгаалалт хайгаад байх шалтгаан нь — өвдөгний өвдөлт нийтлэг ч мэс засалгүй шийдэл ховор...",
+    s1b: "⚠️ АСУУДАЛ:\nӨвдөгний мөгөөрс элэгдэл — суух, алхах, шатаар авирахад өвдөнө.\n\n✅ ШИЙДЭЛ:\nХалаалт + даралтын USB бүс — 40–65°C, автомат унтардаг.\n✅ 3 халаалтын горим\n✅ Баруун, зүүн аль ч өвдөгт тохирно\n✅ Хэмжээ тохируулагддаг\n\n💬 \"Өвдөгний хэрэгсэл авмаар\" гэж DM бичнэ үү → ₮33,500",
+    s2: "😩 ӨМНӨ НЬ:\nӨвдөгний өвдөлтөнд мэс засалгүйгээр шийдэл олдохгүй байсан.\n\n✨ ОДОО:\nUSB халдаг бүс — халаалт + даралтаар өвдөлтийг намдаана.\n\n✅ 3 халаалтын горим\n✅ Автомат аюулгүй унтарна\n\n₮33,500 — DM-ээр захиалаарай ☝️"
+  },
+  "Нуруу халаагч, чичиргээт массажер": {
+    s1h: "Монгол хүн Нурууны массажер хайгаад байх шалтгаан нь — 8 цаг ширээнд сууснаар нуруу шатдаг мэт өвдөж байна...",
+    s1b: "⚠️ АСУУДАЛ:\nУдаан суух — нурууны булчин хатуурч, өвдөлт хуримтлагддаг. Массажист очих цаг, мөнгө байхгүй.\n\n✅ ШИЙДЭЛ:\nХалаалт + чичиргээний хосолмол — компьютертэйгээ хамт ашиглана.\n✅ 3 температурын горим — 40°C, 50°C, 60°C\n✅ USB цэнэглэлт — ажлын цагт\n✅ Нурууны дунд болон доод хэсэгт\n\n💬 \"Нурууны хэрэгсэл авмаар\" гэж DM бичнэ үү → ₮20,500",
+    s2: "😩 ӨМНӨ НЬ:\nАжлын дараа нуруу шатдаг мэт өвдөж, амарч чаддаггүй байсан.\n\n✨ ОДОО:\nНурууны массажер — ажлын цагт ч USB-ээр хэрэглэнэ.\n\n✅ Халаалт + чичиргээ хосолмол\n✅ 3 температурын горим\n\n₮20,500 — DM-ээр захиалаарай ☝️"
+  },
+  "Гэрэлтдэг нисдэг шидэт бөмбөг": {
+    s1h: "Монгол хүн Magic Flight Ball хайгаад байх шалтгаан нь — гарын хооронд нисдэг мэт гэрэлтдэг бөмбөг хамгийн гайхалтай бэлэг...",
+    s1b: "⚠️ АСУУДАЛ:\nБэлэг сонгоход хэцүү — тоглоом ч биш, ердийн зүйл ч биш. Хүн бүрт таалагдах зүйл хайж байна.\n\n✅ ШИЙДЭЛ:\nMagic Flight Ball — гарын хооронд хөвдөг мэт, LED гэрэлтдэг.\n✅ Батарейгүй — гарын дулаанаас эрчим хүч\n✅ Харанхуйд тод гэрэлтдэг\n✅ 5-40 насанд — бэлэгт яг таарна\n\n💬 \"Magic ball авмаар\" гэж DM бичнэ үү → ₮15,500",
+    s2: "😩 ӨМНӨ НЬ:\nБэлэг сонгоход хэцүү — юу авахаа мэдэхгүй.\n\n✨ ОДОО:\nMagic Flight Ball — гарын хооронд нисдэг мэт, LED гэрэлтдэг.\n\n✅ Батарейгүй, цэнэглэлтгүй\n✅ Харанхуйд гэрэлтдэг\n\n₮15,500 — DM-ээр захиалаарай ☝️"
+  },
+  "Зөөврийн нүдний массажер": {
+    s1h: "Монгол хүн Нүдний массажер хайгаад байх шалтгаан нь — 8+ цаг дэлгэц харсны дараа нүд ядарч, толгой өвддөг...",
+    s1b: "⚠️ АСУУДАЛ:\nДэлгэцийн ядаргаа нүдний булчингийн хурцдалаас үүснэ — толгой өвдөж, анхаарал суларна.\n\n✅ ШИЙДЭЛ:\n42°C халаалт + даралт + чичиргээ — 15 минутад бүрэн амарна.\n✅ 3 горим хосолмол\n✅ Дуу дарах функц — тайвширна\n✅ Нугасдаг — цүнхэнд хийж явна\n\n💬 \"Нүдний массажер авмаар\" гэж DM бичнэ үү → ₮106,000",
+    s2: "😩 ӨМНӨ НЬ:\nКомпьютерийн дараа нүд ядарч, толгой өвдөж байсан.\n\n✨ ОДОО:\nНүдний массажер — 15 минутад халаалт + даралтаар бүрэн амарна.\n\n✅ 42°C халаалт\n✅ Дуу дарах + хөгжим\n\n₮106,000 — DM-ээр захиалаарай ☝️"
+  },
+  "7 өнгийн LED нүүрний арчилгааны маск": {
+    s1h: "Монгол хүн LED Face Mask хайгаад байх шалтгаан нь — дэлгүүрт ₮500,000 зарцуулсан ч арьсны өөрчлөлт мэдрэгдэхгүй...",
+    s1b: "⚠️ АСУУДАЛ:\nКрем, сыворотка их хэрэглэсэн ч үр дүн харагдахгүй — арьсны эсэд нөлөөлөх технологи хэрэгтэй.\n\n✅ ШИЙДЭЛ:\nNASA-гийн LED гэрлийн эмчилгээ — 7 өнгийн гэрэл арьсны янз бүрийн асуудлыг шийдэнэ.\n✅ Улаан гэрэл — коллагены үйлдвэрлэл нэмэгдэнэ\n✅ Цэнхэр гэрэл — акне бактерийг устгана\n✅ 7 горим нэг маскаар\n\n💬 \"LED маск авмаар\" гэж DM бичнэ үү → ₮192,000",
+    s2: "😩 ӨМНӨ НЬ:\nАрьсны бүтээгдэхүүнд мөнгө зарцуулдаг, үр дүн нь удаан.\n\n✨ ОДОО:\nLED Face Mask — NASA-гийн технологиор гэртээ мэргэжлийн арчилгаа.\n\n✅ 7 өнгийн гэрэл\n✅ Коллаген нэмэгдэнэ, акне буурна\n\n₮192,000 — DM-ээр захиалаарай ☝️"
+  },
+  "3-в-1 нүүр, биеийн арчилгааны төхөөрөмж": {
+    s1h: "Монгол хүн 3-в-1 арчилгааны хэрэгсэл хайгаад байх шалтгаан нь — нүүр, бие, өөхний 3 өөр хэрэгсэл авах мөнгөгүй...",
+    s1b: "⚠️ АСУУДАЛ:\nEMS, LED эмчилгээ, кавитаци — тусдаа хэрэгсэл авахад үнэ өндөр, зай дутна.\n\n✅ ШИЙДЭЛ:\nНэг хэрэгсэл гурван функцийг гүйцэтгэнэ.\n✅ EMS — нүүрний булчин чангалалт, арьс татна\n✅ LED гэрэл — толбо, үрчлээтэй тэмцэнэ\n✅ Кавитаци — өөхний эсийн задралыг дэмжинэ\n\n💬 \"3 in 1 хэрэгсэл авмаар\" гэж DM бичнэ үү → ₮81,000",
+    s2: "😩 ӨМНӨ НЬ:\nАрьс болон биеийн асуудалд тус бүрийн хэрэгсэл аваад зардал их байсан.\n\n✨ ОДОО:\n3-в-1 — нэг хэрэгслэер нүүр, бие, өөхийг шийдэнэ.\n\n✅ EMS + LED + Кавитаци\n✅ Гэртээ мэргэжлийн түвшин\n\n₮81,000 — DM-ээр захиалаарай ☝️"
+  },
+  "Боксын рефлекс дасгалын бөмбөг": {
+    s1h: "Монгол хүн Боксын рефлекс бөмбөг хайгаад байх шалтгаан нь — хамтрагчгүйгээр хурд, рефлексийг хөгжүүлж болно...",
+    s1b: "⚠️ АСУУДАЛ:\nБоксын дасгал хийхэд уут нь хүрэлгүй, хамтрагч байхгүй.\n\n✅ ШИЙДЭЛ:\nХүзүүний боолттой рефлекс бөмбөг — ямар ч чигт буцаж ирдэг.\n✅ Арьсан бөмбөг — удаан эдлэнэ\n✅ Нүдний хурд + гарын зохицол\n✅ 15 минут/өдөр — мэдэгдэхүйц үр дүн\n\n💬 \"Boxing ball авмаар\" гэж DM бичнэ үү → ₮40,500",
+    s2: "😩 ӨМНӨ НЬ:\nБоксын дасгал хийхэд хамтрагч хэрэгтэй байсан.\n\n✨ ОДОО:\nРефлекс бөмбөг — хүзүүнд зүүгаад дандаа дасгал хийнэ.\n\n✅ Нэг хүний дасгал\n✅ Нүдний хурд нэмэгдэнэ\n\n₮40,500 — DM-ээр захиалаарай ☝️"
+  },
+  "Вакуум дарсны таг (агааргүй хадгалагч)": {
+    s1h: "Монгол хүн Вакуум дарсны таг хайгаад байх шалтгаан нь — нэг аяга л ууж, дарсны лонхыг дунд нь орхидог...",
+    s1b: "⚠️ АСУУДАЛ:\nНээсэн дарс 1–2 өдрийн дотор амтаа алддаг — агаарт исэлдэнэ. Хаяхад харамстай.\n\n✅ ШИЙДЭЛ:\nВакуум таг — нэг шахалтаар агаарыг бүрэн сорно.\n✅ 5–7 хоног ижил амтаар хадгалагдана\n✅ Аливаа лонхны амсарт тохирно\n✅ Ган материал — удаан эдлэнэ\n\n💬 \"Дарсны таг авмаар\" гэж DM бичнэ үү → ₮14,000",
+    s2: "😩 ӨМНӨ НЬ:\nНэг аяга ууж, үлдэхийг нь маргааш хаядаг байсан.\n\n✨ ОДОО:\nВакуум таг — 5–7 хоног ижил амтаар хадгална.\n\n✅ Нэг шахалтаар вакуум\n✅ Аливаа лонхонд тохирно\n\n₮14,000 — DM-ээр захиалаарай ☝️"
+  },
+  "Аэропоник босоо цэцэрлэг (ургуулах систем)": {
+    s1h: "Монгол хүн Аэропоник цэцэрлэг хайгаад байх шалтгаан нь — хүнсний дэлгүүрт зарцуулдаг мөнгөө хэмнэж, гэртээ ногоо ургуулмаар...",
+    s1b: "⚠️ АСУУДАЛ:\nБайрны зай хүрэхгүй, хөрс, усалгааны тогтолцоо хэрэгтэй болдог.\n\n✅ ШИЙДЭЛ:\nШороогүй, агаарт ус шүршдэг аргаар 25–30 ногоо нэгэн зэрэг ургуулна.\n✅ Хөрснийхоос 3 дахин хурдан\n✅ Ус хэрэглэлт 90% бага\n✅ Балкон, гал тогоонд багтана\n\n💬 \"Ногоогоо өөрөө ургуулмаар\" гэж DM илгээнэ үү → ₮217,000",
+    s2: "😩 ӨМНӨ НЬ:\nДэлгүүрт ногоо авдаг — үнэтэй, хэзээ тарьсан нь тодорхой бус.\n\n✨ ОДОО:\nАэропоник цэцэрлэг — гэртээ шороогүйгээр 25+ ногоо ургуулна.\n\n✅ 3 дахин хурдан\n✅ 90% ус хэмнэнэ\n\n₮217,000 — DM-ээр захиалаарай ☝️"
+  },
+  "Амьсгалын дасгалын төхөөрөмж": {
+    s1h: "Монгол хүн Амьсгалын дасгалын хэрэгсэл хайгаад байх шалтгаан нь — стрессийн үед \"гүнзгий ам\" гэж хэлдэг ч зөв аргыг мэдэхгүй...",
+    s1b: "⚠️ АСУУДАЛ:\nЗөв амьсгалах нь эрүүл мэнддэ хамгийн нөлөөтэй — гэхдээ хэн ч зааж өгдөггүй.\n\n✅ ШИЙДЭЛ:\n4-4-4 хэмнэлийн амьсгалын хэрэгсэл — 3 эсэргүүцлийн түвшинтэй.\n✅ Уушгийн хүчийг нэмэгдүүлнэ\n✅ 5 мин/өдрийн дасгал — стресс буурна\n✅ Дуу шуугиангүй — офист ч хэрэглэнэ\n\n💬 \"Breathing device авмаар\" гэж DM бичнэ үү → ₮57,000",
+    s2: "😩 ӨМНӨ НЬ:\nСтресстэй үед хэрхэн амьсгалахаа мэдэхгүй байсан.\n\n✨ ОДОО:\nАмьсгалын дасгалын хэрэгсэл — зөв хэмнэлийг биед заана.\n\n✅ 3 эсэргүүцлийн түвшин\n✅ Офист ч ашиглана\n\n₮57,000 — DM-ээр захиалаарай ☝️"
+  },
+  "Хөлийн улны шөнийн тулгуур (plantar fasciitis)": {
+    s1h: "Монгол хүн Night Splint хайгаад байх шалтгаан нь — өглөө орноосоо үсрэхэд өсгийнд галдуулах мэт өвдөлт болдог...",
+    s1b: "⚠️ АСУУДАЛ:\nPlantar fasciitis — шөнийн туршид хөлний шөрмөс хугарч, өглөө дахин тэлэх үед өвддөг.\n\n✅ ШИЙДЭЛ:\nШөнийн тулгуур — хөлийг 90°-д байлгаж, шөрмөсийг тогтмол тэлнэ.\n✅ 2 долоо хоногт өвдөлт 60% буурдаг\n✅ Хэмжээ тохируулах боломжтой\n✅ Эмч нарын зөвлөдөг консерватив эмчилгээ\n\n💬 \"Night splint авмаар\" гэж DM бичнэ үү → ₮20,500",
+    s2: "😩 ӨМНӨ НЬ:\nӨглөө бүр орноосоо босоход өсгийнд галдуулах мэт өвддөг байсан.\n\n✨ ОДОО:\nNight Splint — унтах үед шөрмөсийг тэлж, өглөө өвдөлт бага.\n\n✅ Эмч нарын зөвлөдөг\n✅ 2 долоо хоногт үр дүн\n\n₮20,500 — DM-ээр захиалаарай ☝️"
+  },
+  "Хөнгөн жингийн аяллын гамак": {
+    s1h: "Монгол хүн Аяллын гамак хайгаад байх шалтгаан нь — майхан нь 3 кг, гамак нь 450 гр — аяллын хамгийн ухаалаг солилт...",
+    s1b: "⚠️ АСУУДАЛ:\nБайгальд майхан аваачихаар жин ихтэй, нугасны ачаалал өндөр.\n\n✅ ШИЙДЭЛ:\n450гр нейлон гамак — хоёр мод хооронд 5 минутад бэлэддэг.\n✅ 250кг тэсвэрлэнэ\n✅ Жижиг уут болно — рюкзакт нэмэлт жингүй\n✅ Москитний тор нэмэлт бий\n\n💬 \"Hammock авмаар\" гэж DM илгээнэ үү → ₮70,000",
+    s2: "😩 ӨМНӨ НЬ:\nБайгальд аяллын ачаа хүнд — майхан, хэрэгслийн жин өндөр байсан.\n\n✨ ОДОО:\nАяллын гамак — 450гр, рюкзакт нэмэлт жингүй.\n\n✅ 5 минутад бэлэддэг\n✅ 250кг тэсвэрлэнэ\n\n₮70,000 — DM-ээр захиалаарай ☝️"
+  },
+  "Тохируулагддаг хурдны боксын уут": {
+    s1h: "Монгол хүн Speed Bag Platform хайгаад байх шалтгаан нь — боксын хурдны дасгал гэртээ хийх боломж байхгүй...",
+    s1b: "⚠️ АСУУДАЛ:\nБоксын клуб руу очих цаг, мөнгөгүй — гэртээ хурдны дасгал хийх хэрэгсэл хэрэгтэй.\n\n✅ ШИЙДЭЛ:\nТохируулагддаг хурдны уутны платформ — нүдний хурд, ритм, гарын зохицол.\n✅ 8 өндрийн тохируулга — хүүхдээс насанд хүрэгч\n✅ Дуу чимээг бууруулдаг\n✅ Ханандаа суурилуулна\n\n💬 \"Speed bag авмаар\" гэж DM бичнэ үү → ₮43,500",
+    s2: "😩 ӨМНӨ НЬ:\nБоксын хурдны дасгал гэртээ хийж чаддаггүй байсан.\n\n✨ ОДОО:\nSpeed Bag Platform — ханандаа суурилуулаад хурдны дасгал гэртээ.\n\n✅ 8 өндрийн тохируулга\n✅ Нүдний хурд нэмэгдэнэ\n\n₮43,500 — DM-ээр захиалаарай ☝️"
+  },
+  "Үс хатаагчийн тараагч хошуу (diffuser)": {
+    s1h: "Монгол хүн Hair Diffuser хайгаад байх шалтгаан нь — кудрит үсийг ширгэгч ашиглахад задарч унадаг...",
+    s1b: "⚠️ АСУУДАЛ:\nЕрдийн ширгэгчийн хурдтай агаар кудрит задалдаг — долгион, буйлан хэлбэрийг хадгалдаггүй.\n\n✅ ШИЙДЭЛ:\nDiffuser нь агаарыг жигд тараан, кудритийн байгалийн хэлбэрийг хадгалдаг.\n✅ Ихэнх ширгэгчийн суваг дээр тохирно\n✅ 360° хамрах хүрээ\n✅ Silicone — дулаанд тэсвэртэй\n\n💬 \"Hair diffuser авмаар\" гэж DM илгээнэ үү → ₮92,000",
+    s2: "😩 ӨМНӨ НЬ:\nҮс хатааж дуусахад кудрит задарч, долгион алга болдог байсан.\n\n✨ ОДОО:\nHair Diffuser — агаарыг жигд тараан кудритийг хадгалдаг.\n\n✅ 360° жигд агаар\n✅ Ихэнх ширгэгчид тохирно\n\n₮92,000 — DM-ээр захиалаарай ☝️"
+  },
+  "Мини дуу бичигч төхөөрөмж": {
+    s1h: "Монгол хүн Mini Voice Recorder хайгаад байх шалтгаан нь — чухал уулзалт, лекцийн агуулга алдагдах аюул байдаг...",
+    s1b: "⚠️ АСУУДАЛ:\nУтсаараа бичвэл зай дуусна, дуу муутай. Тэмдэглэл хурдан хийхгүй.\n\n✅ ШИЙДЭЛ:\nЖижиг дижитал бичигч — 8 цаг тасралтгүй, нарийн микрофон.\n✅ 32GB — 1900 цагийн бичлэг хадгалдаг\n✅ Voice activation — автоматаар эхэлнэ\n✅ MP3 + WAV — ямар ч програмд нийцнэ\n\n💬 \"Voice recorder авмаар\" гэж DM илгээнэ үү → ₮43,500",
+    s2: "😩 ӨМНӨ НЬ:\nЧухал уулзалтын агуулгыг бичиж авах тохиромжтой хэрэгсэл байгаагүй.\n\n✨ ОДОО:\nМини бичигч — 8 цаг тасралтгүй, нарийн бичнэ.\n\n✅ Жижиг хэмжээтэй\n✅ 8 цаг бичлэг\n\n₮43,500 — DM-ээр захиалаарай ☝️"
+  },
+  "Анхаарал төвлөрлийн таймер хонх": {
+    s1h: "Монгол хүн Pomodoro таймер хонх хайгаад байх шалтгаан нь — ажилдаа орсон мартаад 3 цаг өнгөрдөг...",
+    s1b: "⚠️ АСУУДАЛ:\nДэлгэц харахгүйгээр цагаа засах хэрэгтэй — дэлгэц харахаар анхааралаа сарниулдаг.\n\n✅ ШИЙДЭЛ:\nХонхны дуутай таймер — тогтоосон хугацааны зайтайгаар дэлбэрнэ.\n✅ 30 секундээс 60 минут хүртэл\n✅ 6 хонхны байгалийн авиа\n✅ Батарейгүй — гараар ажилладаг\n\n💬 \"Pomodoro timer авмаар\" гэж DM илгээнэ үү → ₮57,000",
+    s2: "😩 ӨМНӨ НЬ:\nАжилдаа орсон мартаад цаг алддаг байсан.\n\n✨ ОДОО:\nMindfulness Timer — хонхны дуу дэлгэцгүйгээр сануулна.\n\n✅ 6 байгалийн авиа\n✅ Батарейгүй\n\n₮57,000 — DM-ээр захиалаарай ☝️"
+  },
+  "Соронзон машины утас тогтоогч": {
+    s1h: "Монгол хүн Соронзон Phone Mount хайгаад байх шалтгаан нь — машин жолоодохдоо утас барихад аюулгүй байдлын дүрэм зөрчдөг...",
+    s1b: "⚠️ АСУУДАЛ:\nМашин жолоодохдоо утас барих — хамгийн нийтлэг аюулгүй байдлын зөрчил.\n\n✅ ШИЙДЭЛ:\nСоронзон байрлуулагч — нэг хөдөлгөөнд холбогдоно, нэг хөдөлгөөнд суллагдана.\n✅ 360° эргэлт — яг хэрэгтэй өнцөгт\n✅ MagSafe бүхий iPhone-д тохирно\n✅ Хяналтын самбар дээр тогтно\n\n💬 \"Phone mount авмаар\" гэж DM илгээнэ үү → ₮14,000",
+    s2: "😩 ӨМНӨ НЬ:\nМашинд утасаа хаана тавихаа мэдэхгүй, гараараа барьдаг байсан.\n\n✨ ОДОО:\nСоронзон тогтоогч — нэг хөдөлгөөнд тавина, нэг хөдөлгөөнд авна.\n\n✅ 360° тохируулга\n✅ Аюулгүй жолоодолт\n\n₮14,000 — DM-ээр захиалаарай ☝️"
+  },
+  "Машины асаагч зөөврийн батарей (jump starter)": {
+    s1h: "Монгол хүн Jump Starter хайгаад байх шалтгаан нь — хүйтэнд машины батарей дуусахад тусламж хүлээх цаггүй...",
+    s1b: "⚠️ АСУУДАЛ:\nӨвлийн хүйтэнд машины батарей дуусахад гадны тусламжгүйгээр асааж чаддаггүй.\n\n✅ ШИЙДЭЛ:\nЗөөврийн Jump Starter — 20 секундэд машиныг авааруулдаг.\n✅ 1000А хийцийн гүйдэл — 6 цилиндр хүртэл\n✅ USB портоор гар утас ч цэнэглэнэ\n✅ Компакт хэмжээтэй\n\n💬 \"Jump starter авмаар\" гэж DM бичнэ үү → ₮43,500",
+    s2: "😩 ӨМНӨ НЬ:\nМашины батарей дуусахад тусламж хүлээж байдаг байсан.\n\n✨ ОДОО:\nJump Starter — 20 секундэд өөрөө асаана.\n\n✅ Гар утас ч цэнэглэнэ\n✅ Компакт хэмжээтэй\n\n₮43,500 — DM-ээр захиалаарай ☝️"
+  },
+  "Зөөврийн компьютерийн хөргөлтийн дэр": {
+    s1h: "Монгол хүн Ноутбукын хөргөлтийн дэр хайгаад байх шалтгаан нь — компьютер халах тусам хурдаа бууруулдаг...",
+    s1b: "⚠️ АСУУДАЛ:\nКомпьютер халах — processor хурдаа бууруулж, бүтээмж унадаг (thermal throttling).\n\n✅ ШИЙДЭЛ:\n6 вентилятортай USB хөргөлтийн дэр — температурыг 5–10°С бууруулна.\n✅ USB-ийн цэнэглэлт — нэмэлт залгуур хэрэггүй\n✅ 17 инч хүртэлх компьютерт\n✅ Өндрийн тохируулга — нурууны зөв байрлал\n\n💬 \"Cooling pad авмаар\" гэж DM бичнэ үү → ₮55,000",
+    s2: "😩 ӨМНӨ НЬ:\nКомпьютер халж, ажлын хурд нь удааширдаг байсан.\n\n✨ ОДОО:\nХөргөлтийн дэр — температурыг 10°С бууруулна.\n\n✅ USB-ийн цэнэглэлт\n✅ Өндрийн тохируулгатай\n\n₮55,000 — DM-ээр захиалаарай ☝️"
+  },
+  "Мини шат өгсөгч дасгалын төхөөрөмж": {
+    s1h: "Монгол хүн Mini Stepper хайгаад байх шалтгаан нь — байранд дасгалын машин тавих зай байхгүй...",
+    s1b: "⚠️ АСУУДАЛ:\nГэрт дасгалын машин тавих зай, мөнгөгүй.\n\n✅ ШИЙДЭЛ:\nШирээний доорх жижиг stepper — шагай, шилбэ, тахимын булчинг нэгэн зэрэг дасгална.\n✅ 20 мин хийхэд 150-200 калор шатаадаг\n✅ Зурагт харж хийнэ\n✅ Чимээгүй — хавтаст байранд ч\n\n💬 \"Mini stepper авмаар\" гэж DM илгээнэ үү → ₮113,000",
+    s2: "😩 ӨМНӨ НЬ:\nДасгал хийх цаг, зай хоёулаа байхгүй байсан.\n\n✨ ОДОО:\nMini Stepper — ширээний доор тавиад ажиллах цагтаа хийнэ.\n\n✅ 20 мин — 200 калор\n✅ Чимээгүй ажилладаг\n\n₮113,000 — DM-ээр захиалаарай ☝️"
+  },
+  "Паракорд амьд үлдэх гар бугуйвч": {
+    s1h: "Монгол хүн Paracord Survival Bracelet хайгаад байх шалтгаан нь — аяллын ослын нэгдүгээр хэрэгсэл болж, бугуйд зүүж явдаг...",
+    s1b: "⚠️ АСУУДАЛ:\nАяллад яаралтай нөхцөлд хэрэгтэй хэрэгсэл нь рюкзакт хаагдсан байдаг.\n\n✅ ШИЙДЭЛ:\nParacord бугуйвч — задлахад 4 метр 550 фунтын олс болдог.\n✅ 5 хэрэгсэл нэг зүүлтэнд: хутга, гал асаагч, шүгэл, луужин, жинс\n✅ 550 фунт тэсвэрлэнэ\n✅ 10+ өнгийн сонголт\n\n💬 \"Survival bracelet авмаар\" гэж DM бичнэ үү → ₮14,000",
+    s2: "😩 ӨМНӨ НЬ:\nАяллын аюулгүй байдлын хэрэгсэл нь хүнд, хэрэглэхэд хэцүү байсан.\n\n✨ ОДОО:\nParacord Bracelet — бугуйд зүүж явна, яаралтай үед задлахад олс болдог.\n\n✅ 5 хэрэгсэл нэг зүүлтэнд\n✅ 550 фунт тэсвэрлэнэ\n\n₮14,000 — DM-ээр захиалаарай ☝️"
   }
-  if (script) {
-    bodyBox.textContent = script;
-    bodyBox.style.display = 'block';
-  }
-  actions.style.display = 'block';
+};
 
-  aiScripts[p.n] = { hook, script };
+let _liteScriptP = null;
+
+function showLiteScripts(p) {
+  _liteScriptP = p;
+  const sc = LITE_SCRIPTS[p.n];
+
+  // Script 1
+  const hook1 = document.getElementById('ls1-hook');
+  const hookT = document.getElementById('ls1-hook-text');
+  const body1 = document.getElementById('ls1-body');
+
+  if (sc) {
+    hookT.textContent = sc.s1h;
+    hook1.style.display = 'block';
+    body1.textContent = sc.s1b;
+    body1.style.display = 'block';
+  } else {
+    // Fallback: ашиглах хуучин hook/script
+    const fb = getProductScript(p);
+    hookT.textContent = `Монгол хүн ${p.n}-г хайгаад байх шалтгаан нь... ${fb.hook}`;
+    hook1.style.display = 'block';
+    body1.textContent = '⚠️ АСУУДАЛ:\n' + fb.hook + '\n\n✅ ШИЙДЭЛ:\n' + fb.script;
+    body1.style.display = 'block';
+  }
+
+  // Script 2
+  const body2 = document.getElementById('ls2-body');
+  if (sc) {
+    body2.textContent = sc.s2;
+    body2.style.display = 'block';
+  } else {
+    const fb = getProductScript(p);
+    body2.textContent = '😩 ӨМНӨ НЬ:\n' + fb.hook + '\n\n✨ ОДОО:\n' + p.n + ' — шийдлийг авч ирнэ.\n\n' + fmtN(p.pN) + ' — DM-ээр захиалаарай ☝️';
+    body2.style.display = 'block';
+  }
 }
 
-
-function copyAIScript() {
-  const hook = document.getElementById('ai-hook-text').textContent;
-  const body = document.getElementById('ai-script-body').textContent;
-  const full = (hook ? 'HOOK:\n' + hook + '\n\n' : '') + body;
-  navigator.clipboard.writeText(full).then(() => {
-    const btn = document.getElementById('ai-copy-btn');
+function copyScript(num) {
+  let text = '';
+  if (num === 1) {
+    const h = document.getElementById('ls1-hook-text').textContent;
+    const b = document.getElementById('ls1-body').textContent;
+    text = `📱 СКРИПТ 1 — TikTok · 30 сек\n\n🎯 HOOK:\n${h}\n\n${b}`;
+  } else {
+    text = document.getElementById('ls2-body').textContent;
+    text = `📸 СКРИПТ 2 — IG Reel · 15 сек\n\n${text}`;
+  }
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById(`ls${num}-copy`);
+    const orig = btn.textContent;
     btn.textContent = '✅ Хуулагдлаа!';
     btn.style.background = 'var(--accent)';
-    btn.style.color = '#fff';
+    btn.style.color = '#111';
     setTimeout(() => {
-      btn.textContent = '📋 Бүтэн script хуулах';
+      btn.textContent = orig;
       btn.style.background = '';
       btn.style.color = '';
     }, 2000);
+  });
+}
+
+function copyAIScript() {
+  const h = document.getElementById('ls1-hook-text')?.textContent || '';
+  const b = document.getElementById('ls1-body')?.textContent || '';
+  const full = `📱 СКРИПТ 1 — TikTok · 30 сек\n\n🎯 HOOK:\n${h}\n\n${b}`;
+  navigator.clipboard.writeText(full).then(() => {
+    const btn = document.getElementById('ai-copy-btn');
+    if(btn){ btn.textContent = '✅ Хуулагдлаа!'; setTimeout(()=>btn.textContent='📋 Бүтэн script хуулах',2000); }
   });
 }
 
@@ -3538,22 +4004,24 @@ function getFiltered(){
   return arr;
 }
 
+const HOT_INDICES = new Set([0, 3, 7, 11, 17, 22]);
+
 function renderGrid(){
   const filtered=getFiltered();
   const grid=document.getElementById('grid');
   document.getElementById('result-info').textContent=filtered.length+' / '+PRODUCTS.length+' бараа';
   document.getElementById('nav-count').textContent=filtered.length+' бараа';
   if(!filtered.length){grid.innerHTML='<div class="empty">🔍 Бараа олдсонгүй</div>';return;}
-  grid.innerHTML=filtered.map(p=>{
+  const cards = filtered.map((p, idx)=>{
     const emoji=CAT_EMOJI[p.mc]||'📦';
     const catCls=CAT_COLORS[p.mc]||'';
-    const seed=p.n.charCodeAt(0)+p.cN;
-    const satLvl=seed%3;
-    const satPct=satLvl===0?25:satLvl===1?58:85;
-    const satCls=satLvl===0?'low':satLvl===1?'mid':'high';
-    const satLbl=satLvl===0?'Бага өрсөлдөөн':satLvl===1?'Дунд өрсөлдөөн':'Өндөр өрсөлдөөн';
+    const isHot = HOT_INDICES.has(idx);
+    const hotBadge = isHot
+      ? `<div style="position:absolute;top:6px;left:6px;z-index:10;background:#ef4444;color:#fff;font-size:9px;font-weight:800;padding:3px 7px;border-radius:20px;letter-spacing:.3px;white-space:nowrap">🔥 Энэ долоо хоногт 12 захиалга</div>`
+      : '';
     return `<div class="card" onclick="openPanel(${JSON.stringify(p).replace(/"/g,'&quot;')})">
-      <div class="card-img">
+      <div class="card-img" style="position:relative">
+        ${hotBadge}
         <span class="card-emoji" style="z-index:1">${emoji}</span>
         <img src="${p.imgUrl || cloudinaryUrlByImgN(p.mc,p.imgN||p.n,1)}" alt="${p.n}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s;z-index:0" onload="this.style.opacity=1;this.previousElementSibling.style.display='none'" onerror="var fb=getCatFallback({mc:'${p.mc}',n:'${p.n}'});if(fb[0]){this.src=fb[0];this.onerror=function(){this.style.display='none'}}else{this.style.display='none'}">
         <span class="cat-badge ${catCls}">${p.mc}</span>
@@ -3570,23 +4038,29 @@ function renderGrid(){
           <span class="card-profit-val">${fmtN(p.npN)}</span>
         </div>
       </div>
+      <div onclick="event.stopPropagation();openProUpgrade()" style="margin:0 10px 8px;padding:6px 10px;background:rgba(200,255,0,.05);border:1.5px dashed rgba(200,255,0,.2);border-radius:8px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;gap:6px;overflow:hidden">
+        <span style="font-size:10px;font-weight:700;color:var(--muted);filter:blur(2px);user-select:none;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:0;min-width:0">🔗 ali.com/...</span>
+        <span style="font-size:9px;font-weight:800;color:var(--accent);white-space:nowrap;flex-shrink:0">🔒 Pro →</span>
+      </div>
       <button class="card-btn">Дэлгэрэнгүй →</button>
     </div>`;
-  }).join('');
+  });
+
+  // FOMO divider — grid-ийн доод хэсэгт нэмнэ (зөвхөн "Бүгд" харагдах үед)
+  const fomoDiv = currentCat === 'all' && !currentSearch ? `
+    <div style="grid-column:1/-1;margin:6px 0;padding:14px 18px;background:linear-gradient(135deg,rgba(200,255,0,.06),rgba(200,255,0,.02));border:1.5px dashed rgba(200,255,0,.25);border-radius:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer" onclick="openProUpgrade()">
+      <div>
+        <div style="font-size:13px;font-weight:800;color:var(--text)">+ 175 бараа <span style="color:var(--accent)">Pro-д</span></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Supplier шууд линк · Bulk тооцоо · 216+ script</div>
+      </div>
+      <div style="padding:7px 14px;background:var(--accent);border-radius:8px;font-size:11px;font-weight:800;color:#111;white-space:nowrap">Pro авах →</div>
+    </div>` : '';
+
+  grid.innerHTML = cards.join('') + fomoDiv;
 }
 
 function openPanel(p){
   if(typeof p==='string') p=JSON.parse(p);
-  // ── VIEW COUNTER → Upsell trigger ──
-  var views=(parseInt(sessionStorage.getItem('pd_lite_views')||'0'))+1;
-  sessionStorage.setItem('pd_lite_views',views);
-  if(views===3 && !sessionStorage.getItem('pd_upsell_shown')){
-    sessionStorage.setItem('pd_upsell_shown','1');
-    setTimeout(function(){
-      var el=document.getElementById('lite-mid-upsell');
-      if(el) el.style.display='flex';
-    },1800);
-  }
   activeProduct=p;
   const sy=window.scrollY||document.documentElement.scrollTop;
   document.body.dataset.scrollY=sy;
@@ -3649,8 +4123,8 @@ function openPanel(p){
     <div class="p-stat"><div class="p-stat-lbl">Цэвэр ашиг</div><div class="p-stat-val green">${fmtN(p.npN)}</div></div>`;
   const enc=encodeURIComponent(p.imgN||p._en||p.n);
   document.getElementById('p-links').innerHTML=`
-    <a class="p-link ali" href="${p.aliUrl||'https://www.alibaba.com/trade/search?SearchText='+enc}" target="_blank">🔗 Alibaba</a>
-    <a class="p-link fb" href="${p.fbAdsUrl||'https://www.facebook.com/ads/library/?active_status=all&ad_type=all&country=ALL&q='+enc+'&search_type=keyword_unordered'}" target="_blank">📱 FB Ads</a>
+    <div onclick="openProUpgrade()" class="p-link" style="position:relative;cursor:pointer;filter:blur(3px);user-select:none;pointer-events:none;opacity:.5">🔗 Alibaba</div>
+    <div onclick="openProUpgrade()" style="display:flex;align-items:center;gap:5px;padding:5px 10px;border:1.5px dashed var(--border2);border-radius:8px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;white-space:nowrap;flex-shrink:0" title="Supplier шууд линк — Pro-д нэвтрэх">🔒 Supplier шууд линк · Pro-д нэвтрэх →</div>
     <a class="p-link" href="${p.tiktokUrl||'https://www.tiktok.com/search?q='+enc}" target="_blank">🎵 Бичлэг</a>`;
   const costA=Math.round(p.cN*.93);
   const costB=Math.round(p.cN*1.08);
@@ -3664,49 +4138,74 @@ function openPanel(p){
       <div class="supp-row"><span class="supp-k">10+ ш</span><span class="supp-v blue">${fmtN(Math.round(costA*.88))}/ш</span></div>
       <div class="supp-row"><span class="supp-k">Хүргэлт</span><span class="supp-v">7–14 хоног</span></div>
       <div class="supp-row"><span class="supp-k">MOQ</span><span class="supp-v">1 ширхэгээс</span></div>
+      <div onclick="openProUpgrade()" style="margin-top:10px;padding:8px 12px;background:rgba(200,255,0,.06);border:1.5px dashed var(--accent-border);border-radius:8px;display:flex;align-items:center;gap:7px;cursor:pointer">
+        <span style="font-size:12px">🔒</span>
+        <span style="font-size:11px;color:var(--muted);font-weight:700">Supplier шууд линк · Pro-д нэвтрэх →</span>
+      </div>
+      <div onclick="openProUpgrade()" style="margin-top:8px;padding:8px 12px;background:var(--surface2);border:1.5px dashed var(--border2);border-radius:8px;display:flex;align-items:center;gap:7px;cursor:pointer;opacity:.7">
+        <span style="font-size:12px">🔒</span>
+        <div>
+          <div style="font-size:11px;color:var(--muted);font-weight:700">Хэдэн ширхэг захиалах зөвлөмж — Pro-д →</div>
+          <div style="font-size:10px;color:var(--muted2);margin-top:1px">MOQ шинжилгээ · эхлэх хэмжээ · шаталсан захиалга</div>
+        </div>
+      </div>
     </div>`;
   document.getElementById('supp-note').innerHTML='💡 <b>Alibaba яагаад дээр?</b> Taobao-оос 10–15% хямд, B2B зориулагдсан. Дээрх линкүүдийг дарж тэдгээр платформ дээр шууд нийлүүлэгчтэй холбогдоно уу.';
   document.getElementById('c-price').value=p.pN.toLocaleString();
   document.getElementById('c-cost').value=p.cN.toLocaleString();
-  document.getElementById('c-qty').value='30';
   document.getElementById('c-ship').value=(p.sh||4000).toLocaleString();
-  document.getElementById('c-mkt').value='0';
-  document.getElementById('c-other').value='2,000';
+  window._calcQty=20;
+  document.querySelectorAll('.qty-preset-btn').forEach(b=>{
+    const isActive=b.id==='qty-20';
+    b.style.background=isActive?'var(--accent)':'var(--surface)';
+    b.style.borderColor=isActive?'var(--accent)':'var(--border2)';
+    b.style.color=isActive?'#111':'var(--text)';
+  });
   calcProfit();
   setTargetDefaults(p);
   drawDemand(p);
   const kws=SOCIAL_KW[p.mc]||[];
   const socialTagsEl=document.getElementById('social-tags');
   if(socialTagsEl) socialTagsEl.innerHTML=kws.map(k=>`<span class="social-tag">👤 ${k}</span>`).join('');
-  showProductScript(p);
+  showLiteScripts(p);
   document.getElementById('panel-overlay').classList.add('open');
   document.getElementById('panel').scrollTop=0;
 }
 
 
 
+function setQty(n){
+  window._calcQty = n;
+  document.querySelectorAll('.qty-preset-btn').forEach(b=>{
+    const isActive = b.id === 'qty-'+n;
+    b.style.background = isActive ? 'var(--accent)' : 'var(--surface)';
+    b.style.borderColor = isActive ? 'var(--accent)' : 'var(--border2)';
+    b.style.color = isActive ? '#111' : 'var(--text)';
+  });
+  calcProfit();
+}
+
 function calcProfit(){
   const price=getInpVal('c-price');
   const cost=getInpVal('c-cost');
-  const qty=getInpVal('c-qty')||1;
+  const qty=window._calcQty||20;
   const shipping=getInpVal('c-ship');
-  const mkt=getInpVal('c-mkt');
-  const other=getInpVal('c-other');
   const customs=Math.round(cost*.03);
   const totalCost=cost+shipping+customs+1000;
-  const netPerUnit=price-totalCost-mkt;
-  const totalNet=netPerUnit*qty-other;
+  const netPerUnit=price-totalCost;
+  const totalNet=netPerUnit*qty;
   const marginPct=price>0?Math.round(netPerUnit/price*100):0;
-  const breakeven=netPerUnit>0?Math.ceil(other/netPerUnit):'∞';
+  const targetMg=parseInt(document.getElementById('c-mg-slider')?.value||40);
+  const suggestedPrice=totalCost>0?Math.round(totalCost/(1-targetMg/100)):0;
   document.getElementById('calc-result').innerHTML=`
     <div class="calc-r-row"><span class="calc-r-key">Нийт өртөг / ш</span><span class="calc-r-val blue">${fmtN(totalCost)}</span></div>
     <div class="calc-r-row" style="font-size:11px;color:var(--muted2);padding:3px 0;border-bottom:1px solid var(--border)">
       <span>Өртөг ${fmtN(cost)} + Карго ${fmtN(shipping)} + Гааль ${fmtN(customs)} + Бусад ₮1,000</span>
     </div>
+    <div class="calc-r-row"><span class="calc-r-key">Зорилтот ${targetMg}% margin-д зарах үнэ</span><span class="calc-r-val" style="color:var(--accent)">${suggestedPrice>0?fmtN(suggestedPrice):'—'}</span></div>
     <div class="calc-r-row"><span class="calc-r-key">Цэвэр ашиг / ш</span><span class="calc-r-val ${netPerUnit>=0?'green':'orange'}">${fmtN(netPerUnit)}</span></div>
     <div class="calc-r-row"><span class="calc-r-key">Нийт ашиг (${qty.toLocaleString()} ш)</span><span class="calc-r-val ${totalNet>=0?'green':'orange'}">${fmtN(totalNet)}</span></div>
-    <div class="calc-r-row"><span class="calc-r-key">Ашгийн хувь</span><span class="calc-r-val ${marginPct>=40?'green':marginPct>=20?'':''}">${marginPct}%</span></div>
-    <div class="calc-r-row"><span class="calc-r-key">Break-even</span><span class="calc-r-val">${breakeven==='∞'?'∞':Number(breakeven).toLocaleString()} ш</span></div>`;
+    <div class="calc-r-row"><span class="calc-r-key">Ашгийн хувь</span><span class="calc-r-val ${marginPct>=40?'green':marginPct>=20?'':''}">${marginPct}%</span></div>`;
 }
 
 function drawDemand(p){
@@ -3754,7 +4253,9 @@ function drawDemand(p){
   let gridLines='';
   [0.25,0.5,0.75].forEach(f=>{
     const gy=padT+chartH*(1-f);
-    gridLines+=`<line x1="${padL}" y1="${gy}" x2="${W-padR}" y2="${gy}" stroke="#f1f5f9" stroke-width="1"/>`;
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const gridColor = isDark ? 'rgba(255,255,255,.08)' : '#f1f5f9';
+    gridLines+=`<line x1="${padL}" y1="${gy}" x2="${W-padR}" y2="${gy}" stroke="${gridColor}" stroke-width="1"/>`;
   });
 
   const svg=`
