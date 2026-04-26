@@ -433,6 +433,13 @@ select.fi3{appearance:none;-webkit-appearance:none;}
 .btn-approve:hover{background:var(--green);color:#fff;}
 .btn-reject{padding:6px 12px;background:var(--redbg);color:var(--red);border:1px solid rgba(255,59,48,0.2);border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;}
 .btn-reject:hover{background:var(--red);color:#fff;}
+.reg-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;}
+.reg-card-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.reg-card-phone{font-weight:700;font-size:15px;flex:1;}
+.reg-card-meta{font-size:11px;color:var(--text3);margin-bottom:10px;}
+.reg-card-actions{display:flex;gap:8px;}
+.reg-card-actions .btn-approve{flex:1;padding:10px;font-size:13px;text-align:center;}
+.reg-card-actions .btn-reject{padding:10px 14px;font-size:13px;}
 .btn-del{padding:5px 10px;background:transparent;color:var(--text4);border:none;border-radius:7px;font-size:12px;cursor:pointer;transition:all .15s;}
 .btn-del:hover{background:var(--redbg);color:var(--red);}
 
@@ -1705,12 +1712,9 @@ html.theme-tr .pipe-table tbody tr{
         <button class="btn-add" onclick="loadRegistrations()" style="font-size:11px;padding:6px 14px;">↻ Шинэчлэх</button>
       </div>
       <div class="list-wrap" style="margin-bottom:16px;">
-        <table class="pipe-table">
-          <thead><tr><th>Утас</th><th>Нууц үг</th><th>Plan</th><th>Огноо</th><th>Статус</th><th>Үйлдэл</th></tr></thead>
-          <tbody id="regs-table-body">
-            <tr><td colspan="6" style="text-align:center;color:var(--text3);padding:30px;font-size:13px;">⏳ Уншиж байна...</td></tr>
-          </tbody>
-        </table>
+        <div id="regs-table-body">
+          <div style="text-align:center;color:var(--text3);padding:30px;font-size:13px;">⏳ Уншиж байна...</div>
+        </div>
       </div>
 
       <!-- ── MASS MESSAGE PANEL ── -->
@@ -4140,7 +4144,9 @@ function renderAnalytics(){
 function loadUsers(){
   var tbody=document.getElementById('users-table-body');
   tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:28px;">⏳ Уншиж байна...</td></tr>';
-  gasFetch(GAS_URL()+'?action=list')
+  var _gu=localStorage.getItem('pd_gas_url');
+  if(!_gu||_gu.indexOf('script.google.com')===-1){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--amber);padding:28px;">⚙️ GAS URL тохируулна уу (Settings)</td></tr>';updateUserStats([]);return;}
+  gasFetch(_gu+'?action=list')
     .then(function(r){return r.json();})
     .then(function(data){
       if(!data||!data.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:28px;">Хэрэглэгч олдсонгүй</td></tr>';updateUserStats([]);return;}
@@ -4192,39 +4198,42 @@ function delUser(pw){
 
 /* ── REGISTRATIONS ── */
 function loadRegistrations(){
-  var tbody=document.getElementById('regs-table-body');
-  tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:24px;">⏳ Уншиж байна...</td></tr>';
-  gasFetch(GAS_URL()+'?action=listRegistrations')
+  var container=document.getElementById('regs-table-body');
+  container.innerHTML='<div style="text-align:center;color:var(--text3);padding:24px;">⏳ Уншиж байна...</div>';
+  var _gu=localStorage.getItem('pd_gas_url');
+  if(!_gu||_gu.indexOf('script.google.com')===-1){container.innerHTML='<div style="text-align:center;color:var(--amber);padding:24px;">⚙️ GAS URL тохируулна уу</div>';updatePendingBadge(0);return;}
+  gasFetch(_gu+'?action=listRegistrations')
     .then(function(r){return r.json();})
     .then(function(regs){
-      if(!regs||!regs.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:24px;">Бүртгэл байхгүй</td></tr>';updatePendingBadge(0);return;}
+      if(!regs||!regs.length){container.innerHTML='<div style="text-align:center;color:var(--text3);padding:24px;">Бүртгэл байхгүй</div>';updatePendingBadge(0);return;}
       var pending=regs.filter(function(r){return r.status==='PENDING';}).length;
       updatePendingBadge(pending);
-      tbody.innerHTML='';
+      container.innerHTML='';
       regs.forEach(function(r,idx){
         var isPending=r.status==='PENDING';
-        var tr=document.createElement('tr');
         var planCls=r.plan==='pro'?'tag-pro':r.plan==='business'?'tag-business':'tag-lite';
-        tr.innerHTML='<td><strong>'+x(r.phone)+'</strong></td>'
-          +'<td class="mono" style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+x(r.pw)+'</td>'
-          +'<td><span class="tag-pill '+planCls+'">'+(r.plan||'pro').toUpperCase()+'</span></td>'
-          +'<td style="font-size:11px;color:var(--text3);">'+x(r.date||'—')+'</td>'
-          +'<td>'+(isPending?'<span class="tag-pill tag-pending">⏳ Хүлээгдэж байна</span>':'<span class="tag-pill tag-ok">✓ Баталгаажсан</span>')+'</td>'
-          +'<td></td>';
+        var card=document.createElement('div');card.className='reg-card';
+        var topHtml='<div class="reg-card-top">'
+          +'<span class="reg-card-phone">'+x(r.phone)+'</span>'
+          +'<span class="tag-pill '+planCls+'">'+(r.plan||'pro').toUpperCase()+'</span>'
+          +(isPending?'<span class="tag-pill tag-pending">⏳</span>':'<span class="tag-pill tag-ok">✓</span>')
+          +'</div>'
+          +'<div class="reg-card-meta">🔑 '+x(r.pw)+'&nbsp;&nbsp;·&nbsp;&nbsp;'+x(r.date||'—')+'</div>';
+        card.innerHTML=topHtml;
         if(isPending){
-          var td=tr.cells[5];
+          var actDiv=document.createElement('div');actDiv.className='reg-card-actions';
           var bA=document.createElement('button');bA.className='btn-approve';bA.textContent='✓ Зөвшөөрөх';
           bA.dataset.phone=r.phone;bA.dataset.pw=r.pw;bA.dataset.plan=r.plan||'pro';bA.dataset.idx=idx;
           bA.addEventListener('click',function(){approveReg(this.dataset.phone,this.dataset.pw,this.dataset.plan,this.dataset.idx);});
-          var bR=document.createElement('button');bR.className='btn-reject';bR.textContent='✕ Татгалзах';
+          var bR=document.createElement('button');bR.className='btn-reject';bR.textContent='✕';
           bR.dataset.phone=r.phone;bR.dataset.idx=idx;
           bR.addEventListener('click',function(){rejectReg(this.dataset.phone,this.dataset.idx);});
-          var wrap=document.createElement('div');wrap.className='action-row';wrap.appendChild(bA);wrap.appendChild(bR);td.appendChild(wrap);
-        }else{tr.cells[5].innerHTML='<span style="font-size:11px;color:var(--text3);">—</span>';}
-        tbody.appendChild(tr);
+          actDiv.appendChild(bA);actDiv.appendChild(bR);card.appendChild(actDiv);
+        }
+        container.appendChild(card);
       });
     })
-    .catch(function(){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--red);padding:24px;">⚠ GAS холбогдсонгүй</td></tr>';});
+    .catch(function(){container.innerHTML='<div style="text-align:center;color:var(--red);padding:24px;">⚠ GAS холбогдсонгүй</div>';});
 }
 
 function updatePendingBadge(count){
@@ -4236,10 +4245,11 @@ function updatePendingBadge(count){
 }
 
 async function approveReg(phone,pw,plan,idx){
-  var expiry=Date.now()+30*86400000;var uid=phone.replace(/\D/g,'');
-  try{await gasFetch(GAS_URL()+'?action=approveAndAdd&phone='+encodeURIComponent(phone)+'&pw='+encodeURIComponent(pw)+'&plan='+encodeURIComponent(plan)+'&uid='+encodeURIComponent(uid)+'&expiry='+expiry+'&days=30',{mode:'no-cors'});}catch(e){}
+  var days=plan==='starter'?30:90;
+  var expiry=Date.now()+days*86400000;var uid=phone.replace(/\D/g,'');
+  try{await gasFetch(GAS_URL()+'?action=approveAndAdd&phone='+encodeURIComponent(phone)+'&pw='+encodeURIComponent(pw)+'&plan='+encodeURIComponent(plan)+'&uid='+encodeURIComponent(uid)+'&expiry='+expiry+'&days='+days,{mode:'no-cors'});}catch(e){}
   // Telegram мэдэгдэл
-  var msg='✅ Бүртгэл баталгаажлаа!\n\n📞 Утас: '+phone+'\n🔑 Нууц үг: '+pw+'\n📦 Plan: '+plan.toUpperCase()+'\n🕐 Хугацаа: 30 хоног\n\n👉 Хэрэглэгч рүү дамжуулна уу:\n🔗 https://productdrops.netlify.app/landing';
+  var msg='✅ Бүртгэл баталгаажлаа!\n\n📞 Утас: '+phone+'\n🔑 Нууц үг: '+pw+'\n📦 Plan: '+plan.toUpperCase()+'\n🕐 Хугацаа: '+days+' хоног\n\n👉 Хэрэглэгч рүү дамжуулна уу:\n🔗 https://productdrops.netlify.app/landing';
   try{await fetch('https://api.telegram.org/bot'+TELEGRAM_BOT_TOKEN+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:TELEGRAM_CHAT_ID,text:msg})});}catch(e){}
   toast('✓ '+phone+' баталгаажлаа!');
   setTimeout(function(){loadRegistrations();loadUsers();},1000);
@@ -7360,7 +7370,7 @@ function exportCSV(type){
       'Ямар зүйлд анхаарах хэрэгтэй вэ? Хамгийн яаралтай 2-3 зүйлийг дурдаж, урамшуулалтай дуусга.';
 
     try{
-      var res=await gasFetch(GAS_URL()+'?action=claude&prompt='+encodeURIComponent(prompt.substring(0,800)));
+      var res=await gasFetch(GAS_URL()+'?action=claude&q='+encodeURIComponent(prompt.substring(0,800)));
       var data=await res.json();
       var text=data.text||'';
       if(!text) throw new Error('empty');
@@ -9069,11 +9079,13 @@ function injectReminderBtns(){
   var _ctxCache = { done: [], todo: [] };
 
   async function loadAIContext(){
+    var _gasUrl = localStorage.getItem('pd_gas_url');
+    if(!_gasUrl || _gasUrl.indexOf('script.google.com') === -1) return { active:0, expiring:0, expiring3:0, newThisMonth:0, pendingCount:0, planCount:{}, monthlyRevenue:0, ctxDone:[], ctxTodo:[] };
     try {
       // Stats + Context хавтгай дуудна
       var [statsRes, ctxRes] = await Promise.all([
-        gasFetch(GAS_URL() + '?action=getStats'),
-        gasFetch(GAS_URL() + '?action=getContext')
+        gasFetch(_gasUrl + '?action=getStats'),
+        gasFetch(_gasUrl + '?action=getContext')
       ]);
       var s = await statsRes.json();
       var ctx = await ctxRes.json();
@@ -9597,8 +9609,8 @@ function injectReminderBtns(){
     try {
       var url = GAS_URL() + '?action=contentPlan'
         + (focus ? '&focus=' + encodeURIComponent(focus) : '');
-      var r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'},
-        body: 'action=contentPlan' + (focus ? '&focus=' + encodeURIComponent(focus) : '') });
+      var r = await gasFetch(url, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body: focus ? 'focus=' + encodeURIComponent(focus) : '' });
       var data = await r.json();
       if(data.ok){
         if(resp)  resp.style.display = 'block';
@@ -9633,9 +9645,8 @@ function injectReminderBtns(){
     if(btn){ btn.disabled = true; btn.textContent = 'Шинжилж байна...'; }
 
     try {
-      var r = await gasFetch(GAS_URL(), { method:'POST',
-        headers:{'Content-Type':'application/x-www-form-urlencoded'},
-        body: 'action=productResearch&product=' + encodeURIComponent(prod) });
+      var r = await gasFetch(GAS_URL() + '?action=productResearch&product=' + encodeURIComponent(prod), { method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:'' });
       var data = await r.json();
       if(data.ok){
         if(resp)  resp.style.display = 'block';
@@ -9840,12 +9851,12 @@ async function ppLoad(){
   var grid=document.getElementById('pp-grid');
   grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text3);font-size:13px;">⏳ Бараа татаж байна...</div>';
 
-  // ── 1. GAS-аас татах (action=get_products) — 8s timeout ──
+  // ── 1. GAS-аас татах (action=get_products) — 15s timeout ──
   try{
     var gasUrl=GAS_URL();
     if(gasUrl){
       var ctrl1=new AbortController();
-      var t1=setTimeout(function(){ctrl1.abort();},8000);
+      var t1=setTimeout(function(){ctrl1.abort();},15000);
       try{
         var r=await fetch(gasUrl+'?action=get_products',{credentials:'omit',signal:ctrl1.signal});
         clearTimeout(t1);
