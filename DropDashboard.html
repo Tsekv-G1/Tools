@@ -18,6 +18,22 @@
 @media(max-width:768px){
   .topbar{padding-top:env(safe-area-inset-top,0px);}
 }
+/* ── Global touch improvements ── */
+button,a,[onclick],[role="button"],
+.ni,.ttab,.tb-rp-btn,.btn-add,.bsave,.vb,.kplus,
+.mbn-item,.mob-nav-item,.sb-tm-btn,.opc-mbtn{
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+/* Prevent text selection on UI elements during touch */
+.topbar,.sidebar-strip,.mob-bottom-nav,.mob-sidebar{
+  user-select:none;-webkit-user-select:none;
+}
+/* Smooth momentum scrolling on all scroll containers */
+.content,.mob-sidebar,.notif-dropdown,.mbox,.mcard,.kcol,.an-card{
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-y:contain;
+}
 </style>
 <link rel="manifest" href="manifest.json"/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -74,7 +90,8 @@
 [data-theme="dark"] .status-btn.active{background:var(--bg4);border-color:var(--border2);color:var(--text);}
 [data-theme="dark"] .pf-btn.on{background:var(--bg4);border-color:var(--border2);color:var(--text);}
 [data-theme="dark"] .ai-run-btn{background:var(--gold);color:#fff;}
-html,body{height:100%;overflow:hidden;}
+html,body{height:100%;height:100dvh;overflow:hidden;}
+body{overscroll-behavior:none;}
 body{
   font-family:'Plus Jakarta Sans',sans-serif;
   color:var(--text);
@@ -274,10 +291,180 @@ body{
 /* STATS GRID */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:22px;}
 .scard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px;cursor:pointer;transition:all .2s cubic-bezier(.25,.46,.45,.94);box-shadow:var(--shadow);}
-.scard:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
+.scard:hover{} /* overridden in desktop improvements below */
 .sc-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:11px;}
 .sc-icon svg{width:16px;height:16px;fill:none;stroke-width:2;}
 .sc-label{font-size:11px;color:var(--text3);font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px;}
+/* ── OPPORTUNITY COST METER ── */
+.opc-wrap{margin-bottom:14px;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);background:var(--bg2);border:1px solid var(--border);}
+[data-theme="dark"] .opc-wrap{background:#0b0b10;border-color:rgba(255,159,10,0.22);}
+.opc-header{display:flex;align-items:center;gap:9px;padding:10px 14px;cursor:pointer;user-select:none;transition:background .15s;}
+.opc-header:hover{background:rgba(0,0,0,0.02);}
+[data-theme="dark"] .opc-header:hover{background:rgba(255,255,255,0.02);}
+.opc-dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0;animation:pulse 1.5s infinite;}
+[data-theme="dark"] .opc-dot{background:#FF9F0A;}
+.opc-title{font-size:11px;font-weight:700;color:var(--text);flex:1;letter-spacing:.01em;}
+[data-theme="dark"] .opc-title{color:rgba(255,159,10,0.85);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;}
+.opc-hright{display:flex;align-items:center;gap:8px;}
+.opc-clock{font-size:10px;font-family:'DM Mono',monospace;color:var(--text4);}
+[data-theme="dark"] .opc-clock{color:rgba(255,159,10,0.38);}
+.opc-gear{width:22px;height:22px;border-radius:6px;border:1px solid var(--border2);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text3);transition:all .15s;}
+.opc-gear:hover{background:var(--bg4);color:var(--text);}
+[data-theme="dark"] .opc-gear{border-color:rgba(255,159,10,0.18);color:rgba(255,159,10,0.5);}
+[data-theme="dark"] .opc-gear:hover{background:rgba(255,159,10,0.1);color:#FF9F0A;}
+.opc-body{border-top:1px solid var(--border);}
+[data-theme="dark"] .opc-body{border-color:rgba(255,159,10,0.1);}
+/* Settings panel */
+.opc-settings{padding:12px 14px;border-bottom:1px solid var(--border);display:none;background:var(--bg3);}
+[data-theme="dark"] .opc-settings{border-color:rgba(255,159,10,0.1);background:rgba(255,159,10,0.04);}
+.opc-settings-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.opc-fi-wrap{display:flex;flex-direction:column;gap:3px;}
+.opc-fi-lbl{font-size:9px;font-weight:700;letter-spacing:.07em;color:var(--text3);text-transform:uppercase;}
+[data-theme="dark"] .opc-fi-lbl{color:rgba(255,159,10,0.45);font-family:'DM Mono',monospace;}
+.opc-fi{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:7px;padding:5px 8px;font-size:12px;font-family:'DM Mono',monospace;color:var(--text);outline:none;transition:border-color .15s;}
+.opc-fi:focus{border-color:var(--gold);}
+[data-theme="dark"] .opc-fi{background:#0f0f17;border-color:rgba(255,159,10,0.2);color:#FF9F0A;}
+[data-theme="dark"] .opc-fi:focus{border-color:rgba(255,159,10,0.6);}
+.opc-apply-btn{margin-top:8px;padding:5px 14px;background:var(--gold);color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;}
+/* Main content */
+.opc-content{padding:12px 14px 13px;}
+.opc-grid{display:grid;grid-template-columns:1fr 130px;gap:0;}
+.opc-lbl{font-size:9px;letter-spacing:.08em;color:var(--text3);margin-bottom:3px;text-transform:uppercase;}
+[data-theme="dark"] .opc-lbl{color:rgba(255,159,10,0.38);font-family:'DM Mono',monospace;}
+.opc-num{font-size:26px;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:-.02em;line-height:1;color:var(--red);}
+[data-theme="dark"] .opc-num{color:#FF4F44;}
+.opc-num.pos{color:var(--green)!important;}
+[data-theme="dark"] .opc-num.pos{color:#32D96A!important;}
+.opc-rate{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);margin-top:5px;}
+[data-theme="dark"] .opc-rate{color:rgba(255,159,10,0.4);}
+.opc-chartbox{position:relative;height:76px;margin-top:10px;}
+.opc-stats{border-left:1px solid var(--border);padding-left:12px;display:flex;flex-direction:column;gap:9px;}
+[data-theme="dark"] .opc-stats{border-color:rgba(255,159,10,0.12);}
+.opc-sl{font-size:9px;letter-spacing:.07em;color:var(--text3);text-transform:uppercase;}
+[data-theme="dark"] .opc-sl{color:rgba(255,159,10,0.35);font-family:'DM Mono',monospace;}
+.opc-sv{font-size:13px;font-weight:700;font-family:'DM Mono',monospace;color:var(--text);margin-top:1px;}
+.opc-sv.neg{color:var(--red)!important;}
+.opc-sv.pos{color:var(--green)!important;}
+[data-theme="dark"] .opc-sv{color:#FF9F0A;}
+[data-theme="dark"] .opc-sv.neg{color:#FF4F44!important;}
+[data-theme="dark"] .opc-sv.pos{color:#32D96A!important;}
+.opc-prog{height:2px;background:var(--bg4);border-radius:2px;margin-top:4px;overflow:hidden;}
+[data-theme="dark"] .opc-prog{background:rgba(255,255,255,0.06);}
+.opc-prog-fill{height:100%;border-radius:2px;background:var(--gold);transition:width .5s cubic-bezier(.25,.46,.45,.94);}
+.opc-mrow{display:flex;align-items:center;gap:4px;margin-top:2px;}
+.opc-mbtn{width:22px;height:22px;border-radius:5px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;line-height:1;transition:all .12s;-webkit-tap-highlight-color:transparent;}
+.opc-mbtn:hover{background:var(--bg4);}
+.opc-mbtn:active{transform:scale(.9);}
+[data-theme="dark"] .opc-mbtn{border-color:rgba(255,159,10,0.22);background:rgba(255,159,10,0.07);color:#FF9F0A;}
+[data-theme="dark"] .opc-mbtn:hover{background:rgba(255,159,10,0.15);}
+.opc-mval{font-size:14px;font-weight:700;font-family:'DM Mono',monospace;color:var(--text);min-width:28px;text-align:center;}
+[data-theme="dark"] .opc-mval{color:#FF9F0A;}
+.opc-step-hint{font-size:9px;color:var(--text4);margin-top:2px;font-family:'DM Mono',monospace;}
+[data-theme="dark"] .opc-step-hint{color:rgba(255,159,10,0.28);}
+
+/* ── Number flash on update ── */
+@keyframes opc-num-flash{
+  0%{opacity:1;transform:translateY(0);}
+  30%{opacity:.5;transform:translateY(2px);}
+  100%{opacity:1;transform:translateY(0);}
+}
+.opc-num.flash{animation:opc-num-flash .28s ease-out;}
+
+/* ── Projection row ── */
+.opc-proj{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.opc-proj-chip{flex:1;min-width:0;background:var(--redbg);border:1px solid rgba(255,59,48,0.15);border-radius:8px;padding:5px 8px;}
+.opc-proj-chip.pos{background:var(--greenbg);border-color:rgba(52,199,89,0.18);}
+[data-theme="dark"] .opc-proj-chip{background:rgba(255,79,68,0.07);border-color:rgba(255,79,68,0.18);}
+[data-theme="dark"] .opc-proj-chip.pos{background:rgba(50,217,106,0.07);border-color:rgba(50,217,106,0.18);}
+.opc-proj-lbl{font-size:8px;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);font-family:'DM Mono',monospace;font-weight:600;}
+[data-theme="dark"] .opc-proj-lbl{color:rgba(255,159,10,0.38);}
+.opc-proj-val{font-size:12px;font-weight:700;font-family:'DM Mono',monospace;color:var(--red);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.opc-proj-val.pos{color:var(--green);}
+[data-theme="dark"] .opc-proj-val{color:#FF4F44;}
+[data-theme="dark"] .opc-proj-val.pos{color:#32D96A;}
+
+/* ── Progress ring ── */
+.opc-ring-wrap{display:flex;align-items:center;gap:7px;margin-top:3px;}
+.opc-ring{flex-shrink:0;}
+.opc-ring-track{fill:none;stroke:var(--bg4);stroke-width:3;}
+[data-theme="dark"] .opc-ring-track{stroke:rgba(255,255,255,0.06);}
+.opc-ring-fill{fill:none;stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .6s cubic-bezier(.25,.46,.45,.94),stroke .3s;}
+
+/* ── Velocity badge ── */
+.opc-vel{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;font-family:'DM Mono',monospace;padding:2px 5px;border-radius:5px;margin-left:4px;vertical-align:middle;transition:background .3s,color .3s;}
+.opc-vel.stable{background:var(--bg4);color:var(--text3);}
+.opc-vel.worse{background:var(--redbg);color:var(--red);}
+.opc-vel.better{background:var(--greenbg);color:var(--green);}
+[data-theme="dark"] .opc-vel.worse{background:rgba(255,79,68,0.12);color:#FF4F44;}
+[data-theme="dark"] .opc-vel.better{background:rgba(50,217,106,0.12);color:#32D96A;}
+
+/* ── Heat with glow ── */
+@keyframes opc-heat-glow{
+  0%,100%{text-shadow:0 0 0 transparent;}
+  50%{text-shadow:0 0 8px currentColor;}
+}
+.opc-sv.heat-max{animation:opc-heat-glow 1.4s infinite;}
+
+/* ═══════════════════════════════════════
+   PRESSURE SYSTEM
+═══════════════════════════════════════ */
+
+/* ── Severity tint on card ── */
+.opc-wrap{transition:border-color .8s,box-shadow .8s;}
+.opc-wrap.sev-1{border-color:rgba(255,59,48,0.30)!important;box-shadow:0 2px 12px rgba(255,59,48,0.08),0 1px 3px rgba(0,0,0,0.04)!important;}
+.opc-wrap.sev-2{border-color:rgba(255,59,48,0.55)!important;box-shadow:0 2px 16px rgba(255,59,48,0.16),0 1px 3px rgba(0,0,0,0.04)!important;}
+.opc-wrap.sev-3{border-color:rgba(255,59,48,0.80)!important;box-shadow:0 4px 24px rgba(255,59,48,0.26),0 1px 3px rgba(0,0,0,0.04)!important;}
+@keyframes opc-sev4-pulse{0%,100%{box-shadow:0 4px 28px rgba(255,59,48,0.30);}50%{box-shadow:0 4px 36px rgba(255,59,48,0.55),0 0 0 2px rgba(255,59,48,0.18);}}
+.opc-wrap.sev-4{border-color:rgba(255,59,48,1)!important;animation:opc-sev4-pulse 2s infinite;}
+[data-theme="dark"] .opc-wrap.sev-1{border-color:rgba(255,79,68,0.35)!important;}
+[data-theme="dark"] .opc-wrap.sev-2{border-color:rgba(255,79,68,0.60)!important;}
+[data-theme="dark"] .opc-wrap.sev-3{border-color:rgba(255,79,68,0.85)!important;}
+[data-theme="dark"] .opc-wrap.sev-4{border-color:#FF4F44!important;}
+
+/* ── Header tint ── */
+.opc-header{transition:background .8s;}
+.opc-wrap.sev-3 .opc-header,.opc-wrap.sev-4 .opc-header{background:rgba(255,59,48,0.04);}
+[data-theme="dark"] .opc-wrap.sev-3 .opc-header,[data-theme="dark"] .opc-wrap.sev-4 .opc-header{background:rgba(255,79,68,0.06);}
+
+/* ── Loss streak badge in header ── */
+.opc-streak{font-size:9px;font-family:'DM Mono',monospace;font-weight:700;padding:2px 7px;border-radius:99px;background:rgba(255,59,48,0.10);color:var(--red);border:1px solid rgba(255,59,48,0.20);white-space:nowrap;display:none;}
+.opc-streak.visible{display:inline-flex;align-items:center;gap:3px;}
+[data-theme="dark"] .opc-streak{background:rgba(255,79,68,0.10);color:#FF4F44;border-color:rgba(255,79,68,0.22);}
+
+/* ── Milestone toast ── */
+@keyframes opc-toast-in{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
+@keyframes opc-toast-out{from{opacity:1;transform:translateX(0);}to{opacity:0;transform:translateX(20px);}}
+.opc-toast-zone{position:absolute;top:8px;right:8px;display:flex;flex-direction:column;gap:5px;pointer-events:none;z-index:10;}
+.opc-toast{background:#FF3B30;color:#fff;font-size:10px;font-weight:700;font-family:'DM Mono',monospace;padding:6px 10px;border-radius:9px;display:flex;align-items:center;gap:5px;box-shadow:0 4px 16px rgba(255,59,48,0.40);animation:opc-toast-in .28s cubic-bezier(.25,.46,.45,.94) forwards;white-space:nowrap;letter-spacing:.01em;}
+.opc-toast.out{animation:opc-toast-out .24s ease-in forwards;}
+[data-theme="dark"] .opc-toast{background:#FF4F44;}
+.opc-toast-icon{font-size:13px;}
+
+/* ── Breakeven gap bar ── */
+.opc-be-gap{margin-top:8px;background:rgba(255,59,48,0.06);border:1px solid rgba(255,59,48,0.12);border-radius:9px;padding:6px 9px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+[data-theme="dark"] .opc-be-gap{background:rgba(255,79,68,0.06);border-color:rgba(255,79,68,0.15);}
+.opc-be-gap-lbl{font-size:8px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);font-family:'DM Mono',monospace;}
+[data-theme="dark"] .opc-be-gap-lbl{color:rgba(255,159,10,0.38);}
+.opc-be-gap-right{display:flex;align-items:center;gap:8px;}
+.opc-be-gap-num{font-size:12px;font-weight:800;font-family:'DM Mono',monospace;color:var(--red);}
+.opc-be-gap-num.zero{color:var(--green);}
+[data-theme="dark"] .opc-be-gap-num{color:#FF4F44;}
+[data-theme="dark"] .opc-be-gap-num.zero{color:#32D96A;}
+.opc-be-bar-wrap{width:64px;height:4px;background:var(--bg4);border-radius:4px;overflow:hidden;}
+[data-theme="dark"] .opc-be-bar-wrap{background:rgba(255,255,255,0.06);}
+.opc-be-bar-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.25,.46,.45,.94),background .4s;}
+
+/* ── Savings chip ── */
+.opc-save-chip{margin-top:6px;background:rgba(52,199,89,0.08);border:1px solid rgba(52,199,89,0.20);border-radius:9px;padding:6px 9px;display:flex;align-items:center;gap:7px;}
+[data-theme="dark"] .opc-save-chip{background:rgba(50,217,106,0.07);border-color:rgba(50,217,106,0.18);}
+.opc-save-icon{font-size:14px;flex-shrink:0;}
+.opc-save-text{flex:1;min-width:0;}
+.opc-save-lbl{font-size:8px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);font-family:'DM Mono',monospace;}
+[data-theme="dark"] .opc-save-lbl{color:rgba(255,159,10,0.38);}
+.opc-save-val{font-size:11px;font-weight:800;font-family:'DM Mono',monospace;color:var(--green);margin-top:1px;}
+[data-theme="dark"] .opc-save-val{color:#32D96A;}
+
+
 .sc-val{font-size:30px;font-weight:800;letter-spacing:-1.2px;line-height:1;}
 .sc-sub{font-size:11px;color:var(--text4);margin-top:5px;font-weight:500;}
 
@@ -325,10 +512,23 @@ body{
 .kplus:hover{background:rgba(0,0,0,0.08);color:var(--text);}
 
 /* TASK CARD */
-.tc{background:var(--bg2);border:1px solid var(--border);border-radius:13px;padding:14px;margin-bottom:8px;cursor:default;transition:all .2s cubic-bezier(.25,.46,.45,.94);box-shadow:0 1px 4px rgba(0,0,0,0.04);}
-.tc:hover{border-color:var(--border2);box-shadow:0 4px 18px rgba(0,0,0,0.08);transform:translateY(-1px);}
+.tc{background:var(--bg2);border:1px solid var(--border);border-radius:13px;padding:14px;margin-bottom:8px;cursor:pointer;transition:all .2s cubic-bezier(.25,.46,.45,.94);box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+.tc:hover{} /* overridden in desktop improvements below */
 .tc:last-child{margin-bottom:0;}
-.tbadge{display:inline-flex;font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;margin-bottom:8px;}
+/* Collapsed card — hide body, keep header */
+.tc.collapsed .tsub,
+.tc.collapsed .tc-stages,
+.tc.collapsed .tdue,
+.tc.collapsed .ttrack,
+.tc.collapsed .tpr,
+.tc.collapsed .tfoot{display:none;}
+.tc.collapsed .tname{margin-bottom:0;}
+.tc.collapsed{opacity:.78;}
+.tc.collapsed:hover{opacity:1;}
+/* Collapse chevron indicator */
+.tc-chev{float:right;width:16px;height:16px;color:var(--text4);transition:transform .2s;margin-top:1px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;margin-left:4px;}
+.tc.collapsed .tc-chev{transform:rotate(-90deg);color:var(--text3);}
+.tc-chev polyline{stroke:currentColor;}.tbadge{display:inline-flex;font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;margin-bottom:8px;}.tc-badge-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
 .bhi{background:var(--redbg);color:var(--red);}
 .bme{background:var(--amberbg);color:var(--amber);}
 .blo{background:var(--greenbg);color:var(--green);}
@@ -749,6 +949,10 @@ html.theme-tr .pipe-table tbody tr{
   /* Modal */
   .mbox{width:calc(100vw - 20px)!important;max-width:100%!important;max-height:88vh!important;overflow-y:auto!important;padding:18px!important;border-radius:20px!important;}
   .mcard{width:calc(100vw - 20px)!important;max-width:100%!important;max-height:88vh!important;overflow-y:auto!important;padding:18px!important;border-radius:20px!important;}
+  /* iOS sheet: slide up from bottom */
+  .modal-wrap{align-items:flex-end!important;padding-bottom:env(safe-area-inset-bottom,0px);}
+  .mbox,.mcard{border-bottom-left-radius:0!important;border-bottom-right-radius:0!important;border-radius:22px 22px 0 0!important;margin-bottom:0!important;}
+  @keyframes aup{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
 
   /* Calendar */
   .cnt-cal-grid{gap:2px;}
@@ -797,49 +1001,113 @@ html.theme-tr .pipe-table tbody tr{
   #cnt-stats{grid-template-columns:repeat(2,1fr)!important;}
 
   /* Toast — bottom nav-ын дээр гарна */
-  .toast{bottom:calc(70px + env(safe-area-inset-bottom,0px));right:14px;max-width:calc(100vw - 28px);}
+  .toast{bottom:calc(68px + env(safe-area-inset-bottom,0px));right:14px;max-width:calc(100vw - 28px);}
 
   /* PWA prompt — bottom nav дээр */
-  .pwa-prompt{bottom:calc(70px + env(safe-area-inset-bottom,0px));left:12px;right:12px;width:auto;}
+  .pwa-prompt{bottom:calc(68px + env(safe-area-inset-bottom,0px));left:12px;right:12px;width:auto;}
 
   /* Req-toast — narrow screen overflow засах */
   .req-toast{right:10px;left:10px;width:auto;}
+
+  /* Prevent horizontal overflow on all pages */
+  .page{max-width:100%;overflow-x:hidden;}
+  .tc{word-break:break-word;}
+  .tsub{word-break:break-word;}
+  .tname{word-break:break-word;}
+  
+  /* Stat cards — prevent overflow */
+  .scard{max-width:100%;overflow:hidden;}
+  .sc-val{font-size:18px!important;}
+
+  /* Fix rm-exit-bar overflow on small screens */
+  .rm-exit-bar{flex-direction:column;gap:12px;}
+  .rm-exit-countdown{justify-content:center;}
+  
+  /* Fix rm-stat-row overflow */
+  .rm-stat-row{grid-template-columns:1fr 1fr!important;}
+  .rm-bn-grid{grid-template-columns:1fr!important;}
+  .rm-target-row{grid-template-columns:1fr 1fr!important;}
+  
+  /* Opportunity cost meter */
+  .opc-grid{grid-template-columns:1fr!important;}
+  .opc-proj{flex-direction:column;gap:4px;}
+  
+  /* Fix brand logo overflow */
+  .brand-nav-pill{max-width:calc(100vw - 100px);}
 }
 
-/* ── BOTTOM NAV BAR (mobile only) ── */
+/* ── BOTTOM NAV BAR (mobile only) — iOS Standard ── */
 .mob-bottom-nav{
+  transition:transform .25s cubic-bezier(.25,.46,.45,.94);
   display:none;
   position:fixed;bottom:0;left:0;right:0;
-  height:60px;
-  background:var(--bg2);
-  border-top:1px solid var(--border);
+  height:calc(56px + env(safe-area-inset-bottom,0px));
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid rgba(0,0,0,0.08);
   z-index:990;
   flex-direction:row;
   align-items:stretch;
-  box-shadow:0 -4px 20px rgba(0,0,0,0.08);
-  -webkit-overflow-scrolling:touch;
-  overflow-x:auto;
-  padding:0 4px;
+  box-shadow:0 -1px 0 rgba(0,0,0,0.06);
+}
+[data-theme="dark"] .mob-bottom-nav{
+  background:rgba(18,18,24,0.94);
+  border-top:1px solid rgba(255,255,255,0.07);
+  box-shadow:0 -1px 0 rgba(255,255,255,0.05);
 }
 .mob-bottom-nav::-webkit-scrollbar{display:none;}
-[data-theme="dark"] .mob-bottom-nav{background:var(--bg2);border-top:1px solid var(--border2);}
 .mbn-item{
-  flex:1;min-width:52px;max-width:72px;
+  flex:1;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:2px;cursor:pointer;
-  padding:6px 2px;
-  color:var(--text3);font-size:10px;font-weight:600;
+  gap:3px;cursor:pointer;
+  padding:8px 4px 6px;
+  color:var(--text4);font-size:9.5px;font-weight:600;letter-spacing:.01em;
   transition:color .15s;
   -webkit-tap-highlight-color:transparent;
-  border-radius:10px;
-  margin:4px 2px;
+  touch-action:manipulation;
+  user-select:none;-webkit-user-select:none;
+  position:relative;
+  min-width:0;
 }
-.mbn-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0;}
+.mbn-item svg{
+  width:22px;height:22px;
+  stroke:currentColor;fill:none;stroke-width:1.7;
+  flex-shrink:0;
+  transition:transform .18s cubic-bezier(.34,1.56,.64,1);
+}
+.mbn-item span{
+  display:block;
+  font-size:9.5px;font-weight:600;
+  line-height:1;
+  transition:color .15s;
+  white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;
+  max-width:100%;
+}
+/* Active state */
 .mbn-item.active{color:var(--gold);}
-.mbn-item.active svg{stroke:var(--gold);}
+.mbn-item.active svg{stroke:var(--gold);transform:scale(1.08);}
+/* Active indicator dot above icon */
+.mbn-item.active::before{
+  content:'';
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:20px;height:2.5px;
+  background:var(--gold);
+  border-radius:0 0 3px 3px;
+}
+/* AI item special color */
+#mbn-ai.active{color:var(--purple);}
+#mbn-ai.active svg{stroke:var(--purple);}
+#mbn-ai.active::before{background:var(--purple);}
+/* Touch feedback */
+.mbn-item:active svg{transform:scale(0.88);}
+.mbn-item.active:active svg{transform:scale(0.96);}
 
 @media(max-width:768px){
   .mob-bottom-nav{display:flex;}
+  .content{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px));}
 }
 
 @media(max-width:480px){
@@ -883,11 +1151,23 @@ html.theme-tr .pipe-table tbody tr{
   /* AI page mobile */
   .ai-wrap{padding:12px 0 80px;}
   .ai-header h1{font-size:18px;}
+  /* ── Prevent iOS auto-zoom on input focus (requires font-size ≥ 16px) ── */
+  input,select,textarea,
+  .fi2,.fi3,.cnt-fi,.cnt-ta,.ssel,.ai-av-select,.ai-av-textarea,
   #cal-confirm-box input[type="date"],
   #cal-confirm-box input[type="time"],
-  #cal-confirm-box input[type="text"]{font-size:16px!important;} /* Prevent iOS zoom */
+  #cal-confirm-box input[type="text"]{font-size:16px!important;}
+  /* Disable textarea resize handle — impossible to use on touchscreen */
+  textarea,.cnt-ta,.ai-av-textarea,.ci-ta,.tg-area{resize:none!important;}
   #cal-confirm-box > div[style*="flex"]{flex-direction:column;}
   #cal-yes-btn{width:100%;padding:12px;font-size:14px;}
+  /* Analytics input row — 5 columns → 2 columns on small screens */
+  .inp-row{grid-template-columns:repeat(2,1fr)!important;}
+  /* User stats — 4 columns → 2 columns */
+  .user-stats{grid-template-columns:repeat(2,1fr)!important;}
+  /* Admin grid — 2 columns → 1 column */
+  .admin-grid{grid-template-columns:1fr!important;}
+  .frow2{grid-template-columns:1fr!important;}
 }
 
 /* ── Very small screens (≤375px) ── */
@@ -907,14 +1187,143 @@ html.theme-tr .pipe-table tbody tr{
 .mob-menu-btn{display:none;width:36px;height:36px;border-radius:10px;border:1px solid var(--border2);background:var(--bg4);cursor:pointer;align-items:center;justify-content:center;color:var(--text2);}
 .mob-menu-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;}
 
+/* ══════════════════════════════════════════
+   🖥️  DESKTOP IMPROVEMENTS
+══════════════════════════════════════════ */
+
+/* ── 1. Sidebar icon tooltips (replace ugly browser title tooltips) ── */
+.ni{position:relative;}
+.ni::after{
+  content:attr(title);
+  position:absolute;
+  left:calc(100% + 12px);
+  top:50%;transform:translateY(-50%) translateX(-4px);
+  background:var(--text);color:#fff;
+  font-size:11px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;
+  padding:5px 10px;border-radius:8px;
+  white-space:nowrap;pointer-events:none;
+  opacity:0;transition:opacity .15s,transform .15s;
+  box-shadow:0 4px 14px rgba(0,0,0,0.18);
+  z-index:9999;
+}
+[data-theme="dark"] .ni::after{background:var(--bg4);color:var(--text);box-shadow:0 4px 14px rgba(0,0,0,0.55),0 0 0 1px var(--border2);}
+.ni:hover::after{opacity:1;transform:translateY(-50%) translateX(0);}
+/* Don't show tooltip if no title */
+.ni[title=""]::after,.ni:not([title])::after{display:none;}
+
+/* ── 2. Wide screen content max-width (1440px+) ── */
+@media(min-width:1440px){
+  .content{padding:26px 32px;}
+  .page{max-width:1380px;}
+  .stats{grid-template-columns:repeat(5,1fr);}
+  .kanban{grid-template-columns:repeat(4,1fr);}
+}
+@media(min-width:1800px){
+  .content{padding:28px 40px;}
+  .page{max-width:1600px;}
+}
+
+/* ── 3. Keyboard focus styles — clean, accessible ── */
+:focus-visible{
+  outline:2px solid var(--blue);
+  outline-offset:2px;
+  border-radius:6px;
+}
+button:focus-visible,
+.ni:focus-visible,
+.ttab:focus-visible,
+.mbn-item:focus-visible,
+.tc:focus-visible,
+.scard:focus-visible{
+  outline:2px solid var(--blue);
+  outline-offset:2px;
+}
+/* Remove outline for mouse users */
+:focus:not(:focus-visible){outline:none;}
+
+/* ── 4. Topbar glassmorphism on scroll ── */
+.topbar{transition:background .25s,backdrop-filter .25s,box-shadow .25s;}
+.topbar.scrolled{
+  background:rgba(249,249,251,0.88)!important;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  box-shadow:0 1px 0 var(--border);
+}
+[data-theme="dark"] .topbar.scrolled{
+  background:rgba(10,10,14,0.88)!important;
+}
+
+/* ── 5. Stat card: richer hover with color accent ── */
+.scard{transition:all .22s cubic-bezier(.25,.46,.45,.94);}
+.scard:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,0.10),0 2px 8px rgba(0,0,0,0.06);}
+
+/* ── 6. Kanban card: refined hover ── */
+.tc{transition:all .18s cubic-bezier(.25,.46,.45,.94);}
+.tc:hover{
+  border-color:var(--border2);
+  box-shadow:0 6px 22px rgba(0,0,0,0.09),0 1px 4px rgba(0,0,0,0.05);
+  transform:translateY(-2px);
+}
+
+/* ── 7. Drop/feature card hover ── */
+.drop-card:hover,.fc:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 28px rgba(0,0,0,0.10);
+}
+
+/* ── 8. Sidebar strip: visual separator between pills ── */
+.sb-pill{transition:box-shadow .18s;}
+.sb-pill:hover{box-shadow:0 0 0 1px var(--border2),var(--shadow);}
+
+/* ── 9. Scrollbar: visible on hover for content area ── */
+.content::-webkit-scrollbar{width:5px;}
+.content::-webkit-scrollbar-thumb{background:transparent;border-radius:99px;transition:background .2s;}
+.content:hover::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.14);}
+[data-theme="dark"] .content:hover::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);}
+
+/* ── 10. Button active press feedback ── */
+.btn-add:active,.btn-green:active,.bsave:active,.cnt-bsave:active{
+  transform:translateY(0) scale(0.97)!important;
+  box-shadow:none!important;
+}
+.ni:active{transform:scale(0.88);}
+.ttab:active{transform:scale(0.95);}
+
+/* ── 11. Selection color matches brand ── */
+::selection{background:rgba(255,149,0,0.18);color:var(--text);}
+[data-theme="dark"] ::selection{background:rgba(255,159,10,0.22);}
+
+
+
 /* ══ MOBILE SIDEBAR OVERLAY ══ */
-.mob-sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:998;backdrop-filter:blur(2px);}
-.mob-sidebar-overlay.show{display:block;}
-.mob-sidebar{display:none;position:fixed;left:0;top:0;bottom:0;width:240px;background:var(--bg2);z-index:999;padding:20px 14px;flex-direction:column;gap:6px;box-shadow:var(--shadow-lg);overflow-y:auto;}
-.mob-sidebar.show{display:flex;}
-.mob-nav-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text2);transition:all .15s;}
-.mob-nav-item:hover,.mob-nav-item.active{background:var(--bg4);color:var(--text);}
-.mob-nav-item svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0;}
+/* ══ MOBILE SIDEBAR — smooth slide-in ══ */
+.mob-sidebar-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0);z-index:998;
+  transition:background .28s ease;
+}
+.mob-sidebar-overlay.show{display:block;background:rgba(0,0,0,0.45);}
+.mob-sidebar{
+  display:flex;position:fixed;left:0;top:0;bottom:0;width:260px;
+  background:var(--bg2);z-index:999;padding:0 0 env(safe-area-inset-bottom,0px);
+  flex-direction:column;gap:0;
+  box-shadow:var(--shadow-lg);overflow-y:auto;overflow-x:hidden;
+  transform:translateX(-105%);
+  transition:transform .3s cubic-bezier(.25,.46,.45,.94);
+  will-change:transform;
+  -webkit-overflow-scrolling:touch;
+  padding-top:env(safe-area-inset-top,0px);
+}
+.mob-sidebar .mob-sidebar-inner{padding:20px 14px;display:flex;flex-direction:column;gap:4px;flex:1;}
+.mob-sidebar.show{transform:translateX(0);}
+.mob-nav-item{
+  display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:14px;
+  cursor:pointer;font-size:14px;font-weight:600;color:var(--text2);
+  transition:background .12s,color .12s,transform .1s;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  user-select:none;-webkit-user-select:none;
+}
+.mob-nav-item:active{transform:scale(0.97);background:var(--bg4);color:var(--text);}
+.mob-nav-item.active{background:var(--bg4);color:var(--text);}
+.mob-nav-item svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0;}
 
 /* ══ PRINT STYLES ══ */
 @media print{
@@ -927,11 +1336,6 @@ html.theme-tr .pipe-table tbody tr{
   .scard,.an-card{break-inside:avoid;}
 }
 
-/* ══ CARD HOVER ENHANCED ══ */
-.tc:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,.10);}
-.scard:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
-.fc:hover{transform:translateY(-3px);}
-.drop-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
 
 /* ══ DRAG & DROP ══ */
 .tc.dragging{opacity:.4;transform:scale(.97);}
@@ -1165,7 +1569,7 @@ html.theme-tr .pipe-table tbody tr{
 
 <!-- Mobile sidebar overlay -->
 <div class="mob-sidebar-overlay" id="mob-overlay" onclick="closeMobSidebar()"></div>
-<div class="mob-sidebar" id="mob-sidebar">
+<div class="mob-sidebar" id="mob-sidebar"><div class="mob-sidebar-inner">
   <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);">
     <div style="width:28px;height:28px;background:linear-gradient(145deg,#FF9500,#FF6000);border-radius:8px;display:flex;align-items:center;justify-content:center;">
       <svg viewBox="0 0 24 24" width="13" height="13" stroke="#fff" fill="none" stroke-width="2.3"><path d="M12 2 3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5"/></svg>
@@ -1183,7 +1587,7 @@ html.theme-tr .pipe-table tbody tr{
   <div class="mob-nav-item" onclick="mobNav('checkin')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>Check-in</div>
   <div class="mob-nav-item" onclick="mobNav('roadmap')"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Төлөвлөгөө</div>
   <div class="mob-nav-item" onclick="mobNav('ai')" style="border:1px solid rgba(175,82,222,.25);background:var(--purplebg,#f5f0ff)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>🤖 AI Зөвлөгч</div>
-</div>
+</div></div>
 
 <!-- ══ SIDEBAR STRIP — 3 тусдаа floating pill ══ -->
 <div class="sidebar-strip" id="sidebar-strip">
@@ -1365,6 +1769,148 @@ html.theme-tr .pipe-table tbody tr{
         <div class="scard"><div class="sc-icon" style="background:var(--greenbg);"><svg viewBox="0 0 24 24" stroke="var(--green)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="sc-label">Дуусгасан</div><div class="sc-val" id="st-dn" style="color:var(--green);">0</div><div class="sc-sub">Амжилттай</div></div>
       </div>
 
+      <!-- ── OPPORTUNITY COST METER ── -->
+      <div class="opc-wrap" id="opc-wrap">
+        <div class="opc-header" id="opc-header-toggle">
+          <div class="opc-dot"></div>
+          <div class="opc-title">LIVE P&amp;L // БОЛОМЖИЙН ӨРТӨГ</div>
+          <div class="opc-hright">
+            <span class="opc-streak" id="opc-streak">🔴 0:00</span>
+            <span class="opc-clock" id="opc-clock">00:00:00</span>
+            <button class="opc-gear" id="opc-gear-btn" title="Тохиргоо" onclick="event.stopPropagation();opcToggleSettings();">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </button>
+            <svg id="opc-arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px;flex-shrink:0;transition:transform .2s;transform:rotate(180deg);color:var(--text3);"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="opc-body" id="opc-body">
+          <!-- Settings panel (hidden by default) -->
+          <div class="opc-settings" id="opc-settings">
+            <div class="opc-settings-grid">
+              <div class="opc-fi-wrap">
+                <div class="opc-fi-lbl">Сарын үнэ ₮</div>
+                <input class="opc-fi" id="opc-fi-price" type="number" value="59900" min="1000" step="100">
+              </div>
+              <div class="opc-fi-wrap">
+                <div class="opc-fi-lbl">Зорилт гишүүн</div>
+                <input class="opc-fi" id="opc-fi-target" type="number" value="250" min="10" step="10">
+              </div>
+              <div class="opc-fi-wrap">
+                <div class="opc-fi-lbl">Нэмэх алхам</div>
+                <input class="opc-fi" id="opc-fi-step" type="number" value="10" min="1" max="50" step="1">
+              </div>
+              <div class="opc-fi-wrap">
+                <div class="opc-fi-lbl">Хурд (÷хуваагч)</div>
+                <input class="opc-fi" id="opc-fi-scale" type="number" value="10" min="1" max="100" step="1">
+              </div>
+            </div>
+
+            <!-- Manual monthly loss override -->
+            <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
+                <div style="font-size:9px;font-weight:700;letter-spacing:.07em;color:var(--text3);text-transform:uppercase;font-family:'DM Mono',monospace;">Сарын алдагдал</div>
+                <!-- Toggle switch -->
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span id="opc-ml-mode-lbl" style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text4);">АВТО</span>
+                  <div id="opc-ml-toggle" onclick="opcToggleManualLoss()" style="width:32px;height:18px;border-radius:99px;background:var(--bg4);border:1px solid var(--border2);cursor:pointer;position:relative;transition:background .2s;">
+                    <div id="opc-ml-knob" style="width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.18);position:absolute;top:1px;left:1px;transition:transform .2s;"></div>
+                  </div>
+                </div>
+              </div>
+              <div id="opc-ml-manual-wrap" style="display:none;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                  <div class="opc-fi-wrap">
+                    <div class="opc-fi-lbl">Сарын алдагдал ₮</div>
+                    <input class="opc-fi" id="opc-fi-month-loss" type="number" placeholder="жишээ: 150000" min="0" step="1000" style="font-size:11px;">
+                  </div>
+                  <div class="opc-fi-wrap">
+                    <div class="opc-fi-lbl">Өдрийн алдагдал ₮</div>
+                    <input class="opc-fi" id="opc-fi-day-loss" type="number" placeholder="жишээ: 5000" min="0" step="100" style="font-size:11px;" oninput="opcSyncDayFromMonth()">
+                  </div>
+                </div>
+                <div style="margin-top:6px;font-size:9px;color:var(--text4);font-family:'DM Mono',monospace;">Нэг утга оруулахад нөгөө нь автоматаар тооцогдоно</div>
+              </div>
+            </div>
+
+            <button class="opc-apply-btn" onclick="opcApplySettings()">Хэрэгжүүлэх</button>
+          </div>
+          <!-- Chart + stats -->
+          <div class="opc-content" style="position:relative;">
+            <!-- Toast zone -->
+            <div class="opc-toast-zone" id="opc-toast-zone"></div>
+            <div class="opc-grid">
+              <div>
+                <div class="opc-lbl">Алдагдсан боломж</div>
+                <div class="opc-num" id="opc-pnl">-₮0</div>
+                <div class="opc-rate">DRIFT <span id="opc-drift-rate" style="color:var(--red);">−₮0.58/сек</span><span class="opc-vel stable" id="opc-vel">→</span> &nbsp;·&nbsp; BREAKEVEN <span id="opc-be-label" style="color:var(--text3);">125 гишүүн</span></div>
+                <div class="opc-chartbox"><canvas id="opc-canvas" role="img" aria-label="Боломжийн өртгийн chart"></canvas></div>
+                <!-- Projection chips -->
+                <div class="opc-proj">
+                  <div class="opc-proj-chip" id="opc-proj-day-wrap">
+                    <div class="opc-proj-lbl">Өнөөдөр</div>
+                    <div class="opc-proj-val" id="opc-proj-day">−₮0</div>
+                  </div>
+                  <div class="opc-proj-chip" id="opc-proj-month-wrap">
+                    <div class="opc-proj-lbl">Энэ сар</div>
+                    <div class="opc-proj-val" id="opc-proj-month">−₮0</div>
+                  </div>
+                </div>
+                <!-- Breakeven gap bar -->
+                <div class="opc-be-gap">
+                  <div class="opc-be-gap-lbl">Breakeven хүртэл</div>
+                  <div class="opc-be-gap-right">
+                    <div class="opc-be-bar-wrap"><div class="opc-be-bar-fill" id="opc-be-bar" style="width:0%;background:var(--red);"></div></div>
+                    <div class="opc-be-gap-num" id="opc-be-gap-num">−125 гишүүн</div>
+                  </div>
+                </div>
+                <!-- Savings chip -->
+                <div class="opc-save-chip" id="opc-save-chip">
+                  <div class="opc-save-icon">💡</div>
+                  <div class="opc-save-text">
+                    <div class="opc-save-lbl">Breakeven хүрвэл өдөрт хэмнэнэ</div>
+                    <div class="opc-save-val" id="opc-save-val">₮0</div>
+                  </div>
+                </div>
+              </div>
+              <div class="opc-stats">
+                <div>
+                  <div class="opc-sl">Drift/сек</div>
+                  <div class="opc-sv neg" id="opc-drift">−₮0.58</div>
+                </div>
+                <div>
+                  <div class="opc-sl">Гишүүн</div>
+                  <div class="opc-mrow">
+                    <button class="opc-mbtn" id="opc-minus">−</button>
+                    <span class="opc-mval" id="opc-members">0</span>
+                    <button class="opc-mbtn" id="opc-plus">+</button>
+                  </div>
+                  <div class="opc-step-hint">/ <span id="opc-target-label">250</span> · алхам <span id="opc-step-label">10</span></div>
+                </div>
+                <div>
+                  <div class="opc-sl">Явц</div>
+                  <!-- Progress ring -->
+                  <div class="opc-ring-wrap">
+                    <svg class="opc-ring" width="36" height="36" viewBox="0 0 36 36">
+                      <circle class="opc-ring-track" cx="18" cy="18" r="14"/>
+                      <circle class="opc-ring-fill" id="opc-ring-fill" cx="18" cy="18" r="14"
+                        stroke="var(--gold)"
+                        stroke-dasharray="87.96"
+                        stroke-dashoffset="87.96"
+                        transform="rotate(-90 18 18)"/>
+                    </svg>
+                    <div class="opc-sv" id="opc-conv" style="color:var(--gold);">0%</div>
+                  </div>
+                </div>
+                <div>
+                  <div class="opc-sl">Heat</div>
+                  <div class="opc-sv neg" id="opc-heat">LOW</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- ── GOOGLE CALENDAR DIRECT ADD ── -->
       <div id="dash-cal-wrap" style="margin-bottom:18px;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);">
         <!-- Header — always visible, click to toggle body -->
@@ -1431,7 +1977,7 @@ html.theme-tr .pipe-table tbody tr{
       </div>
       <div id="kanban-board">
         <div class="kanban">
-          <div class="kcol"><div class="kh"><div class="kdot" style="background:#AEAEB2;"></div><span class="kt">Эхлээгүй</span><span class="kc" id="cnt-todo">0</span><button class="kplus" onclick="openM('todo')">+</button></div><div id="col-todo"></div><button class="addcol" onclick="openM('todo')">+ Нэмэх</button></div>
+          <div class="kcol"><div class="kh"><div class="kdot" style="background:var(--text4);"></div><span class="kt">Эхлээгүй</span><span class="kc" id="cnt-todo">0</span><button class="kplus" onclick="openM('todo')">+</button></div><div id="col-todo"></div><button class="addcol" onclick="openM('todo')">+ Нэмэх</button></div>
           <div class="kcol"><div class="kh"><div class="kdot" style="background:var(--blue);"></div><span class="kt">Хийгдэж байна</span><span class="kc" id="cnt-inprogress">0</span><button class="kplus" onclick="openM('inprogress')">+</button></div><div id="col-inprogress"></div><button class="addcol" onclick="openM('inprogress')">+ Нэмэх</button></div>
           <div class="kcol"><div class="kh"><div class="kdot" style="background:var(--amber);"></div><span class="kt">Хянагдаж байна</span><span class="kc" id="cnt-review">0</span><button class="kplus" onclick="openM('review')">+</button></div><div id="col-review"></div><button class="addcol" onclick="openM('review')">+ Нэмэх</button></div>
           <div class="kcol"><div class="kh"><div class="kdot" style="background:var(--green);"></div><span class="kt">Дууссан</span><span class="kc" id="cnt-done">0</span><button class="kplus" onclick="openM('done')">+</button></div><div id="col-done"></div><button class="addcol" onclick="openM('done')">+ Нэмэх</button></div>
@@ -3982,7 +4528,7 @@ function showPage(name,sidebarEl){
   var mbnEl=document.getElementById('mbn-'+name);
   if(mbnEl) mbnEl.classList.add('active');
   // Page actions
-  if(name==='analytics')renderAnalytics();
+  if(name==='analytics'){renderAnalytics();setTimeout(renderRevChart,60);}
   if(name==='content')renderContent();
   if(name==='users'){loadUsers();loadRegistrations();}
   if(name==='admin'){loadRegistrations();}
@@ -4006,6 +4552,7 @@ function render(){
     if(el)el.innerHTML=list.map(cardH).join('');
     var cnt=document.getElementById('cnt-'+s);if(cnt)cnt.textContent=list.length;
   });
+  applyCollapsedState();
   var st=function(id,v){var e=document.getElementById(id);if(e)e.textContent=v;};
   st('st-tot',tasks.length);
   st('st-ip',tasks.filter(function(t){return t.status==='inprogress';}).length);
@@ -4027,9 +4574,9 @@ function cardH(t){
     var dLabel,dColor,dBg;
     if(isDone){dLabel=d.toLocaleDateString('mn-MN',{month:'short',day:'numeric'});dColor='var(--text4)';dBg='transparent';}
     else if(diff<0){dLabel='Хоцорсон '+Math.abs(diff)+' өдөр';dColor='var(--red)';dBg='var(--redbg)';}
-    else if(diff===0){dLabel='Өнөөдөр дуусна';dColor='#d97706';dBg='rgba(245,158,11,0.12)';}
-    else if(diff<=7){dLabel=diff+' өдөр үлдсэн';dColor='#d97706';dBg='rgba(245,158,11,0.12)';}
-    else{dLabel=diff+' өдөр үлдсэн';dColor='var(--green)';dBg='rgba(34,197,94,0.10)';}
+    else if(diff===0){dLabel='Өнөөдөр дуусна';dColor='var(--amber)';dBg='var(--amberbg)';}
+    else if(diff<=7){dLabel=diff+' өдөр үлдсэн';dColor='var(--amber)';dBg='var(--amberbg)';}
+    else{dLabel=diff+' өдөр үлдсэн';dColor='var(--green)';dBg='var(--greenbg)';}
     due='<div class="tdue"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>'
       +(isDone
         ?'<span style="color:'+dColor+';">'+dLabel+'</span>'
@@ -4057,8 +4604,8 @@ function cardH(t){
     progSection='<div class="tpr"><span class="tpl">Явц</span><span class="tpv">'+t.prog+'/5</span></div><div class="ttrack"><div class="tfill" style="width:'+pct2+'%;background:'+col+';"></div></div>';
   }
 
-  return '<div class="tc"><span class="tbadge '+bc+'">'+bl+'</span>'
-    +'<div class="tname">'+x(t.name)+'</div>'
+  return '<div class="tc" data-tid="'+t.id+'"><span class="tbadge '+bc+'">'+bl+'</span>'
+    +'<svg class="tc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>'+'<div class="tname">'+x(t.name)+'</div>'
     +(t.sub?'<div class="tsub">'+x(t.sub)+'</div>':'')
     +progSection+due
     +'<div class="tfoot"><select class="ssel" onchange="chg('+t.id+',this.value)">'
@@ -4231,6 +4778,39 @@ function toggleStage(taskId,stageIdx){
   saveAll();render();
   sbTaskUpdate(t).catch(function(){});
 }
+
+/* ── CARD COLLAPSE ── */
+var _collapsedCards=(function(){try{return JSON.parse(localStorage.getItem('pd_card_collapsed')||'{}');}catch(e){return {};}})();
+function _saveCollapsed(){try{localStorage.setItem('pd_card_collapsed',JSON.stringify(_collapsedCards));}catch(e){}}
+
+function tcToggleCollapse(card){
+  var tid=card.getAttribute('data-tid');
+  var isNowCollapsed=card.classList.toggle('collapsed');
+  if(tid){
+    if(isNowCollapsed) _collapsedCards[tid]=1;
+    else delete _collapsedCards[tid];
+    _saveCollapsed();
+  }
+}
+
+/* Apply saved collapse state after render */
+function applyCollapsedState(){
+  document.querySelectorAll('.tc[data-tid]').forEach(function(card){
+    var tid=card.getAttribute('data-tid');
+    if(_collapsedCards[tid]) card.classList.add('collapsed');
+  });
+}
+
+/* Kanban board click delegation — collapse on card click, skip interactive elements */
+(function(){
+  document.addEventListener('click',function(e){
+    var card=e.target.closest('.tc');
+    if(!card) return;
+    /* Skip clicks on interactive children */
+    if(e.target.closest('.ssel,.dbtn,.tc-stage-item,.remind-btn,.ctx-btn')) return;
+    tcToggleCollapse(card);
+  });
+})();
 
 
 /* ── CONTENT PIPELINE ── */
@@ -4921,7 +5501,14 @@ function setSidebarTheme(mode){
   var mc=document.getElementById('meta-theme-color');
   if(mc) mc.setAttribute('content',isDark?'#0A0A0E':'#ffffff');
   _syncThemeIcons();
-  setTimeout(function(){ document.documentElement.classList.remove('theme-tr'); }, 320);
+  setTimeout(function(){
+    document.documentElement.classList.remove('theme-tr');
+    /* Re-render all canvas/SVG charts so colors match the new theme */
+    if(typeof renderRevChart==='function') renderRevChart();
+    if(typeof drawForecastChart==='function') drawForecastChart();
+    if(typeof drawChart==='function') drawChart();
+    if(typeof renderCntRevAnalytics==='function') renderCntRevAnalytics();
+  }, 320);
 }
 function _syncThemeIcons(){
   var isDark=document.documentElement.getAttribute('data-theme')==='dark';
@@ -4942,7 +5529,7 @@ function toggleTheme(){
 })();
 
 /* ── NOTIFICATION SYSTEM ── */
-var NOTIFICATIONS=JSON.parse(localStorage.getItem('pd_notifs')||'[]');
+var NOTIFICATIONS=(function(){try{return JSON.parse(localStorage.getItem('pd_notifs')||'[]');}catch(e){return [];}})();
 var notifOpen=false;
 
 function saveNotifs(){localStorage.setItem('pd_notifs',JSON.stringify(NOTIFICATIONS));}
@@ -5091,8 +5678,8 @@ updatePendingBadge=function(count){
   _lastPendingCount=count;
 };
 
-/* Auto-poll every 45s for new registrations */
-setInterval(function(){loadRegistrations();},45000);
+/* Auto-poll every 45s for new registrations — pause when tab is hidden */
+setInterval(function(){if(!document.hidden)loadRegistrations();},45000);
 
 /* Init notifications */
 renderNotifBadge();
@@ -5413,7 +6000,7 @@ var DEFAULT_QLINKS = [
   {id:'github',   name:'GitHub',         sub:'Tsekv-G1',        url:'https://github.com/Tsekv-G1',                                                                              color:'var(--purplebg)', stroke:'var(--purple)', icon:'git'}
 ];
 
-var CUSTOM_QLINKS = JSON.parse(localStorage.getItem('pd_qlinks')||'[]');
+var CUSTOM_QLINKS=(function(){try{return JSON.parse(localStorage.getItem('pd_qlinks')||'[]');}catch(e){return [];}})();
 
 function renderFgrid(){
   var grid=document.getElementById('fgrid');
@@ -6103,13 +6690,34 @@ setTimeout(_applySidebar, 0);
 
 /* ── MOBILE SIDEBAR ── */
 function openMobSidebar(){
-  document.getElementById('mob-sidebar').classList.add('show');
-  document.getElementById('mob-overlay').classList.add('show');
+  var sb=document.getElementById('mob-sidebar');
+  var ov=document.getElementById('mob-overlay');
+  ov.style.display='block';
+  // Force reflow before adding class for transition to work
+  void ov.offsetWidth;
+  sb.classList.add('show');
+  ov.classList.add('show');
 }
 function closeMobSidebar(){
-  document.getElementById('mob-sidebar').classList.remove('show');
-  document.getElementById('mob-overlay').classList.remove('show');
+  var sb=document.getElementById('mob-sidebar');
+  var ov=document.getElementById('mob-overlay');
+  sb.classList.remove('show');
+  ov.classList.remove('show');
+  // Hide overlay after transition
+  setTimeout(function(){ if(!sb.classList.contains('show')) ov.style.display=''; }, 320);
 }
+
+/* Sidebar swipe gesture removed — use hamburger button or More tab */
+
+/* ── 🖥️ DESKTOP: Topbar glassmorphism on content scroll ── */
+(function(){
+  var content=document.querySelector('.content');
+  var topbar=document.querySelector('.topbar');
+  if(!content||!topbar) return;
+  content.addEventListener('scroll',function(){
+    topbar.classList.toggle('scrolled', content.scrollTop>8);
+  },{passive:true});
+})();
 function mobNav(page){
   closeMobSidebar();
   showPage(page,null);
@@ -6124,6 +6732,8 @@ function mobNav(page){
 function mbnNav(page){
   showPage(page,null);
   mbnSync(page);
+  // Haptic feedback
+  if(navigator.vibrate) navigator.vibrate(8);
   // sync mob-sidebar items
   var pageOrder=['kanban','content','analytics','users','admin','focus','finance','checkin','roadmap','ai'];
   document.querySelectorAll('.mob-nav-item').forEach(function(el,i){
@@ -6748,11 +7358,7 @@ setTimeout(function(){
 },500);
 
 /* ── FINANCE TRACKER ── */
-var _fin=JSON.parse(localStorage.getItem('pd_finance')||JSON.stringify({
-  salary:800000,
-  inc:[{id:1,name:'Pro план',amt:0},{id:2,name:'Нэмэлт',amt:0}],
-  exp:[{id:1,name:'Meta реклам',amt:0},{id:2,name:'Tool зардал',amt:0}]
-}));
+var _fin=(function(){var def={salary:800000,inc:[{id:1,name:'Pro план',amt:0},{id:2,name:'Нэмэлт',amt:0}],exp:[{id:1,name:'Meta реклам',amt:0},{id:2,name:'Tool зардал',amt:0}]};try{return JSON.parse(localStorage.getItem('pd_finance')||'null')||def;}catch(e){return def;}})();
 var _finNid=10;
 function _saveFin(){localStorage.setItem('pd_finance',JSON.stringify(_fin));}
 
@@ -6835,7 +7441,7 @@ function finRender(){
 /* ── DAILY CHECK-IN ── */
 var _ciStep=1;
 var _ciData={};
-var _ciHistory=JSON.parse(localStorage.getItem('pd_checkins')||'[]');
+var _ciHistory=(function(){try{return JSON.parse(localStorage.getItem('pd_checkins')||'[]');}catch(e){return [];}})();
 
 function ciOpen(){
   _ciStep=1;
@@ -6904,7 +7510,7 @@ setTimeout(function(){
     _origRenderAnalytics=renderAnalytics;
     window.renderAnalytics=function(){
       _origRenderAnalytics();
-      renderRevChart();
+      if(typeof renderRevChart==='function') renderRevChart();
     };
   }
 },600);
@@ -7233,105 +7839,55 @@ function exportCSV(type){
     if(typeof renderAnalytics==='function'){
       clearInterval(_hookDropPerf);
       var _orig=window.renderAnalytics;
-      window.renderAnalytics=function(){
-        _orig();
-        setTimeout(function(){injectDropPerf();renderDropPerf();},150);
-      };
+      if(!_orig._dropPerfWrapped){
+        var _wrapped=function(){_orig();setTimeout(function(){injectDropPerf();renderDropPerf();},150);};
+        _wrapped._dropPerfWrapped=true;
+        window.renderAnalytics=_wrapped;
+      }
     }
   },400);
 })();
 
-/* ── 🎨 SWIPE GESTURE — Page navigation ── */
+/* ── 🎨 SCREEN EDGE LOCK — Prevent accidental edge swipe ── */
 (function(){
-  var _pages=['kanban','content','analytics','focus','users','admin','finance','checkin'];
-  var _sx=0,_sy=0,_sActive=false,_sThreshold=60,_sVertLimit=80;
-
+  /* Block touches starting within 20px of left/right screen edge */
   document.addEventListener('touchstart',function(e){
-    if(e.target.closest('.mob-bottom-nav,.mob-sidebar,.mbox,.ci-box,.gsearch-overlay,.tc')) return;
-    _sx=e.touches[0].clientX; _sy=e.touches[0].clientY; _sActive=true;
-  },{passive:true});
-
-  document.addEventListener('touchend',function(e){
-    if(!_sActive) return; _sActive=false;
-    var dx=e.changedTouches[0].clientX-_sx;
-    var dy=Math.abs(e.changedTouches[0].clientY-_sy);
-    if(Math.abs(dx)<_sThreshold||dy>_sVertLimit) return;
-    // Find current page
-    var cur=null;
-    _pages.forEach(function(p){
-      var el=document.getElementById('page-'+p);
-      if(el&&el.classList.contains('active')) cur=p;
-    });
-    if(!cur) return;
-    var idx=_pages.indexOf(cur);
-    var next=dx<0?Math.min(idx+1,_pages.length-1):Math.max(idx-1,0);
-    if(next===idx) return;
-    // Animate
-    var content=document.querySelector('.content');
-    if(content){
-      content.style.transition='transform 0.22s ease,opacity 0.22s';
-      content.style.transform='translateX('+(dx<0?'-30px':'30px')+')';
-      content.style.opacity='0.6';
-      setTimeout(function(){
-        showPage(_pages[next],null);
-        content.style.transition='none';
-        content.style.transform='translateX('+(dx<0?'30px':'-30px')+')';
-        content.style.opacity='0.6';
-        requestAnimationFrame(function(){
-          requestAnimationFrame(function(){
-            content.style.transition='transform 0.22s ease,opacity 0.22s';
-            content.style.transform='';
-            content.style.opacity='';
-          });
-        });
-      },150);
-    } else {
-      showPage(_pages[next],null);
+    var x=e.touches[0].clientX;
+    var w=window.innerWidth;
+    if(x<=20||x>=w-20){
+      e.preventDefault();
     }
-  },{passive:true});
+  },{passive:false});
 })();
 
-/* ── 🎨 QUICK ADD FAB ── */
+/* ── 📱 iOS KEYBOARD — visualViewport shrink fix ── */
+/* When the soft keyboard opens, iOS shrinks the viewport but the layout doesn't
+   respond automatically. This nudges the focused input into view. */
 (function(){
-  var fab=document.createElement('div');
-  fab.id='fab-btn';
-  fab.innerHTML=
-    '<div class="fab-main" onclick="fabToggle()" title="Шинэ нэмэх">'+
-      '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2.5;transition:transform .25s;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>'+
-    '</div>'+
-    '<div class="fab-menu" id="fab-menu">'+
-      '<div class="fab-item" onclick="fabToggle();openM(\'todo\')"><span>📋</span> Даалгавар</div>'+
-      '<div class="fab-item" onclick="fabToggle();openContentM()"><span>🎬</span> Script</div>'+
-      '<div class="fab-item" onclick="fabToggle();document.getElementById(\'ci-overlay\').classList.remove(\'hidden\')"><span>✅</span> Check-in</div>'+
-      '<div class="fab-item" onclick="fabToggle();if(typeof openPad===\'function\')openPad()"><span>📝</span> Scratch Pad</div>'+
-    '</div>';
-  document.body.appendChild(fab);
-
-  var _fabOpen=false;
-  window.fabToggle=function(){
-    _fabOpen=!_fabOpen;
-    fab.classList.toggle('open',_fabOpen);
-    var icon=fab.querySelector('svg');
-    if(icon) icon.style.transform=_fabOpen?'rotate(45deg)':'';
-  };
-  window.fabClose=function(){
-    if(_fabOpen){_fabOpen=false;fab.classList.remove('open');var icon=fab.querySelector('svg');if(icon)icon.style.transform='';}
-  };
-  // Close on outside tap
-  document.addEventListener('touchstart',function(e){
-    if(_fabOpen&&!fab.contains(e.target)){window.fabClose();}
-  },{passive:true});
-  document.addEventListener('click',function(e){
-    if(_fabOpen&&!fab.contains(e.target)){window.fabClose();}
+  if(!window.visualViewport) return;
+  var _lastH=window.visualViewport.height;
+  window.visualViewport.addEventListener('resize',function(){
+    var h=window.visualViewport.height;
+    var kbOpen=h<_lastH-100; // keyboard appeared
+    _lastH=h;
+    var focused=document.activeElement;
+    if(kbOpen&&focused&&/INPUT|TEXTAREA|SELECT/.test(focused.tagName)){
+      // Scroll focused element into view after keyboard settles
+      setTimeout(function(){
+        focused.scrollIntoView({behavior:'smooth',block:'nearest'});
+      },120);
+    }
+    // Adjust bottom nav and FAB so they don't overlap keyboard
+    var mbn=document.getElementById('mob-bottom-nav');
+      if(kbOpen){
+      if(mbn) mbn.style.transform='translateY(100%)';
+    } else {
+      if(mbn) mbn.style.transform='';
+    }
   });
-  // Hide FAB when any modal overlay is open
-  var _fabObserver=new MutationObserver(function(){
-    var anyOpen=document.querySelector('.moverlay:not(.hidden),.cnt-overlay.open,.ci-overlay:not(.hidden),.gsearch-overlay.show');
-    fab.style.opacity=anyOpen?'0':'';
-    fab.style.pointerEvents=anyOpen?'none':'';
-  });
-  _fabObserver.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class','style']});
 })();
+
+/* FAB removed */
 
 /* ── 🎨 PULL TO REFRESH ── */
 (function(){
@@ -7392,14 +7948,6 @@ function exportCSV(type){
 (function(){
   var style=document.createElement('style');
   style.textContent=
-  /* FAB styles */
-  '#fab-btn{position:fixed;bottom:calc(72px + env(safe-area-inset-bottom,0px));right:18px;z-index:980;display:flex;flex-direction:column;align-items:flex-end;gap:8px;transition:opacity .2s;}'+
-  '@media(min-width:769px){#fab-btn{display:none;}}'+
-  '.fab-main{width:52px;height:52px;border-radius:50%;background:linear-gradient(145deg,var(--gold),#FF6000);box-shadow:0 6px 20px rgba(255,149,0,0.4);display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;}'+
-  '.fab-menu{display:flex;flex-direction:column;gap:6px;opacity:0;pointer-events:none;transform:translateY(10px) scale(0.95);transition:all .2s cubic-bezier(.25,.46,.45,.94);}'+
-  '#fab-btn.open .fab-menu{opacity:1;pointer-events:auto;transform:none;}'+
-  '.fab-item{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:9px 14px;font-size:12px;font-weight:700;color:var(--text);cursor:pointer;box-shadow:var(--shadow);white-space:nowrap;-webkit-tap-highlight-color:transparent;}'+
-  '.fab-item:active{transform:scale(0.97);}'+
   /* Search overlay */
   '#gsearch-overlay{position:fixed;inset:0;z-index:99990;opacity:0;pointer-events:none;transition:opacity .2s;}'+
   '#gsearch-overlay.show{opacity:1;pointer-events:auto;}'+
@@ -7426,7 +7974,6 @@ function exportCSV(type){
   '.page{display:none;}'+
   '.page.active{display:block;}'+
   /* Active touch states */
-  '.fab-main:active{transform:scale(0.94);}'+
   '.mbn-item:active{opacity:.7;}'+
   '.mob-nav-item:active{background:var(--bg3);}';
   document.head.appendChild(style);
@@ -7447,22 +7994,28 @@ function exportCSV(type){
 <!-- Mobile Bottom Navigation Bar -->
 <div class="mob-bottom-nav" id="mob-bottom-nav">
   <div class="mbn-item active" id="mbn-kanban" onclick="mbnNav('kanban')">
-    <svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>Ерөнхий
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+    <span>Ерөнхий</span>
   </div>
-<div class="mbn-item" id="mbn-content" onclick="mbnNav('content')">
-    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>Контент
+  <div class="mbn-item" id="mbn-content" onclick="mbnNav('content')">
+    <svg viewBox="0 0 24 24"><path d="M15 10l4.553-2.07A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.89L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+    <span>Контент</span>
   </div>
   <div class="mbn-item" id="mbn-analytics" onclick="mbnNav('analytics')">
-    <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Аналитик
+    <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+    <span>Аналитик</span>
   </div>
   <div class="mbn-item" id="mbn-focus" onclick="mbnNav('focus')">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Focus
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <span>Focus</span>
   </div>
-  <div class="mbn-item" id="mbn-ai" onclick="mbnNav('ai')" style="color:var(--purple,#af52de)">
-    <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm-1-5h2v2h-2zm0-8h2v6h-2z"/></svg>AI
+  <div class="mbn-item" id="mbn-ai" onclick="mbnNav('ai')">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none" opacity=".3"/></svg>
+    <span>AI</span>
   </div>
   <div class="mbn-item" id="mbn-more" onclick="openMobSidebar()">
-    <svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>Дэлгэрэнгүй
+    <svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
+    <span>Дэлгэрэнгүй</span>
   </div>
 </div>
 <!-- Offline indicator -->
@@ -7656,7 +8209,7 @@ function exportCSV(type){
       clearInterval(_hookAI);
       setTimeout(injectAIBriefing,1000);
       var _orig=window.renderAnalytics;
-      if(_orig){window.renderAnalytics=function(){_orig();setTimeout(injectAIBriefing,200);};}
+      if(_orig&&!_orig._aiWrapped){var _w=function(){_orig();setTimeout(injectAIBriefing,200);};_w._aiWrapped=true;window.renderAnalytics=_w;}
     }
   },300);
 })();
@@ -8169,10 +8722,6 @@ var _hookPomo=setInterval(function(){
   /* Scratch pad dark mode */
   '[data-theme="dark"] #scratch-pad{background:var(--bg2);}'+
   '[data-theme="dark"] #pad-ta{background:var(--bg2);color:var(--text);}'+
-  /* Fab position on iOS */
-  '@supports(padding-bottom:env(safe-area-inset-bottom)){'+
-    '#fab-btn{bottom:calc(76px + env(safe-area-inset-bottom,0px));}'+
-  '}'+
   /* Scroll snap for kanban on mobile */
   '@media(max-width:768px){'+
     '#kanban-board{scroll-padding-left:14px;}'+
@@ -8181,7 +8730,19 @@ var _hookPomo=setInterval(function(){
   /* Momentum ring animation */
   '#tg-ring-arc{transition:stroke-dashoffset 1.2s cubic-bezier(.25,.46,.45,.94),stroke .4s;}'+
   /* AI brief output */
-  '#ai-brief-out b,#ai-brief-out strong{color:var(--text);font-weight:800;}';
+  '#ai-brief-out b,#ai-brief-out strong{color:var(--text);font-weight:800;}'+
+  /* UX Polish — mobile tap states & topbar blur */
+  '@media(max-width:768px){'+
+    '.tc:active{transform:scale(0.985);opacity:.9;transition:transform .1s,opacity .1s;}'+
+    '.topbar{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);background:rgba(249,249,251,0.88)!important;}'+
+    '[data-theme=\"dark\"] .topbar{background:rgba(10,10,14,0.88)!important;}'+
+    '.scard:active{transform:scale(0.97);}'+
+    '.addcol{padding:10px;font-size:12px;border-radius:12px;}'+
+    '#kanban-board{padding-bottom:4px;}'+
+  '}'+
+  /* Smooth page transitions */
+  '.page.active{animation:pgIn .18s ease;}'+
+  '@keyframes pgIn{from{opacity:.7;transform:translateY(6px)}to{opacity:1;transform:none}}';
   document.head.appendChild(style);
 })();
 </script>
@@ -8322,6 +8883,10 @@ var _hookPomo=setInterval(function(){
 #fab-goals:hover{background:var(--bluebg);color:var(--blue);border-color:rgba(0,122,255,.3);transform:scale(1.06);}
 #fab-goals svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;}
 @media(max-width:768px){
+  #fab-export{display:none!important;}
+  #fab-goals{display:none!important;}
+}
+@media(min-width:769px){
   #fab-export{right:68px;bottom:calc(12px + env(safe-area-inset-bottom,0px));}
   #fab-goals{right:120px;bottom:calc(12px + env(safe-area-inset-bottom,0px));}
 }
@@ -8581,6 +9146,16 @@ function injectForecastChart(){
   // Insert AFTER the revenue chart card
   revCard.parentNode.insertBefore(wrap, revCard.nextSibling);
   drawForecastChart();
+}
+
+function _seededRand(seed){
+  // Mulberry32 — fast, high-quality 32-bit seeded PRNG
+  seed = seed >>> 0;
+  seed += 0x6D2B79F5;
+  var t = seed;
+  t = Math.imul(t ^ t >>> 15, t | 1);
+  t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+  return ((t ^ t >>> 14) >>> 0) / 4294967296;
 }
 
 function drawForecastChart(){
@@ -11816,6 +12391,642 @@ document.addEventListener('click',function(e){
     closeScriptView();
     setTimeout(function(){if(typeof openCntEdit==='function')openCntEdit(_svId);},50);
   };
+})();
+
+</script>
+<script>
+/* ── OPPORTUNITY COST METER ── */
+(function(){
+  /* ── Config (editable via settings panel) ── */
+  var CFG = { PRICE:59900, TARGET:250, STEP:10, SCALE:10 };
+  try{ var _sc=JSON.parse(localStorage.getItem('pd_opc_cfg')||'null'); if(_sc&&_sc.PRICE) Object.assign(CFG,_sc); }catch(e){}
+  var SECS_DAY   = 86400;      // 24 * 3600
+  var SECS_MONTH = 2592000;    // 30 * 24 * 3600
+
+  /* ── Persist OPC state across refresh ── */
+  var OPC_KEY='pd_opc_state';
+  function opcSaveState(){
+    try{
+      localStorage.setItem(OPC_KEY, JSON.stringify({
+        members: members,
+        pnl: pnl,
+        secs: secs,
+        hist: hist,
+        ts: Date.now()
+      }));
+    }catch(e){}
+  }
+  function opcLoadState(){
+    try{
+      var raw=localStorage.getItem(OPC_KEY);
+      if(!raw) return false;
+      var s=JSON.parse(raw);
+      /* Resume only if saved within last 24h */
+      if(!s||!s.ts||(Date.now()-s.ts)>86400000) return false;
+      members=s.members||0;
+      pnl=s.pnl||0;
+      secs=s.secs||0;
+      hist=s.hist||[];
+      displayPnl=pnl; displayDrift=0;
+      return true;
+    }catch(e){ return false; }
+  }
+
+  var members=0, pnl=0, secs=0;
+  var hist=[], MAXH=240;
+  /* Smooth animation: interpolate displayPnl & displayDrift toward real values */
+  var displayPnl=0, displayDrift=0, rafId=null;
+
+  function PMS(){ return CFG.PRICE/(30*24*3600)/CFG.SCALE; }
+  function drift(m){ return m*PMS()-(CFG.TARGET-m)*PMS(); }
+  function breakeven(){ return Math.ceil(CFG.TARGET/2); }
+
+  function fmtS(v){
+    var a=Math.abs(v),s=v<0?'−':'+';
+    if(a>=1e6) return s+'₮'+(a/1e6).toFixed(2)+'M';
+    if(a>=1e3) return s+'₮'+(a/1e3).toFixed(1)+'K';
+    return s+'₮'+a.toFixed(2);
+  }
+  function fmtAbs(v){
+    var a=Math.abs(v),s=v<0?'-':'';
+    if(a>=1e6) return s+'₮'+(a/1e6).toFixed(3)+'M';
+    if(a>=1e3) return s+'₮'+Math.round(a/1e3).toLocaleString()+'K';
+    return s+'₮'+a.toFixed(1);
+  }
+  function fmtT(s){ return [Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(function(x){return String(x).padStart(2,'0');}).join(':'); }
+
+  function isDark(){ return document.documentElement.getAttribute('data-theme')==='dark'; }
+
+  /* ── Settings toggle ── */
+  window.opcToggleSettings=function(){
+    var s=document.getElementById('opc-settings');
+    if(!s) return;
+    s.style.display = s.style.display==='block'?'none':'block';
+  };
+  window.opcApplySettings=function(){
+    var p=parseFloat(document.getElementById('opc-fi-price').value)||59900;
+    var t=parseInt(document.getElementById('opc-fi-target').value)||250;
+    var st=parseInt(document.getElementById('opc-fi-step').value)||10;
+    var sc=parseInt(document.getElementById('opc-fi-scale').value)||10;
+    CFG.PRICE=p; CFG.TARGET=t; CFG.STEP=st; CFG.SCALE=sc;
+    try{ localStorage.setItem('pd_opc_cfg', JSON.stringify(CFG)); }catch(e){}
+    var sl=document.getElementById('opc-step-label'); if(sl) sl.textContent=st;
+    var tl=document.getElementById('opc-target-label'); if(tl) tl.textContent=t;
+    var bel=document.getElementById('opc-be-label'); if(bel) bel.textContent=breakeven()+' гишүүн';
+    members=Math.min(members,t);
+    document.getElementById('opc-settings').style.display='none';
+    updateUI(); drawChart();
+  };
+
+  /* ── Header collapse toggle ── */
+  var hdr=document.getElementById('opc-header-toggle');
+  if(hdr) hdr.addEventListener('click',function(){
+    var b=document.getElementById('opc-body');
+    var a=document.getElementById('opc-arr');
+    if(!b) return;
+    var open=b.style.display!=='none';
+    b.style.display=open?'none':'block';
+    if(a) a.style.transform=open?'rotate(0deg)':'rotate(180deg)';
+  });
+
+  /* ═══════════════════════════════════════
+     PRESSURE SYSTEM
+  ═══════════════════════════════════════ */
+
+  /* Milestones — negative PNL thresholds */
+  var MILESTONES=[-50,-100,-250,-500,-1000,-2500,-5000,-10000,-25000,-50000,-100000];
+  var milestonesHit={};
+  var lossStreakSecs=0;
+
+  function fmtMilestone(v){
+    var a=Math.abs(v);
+    if(a>=1e6) return '-₮'+(a/1e6).toFixed(1)+'M';
+    if(a>=1e3) return '-₮'+(a/1e3).toFixed(0)+'K';
+    return '-₮'+a;
+  }
+
+  function showToast(msg){
+    var zone=document.getElementById('opc-toast-zone'); if(!zone) return;
+    var el=document.createElement('div');
+    el.className='opc-toast';
+    el.innerHTML='<span class="opc-toast-icon">⚠️</span>'+msg;
+    zone.appendChild(el);
+    setTimeout(function(){
+      el.classList.add('out');
+      setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); },250);
+    },3800);
+  }
+
+  function checkMilestones(pnlVal){
+    if(pnlVal>=0) return;
+    for(var i=0;i<MILESTONES.length;i++){
+      var m=MILESTONES[i];
+      if(pnlVal<=m && !milestonesHit[m]){
+        milestonesHit[m]=true;
+        showToast(fmtMilestone(m)+' алдагдал давлаа!');
+      }
+    }
+  }
+
+  function getSeverity(pnlVal){
+    if(pnlVal>=-50) return 0;
+    if(pnlVal>=-250) return 1;
+    if(pnlVal>=-1000) return 2;
+    if(pnlVal>=-5000) return 3;
+    return 4;
+  }
+
+  function updatePressure(){
+    var sev=getSeverity(pnl);
+    var wrap=document.getElementById('opc-wrap');
+    if(wrap){
+      wrap.classList.remove('sev-1','sev-2','sev-3','sev-4');
+      if(sev>0) wrap.classList.add('sev-'+sev);
+    }
+
+    /* Loss streak */
+    if(pnl<0){ lossStreakSecs++; } else { lossStreakSecs=0; }
+    var sk=document.getElementById('opc-streak');
+    if(sk){
+      if(lossStreakSecs>=10){
+        var sm=Math.floor(lossStreakSecs/60), ss=lossStreakSecs%60;
+        sk.textContent='🔴 '+sm+':'+(ss<10?'0':'')+ss;
+        sk.className='opc-streak visible';
+      } else {
+        sk.className='opc-streak';
+      }
+    }
+
+    /* Breakeven gap */
+    var be=breakeven();
+    var gap=be-members; /* how many more members needed */
+    var bgn=document.getElementById('opc-be-gap-num');
+    var bbf=document.getElementById('opc-be-bar');
+    if(bgn){
+      if(gap<=0){
+        bgn.textContent='✓ Ашигтай';
+        bgn.className='opc-be-gap-num zero';
+      } else {
+        bgn.textContent='+'+gap+' гишүүн';
+        bgn.className='opc-be-gap-num';
+      }
+    }
+    if(bbf){
+      var pct=Math.min(100,Math.round((members/be)*100));
+      bbf.style.width=pct+'%';
+      bbf.style.background=pct>=100?'var(--green)':pct>=60?'var(--gold)':'var(--red)';
+    }
+
+    /* Savings chip — daily loss saved if at breakeven now */
+    var dailyLoss=Math.abs(projDay());
+    var sv=document.getElementById('opc-save-val');
+    if(sv){ sv.textContent='₮'+fmtProj(dailyLoss).replace('-','').replace('₮',''); }
+
+    /* Milestone check */
+    checkMilestones(pnl);
+  }
+
+  /* ── Manual monthly loss override ── */
+  var manualLossActive=false;
+  var manualMonthLoss=0; /* ₮ */
+
+  window.opcToggleManualLoss=function(){
+    manualLossActive=!manualLossActive;
+    var tgl=document.getElementById('opc-ml-toggle');
+    var knob=document.getElementById('opc-ml-knob');
+    var lbl=document.getElementById('opc-ml-mode-lbl');
+    var wrap=document.getElementById('opc-ml-manual-wrap');
+    if(manualLossActive){
+      tgl.style.background='var(--red)';
+      knob.style.transform='translateX(14px)';
+      lbl.textContent='ГАРААР';
+      lbl.style.color='var(--red)';
+      wrap.style.display='block';
+      /* pre-fill with current auto value */
+      var autoMonth=Math.abs(projMonthAuto());
+      var autoDay=Math.abs(projDayAuto());
+      var mfi=document.getElementById('opc-fi-month-loss');
+      var dfi=document.getElementById('opc-fi-day-loss');
+      if(mfi && !mfi.value) mfi.value=Math.round(autoMonth);
+      if(dfi && !dfi.value) dfi.value=Math.round(autoDay);
+      manualMonthLoss=parseFloat(document.getElementById('opc-fi-month-loss').value)||autoMonth;
+    } else {
+      tgl.style.background='var(--bg4)';
+      knob.style.transform='translateX(0)';
+      lbl.textContent='АВТО';
+      lbl.style.color='var(--text4)';
+      wrap.style.display='none';
+      manualMonthLoss=0;
+    }
+  };
+
+  /* Sync: when month loss changes → update day field */
+  window.opcSyncDayFromMonth=function(){
+    var mfi=document.getElementById('opc-fi-month-loss');
+    var dfi=document.getElementById('opc-fi-day-loss');
+    var mv=parseFloat(mfi&&mfi.value)||0;
+    if(dfi) dfi.value=mv?Math.round(mv/30):'';
+    manualMonthLoss=mv;
+  };
+
+  /* Listen for day field changes → update month */
+  document.addEventListener('DOMContentLoaded',function(){
+    var dfi=document.getElementById('opc-fi-day-loss');
+    if(dfi) dfi.addEventListener('input',function(){
+      var dv=parseFloat(dfi.value)||0;
+      var mfi=document.getElementById('opc-fi-month-loss');
+      if(mfi) mfi.value=dv?Math.round(dv*30):'';
+      manualMonthLoss=dv*30;
+    });
+    var mfi=document.getElementById('opc-fi-month-loss');
+    if(mfi) mfi.addEventListener('input',function(){
+      window.opcSyncDayFromMonth();
+    });
+  });
+
+  function projDayAuto(){ return drift(members)*SECS_DAY/CFG.SCALE; }
+  function projMonthAuto(){ return drift(members)*SECS_MONTH/CFG.SCALE; }
+
+  function projDay(){
+    if(manualLossActive && manualMonthLoss){
+      return -(manualMonthLoss/30);
+    }
+    return projDayAuto();
+  }
+  function projMonth(){
+    if(manualLossActive && manualMonthLoss){
+      var mfi=document.getElementById('opc-fi-month-loss');
+      return -(parseFloat(mfi&&mfi.value)||manualMonthLoss);
+    }
+    return projMonthAuto();
+  }
+
+  function fmtProj(v){
+    var a=Math.abs(v),s=v<0?'-':'';
+    if(a>=1e6) return s+'₮'+(a/1e6).toFixed(2)+'M';
+    if(a>=1e3) return s+'₮'+(a/1e3).toFixed(0)+'K';
+    return s+'₮'+a.toFixed(0);
+  }
+
+  /* ── UI update ── */
+  var prevDrift=null, prevPnl=null;
+  function updateUI(){
+    var d=drift(members);
+    var conv=Math.round((members/CFG.TARGET)*100);
+    var heat=conv<20?'LOW':conv<50?'MED':conv<80?'HIGH':'MAX';
+    var hc=conv<20?'var(--red)':conv<50?'var(--gold)':conv<80?'var(--green)':'var(--blue)';
+
+    /* PNL number — flash on whole-number boundary cross */
+    var pnlEl=document.getElementById('opc-pnl');
+    if(pnlEl){
+      var curFloor=Math.floor(Math.abs(displayPnl));
+      var prevFloor=prevPnl!==null?Math.floor(Math.abs(prevPnl)):-1;
+      if(prevPnl!==null && curFloor!==prevFloor){
+        pnlEl.classList.remove('flash');
+        void pnlEl.offsetWidth;
+        pnlEl.classList.add('flash');
+      }
+      pnlEl.textContent=fmtAbs(displayPnl);
+      pnlEl.className=(pnlEl.classList.contains('flash')?'opc-num flash':'opc-num')+(displayPnl>=0?' pos':'');
+      prevPnl=displayPnl;
+    }
+
+    var dr=document.getElementById('opc-drift');
+    if(dr){ dr.textContent=fmtS(d); dr.className='opc-sv'+(d<0?' neg':d>0?' pos':''); }
+
+    /* Velocity badge */
+    var vel=document.getElementById('opc-vel');
+    if(vel && prevDrift!==null){
+      var diff=Math.abs(d)-Math.abs(prevDrift);
+      if(Math.abs(diff)<0.0001){ vel.textContent='→'; vel.className='opc-vel stable'; }
+      else if(diff>0){ vel.textContent='↓'; vel.className='opc-vel worse'; }
+      else { vel.textContent='↑'; vel.className='opc-vel better'; }
+    }
+    prevDrift=d;
+
+    var mv=document.getElementById('opc-members'); if(mv) mv.textContent=members;
+    var cv=document.getElementById('opc-conv'); if(cv){ cv.textContent=conv+'%'; cv.style.color=hc; }
+
+    /* Progress ring — circumference = 2π×14 ≈ 87.96 */
+    var rf=document.getElementById('opc-ring-fill');
+    if(rf){
+      var circ=87.96;
+      var offset=circ*(1-Math.min(conv/100,1));
+      rf.style.strokeDashoffset=offset;
+      rf.style.stroke=hc;
+    }
+
+    /* Keep old flat bar hidden — ring replaces it */
+    var pf=document.getElementById('opc-prog-fill'); if(pf){ pf.style.width=conv+'%'; pf.style.background=hc; }
+
+    /* Heat glow on MAX */
+    var hv=document.getElementById('opc-heat');
+    if(hv){
+      hv.textContent=heat; hv.style.color=hc;
+      hv.className='opc-sv'+(heat==='MAX'?' heat-max':'');
+    }
+
+    /* Projections */
+    var pd=projDay(), pm=projMonth();
+    var pdw=document.getElementById('opc-proj-day-wrap');
+    var pmw=document.getElementById('opc-proj-month-wrap');
+    var pdv=document.getElementById('opc-proj-day');
+    var pmv=document.getElementById('opc-proj-month');
+    if(pdv){ pdv.textContent=fmtProj(pd); pdv.className='opc-proj-val'+(pd>=0?' pos':''); }
+    if(pmv){ pmv.textContent=fmtProj(pm); pmv.className='opc-proj-val'+(pm>=0?' pos':''); }
+    if(pdw){ pdw.className='opc-proj-chip'+(pd>=0?' pos':''); }
+    if(pmw){ pmw.className='opc-proj-chip'+(pm>=0?' pos':''); }
+  }
+
+  /* ── Smooth animation loop ── */
+  function animLoop(){
+    /* Lerp PnL — 0.14 = snappier but still fluid */
+    var deltaPnl=pnl-displayPnl;
+    if(Math.abs(deltaPnl)>0.001){ displayPnl+=deltaPnl*0.14; } else { displayPnl=pnl; }
+
+    /* Lerp Drift for sidebar chip */
+    var targetDrift=drift(members);
+    var deltaDrift=targetDrift-displayDrift;
+    if(Math.abs(deltaDrift)>0.0001){ displayDrift+=deltaDrift*0.10; } else { displayDrift=targetDrift; }
+
+    /* Update DOM every frame — buttery smooth numbers */
+    var pnlEl=document.getElementById('opc-pnl');
+    if(pnlEl){ pnlEl.textContent=fmtAbs(displayPnl); pnlEl.className='opc-num'+(displayPnl>=0?' pos':''); }
+
+    var drr=document.getElementById('opc-drift-rate');
+    if(drr){ drr.textContent=fmtS(displayDrift)+'/сек'; drr.style.color=displayDrift<0?'var(--red)':'var(--green)'; }
+
+    drawChart();
+    rafId=requestAnimationFrame(animLoop);
+  }
+
+  /* ── Canvas chart with smooth bezier curve ── */
+  var canvas=document.getElementById('opc-canvas');
+  var ctx=canvas?canvas.getContext('2d'):null;
+
+  function drawChart(){
+    if(!ctx) return;
+    var box=canvas.parentElement;
+    var W=box.offsetWidth, H=box.offsetHeight;
+    if(W<=0||H<=0) return;
+    if(canvas.width!==W||canvas.height!==H){ canvas.width=W; canvas.height=H; }
+    ctx.clearRect(0,0,W,H);
+    if(hist.length<1) return;
+
+    var dark=isDark();
+    /* include displayPnl as synthetic last point for smooth live animation */
+    var pts=hist.slice();
+    pts[pts.length-1]=displayPnl; /* animate last point */
+
+    var mn=Math.min.apply(null,pts.concat([0]));
+    var mx=Math.max.apply(null,pts.concat([0]));
+    var rng=mx-mn||1;
+    var pd=5, pdR=4;
+    function toY(v){ return H-pd-((v-mn)/rng)*(H-pd*2); }
+    function toX(i){ return pdR+(i/(Math.max(pts.length-1,1)))*(W-pdR*2); }
+
+    var dark=isDark();
+    /* Grid lines */
+    ctx.lineWidth=0.5;
+    for(var g=0;g<=3;g++){
+      var gy=pd+(g/3)*(H-pd*2);
+      ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke();
+    }
+
+    /* Zero line */
+    var zy=toY(0);
+    ctx.strokeStyle=dark?'rgba(255,159,10,0.18)':'rgba(0,0,0,0.12)';
+    ctx.lineWidth=1; ctx.setLineDash([3,4]);
+    ctx.beginPath(); ctx.moveTo(0,zy); ctx.lineTo(W,zy); ctx.stroke();
+    ctx.setLineDash([]);
+
+    if(pts.length<2) return;
+
+    var last=pts[pts.length-1];
+    var lineColor=last<0?(dark?'#FF4F44':'#FF3B30'):(dark?'#32D96A':'#34C759');
+    var fillColorA=last<0?(dark?'rgba(255,79,68,0.18)':'rgba(255,59,48,0.10)'):(dark?'rgba(50,217,106,0.18)':'rgba(52,199,89,0.10)');
+    var fillColorB=last<0?(dark?'rgba(255,79,68,0.0)':'rgba(255,59,48,0.0)'):(dark?'rgba(50,217,106,0.0)':'rgba(52,199,89,0.0)');
+
+    /* Build smooth bezier path */
+    ctx.beginPath();
+    ctx.moveTo(toX(0),toY(pts[0]));
+    for(var i=1;i<pts.length;i++){
+      var x0=toX(i-1),y0=toY(pts[i-1]);
+      var x1=toX(i),y1=toY(pts[i]);
+      var cpx=(x0+x1)/2;
+      ctx.bezierCurveTo(cpx,y0,cpx,y1,x1,y1);
+    }
+
+    /* Area fill */
+    ctx.lineTo(toX(pts.length-1),zy);
+    ctx.lineTo(toX(0),zy);
+    ctx.closePath();
+    var grad=ctx.createLinearGradient(0,Math.min(zy,toY(last)),0,Math.max(zy,toY(last))+20);
+    grad.addColorStop(0,fillColorA);
+    grad.addColorStop(1,fillColorB);
+    ctx.fillStyle=grad;
+    ctx.fill();
+
+    /* Stroke the smooth line */
+    ctx.beginPath();
+    ctx.moveTo(toX(0),toY(pts[0]));
+    for(var i=1;i<pts.length;i++){
+      var x0=toX(i-1),y0=toY(pts[i-1]);
+      var x1=toX(i),y1=toY(pts[i]);
+      var cpx=(x0+x1)/2;
+      ctx.bezierCurveTo(cpx,y0,cpx,y1,x1,y1);
+    }
+    ctx.strokeStyle=lineColor;
+    ctx.lineWidth=2.2;
+    ctx.lineJoin='round';
+    ctx.lineCap='round';
+    ctx.stroke();
+
+    /* Live dot — pulsing ring effect */
+    var lx=toX(pts.length-1), ly=toY(last);
+    /* outer glow ring */
+    ctx.beginPath(); ctx.arc(lx,ly,5.5,0,Math.PI*2);
+    ctx.fillStyle=last<0?(dark?'rgba(255,79,68,0.22)':'rgba(255,59,48,0.18)'):(dark?'rgba(50,217,106,0.22)':'rgba(52,199,89,0.18)');
+    ctx.fill();
+    /* solid dot */
+    ctx.fillStyle=lineColor;
+    ctx.beginPath(); ctx.arc(lx,ly,3.5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle=dark?'rgba(11,11,16,0.65)':'rgba(255,255,255,0.8)';
+    ctx.beginPath(); ctx.arc(lx,ly,1.4,0,Math.PI*2); ctx.fill();
+
+    /* Value callout label — positioned LEFT of dot */
+    var labelText=fmtAbs(last);
+    ctx.font='bold 9px "DM Mono", monospace';
+    ctx.textBaseline='middle';
+    ctx.textAlign='left';
+    var tw=ctx.measureText(labelText).width;
+    var lpad=5, lpy=3.5;
+    var pillW=tw+lpad*2, pillH=lpy*2+1;
+    /* Dot is at right edge — place pill to the left */
+    var pillX=lx-pillW-14;
+    var pillY=ly-pillH/2;
+    /* Clamp so it doesn't go off canvas */
+    pillX=Math.max(2,pillX);
+    pillY=Math.max(2,Math.min(H-pillH-2,pillY));
+    /* Draw rounded pill manually (no ctx.roundRect for compat) */
+    var r2=4;
+    ctx.fillStyle=last<0?(dark?'rgba(255,79,68,0.88)':'rgba(255,59,48,0.92)'):(dark?'rgba(50,217,106,0.88)':'rgba(52,199,89,0.92)');
+    ctx.beginPath();
+    ctx.moveTo(pillX+r2,pillY);
+    ctx.lineTo(pillX+pillW-r2,pillY);
+    ctx.arcTo(pillX+pillW,pillY,pillX+pillW,pillY+r2,r2);
+    ctx.lineTo(pillX+pillW,pillY+pillH-r2);
+    ctx.arcTo(pillX+pillW,pillY+pillH,pillX+pillW-r2,pillY+pillH,r2);
+    ctx.lineTo(pillX+r2,pillY+pillH);
+    ctx.arcTo(pillX,pillY+pillH,pillX,pillY+pillH-r2,r2);
+    ctx.lineTo(pillX,pillY+r2);
+    ctx.arcTo(pillX,pillY,pillX+r2,pillY,r2);
+    ctx.closePath();
+    ctx.fill();
+    /* Text */
+    ctx.fillStyle='#fff';
+    ctx.fillText(labelText,pillX+lpad,pillY+pillH/2);
+  }
+
+  /* ── Tick every second — clock + history push only ── */
+  setInterval(function(){
+    secs++;
+    hist.push(pnl); if(hist.length>MAXH) hist.shift();
+    var cl=document.getElementById('opc-clock'); if(cl) cl.textContent=fmtT(secs);
+    updateUI();
+    updatePressure();
+    opcSaveState();
+  },1000);
+
+  /* ── Sub-tick every 100ms — smooth continuous PNL drift (10 steps/sec) ── */
+  setInterval(function(){
+    pnl+=drift(members)*0.1;
+  },100);
+
+  /* ── Member controls ── */
+  function addM(n){
+    members=Math.max(0,Math.min(CFG.TARGET,members+n));
+    updateUI();
+    opcSaveState();
+  }
+  var bp=document.getElementById('opc-plus'), bm=document.getElementById('opc-minus');
+  if(bp) bp.addEventListener('click',function(e){e.stopPropagation();addM(CFG.STEP);});
+  if(bm) bm.addEventListener('click',function(e){e.stopPropagation();addM(-CFG.STEP);});
+  /* Hold to repeat */
+  function holdBtn(el,fn){
+    var t=null,iv=null;
+    el.addEventListener('mousedown',function(e){e.stopPropagation();fn();t=setTimeout(function(){iv=setInterval(fn,80);},400);});
+    el.addEventListener('mouseup',function(){clearTimeout(t);clearInterval(iv);});
+    el.addEventListener('mouseleave',function(){clearTimeout(t);clearInterval(iv);});
+    el.addEventListener('touchstart',function(e){e.stopPropagation();fn();t=setTimeout(function(){iv=setInterval(fn,80);},400);},{passive:true});
+    el.addEventListener('touchend',function(){clearTimeout(t);clearInterval(iv);});
+  }
+  if(bp&&bm){ holdBtn(bp,function(){addM(CFG.STEP);}); holdBtn(bm,function(){addM(-CFG.STEP);}); }
+
+  window.addEventListener('resize',drawChart);
+  /* Init labels */
+  var sl=document.getElementById('opc-step-label'); if(sl) sl.textContent=CFG.STEP;
+  var tl=document.getElementById('opc-target-label'); if(tl) tl.textContent=CFG.TARGET;
+  var bel=document.getElementById('opc-be-label'); if(bel) bel.textContent=breakeven()+' гишүүн';
+  /* Load persisted OPC state (survives refresh) */
+  opcLoadState();
+  /* Restore input field values from saved CFG */
+  (function(){
+    var ep=document.getElementById('opc-fi-price'); if(ep) ep.value=CFG.PRICE;
+    var et=document.getElementById('opc-fi-target'); if(et) et.value=CFG.TARGET;
+    var est=document.getElementById('opc-fi-step'); if(est) est.value=CFG.STEP;
+    var esc=document.getElementById('opc-fi-scale'); if(esc) esc.value=CFG.SCALE;
+    var sl2=document.getElementById('opc-step-label'); if(sl2) sl2.textContent=CFG.STEP;
+    var tl2=document.getElementById('opc-target-label'); if(tl2) tl2.textContent=CFG.TARGET;
+    var bel2=document.getElementById('opc-be-label'); if(bel2) bel2.textContent=breakeven()+' гишүүн';
+  })();
+  updateUI();
+  animLoop();
+})();
+
+/* ══════════════════════════════════════════════════
+   ✨ FINAL POLISH
+══════════════════════════════════════════════════ */
+(function(){
+
+  /* 1. Time-aware greeting refresh every minute */
+  function refreshGreet(){
+    var nm=localStorage.getItem('pd4_nm')||'Цэвэгмид';
+    var h=new Date().getHours();
+    var g=h<5?'Шөнийн мэнд':h<12?'Өглөөний мэнд':h<18?'Өдрийн мэнд':'Оройн мэнд';
+    var emoji=h<5?'🌙':h<12?'☀️':h<18?'🌤️':'🌙';
+    var gh=document.getElementById('greet-h');
+    if(gh) gh.textContent=g+', '+nm+'! '+emoji;
+    var gs=document.getElementById('greet-sub');
+    if(gs){
+      var d=new Date();
+      var days=['Ням','Даваа','Мягмар','Лхагва','Пүрэв','Баасан','Бямба'];
+      gs.textContent='ProductDrop.MN · '+days[d.getDay()]+', '+d.toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric'});
+    }
+  }
+  refreshGreet();
+  setInterval(refreshGreet, 60000);
+
+  /* 2. Topbar dynamic page title */
+  var _pageNames={
+    kanban:'Ажлын самбар',content:'Контент Pipeline',analytics:'Аналитик',
+    users:'Хэрэглэгчид',admin:'Admin',focus:'Focus Zone',finance:'Finance',
+    checkin:'Daily Check-in',roadmap:'Scale Төлөвлөгөө',ai:'AI Зөвлөгч'
+  };
+  var _pageTitle=document.createElement('span');
+  _pageTitle.id='tb-page-title';
+  _pageTitle.style.cssText='font-size:12px;font-weight:700;color:var(--text3);margin-left:2px;opacity:0;transition:opacity .2s;white-space:nowrap;';
+  var _tbGap=document.querySelector('.tb-gap');
+  if(_tbGap) _tbGap.parentNode.insertBefore(_pageTitle, _tbGap);
+
+  var _origShowPage=window.showPage;
+  if(typeof _origShowPage==='function'){
+    window.showPage=function(name,el){
+      _origShowPage.call(this,name,el);
+      if(_pageNames[name]){
+        _pageTitle.textContent=_pageNames[name];
+        _pageTitle.style.opacity='1';
+      }
+    };
+  }
+
+  /* 3. Cmd+K shortcut hint tooltip on search button — desktop */
+  var srchBtn=document.querySelector('.tb-rp-btn[onclick*="openCmd"],.tb-rp-btn[title*="хайх"],.tb-rp-btn[title*="Хайх"]');
+  if(srchBtn&&!srchBtn.getAttribute('title')){
+    srchBtn.setAttribute('title','Хайх (⌘K)');
+  }
+
+  /* 4. Smooth scroll-to-top on page switch */
+  var _origSP2=window.showPage;
+  if(typeof _origSP2==='function'){
+    window.showPage=function(name,el){
+      _origSP2.call(this,name,el);
+      var c=document.querySelector('.content');
+      if(c) c.scrollTo({top:0,behavior:'smooth'});
+    };
+  }
+
+  /* 5. Better page-in animation — subtle lift */
+  var _pgStyle=document.createElement('style');
+  _pgStyle.textContent=
+    '.page.active{animation:pgIn2 .2s cubic-bezier(.25,.46,.45,.94);}'+
+    '@keyframes pgIn2{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}'+
+    /* Topbar page title responsive */
+    '@media(max-width:768px){#tb-page-title{display:none;}}'+
+    /* Remove default title tooltip on .ni (our CSS handles it) */
+    /* Cursor improvements */
+    '.scard,.tc,.fc,.drop-card,.an-card{cursor:default;}'+
+    '.scard[onclick],.tc[onclick],.fc[onclick],.drop-card[onclick]{cursor:pointer;}'+
+    /* Disabled button state */
+    'button:disabled{opacity:.4;cursor:not-allowed;}'+
+    /* Smooth nav icon transitions */
+    '.ni{transition:background .15s cubic-bezier(.25,.46,.45,.94),color .15s,transform .12s;}'+
+    /* Revenue chip pulse */
+    '.rev-chip::before{animation:pulse 2.5s ease-in-out infinite;}'+
+    /* Notif dropdown backdrop */
+    '.notif-dropdown{animation:dropIn .18s cubic-bezier(.25,.46,.45,.94);}';
+  document.head.appendChild(_pgStyle);
+
 })();
 
 </script>
