@@ -907,12 +907,40 @@ html.theme-tr .pipe-table tbody tr{
 
 /* ══ CONTEXT MENU ══ */
 .ctx-menu{position:fixed;background:var(--bg2);border:1px solid var(--border2);border-radius:13px;box-shadow:var(--shadow-lg);z-index:99990;padding:5px;min-width:180px;animation:dropIn .15s cubic-bezier(.25,.46,.45,.94);}
-.ctx-item{display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);transition:all .12s;}
+.ctx-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);transition:all .12s;min-height:36px;}
 .ctx-item:hover{background:var(--bg4);color:var(--text);}
 .ctx-item svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;}
 .ctx-item.danger{color:var(--red);}
 .ctx-item.danger:hover{background:var(--redbg);}
 .ctx-sep{height:1px;background:var(--border);margin:4px 0;}
+
+/* ══ CONTENT KANBAN ══ */
+.cnt-kanban{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:10px;align-items:start;padding-bottom:20px;}
+.cnt-kcol{background:rgba(0,0,0,0.025);border:1px solid var(--border);border-radius:var(--r);padding:10px;}
+[data-theme="dark"] .cnt-kcol{background:rgba(255,255,255,0.03);}
+.cnt-kh{display:flex;align-items:center;gap:7px;margin-bottom:10px;padding:0 2px;}
+.cnt-kdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.cnt-kt{font-size:11px;font-weight:800;color:var(--text);flex:1;letter-spacing:-.1px;}
+.cnt-kcount{font-size:11px;background:rgba(0,0,0,0.06);border-radius:99px;padding:2px 8px;color:var(--text3);font-weight:700;}
+[data-theme="dark"] .cnt-kcount{background:rgba(255,255,255,0.08);}
+.cnt-kcard{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:10px 12px;margin-bottom:7px;cursor:pointer;transition:all .18s;position:relative;}
+.cnt-kcard:hover{transform:translateY(-1px);box-shadow:var(--shadow);border-color:var(--border2);}
+.cnt-kcard.dragging{opacity:.5;transform:scale(.97);}
+.cnt-kcol.drag-over{background:rgba(255,149,0,.06);border-color:rgba(255,149,0,.3);}
+
+/* ══ IDEA BANK CHIPS ══ */
+.idea-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:8px;background:rgba(175,82,222,0.08);border:1px solid rgba(175,82,222,0.2);cursor:pointer;font-size:11px;color:var(--purple);font-weight:600;transition:all .15s;max-width:100%;text-align:left;line-height:1.3;}
+.idea-chip:hover,.idea-chip:active{background:rgba(175,82,222,0.18);border-color:var(--purple);}
+.idea-chip-del{width:18px;height:18px;border-radius:4px;border:none;background:rgba(255,59,48,0.1);color:var(--red);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:2px;transition:all .12s;}
+.idea-chip-del:hover{background:var(--red);color:#fff;}
+
+/* Mobile delete buttons — bigger touch targets */
+@media(max-width:768px){
+  .cnt-kanban{grid-template-columns:1fr;gap:10px;}
+  #cnt-kanban-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .cnt-kanban{min-width:unset;display:flex;flex-direction:column;gap:10px;}
+  .si-del-btn,.hb-del-btn{min-width:40px!important;min-height:40px!important;font-size:16px!important;padding:4px 8px!important;}
+}
 
 /* ══ OFFLINE BANNER ══ */
 .offline-bar{position:fixed;top:0;left:0;right:0;z-index:99998;background:var(--amber);color:#fff;text-align:center;font-size:12px;font-weight:700;padding:7px;display:none;align-items:center;justify-content:center;gap:8px;}
@@ -2099,6 +2127,7 @@ button:focus-visible,
           <button class="cnt-fb" data-f="BOFU" onclick="setCntFilter(this,'BOFU')">BOFU</button>
         </div>
         <button class="btn-add" style="background:var(--purple);color:#fff;border:none;" onclick="openHookBank()">🔗 Hook Bank</button>
+        <button class="btn-add" id="idea-bank-main-btn" style="background:linear-gradient(135deg,#AF52DE,#7B2FBE);color:#fff;border:none;" onclick="openIdeaBank()">📚 Idea Bank <span id="idea-bank-main-count" style="font-size:10px;opacity:0.85;"></span></button>
         <button class="btn-add" style="background:var(--blue);color:#fff;border:none;" onclick="openBatchPlanner()">📅 7 Хоногийн Контент</button>
         <button class="btn-add" style="background:var(--text3);" onclick="resetContents()">↺ Reset</button>
         <button class="btn-add" onclick="openContentM()">+ Нэмэх</button>
@@ -2106,9 +2135,11 @@ button:focus-visible,
       <!-- Card list -->
       <div class="cnt-view-btns">
         <button class="cnt-vb on" onclick="setCntView('list',this)">Жагсаалт</button>
+        <button class="cnt-vb" onclick="setCntView('kanban',this)">Kanban</button>
         <button class="cnt-vb" onclick="setCntView('calendar',this)">Хуанли</button>
       </div>
       <div id="cnt-card-list"></div>
+      <div id="cnt-kanban-wrap" style="display:none;overflow-x:auto;-webkit-overflow-scrolling:touch;"></div>
       <div id="cnt-cal-wrap" style="display:none;"></div>
     </div>
 
@@ -3532,7 +3563,46 @@ button:focus-visible,
         <button onclick="var e=document.getElementById('ai-api-key');e.type=e.type==='password'?'text':'password'" style="padding:7px 10px;border-radius:8px;border:1px solid var(--border2);background:var(--bg4);color:var(--text2);font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;">👁 Харах</button>
       </div>
       <div style="font-size:11px;color:var(--text3);margin:4px 0 10px;">Нэг удаа оруулахад браузерт хадгалагдана. <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:var(--purple);">Key авах →</a></div>
+      <!-- ── ГОЛ САНАА ҮҮСГЭГЧ ── -->
+      <div style="margin-bottom:10px;">
+        <div id="idea-gen-toggle" onclick="(function(){var b=document.getElementById('idea-gen-box');var ic=document.getElementById('idea-gen-chev');var open=b.style.display==='block';b.style.display=open?'none':'block';ic.style.transform=open?'rotate(0deg)':'rotate(180deg)';})()" style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 11px;border-radius:10px;background:linear-gradient(135deg,rgba(175,82,222,0.12),rgba(0,122,255,0.08));border:1.5px solid rgba(175,82,222,0.28);user-select:none;transition:all .15s;">
+          <span style="font-size:14px;">💡</span>
+          <span style="font-size:11px;font-weight:800;color:var(--purple);flex:1;letter-spacing:.03em;">ГОЛ САНАА ҮҮСГЭГЧ</span>
+          <span style="font-size:10px;color:var(--text3);font-weight:500;margin-right:4px;">Funnel-д тохирсон олон санаа</span>
+          <svg id="idea-gen-chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2.5" style="transition:transform .2s;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div id="idea-gen-box" style="display:none;margin-top:6px;padding:13px 14px;border-radius:12px;border:1.5px solid rgba(175,82,222,0.22);background:linear-gradient(135deg,rgba(175,82,222,0.05),rgba(0,122,255,0.03));">
+          <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.6;">Нишний контекст оруулснаар <strong style="color:var(--purple);">8 гол санаа</strong> гаргаж өгнө. Дараа нь дурсах санаагаа дарж "<em>Санаа / Гол утга</em>" талбарт нэмнэ.</div>
+          <div style="margin-bottom:8px;">
+            <label class="cnt-lbl" style="color:var(--purple);">Зорилтот хүн</label>
+            <input class="cnt-fi" id="ig-audience" placeholder="Жишээ: их сургуулийн оюутан, онлайн бизнес эхлүүлмээр" style="margin-bottom:0;border-color:rgba(175,82,222,0.3);"/>
+          </div>
+          <label class="cnt-lbl" style="color:var(--purple);">Хүн ямар асуудалтай байна? / Яг юу өвдөж байна?</label>
+          <textarea class="cnt-ta" id="ig-pain" placeholder="Жишээ: Ямар бараа зарахаа мэдэхгүй, Alibaba хайхад цаг алдаж байна, туршивал алдаж магадгүй гэж айна..." style="min-height:55px;margin-bottom:8px;border-color:rgba(175,82,222,0.3);"></textarea>
+          <button id="ig-run-btn" onclick="aiGenMainIdeas()" style="width:100%;padding:10px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .18s;margin-bottom:8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            8 Гол санаа үүсгэх
+          </button>
+          <div id="ig-status" style="font-size:11px;text-align:center;min-height:16px;font-weight:600;margin-bottom:4px;"></div>
+          <div id="ig-results" style="display:none;flex-direction:column;gap:5px;"></div>
+          <div id="ig-saved-btn-wrap" style="display:none;margin-top:10px;border-top:1px solid rgba(175,82,222,0.15);padding-top:10px;display:none;justify-content:space-between;align-items:center;">
+            <span style="font-size:10px;color:var(--text4);">Сонгосон санааг доорх талбарт нэмж засах боломжтой</span>
+            <button onclick="openSavedIdeas()" style="border:none;background:rgba(175,82,222,0.12);color:var(--purple);font-size:11px;font-weight:700;cursor:pointer;padding:5px 10px;border-radius:7px;">📚 Хадгалсан</button>
+          </div>
+        </div>
+      </div>
+
       <label class="cnt-lbl" style="color:var(--purple);">Санаа / Гол утга</label>
+      <!-- ── САНАА БАНК inline ── -->
+      <div id="idea-bank-wrap" style="margin-bottom:8px;">
+        <div onclick="toggleIdeaBank()" style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:6px 10px;border-radius:9px;background:rgba(175,82,222,0.07);border:1.5px solid rgba(175,82,222,0.18);user-select:none;transition:all .15s;margin-bottom:0;" id="idea-bank-toggle">
+          <span style="font-size:13px;">📚</span>
+          <span style="font-size:11px;font-weight:800;color:var(--purple);flex:1;">Хадгалсан Санаа Банк</span>
+          <span id="idea-bank-count" style="font-size:10px;color:var(--text4);font-weight:600;"></span>
+          <svg id="idea-bank-chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2.5" style="transition:transform .2s;"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div id="idea-bank-chips" style="display:none;padding:8px 2px;flex-wrap:wrap;gap:5px;"></div>
+      </div>
       <textarea class="ai-av-textarea" id="ai-idea" placeholder="Жишээ: Alibaba-аас бараа хайхад 3 цаг зарцуулдаг, ProductDrop 30 минутад шийддэг. Цагийн тооцоог харуулна."></textarea>
       <div style="display:flex;gap:7px;margin-bottom:6px;">
         <button class="ai-gen-btn" id="ai-gen-btn" onclick="aiGenScript()" style="flex:1;">
@@ -3656,6 +3726,25 @@ button:focus-visible,
       </div>
       <div id="hb-list" style="display:flex;flex-direction:column;gap:6px;"></div>
       <div style="text-align:center;padding:20px;color:var(--text4);font-size:12px;" id="hb-empty" style="display:none;">Хадгалсан hook байхгүй байна. Script үүсгэх үед "💾 Save" дарж хадгалаарай.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ IDEA BANK MODAL ══ -->
+<div id="idea-bank-overlay" onclick="if(event.target===this)closeIdeaBank()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);z-index:9100;align-items:flex-end;justify-content:center;">
+  <div style="width:100%;max-width:600px;max-height:82vh;background:var(--bg2);border-radius:22px 22px 0 0;display:flex;flex-direction:column;box-shadow:0 -8px 40px rgba(0,0,0,.2);animation:aup .22s cubic-bezier(.25,.46,.45,.94);">
+    <div style="padding:18px 22px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;">
+      <span style="font-size:18px;">📚</span>
+      <div style="flex:1;">
+        <div style="font-size:15px;font-weight:800;color:var(--text);">Idea Bank</div>
+        <div style="font-size:11px;color:var(--text3);">Хадгалсан санаанууд — дарж Script-д ашиглах</div>
+      </div>
+      <button onclick="closeIdeaBank()" style="width:30px;height:30px;border-radius:8px;border:1px solid var(--border2);background:var(--bg4);color:var(--text3);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+    <div style="padding:14px 22px;flex:1;overflow-y:auto;">
+      <input id="ib-search" type="text" placeholder="Санаа хайх..." oninput="renderIdeaBankModal()" style="width:100%;padding:8px 12px;border-radius:10px;border:1.5px solid var(--border2);background:var(--bg3);color:var(--text);font-size:12px;font-family:inherit;outline:none;margin-bottom:14px;"/>
+      <div id="ib-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+      <div id="ib-empty" style="display:none;text-align:center;padding:28px 20px;color:var(--text4);font-size:12px;">Хадгалсан санаа байхгүй байна.<br><span style="font-size:11px;opacity:.7;">AI-аар script үүсгэж 💾 Save дарж хадгал.</span></div>
     </div>
   </div>
 </div>
@@ -4955,7 +5044,7 @@ function renderContent(){
           +(c.revenue>0?'<span style="font-size:11px;font-weight:700;color:var(--green);">₮'+(c.revenue>=1000000?(c.revenue/1000000).toFixed(1)+'M':c.revenue>=1000?Math.round(c.revenue/1000)+'K':c.revenue)+'</span>':'')
           +'</div>';
       }
-      html+='<div class="cnt-card" onclick="event.stopPropagation();openScriptView('+c.id+')" style="cursor:pointer;position:relative;">'
+      html+='<div class="cnt-card" data-cid="'+c.id+'" onclick="event.stopPropagation();openScriptView('+c.id+')" style="cursor:pointer;position:relative;" oncontextmenu="cntCtxMenu(event,'+c.id+')">'
         // Top row: badges + date
         +'<div style="display:flex;align-items:center;gap:5px;margin-bottom:9px;flex-wrap:wrap;">'
         +cntTypeBadge(c.type)+cntStatusBadge(c.status)
@@ -4984,6 +5073,8 @@ function renderContent(){
     html+='</div>';
   });
   el.innerHTML=html;
+  // Refresh kanban if in kanban view
+  if(_cntView==='kanban') _renderCntKanban();
 
   // analytics badge
   var dot=document.getElementById('content-ni-dot');if(dot)dot.style.display=contents.filter(function(c){return c.status!=='pub';}).length>0?'':'none';
@@ -6913,6 +7004,12 @@ function _closeCtxMenu(){
 }
 document.addEventListener('click',function(){ _closeCtxMenu(); });
 document.addEventListener('contextmenu',function(e){
+  var cntcard=e.target.closest('.cnt-card');
+  if(cntcard){
+    var cid=parseInt(cntcard.dataset.cid||cntcard.getAttribute('data-cid'));
+    if(!cid){/* try onclick attr */var m=(cntcard.getAttribute('onclick')||'').match(/\d+/);if(m)cid=parseInt(m[0]);}
+    if(cid){cntCtxMenu(e,cid);return;}
+  }
   var card=e.target.closest('.tc');
   if(!card) return;
   e.preventDefault();
@@ -7249,7 +7346,125 @@ function setCntView(v,btn){
   document.getElementById('cnt-card-list').style.display=v==='list'?'':'none';
   var cw=document.getElementById('cnt-cal-wrap');
   if(cw) cw.style.display=v==='calendar'?'':'none';
+  var kw=document.getElementById('cnt-kanban-wrap');
+  if(kw) kw.style.display=v==='kanban'?'':'none';
   if(v==='calendar') _renderCntCal();
+  if(v==='kanban') _renderCntKanban();
+}
+
+/* ── CONTENT PIPELINE KANBAN ── */
+var _cntKanbanCols=[
+  {id:'idea',label:'💡 Санаа',dot:'var(--text4)'},
+  {id:'scr',label:'📝 Script',dot:'var(--blue)'},
+  {id:'rec',label:'🎬 Бичлэг',dot:'var(--amber)'},
+  {id:'pub',label:'✅ Нийтлэгдсэн',dot:'var(--green)'}
+];
+var _cntDragId=null;
+
+function _renderCntKanban(){
+  var kw=document.getElementById('cnt-kanban-wrap');if(!kw)return;
+  var q=(document.getElementById('cnt-search')||{value:''}).value.toLowerCase();
+  var list=contents.filter(function(c){
+    var mf=cntFilter==='all'||c.type===cntFilter;
+    var mq=!q||(c.title||'').toLowerCase().includes(q)||(c.hooks||'').toLowerCase().includes(q);
+    return mf&&mq;
+  });
+  var html='<div class="cnt-kanban">';
+  _cntKanbanCols.forEach(function(col){
+    var cards=list.filter(function(c){return (c.status||'idea')===col.id;});
+    html+='<div class="cnt-kcol" data-colid="'+col.id+'" ondragover="event.preventDefault();this.classList.add(\'drag-over\')" ondragleave="this.classList.remove(\'drag-over\')" ondrop="cntKanbanDrop(event,\''+col.id+'\')">'
+      +'<div class="cnt-kh"><div class="cnt-kdot" style="background:'+col.dot+';"></div><span class="cnt-kt">'+col.label+'</span><span class="cnt-kcount">'+cards.length+'</span></div>';
+    cards.forEach(function(c){
+      var typeC={TOFU:'var(--blue)',MOFU:'var(--amber)',BOFU:'var(--red)'};
+      var tc=typeC[c.type]||'var(--text3)';
+      html+='<div class="cnt-kcard" data-cid="'+c.id+'" draggable="true" '
+        +'ondragstart="cntKanbanDragStart(event,'+c.id+')" ondragend="cntKanbanDragEnd(event)" '
+        +'onclick="openScriptView('+c.id+')" '
+        +'oncontextmenu="cntCtxMenu(event,'+c.id+')">'
+        +'<div style="display:flex;align-items:center;gap:4px;margin-bottom:6px;flex-wrap:wrap;">'
+        +'<span style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;background:rgba(0,0,0,0.06);color:'+tc+';">'+c.type+'</span>'
+        +'<span style="margin-left:auto;font-size:9px;color:var(--text4);font-weight:600;">'+fmtCntDate(c.date)+'</span>'
+        +'</div>'
+        +'<div style="font-size:12px;font-weight:700;color:var(--text);line-height:1.35;margin-bottom:5px;">'+x(c.title)+'</div>'
+        +((c.hooks||'').trim()?'<div style="font-size:10.5px;color:var(--text3);font-style:italic;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin-bottom:6px;">'+x((c.hooks||'').split('\n')[0])+'</div>':'')
+        +'<div style="display:flex;gap:4px;padding-top:7px;border-top:1px solid var(--border);">'
+        +'<button onclick="event.stopPropagation();openCntEdit('+c.id+')" style="flex:1;padding:5px;border-radius:7px;border:1.5px solid var(--border2);background:transparent;color:var(--text2);font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;">✏️ Засах</button>'
+        +'<button onclick="event.stopPropagation();cntCtxMenu(event,'+c.id+')" style="padding:5px 8px;border-radius:7px;border:1.5px solid var(--border2);background:transparent;color:var(--text3);font-size:11px;cursor:pointer;">⋮</button>'
+        +'</div>'
+        +'</div>';
+    });
+    html+='<button onclick="openContentM()" style="width:100%;margin-top:6px;padding:7px;border-radius:9px;border:1.5px dashed var(--border2);background:transparent;color:var(--text4);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;" onmouseenter="this.style.borderColor=\'var(--text3)\';this.style.color=\'var(--text2)\'" onmouseleave="this.style.borderColor=\'var(--border2)\';this.style.color=\'var(--text4)\'">+ Нэмэх</button>'
+    +'</div>';
+  });
+  html+='</div>';
+  kw.innerHTML=html;
+  /* Touch long-press for context menu on mobile */
+  kw.querySelectorAll('.cnt-kcard').forEach(function(card){
+    var _lpt=null;
+    card.addEventListener('touchstart',function(e){
+      var cid=parseInt(card.dataset.cid);
+      _lpt=setTimeout(function(){_closeCtxMenu();cntCtxMenuTouch(card,cid);},500);
+    },{passive:true});
+    card.addEventListener('touchend',function(){clearTimeout(_lpt);},{passive:true});
+    card.addEventListener('touchmove',function(){clearTimeout(_lpt);},{passive:true});
+  });
+}
+
+function cntKanbanDragStart(e,id){_cntDragId=id;setTimeout(function(){var c=document.querySelector('.cnt-kcard[data-cid="'+id+'"]');if(c)c.classList.add('dragging');},0);}
+function cntKanbanDragEnd(e){document.querySelectorAll('.cnt-kcard.dragging,.cnt-kcol.drag-over').forEach(function(el){el.classList.remove('dragging','drag-over');});_cntDragId=null;}
+function cntKanbanDrop(e,colId){
+  e.preventDefault();
+  document.querySelectorAll('.cnt-kcol').forEach(function(el){el.classList.remove('drag-over');});
+  if(!_cntDragId)return;
+  var c=contents.find(function(c){return c.id===_cntDragId;});
+  if(c){c.status=colId;saveAll();renderContent();_renderCntKanban();sbCntUpdate(c.id,{status:colId}).catch(function(){});}
+  _cntDragId=null;
+}
+
+/* Content right-click context menu */
+var _cntCtxId=null;
+function cntCtxMenu(e,id){
+  e.preventDefault();e.stopPropagation();
+  _closeCtxMenu();
+  _cntCtxId=id;
+  var menu=document.createElement('div');
+  menu.id='ctx-menu-el';menu.className='ctx-menu';
+  menu.style.left=Math.min(e.clientX,window.innerWidth-200)+'px';
+  menu.style.top=Math.min(e.clientY,window.innerHeight-260)+'px';
+  menu.innerHTML=[
+    '<div class="ctx-item" onclick="cntCtxSetStatus(\'idea\')">💡 Санаа болгох</div>',
+    '<div class="ctx-item" onclick="cntCtxSetStatus(\'scr\')">📝 Script бэлэн</div>',
+    '<div class="ctx-item" onclick="cntCtxSetStatus(\'rec\')">🎬 Бичлэг хийсэн</div>',
+    '<div class="ctx-item" onclick="cntCtxSetStatus(\'pub\')">✅ Нийтлэгдсэн</div>',
+    '<div class="ctx-sep"></div>',
+    '<div class="ctx-item" onclick="openCntEdit(_cntCtxId)"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Засварлах</div>',
+    '<div class="ctx-item" onclick="openScriptView(_cntCtxId)"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Script харах</div>',
+    '<div class="ctx-sep"></div>',
+    '<div class="ctx-item danger" onclick="cntCtxDelete()"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Устгах</div>'
+  ].join('');
+  document.body.appendChild(menu);
+  setTimeout(function(){document.addEventListener('click',_closeCtxMenu,{once:true});},10);
+}
+function cntCtxMenuTouch(card,id){
+  var r=card.getBoundingClientRect();
+  var fakeE={preventDefault:function(){},stopPropagation:function(){},clientX:r.left+r.width/2,clientY:r.top};
+  cntCtxMenu(fakeE,id);
+}
+function cntCtxSetStatus(s){
+  var c=contents.find(function(c){return c.id===_cntCtxId;});
+  if(c){c.status=s;saveAll();renderContent();if(_cntView==='kanban')_renderCntKanban();sbCntUpdate(c.id,{status:s}).catch(function(){});}
+  _closeCtxMenu();
+  if(typeof toast==='function')toast('Статус өөрчлөгдлөө ✓','ok');
+}
+function cntCtxDelete(){
+  var c=contents.find(function(c){return c.id===_cntCtxId;});
+  if(!c)return;_closeCtxMenu();
+  if(!confirm('Устгах уу? "'+c.title+'"'))return;
+  var delId=_cntCtxId;
+  contents=contents.filter(function(x){return x.id!==delId;});
+  saveAll();renderContent();if(_cntView==='kanban')_renderCntKanban();
+  sbCntDelete(delId).catch(function(){});
+  if(typeof toast==='function')toast('Устгагдлаа','ok');
 }
 var MN_DAYS_SHORT=['Да','Мя','Лх','Пү','Ба','Бя','Ня'];
 function _renderCntCal(){
@@ -11740,72 +11955,170 @@ async function aiGenScript() {
   btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Боловсруулж байна...';
   status.textContent = '⏳ AI script бичиж байна...';
 
-  var systemPrompt = `Чи ProductDrop.MN-ийн ахлах контент стратегич. Alex Hormozi-ийн Content & Offer strategy-г Монголын dropshipping зах зээлд яг хэрэгжүүлдэг.
+  var systemPrompt = `Чи ProductDrop.MN-ийн контент стратегич.
+Hormozi-ийн механизмыг Монгол хүний сэтгэлзүйд тааруулдаг — copy хийдэггүй.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Зорилго:
+→ "зөв харагдах" биш — "танигдах, мартагдахгүй байх"
+→ тэр хүн "энэ надтай ярьж байна" гэж мэдрэх
+→ нэг л үйлдэл хийлгэх
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 DREAM AVATAR: ${av.emoji} ${av.name}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Нас / байдал: ${av.age}
-Яг одоо байгаа байдал: ${av.situation}
-Pains: ${av.pains}
-Dreams: ${av.dreams}
-Trigger үгс: ${av.triggers}
-Objections: ${av.objections}
-Дотоод яриа: ${av.inner_voice}
-Hook жишээ (санаа авах — хуулахгүй): ${(av.hooks||[]).join(' | ')}
+Яг одоо байгаа нөхцөл: ${av.situation}
+Өдөр тутмын өвдөлт: ${av.pains}
+Хүсдэг зүйл: ${av.dreams}
+Дотоод яриа — 70% яг, 30% утгаар хувиргаж ашигла: ${av.inner_voice}
+Trigger болдог зүйл: ${av.triggers}
+Objection-ууд: ${av.objections}
+Hook жишээ (санаа авах, хуулахгүй): ${(av.hooks||[]).join(' | ')}
 Хориотой: ${av.forbidden||''}
 CTA хэв: ${av.cta_style}
 Контентийн төрөл: ${cntType}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-HORMOZI FRAMEWORK — ЯГ ДАГАНА
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+VOICE LOCK — ҮРГЭЛЖ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Контент бүр дараах tone-оор бичигдэнэ:
+→ Шууд — тойруулж ярихгүй
+→ Хэт motivational биш — бодит
+→ "зааж байгаа" биш — "хэлж байгаа"
+→ Slightly confrontational — бага зэрэг шахна, гэхдээ доромжлохгүй
 
-HOOK ТОМЬЁО: [Тоо] [үр дүн] [цаг хугацаа] — [нөхцөл / хязгаарлалт]
-Жишээ: "₮2.1 сая 47 хоногт — агуулах байхгүй, код мэдэхгүй байсан"
-Hook нь Dream Outcome + хязгаарлалт хослуулна. Ерөнхий биш — яг avatar-ийн тоо, цаг, нөхцөл.
+Tone жишээ:
+"Чи ингэж бодож байж магадгүй… гэхдээ"
+"Үнэн нь энэ"
+"Ихэнх хүмүүс энд алдаад байдаг"
 
-VILLAIN FRAME: Хуучин арга / тогтолцоо яагаад ажиллахгүй байгааг заавал тайлбарла.
-"Alibaba-аас өөрөө хайх гэж 3 цаг зарцуулна, ашиг тооцох гэж Excel нээнэ — энэ бол 2019 оны арга."
-Дайсан = тогтолцоо, арга, буруу итгэл — хэзээ ч хүн биш.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+МОНГОЛ ДҮРЭМ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-VALUE EQUATION шалга:
-  Dream Outcome: avatar-ийн яг мөрөөдөл үр дүн
-  Likelihood: "Надад ч болсон / 200+ хүн хийсэн" — бодит нотолгоо
-  Time Delay: хэр хурдан үр дүн гарах — тоо, хоног
-  Effort: хэр хялбар — "Phone нэг л хэрэгтэй"
-Value = (Outcome × Likelihood) ÷ (Time × Effort) — энэ томьёогоор БҮГДИЙГ шалга.
+① HOOK
 
-PROOF TIER — энэ дарааллаар нотол:
-  1. Өөрийн үр дүн (screenshot, тоо)
-  2. Бусдын үр дүн ("Манай member Болд 14 хоногт...")
-  3. Логик тайлбар (яагаад ажиллах нь тодорхой)
+Default дараалал — эхлээд 1-ийг оролд, тохирохгүй бол 2, дараа 3:
 
-OFFER STACK — CTA өмнө "юу авах вэ" заавал нэм:
-  "DM-д SCALE гэж бичихэд: [1] Бэлэн бараа жагсаалт [2] Ашиг тооцоолуур [3] Эхний 7 хоногийн зааварчилгаа — ҮНЭГҮЙ"
-  Perceived value > үнэ. Хүн "энэ их зүйл авна" гэж мэдрэх ёстой.
+[1] Relatable нөхцөл (хамгийн их ашиглана)
+→ "Хийе гэж бодоод л байдаг — гэхдээ..."
+→ "Өдөрт 2 цаг утас ухдаг хэрнээ..."
 
-НЭГ ХҮНТЭЙ ЯРИ: "ЧИ" — хэзээ ч "залуусаа / хүмүүс / бид" биш.
-HYPER-SPECIFIC: "Мөнгөгүй" биш → "Картаа уншуулахдаа дотор чинь харанхуйлдаг тэр секунд"
-SHOW DON'T TELL: "Хурдан" гэж бүү хэл — секунд тоол. "Хялбар" биш — дэлгэц харуул.
-VESSEL: "Надад ч байсан" > "Чи чадна". Алдаа, эргэлзээгээ нээлттэй илчил.
-НЭГ CTA: Нэг үйлдэл л. "DM-д X бич" — цааш юу ч биш.
-FLUFF УСТГА: Хасахад утга алдагдахгүй өгүүлбэр бүрийг хас.
+[2] Pattern break (хоёрдугаарт)
+→ "Чи завгүй биш — зүгээр л зайлсхийж байна"
+→ "Чи эхлээгүй байгаа шалтгаан нь мэдэхгүйдээ биш"
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[3] Жижиг бодит тоо (хамгийн бага)
+→ "4 хоногт 11 захиалга. Агуулах байхгүй."
+→ "₮30,000. Эхний захиалга. Дахин хэлье."
+
+Comment trigger — 50% дээр нэм, 50% дээр зөвхөн curiosity:
+→ 50%: "Чи үүнийг ойлгож байвал 1 гэж бич" / "Чи аль талд нь байна?"
+→ 50%: trigger байхгүй — hook өөрөө татна
+Чухал: conversation шиг байх — илт bait биш
+
+ХОРИГЛОНО: $-тэй том тоо, "passive income", "сард X олсон" flex
+
+② VILLAIN
+
+Дайсан = буруу систем, буруу ойлголт, дотоод дайсан — хэзээ ч хүн биш
+
+✓ "dropshipping бол амархан" гэдэг худлаа
+✓ "сайн бараа олвол л болно" гэсэн алдаатай итгэл
+✓ Avatar-ийн inner voice-ийг толин тусгал болго:
+   Мөрөөдөгч → "Маргааш нь эхэлнэ" / "Алдвал яах вэ"
+   Туршиж байгаа → "Буруу бараа сонгосон байх" / "DM хоосон"
+   Хийж байгаа → "Цаг нэмэхгүйгээр орлого нэмэгдэхгүй"
+
+③ BRIDGE
+
+Дараах гурваас нэгийг сонго — давт хэрэглэхгүй:
+
+[1] Vessel: "Би ч яг тэгж байсан. Тэгэхэд..."
+[2] Reframe: "Гол асуудал нь бараа биш байсан — би үүнийг дараа ойлгосон"
+[3] Observation: "Ихэнх хүмүүс яг энд алдаад байдаг — шалтгаан нь..."
+
+→ Шууд зарахгүй. Avatar "надтай адил хүн ярьж байна" гэж мэдрэх ёстой.
+
+④ VALUE + ⑤ PROOF
+
+Stack limit: дараах гурваас MAX 2-ийг оруул — 3-уулаа зэрэг биш:
+
+[ ] Micro-conflict: "Чи ингэж бодож байж магадгүй — гэхдээ..."
+[ ] Open loop: "Гэхдээ хамгийн том алдаа нь энэ биш" / "Хамгийн чухал нь дараагийнх"
+[ ] Memorability trigger — доороос нэгийг:
+      Repeatable phrase: "Асуудал нь бараа биш" / "Чи бодож байгаагаасаа өөр"
+      Visual line: "Орой 11 цагт, хүүхдүүд унтчихсан, дэлгэцийн гэрэл л байна"
+      Contrast pair: "Олон бараа биш — зөв систем" / "Илүү цаг биш — зөв алхам"
+
+Value: НЭГ core insight л өг — teaser болго. Show don't tell: "хурдан" биш → секунд тоол.
+
+Proof заавал хоёр давхаргатай:
+[Өгөгдөл] Жижиг бодитой тоо, Монголд болсон жишээ
+[Experience] Нэг бодит мөч:
+   → "Эхний захиалга орж ирэхэд итгэхгүй байлаа"
+   → "Messenger дээр 'хүргэлт хэзээ вэ' гэж ирэхэд..."
+
+ХОРИГЛОНО: Баталгаагүй claim, flex тоо, туршлагагүй хүнд итгэмжгүй амлалт
+
+⑥ CTA
+
+Нэг л үйлдэл + дараагийн контенттой loop:
+
+Мөрөөдөгч → "Чи одоо аль дээр гацаж байгаагаа бич — дараагийн видеонд яг тэр дээр орно"
+Туршиж байгаа → "Чи эхэлсэн үү, эсвэл бодоод л явж байна уу — хариуд нь тохирох видео явуулъя"
+Хийж байгаа → "Чиний нөхцөлд таарах эсэхийг хэлж өгье — дараагийнх илүү гүн орно"
+
+Заримдаа statement байж болно: "1 гэж бич — явуулъя"
+
+ХОРИГЛОНО: "линк bio дотор", "одоо худалдаж ав", "хязгаарлагдмал хугацаа"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SIGNATURE LOCK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+70% — Uncomfortable truth (брэндийн гол дуу хоолой):
+→ "Чи завгүй биш — зайлсхийж байна"
+→ "Асуудал чинь бараа биш — итгэл байхгүй"
+→ "Чи бодож байгаагаасаа өөр шалтгаан байна"
+
+30% — Эргэлж оруулна:
+→ Curiosity-driven: шууд хариулахгүй, татаж оруулна
+→ Story-driven: нэг бодит жижиг үйл явдлаас эхэлнэ
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FREEDOM LAYER — 20% RULE BREAK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Контент бүрт нэг хэсэгт дүрмээс санаатай зөрж болно:
+HOOK → бүтцийг эвдэж, unconventional байж болно
+BRIDGE → structure орхиж, цэвэр storytelling хийж болно
+VALUE → заримыг тайлбарлахгүй орхиж болно — орхисон нь татна
+CTA → асуултгүй, зөвхөн statement байж болно
+Зорилго: контент "хүн бичсэн" мэт байх — perfect биш, амьд байх
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ХЭЛНИЙ ДҮРЭМ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+→ "ЧИ" — хэзээ ч "залуусаа / хүмүүс / бид" биш
+→ Rhythm > rigid structure: storytelling хэсэгт урт өгүүлбэр зөвшөөрнө
+→ 10–20%: хурц үг, шууд хэлэлт, бага зэрэг эвгүй үнэн зөвшөөрнө
+→ Guru tone, western exaggeration, "ингэж амжилтанд хүрлээ" narrative хориглоно
+→ FLUFF: хасахад утга алдагдахгүй өгүүлбэрийг хас
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 SCRIPT БҮТЭЦ
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[HOOK — 0-4с]: Hormozi hook томьёо. Dream Outcome + тоо + нөхцөл. Хэзээ ч ерөнхий эхлэл биш.
-[VILLAIN — 4-10с]: Хуучин арга яагаад ажиллахгүй. "Чи одоо ийм байна" — avatar-ийн яг өвдөлт.
-[BRIDGE — 10-20с]: "Надад ч байсан. Тэгэхэд би олж мэдсэн зүйл..." — vessel angle.
-[PROOF — 20-40с]: Show don't tell. Тоо, screenshot, demo, Value Equation-ийг харуул.
-[OFFER+CTA — 40-60с]: Offer stack → нэг л үйлдэл. Avatar-д тохирсон CTA хэв.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[HOOK — 0-3с]
+[VILLAIN — 3-8с]
+[BRIDGE — 8-18с]
+[VALUE — 18-35с]
+[PROOF — 35-50с]
+[CTA — 50-60с]
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-JSON FORMAT ЗӨВХӨН гаргана (тайлбар, markdown, backtick огт хэрэггүй):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+JSON FORMAT ЗӨВХӨН (тайлбар, markdown, backtick хэрэггүй):
 {
-  "hooks": "Hook 1: [тоо+үр дүн+цаг+нөхцөл]\\nHook 2: ...\\nHook 3: ...",
-  "script": "[HOOK — 0-4с]\\n...\\n\\n[VILLAIN — 4-10с]\\n...\\n\\n[BRIDGE — 10-20с]\\n...\\n\\n[PROOF — 20-40с]\\n...\\n\\n[OFFER+CTA — 40-60с]\\n..."
+  "hooks": "Hook 1: ...\\nHook 2: ...\\nHook 3: ...",
+  "script": "[HOOK — 0-3с]\\n...\\n\\n[VILLAIN — 3-8с]\\n...\\n\\n[BRIDGE — 8-18с]\\n...\\n\\n[VALUE — 18-35с]\\n...\\n\\n[PROOF — 35-50с]\\n...\\n\\n[CTA — 50-60с]\\n..."
 }`;
 
   var userMsg = `Дараах санаа дээр үндэслэн бүх талбарыг бөглөж өг:\n\n${idea}\n\nJSON зөвхөн гаргана.`;
@@ -12109,6 +12422,442 @@ async function pbGenScript(){
   btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Барааны Script үүсгэх';
 }
 
+/* ══════════════════════════════════════════════
+   💡 ГОЛ САНАА ҮҮСГЭГЧ — Main Idea Generator  v2
+══════════════════════════════════════════════ */
+async function aiGenMainIdeas() {
+  var btn = document.getElementById('ig-run-btn');
+  var status = document.getElementById('ig-status');
+  var results = document.getElementById('ig-results');
+
+  var product  = 'Product drop';
+  var audience = (document.getElementById('ig-audience') || {}).value || '';
+  var pain     = (document.getElementById('ig-pain')     || {}).value || '';
+  var funnelStage = (document.getElementById('ai-content-type') || {}).value || 'TOFU';
+  var avatarKey   = (document.getElementById('ai-avatar-type')  || {}).value || 'morodogch';
+
+  if (!pain.trim() && !audience.trim()) {
+    if (typeof toast === 'function') toast('Зорилтот хүн эсвэл асуудлаа оруулна уу', 'err');
+    return;
+  }
+
+  var apiKey = (document.getElementById('ai-api-key') || {}).value || localStorage.getItem('pd_ak') || '';
+  if (!apiKey) {
+    status.textContent = '✗ API key оруулна уу';
+    status.style.color = 'var(--red)';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Үүсгэж байна...';
+  status.textContent = '⚡ AI санаа боловсруулж байна...';
+  status.style.color = 'var(--purple)';
+  results.style.display = 'none';
+  results.innerHTML = '';
+
+  var av = (_AVATAR_DATA && _AVATAR_DATA[avatarKey]) || { name: 'Мөрөөдөгч', pains: 'Мэдэхгүй', situation: 'Эхлэхийг хүсэж байна', age: '20-35', forbidden: '' };
+
+  /* ═══════════════════════════════════════════════════════════════
+     SYSTEM PROMPT v2 — 10 upgrade бүгд нэгдсэн
+     1. Weak generic output blacklist
+     2. Emotional trigger layer
+     3. Tactical TOFU/MOFU/BOFU дүрэм
+     4. Premise structure formula
+     5. Монгол context хүчтэй болгосон
+     6. Idea type-д mini guidance
+     7. Novelty filter
+     8. Output-д format + emotion + why_it_works
+     8. Idea diversity guardrail
+     9. Mechanism examples
+     10. Root cause only + Mechanism-first
+     11. Avatar pain library
+     12. Content surface (platform-native)
+     13. Anti-guru filter
+     14. Avatar & бизнесийн контекст
+     15. Final master rule
+  ═══════════════════════════════════════════════════════════════ */
+  var systemPrompt = `Чи Монголын dropshipping зах зээлийн хамгийн мэргэшсэн content strategist. Alex Hormozi-ийн mechanism-first, Codie Sanchez-ийн contrarian angle, Gary Vee-ийн raw authenticity — гурвыг нэгтгэн Монгол хэрэглэгчид зориулж ажилладаг.
+
+═══════════════════════════════════
+ТАНЫ ЗОРИЛГО
+═══════════════════════════════════
+Нэг бүтэн контентийн "гол санаа" (premise / content angle) үүсгэх.
+Hook биш — тэр видео эсвэл постын ЦӨМ УТГА.
+Premise уншаад creator "яг энэ видео хийнэ" гэж шууд мэдрэх ёстой.
+
+═══════════════════════════════════
+#1 — ХОРИГЛОХ OUTPUT
+═══════════════════════════════════
+Дараах зүйл агуулсан premise бол ДАХИН боловсруул:
+✗ "Dropshipping хийж мөнгө олох"
+✗ "Онлайн бизнес эхлүүлэх"
+✗ "Амжилтанд хүрэх"
+✗ "Пассив орлого"
+✗ Motivational өнгийн premise
+✗ Specific detail огт агуулаагүй
+✗ Hook шиг ганц өгүүлбэр
+✗ "5 зөвлөгөө", "3 арга" гэх generic listicle
+✗ Facebook-д 1000 удаа харсан шиг санагдах контент
+✗ Fake luxury / rented success energy
+✗ "Би бүгдийг мэднэ" гуру өнгө
+Хэрэв ийм байвал илүү niche болго, unexpected angle ол, Монгол context нэм.
+
+═══════════════════════════════════
+#2 — EMOTIONAL TRIGGER LAYER
+═══════════════════════════════════
+Санаа бүр яг НЭГ emotional trigger дээр суурилна:
+- атаархал → "Бусад хүн аль хэдийн хийж байна, би үгүй"
+- FOMO → "Энэ цонх хаагдвал хожигдоно"
+- бухимдал → "Яагаад надад болохгүй байна вэ"
+- ичгүүр → "Би энгийн зүйлийг мэдэхгүй байсан"
+- "би ганцаараа ингэж боддог" → нууц нийтлэг мэдрэмж
+- нууц мэдсэн мэдрэмж → insider knowledge
+- цаг алдаж байгаа айдас → "хоцорч байна"
+- мөнгө алдаж байгаа мэдрэмж → "буруу хийж байсан"
+- identity/status → "энэ хүмүүст ороход ямар вэ"
+Emotion нь premise-г "үзмээр" болгодог гол хөдөлгүүр.
+
+═══════════════════════════════════
+#3 — FUNNEL STAGE: ${funnelStage}
+═══════════════════════════════════
+${funnelStage === 'TOFU' ? `TOFU — ХАТУУ ДҮРЭМ:
+✓ Бүтээгдэхүүн, брэнд, tool нэр ОГТХОН дурдахгүй
+✓ Асуудлыг тодорхойл — шийдлийг ил гаргахгүй
+✓ Curiosity gap үлдээ — хариулт дотор л байна
+✓ "Энэ яг миний асуудал" гэж avatar шууд мэдрэх
+✓ Хуваалцмаар, viral potential өндөр байх
+✗ Шууд зааж сургахгүй — awareness л хангана` : ''}
+${funnelStage === 'MOFU' ? `MOFU — ХАТУУ ДҮРЭМ:
+✓ Mechanism тайлбарла — яагаад ажилладаг/ажилладаггүй
+✓ "Би яаж хийсэн" форматтай mini case study
+✓ Workflow, step-by-step процесс харуул
+✓ Avatar-ийн эргэлзлийг шийд — objection нэг нэгээр
+✓ Бүтээгдэхүүний давуу талыг шууд биш context дотроос харуул
+✗ Шууд худалдахгүй — шийдэл ойртуулна` : ''}
+${funnelStage === 'BOFU' ? `BOFU — ХАТУУ ДҮРЭМ:
+✓ Offer-centric — яг юу авах, ямар үнэ цэнтэй
+✓ Risk reversal заавал — "алдахгүй" гэдгийг тодорхой болго
+✓ Time/cost of inaction — одоо хийхгүй бол ямар зардалтай
+✓ Specific CTA — "1 гэж бич", "холбоос дарь", "DM яв"
+✓ Urgency бодит байх — хиймэл urgency биш` : ''}
+
+═══════════════════════════════════
+#4 — PREMISE STRUCTURE FORMULA
+═══════════════════════════════════
+Premise яг 3 өгүүлбэр байна — илүү ч биш, дутуу ч биш:
+1-р өгүүлбэр: Misconception — хүмүүс юуг буруу ойлгодог? (\"Ихэнх хүмүүс X гэж боддог\")
+2-р өгүүлбэр: Mechanism — яагаад буруу, жинхэнэ root cause юу вэ? (\"Гэтэл бодит шалтгаан нь Y\")
+3-р өгүүлбэр: Why watch — видео яг юу задлах, viewer ямар ашиг авах? (\"Видео нь Z-г харуулна\")
+Hook биш — цөм утга. Видео юу ярих нь 3 өгүүлбэрт бүрэн ойлгогдох ёстой.
+
+═══════════════════════════════════
+#5 — МОНГОЛ CONTEXT (заавал ашигла)
+═══════════════════════════════════
+Дараах Монгол-specific зүйлсийг нэм — тэгэхгүй бол US-style generic болно:
+- Хүргэлтийн удаашрал (3-7 хоног), COD соёл
+- Facebook comment culture, "1 гэж бич" механизм
+- Alibaba sourcing confusion, 1688 vs AliExpress
+- TikTok shop trend Монголд хүрч байгаа эсэх
+- "Таньдаг хүн" mentality — сошиал нотолгоо
+- ₮ дүнгээр ярих — доллар биш
+- Ulaanbaatar lifestyle — оффис, цас, traffic, apartment
+- Жижиг зах зээлийн сэтгэлгээ — "хэн ч зараагүй" = давуу тал
+
+═══════════════════════════════════
+#6 — IDEA TYPE БҮРИЙН MINI GUIDANCE
+═══════════════════════════════════
+Specific Moment → Нэг яг бодит мөч. "Alibaba хайхад 3 цаг өнгөрч..." Ерөнхий биш — scene байх.
+Counterintuitive → Олон хүний итгэдэг зүйлийг эсэргүүц + mechanism тайлбарла.
+Story-Driven → Нэг хүний decision → алдаа → үр дүн. Measurable outcome байх.
+Data-Backed → Тоо, хугацаа, conversion, margin — бүгд specific. "Олон" гэж битгий хэл.
+Transformation → Before vs after measurable change. "Өмнө: X, хойно: Y" тоотойгоор.
+Myth Busting → Industry misconception эвдэх + яагаад буруу гэдгийг mechanism-аар тайлбарла.
+Behind the Scenes → Hidden workflow/process — хэн ч харуулдаггүй дотоод зүйл.
+Urgency/Trend → Яг одоо platform/market shift — хоцорвол тодорхой зардал байна.
+
+═══════════════════════════════════
+#7 — NOVELTY FILTER
+═══════════════════════════════════
+Premise үүсгэхдээ өөрөө шалгана:
+"Энэ санааг Монголын Facebook-д 1000 удаа харсан уу?"
+Хэрэв тийм → илүү specific болго → unexpected angle ол → niche detail нэм.
+Тест: нэг онцлог detail хасахад premise ямар ч контентэд тохирч болдог бол — хэт ерөнхий.
+
+═══════════════════════════════════
+#8 — IDEA DIVERSITY GUARDRAIL
+═══════════════════════════════════
+8 санааны ЗААВАЛ байх mix:
+✦ 1 × Counterintuitive (буруу ойлголт эвдэх)
+✦ 1 × Data-Backed (тоо, хугацаа, conversion)
+✦ 1 × Story-Driven (нэг хүний journey)
+✦ 1 × Specific Moment (нэг scene, нэг мөч)
+✦ 1 × Myth Busting (industry misconception)
+✦ 1 × Behind the Scenes (hidden process)
+✦ 2 × чөлөөт сонголт — Transformation / Urgency / аль ч type
+
+Давхцалтын хориг:
+- Ижил emotion 2 санаанд давтагдахгүй
+- Ижил Монгол context (COD, Alibaba, creative...) 2 санаанд давтагдахгүй
+- Beginner pain болон scaling pain хоёул байх
+- Нэг нь process, нөгөө нь outcome дээр төвлөрнө
+
+═══════════════════════════════════
+#9 — MECHANISM EXAMPLES (concrete болго)
+═══════════════════════════════════
+Mechanism гэдэг үгийг abstract ойлгохгүйн тулд — concrete example ашигла:
+
+✗ \"Сайн creative хэрэгтэй\"
+✓ \"Эхний 2 секундэд price хэлэхгүй болохоор хүмүүс scroll хийдэг\"
+
+✗ \"Product буруу\"
+✓ \"Монгол traffic-д desktop screenshot creative ажиллахгүй\"
+
+✗ \"Audience буруу\"
+✓ \"COD авдаг хүмүүс урьдчилж comment proof хайдаг\"
+
+✗ \"Зарагдахгүй байна\"
+✓ \"Facebook comment орж байгаа ч COD confirmation дээр хүмүүс алга болдог\"
+
+✗ \"Marketing сайжруулах хэрэгтэй\"
+✓ \"Comment → Messenger → COD sequence байхгүйгээс order excitement 5 хоногт үхдэг\"
+
+Mechanism = яг яагаад болж байгааг НЭГ тодорхой шалтгаанаар тайлбарлах.
+Abstract дүгнэлт биш — операциональ, ажиллагаатай тайлбар.
+
+═══════════════════════════════════
+#10 — ROOT CAUSE ONLY + MECHANISM-FIRST
+═══════════════════════════════════
+Premise нь surface problem биш ROOT CAUSE дээр төвлөрнө.
+
+SYMPTOM (хориотой):
+✗ "Борлуулалт муу"
+✗ "Reach унасан"
+✗ "Хүн авахгүй байна"
+✗ "Сайн creative хэрэгтэй"
+✗ "Product буруу"
+✗ "Audience буруу"
+
+ROOT CAUSE (зөв):
+✅ "COD confirmation workflow байхгүйгээс fake order өссөн"
+✅ "Монгол хүмүүс product page биш comment section уншаад шийддэг"
+✅ "Alibaba supplier reply удаан болохоор momentum үхдэг"
+✅ "Эхний 2 секундэд price хэлэхгүй болохоор хүмүүс scroll хийдэг"
+✅ "Монгол traffic-д desktop screenshot creative ажиллахгүй"
+✅ "COD авдаг хүмүүс урьдчилж comment proof хайдаг"
+
+Premise бүр нэг SPECIFIC mechanism эсвэл root cause дээр суурилна.
+Hormozi зарчим: яг яагаад болж байгааг mechanism-аар тайлбарла.
+
+═══════════════════════════════════
+#11 — AVATAR PAIN LIBRARY (Монгол dropshipping beginner)
+═══════════════════════════════════
+Доорх өвдөлтийн аль нэгийг premise-дээ суурилуул — avatar мэдрэх ёстой:
+- Alibaba дээр supplier сонгохоос айдаг
+- ₮80K product-г хүн авах эсэхэд эргэлздэг
+- Fake order их ордог, COD cancel-ийн шалтгаан мэдэхгүй
+- Delivery удаан болохоор customer уурладаг
+- Creative хийхдээ нүүрээ гаргахаас санаа зовдог
+- "Монголд ийм юм явахгүй" гэж хүмүүс хэлдэг
+- 10 comment байхад reply яаж хийхээ мэддэггүй
+- Winning product олоход өдөржин TikTok scroll хийдэг
+- Comment → Messenger → COD confirmation sequence мэдэхгүй
+- First sale хийхэд яг юу хийхээ мэдэхгүй
+
+═══════════════════════════════════
+#12 — CONTENT SURFACE (platform-native)
+═══════════════════════════════════
+Premise нь TikTok/Facebook short-form хэлбэрт naturally тохирсон байх:
+✓ Нэг scene дээр төвлөрч болно
+✓ POV байж болно
+✓ Screen recording + narration байж болно
+✓ Comment screenshot ашиглаж болно
+✓ Messenger conversation харуулж болно
+✓ Talking head — raw, гэрийн орчинд
+✗ YouTube-style урт тайлбар шиг байж болохгүй
+✗ "10 зүйл"-тэй listicle болж болохгүй
+
+═══════════════════════════════════
+#13 — ANTI-GURU FILTER
+═══════════════════════════════════
+Монгол audience fake guru vibe-г маш хурдан мэдэрдэг. Premise нь:
+✓ humble — "Би ч ингэж алдсан"
+✓ observational — "Ажиглаж байтал ийм юм харлаа"
+✓ raw — засаагүй, хэтэрхий polish хийгээгүй мэт
+✓ slightly imperfect — бодит хүн ярьж байгаа мэт
+✗ "Би бүгдийг мэднэ" — хориотой
+✗ "Баян болоорой" — хориотой
+✗ Fake luxury, rented car, rented apartment — хориотой
+✗ Overclaim success energy — хориотой
+
+═══════════════════════════════════
+#14 — AVATAR & БИЗНЕСИЙН КОНТЕКСТ
+═══════════════════════════════════
+AVATAR МЭДЭЭЛЭЛ
+═══════════════════════════════════
+- Нэр: ${av.name} | Нас: ${av.age}
+- Өвдөлт: ${av.pains}
+- Нөхцөл: ${av.situation}
+- Хориотой хандлага: ${av.forbidden || 'байхгүй'}
+
+БИЗНЕСИЙН КОНТЕКСТ:
+- Бүтээгдэхүүн/Үйлчилгээ: ${product || 'Тодорхойгүй'}
+- Зорилтот хүн: ${audience || av.name + ', ' + av.age}
+- Гол өвдөлт: ${pain || av.pains}
+
+═══════════════════════════════════
+OUTPUT FORMAT (production-ready)
+═══════════════════════════════════
+JSON FORMAT ЗӨВХӨН. Markdown, backtick, тайлбар огт биш.
+{
+  "ideas": [
+    {
+      "type": "Counterintuitive",
+      "emotion": "бухимдал",
+      "title": "COD cancel их байгаагийн жинхэнэ шалтгаан",
+      "premise": "Ихэнх хүмүүс COD cancel-ийг product муу гэж боддог. Гэтэл асуудал нь checkout биш — delivery хүлээх 5 хоногийн хооронд customer-ийн excitement үхдэг дээр байдаг. Видео нь яагаад comment → messenger → anticipation sequence байхгүй үед хүмүүс order-оо цуцалдгийг задлана.",
+      "why_it_works": "Dropshipping хийж байгаа хүмүүсийн нийтлэг өвдөлтийг unexpected mechanism-аар тайлбарлаж байна.",
+      "format": "Talking head + Messenger screenshots"
+    }
+  ]
+}
+
+emotion утгууд: "FOMO" | "атаархал" | "бухимдал" | "ичгүүр" | "нууц мэдсэн" | "цаг алдах айдас" | "мөнгө алдах" | "identity"
+format утгууд: "Talking head" | "Screen recording" | "Storytime" | "Talking head + Comment screenshots" | "Talking head + Messenger screenshots" | "POV" | "Whiteboard" | "Commentary"
+
+═══════════════════════════════════
+FINAL MASTER RULE
+═══════════════════════════════════
+Хэрэв premise-ийг сонсоод creator яг ямар scene, ямар footage,
+ямар яриа ашиглахаа төсөөлж чадахгүй бол — premise хангалтгүй.
+Дахин бич.`;
+
+  var userMsg = `${funnelStage} funnel-д зориулсан 8 гол санаа үүсгэ. Бүх дүрмийг дагана.
+
+Бүтээгдэхүүн: ${product || '(avatar-аас авна)'}
+Зорилтот хүн: ${audience || '(avatar-аас авна)'}
+Гол өвдөлт: ${pain || '(avatar-аас авна)'}
+
+ШАЛГАХ — гаргахаасаа өмнө:
+① Premise бүр яг 3 өгүүлбэр үү? (misconception → mechanism → why watch)
+② Premise бүр ROOT CAUSE дээр байна уу? Symptom биш.
+③ 8 санааны mix зөв үү? (Counterintuitive × 1, Data-Backed × 1, Story-Driven × 1, Specific Moment × 1, Myth Busting × 1, Behind the Scenes × 1, чөлөөт × 2)
+④ Монгол-specific detail байна уу? COD / Facebook comment / ₮ дүн / Alibaba...
+⑤ Anti-guru тест: humble, raw, observational мэт санагдаж байна уу?
+
+JSON зөвхөн. Тайлбар, markdown огт биш.`;
+
+  var typeColors = {
+    'Specific Moment':'var(--blue)',
+    'Counterintuitive':'var(--red)',
+    'Story-Driven':'var(--gold)',
+    'Data-Backed':'var(--green)',
+    'Transformation':'var(--purple)',
+    'Myth Busting':'var(--amber)',
+    'Behind the Scenes':'var(--text2)',
+    'Urgency/Trend':'var(--red)'
+  };
+  var typeEmoji = {
+    'Specific Moment':'🎯','Counterintuitive':'🔄','Story-Driven':'📖',
+    'Data-Backed':'📊','Transformation':'✨','Myth Busting':'💥',
+    'Behind the Scenes':'🔍','Urgency/Trend':'⚡'
+  };
+  var emotionEmoji = {
+    'FOMO':'⏰','атаархал':'👀','бухимдал':'😤','ичгүүр':'😳',
+    'нууц мэдсэн':'🔑','цаг алдах айдас':'⌛','мөнгө алдах':'💸','identity':'🏆'
+  };
+  var formatEmoji = {
+    'Talking head':'🎙️','Screen recording':'🖥️','Storytime':'📖',
+    'Whiteboard':'📋','Interview':'🎤','Commentary':'💬','POV':'🎥'
+  };
+
+  try {
+    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2800,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userMsg }]
+      })
+    });
+    var data = await resp.json();
+    var raw = (data.content && data.content[0] && data.content[0].text) || '';
+    raw = raw.replace(/```json/g,'').replace(/```/g,'').trim();
+    var parsed = JSON.parse(raw);
+    var ideas = parsed.ideas || [];
+    _igIdeasCache = ideas;
+
+    ideas.forEach(function(idea, i) {
+      var color = typeColors[idea.type] || 'var(--text3)';
+      var emoji = typeEmoji[idea.type] || '💡';
+      var eEmoji = emotionEmoji[idea.emotion] || '💡';
+      var fEmoji = (function(){var m={'Talking head':'🎙️','Screen recording':'🖥️','Storytime':'📖','Whiteboard':'📋','Interview':'🎤','Commentary':'💬','POV':'🎥'};return m[idea.format]||'🎬';})();
+
+      var card = document.createElement('div');
+      card.className = 'ig-card';
+      card.setAttribute('data-idx', i);
+      card.style.cssText = 'background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .18s;';
+
+      /* ── Header row (always visible, click to expand) ── */
+      var header = document.createElement('div');
+      header.style.cssText = 'display:flex;align-items:center;gap:6px;padding:10px 12px;cursor:pointer;user-select:none;flex-wrap:wrap;';
+      header.innerHTML =
+          '<span style="font-size:12px;">' + emoji + '</span>'
+        + '<span style="font-size:10px;font-weight:800;color:' + color + ';text-transform:uppercase;letter-spacing:.05em;flex-shrink:0;">' + (idea.type || '') + '</span>'
+        + (idea.emotion ? '<span style="font-size:10px;background:rgba(0,0,0,0.06);color:var(--text3);border-radius:5px;padding:2px 7px;font-weight:600;flex-shrink:0;">' + eEmoji + ' ' + idea.emotion + '</span>' : '')
+        + '<span style="flex:1;min-width:0;font-size:11px;font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + (idea.title || '') + '</span>'
+        + '<svg class="ig-chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text4)" stroke-width="2.5" style="flex-shrink:0;transition:transform .18s;"><polyline points="6 9 12 15 18 9"/></svg>';
+
+      /* ── Body (collapsible) ── */
+      var body = document.createElement('div');
+      body.style.cssText = 'display:none;padding:0 12px 12px;';
+      body.innerHTML =
+          '<div style="font-size:11px;color:var(--text3);line-height:1.7;margin-bottom:8px;">' + (idea.premise || '') + '</div>'
+        + (idea.why_it_works ? '<div style="font-size:10px;color:var(--green);background:var(--greenbg);border-radius:6px;padding:4px 9px;font-weight:600;margin-bottom:9px;">✓ ' + idea.why_it_works + '</div>' : '')
+        + (idea.format ? '<div style="font-size:10px;color:var(--text4);margin-bottom:9px;">' + fEmoji + ' ' + idea.format + '</div>' : '')
+        + '<div style="display:flex;gap:6px;">'
+        + '<button class="ig-use-btn" onclick="igUseIdea(' + i + ',this)" style="flex:1;padding:7px 10px;border-radius:8px;border:none;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">⚡ Шууд ашиглах</button>'
+        + '<button class="ig-save-btn" onclick="igSaveIdea(event,' + i + ',this)" style="padding:7px 10px;border-radius:8px;border:1.5px solid rgba(175,82,222,0.35);background:transparent;color:var(--purple);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">💾 Хадгалах</button>'
+        + '<button onclick="igDeleteCard(this)" style="padding:7px 10px;border-radius:8px;border:1.5px solid var(--border2);background:transparent;color:var(--text4);font-size:11px;cursor:pointer;font-family:inherit;" title="Хаах">✕</button>'
+        + '</div>';
+
+      /* Toggle expand/collapse */
+      header.onclick = function() {
+        var open = body.style.display === 'block';
+        body.style.display = open ? 'none' : 'block';
+        card.style.borderColor = open ? 'var(--border)' : color;
+        var chev = header.querySelector('.ig-chev');
+        if (chev) chev.style.transform = open ? '' : 'rotate(180deg)';
+      };
+
+      card.appendChild(header);
+      card.appendChild(body);
+      results.appendChild(card);
+    });
+
+    results.style.display = 'flex';
+    var sbw = document.getElementById('ig-saved-btn-wrap');
+    if (sbw) sbw.style.display = 'flex';
+    status.textContent = '✓ 8 гол санаа бэлэн — дарж нээгээрэй!';
+    status.style.color = 'var(--green)';
+    if (typeof toast === 'function') toast('💡 8 гол санаа бэлэн болов!', 'ok');
+
+  } catch(e) {
+    status.textContent = '✗ Алдаа: ' + (e.message || 'Дахин оролдоно уу');
+    status.style.color = 'var(--red)';
+    if (typeof toast === 'function') toast('AI алдаа гарлаа', 'err');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> 8 Гол санаа үүсгэх';
+  }
+}
+
 async function aiGen10Hooks() {
   var btn = document.getElementById('ai-hooks10-btn');
   var status = document.getElementById('ai-gen-status');
@@ -12224,25 +12973,220 @@ JSON FORMAT ЗӨВХӨН (тайлбар, markdown, backtick огт биш):
 /* ══════════════════════════════════════════
    FEATURE 6 — HOOK BANK
 ══════════════════════════════════════════ */
-function getHookBank(){try{return JSON.parse(localStorage.getItem('pd_hookbank')||'[]');}catch(e){return[];}}
-function saveHookBank(arr){localStorage.setItem('pd_hookbank',JSON.stringify(arr));}
+/* ══ IDEA CARD HELPERS ══ */
+var _igIdeasCache = [];
 
-function saveHookToBank(hookText,avatarKey,cntType){
-  if(!hookText||!hookText.trim())return;
-  var bank=getHookBank();
-  var entry={id:Date.now(),text:hookText.trim(),avatar:avatarKey||'',type:cntType||'',date:new Date().toISOString().split('T')[0]};
-  bank.unshift(entry);
-  if(bank.length>200)bank=bank.slice(0,200);
-  saveHookBank(bank);
-  if(typeof toast==='function')toast('💾 Hook Bank-д хадгалагдлаа','ok');
+function igUseIdea(idx) {
+  var idea = _igIdeasCache[idx]; if(!idea) return;
+  var f = document.getElementById('ai-idea');
+  if(f){ f.value = idea.title+':\n\n'+idea.premise; f.style.borderColor='var(--purple)'; setTimeout(function(){f.style.borderColor='';},1400); f.scrollIntoView({behavior:'smooth',block:'center'}); f.focus(); }
+  if(typeof toast==='function') toast('⚡ Санаа нэмэгдлээ — засаад Script үүсгэ!','ok');
+}
+function igDeleteCard(btn){ var c=btn.closest('.ig-card'); if(c){c.style.opacity='0';c.style.transition='opacity .18s';setTimeout(function(){c.remove();},180);} }
+
+/* ══ SAVED IDEAS ══ */
+var SB_IDEAS = SB_URL+'/rest/v1/saved_ideas';
+async function sbIdeaInsert(row){ var r=await fetch(SB_IDEAS,{method:'POST',headers:SB_H,body:JSON.stringify(row)}); if(!r.ok)throw new Error(await r.text()); var res=await r.json();return Array.isArray(res)?res[0]:res; }
+async function sbIdeaGet(){ var r=await fetch(SB_IDEAS+'?order=created_at.desc&limit=80',{headers:SB_H}); if(!r.ok)throw new Error(r.status); return r.json(); }
+async function sbIdeaDelete(id){ var h=Object.assign({},SB_H,{'Prefer':''}); await fetch(SB_IDEAS+'?id=eq.'+id,{method:'DELETE',headers:h}); }
+
+async function igSaveIdea(ev,idx,btn){
+  ev.stopPropagation(); if(btn.dataset.saved==='1')return;
+  var idea=_igIdeasCache[idx]; if(!idea)return;
+  var row={id:Date.now(),idea_type:idea.type||'',emotion:idea.emotion||'',title:idea.title||'',premise:idea.premise||'',why_it_works:idea.why_it_works||'',format:idea.format||'',audience:(document.getElementById('ig-audience')||{}).value||'',funnel_stage:(document.getElementById('ai-content-type')||{value:'TOFU'}).value||'TOFU',product:'Product drop',created_at:new Date().toISOString()};
+  var saved=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]'); saved.unshift(row); localStorage.setItem('pd4_saved_ideas',JSON.stringify(saved.slice(0,100)));
+  btn.textContent='✅'; btn.style.color='var(--green)'; btn.dataset.saved='1';
+  if(typeof toast==='function')toast('💾 Санаа хадгалагдлаа!','ok');
+  if(typeof renderIdeaBank==='function') renderIdeaBank();
+  /* refresh modal count */
+  var _mc=document.getElementById('idea-bank-main-count');
+  if(_mc){var _ic=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]');_mc.textContent=_ic.length?'('+_ic.length+')':'';}
+  try{await sbIdeaInsert(row);}catch(e){}
 }
 
-function openHookBank(){
-  var overlay=document.getElementById('hook-bank-overlay');
-  if(!overlay)return;
-  var keyInput=document.getElementById('batch-api-key')||document.getElementById('ai-api-key');
+async function openSavedIdeas(){
+  var overlay=document.getElementById('saved-ideas-overlay'); if(!overlay)return;
   overlay.style.display='flex';
-  renderHookBank();
+  var list=document.getElementById('saved-ideas-list');
+  list.innerHTML='<div style="text-align:center;padding:30px;color:var(--text3);font-size:12px;">⏳ Уншиж байна...</div>';
+  var ideas=[];
+  try{ideas=await sbIdeaGet();}catch(e){ideas=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]');}
+  if(!ideas.length){list.innerHTML='<div style="text-align:center;padding:40px;color:var(--text4);font-size:12px;">Хадгалсан санаа байхгүй байна.<br>💾 Хадгалах дарж хадгалаарай.</div>';return;}
+  var tc={'Specific Moment':'var(--blue)','Counterintuitive':'var(--red)','Story-Driven':'var(--gold)','Data-Backed':'var(--green)','Transformation':'var(--purple)','Myth Busting':'var(--amber)','Behind the Scenes':'var(--text2)','Urgency/Trend':'var(--red)'};
+  list.innerHTML=ideas.map(function(idea){
+    var color=tc[idea.idea_type||idea.type]||'var(--text3)';
+    var dateStr=idea.created_at?new Date(idea.created_at).toLocaleDateString('mn-MN'):'';
+    var t=(idea.title||'').replace(/'/g,'&#39;'), p=(idea.premise||'').replace(/'/g,'&#39;');
+    return '<div class="si-card" style="background:var(--bg3);border:1.5px solid var(--border);border-radius:11px;padding:11px 13px;margin-bottom:8px;">'
+      +'<div style="display:flex;align-items:center;gap:5px;margin-bottom:5px;flex-wrap:wrap;">'
+      +'<span style="font-size:10px;font-weight:800;color:'+color+';text-transform:uppercase;">'+(idea.idea_type||idea.type||'')+'</span>'
+      +(idea.emotion?'<span style="font-size:10px;background:rgba(0,0,0,0.06);color:var(--text3);border-radius:4px;padding:1px 6px;font-weight:600;">'+idea.emotion+'</span>':'')
+      +(idea.funnel_stage?'<span style="font-size:10px;background:var(--bluebg);color:var(--blue);border-radius:4px;padding:1px 6px;font-weight:600;">'+idea.funnel_stage+'</span>':'')
+      +'<span style="flex:1;"></span>'
+      +(dateStr?'<span style="font-size:9px;color:var(--text4);">'+dateStr+'</span>':'')
+      +'<button onclick="siDelete(this,'+(idea.id||0)+')" class="si-del-btn" style="border:none;background:var(--redbg);color:var(--red);font-size:13px;cursor:pointer;padding:4px 8px;border-radius:7px;margin-left:4px;min-width:34px;min-height:34px;display:flex;align-items:center;justify-content:center;">🗑</button>'
+      +'</div>'
+      +'<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:5px;">'+(idea.title||'')+'</div>'
+      +'<div style="font-size:11px;color:var(--text3);line-height:1.7;margin-bottom:8px;">'+(idea.premise||'')+'</div>'
+      +(idea.why_it_works?'<div style="font-size:10px;color:var(--green);background:var(--greenbg);border-radius:5px;padding:3px 8px;margin-bottom:8px;font-weight:600;">✓ '+idea.why_it_works+'</div>':'')
+      +'<button onclick="siUse(\''+t+'\',\''+p+'\')" style="width:100%;padding:8px;border-radius:8px;border:none;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">⚡ Шууд ашиглах</button>'
+      +'</div>';
+  }).join('');
+}
+
+function siUse(title,premise){
+  var f=document.getElementById('ai-idea');
+  if(f){f.value=title+':\n\n'+premise;f.style.borderColor='var(--purple)';setTimeout(function(){f.style.borderColor='';},1400);f.scrollIntoView({behavior:'smooth',block:'center'});f.focus();}
+  document.getElementById('saved-ideas-overlay').style.display='none';
+  if(typeof toast==='function')toast('⚡ Санаа нэмэгдлээ — засаад Script үүсгэ!','ok');
+}
+async function siDelete(btn,id){
+  var card=btn.closest('.si-card');if(card){card.style.opacity='0';card.style.transition='opacity .18s';setTimeout(function(){card.remove();},160);}
+  var saved=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]').filter(function(x){return x.id!==id;});
+  localStorage.setItem('pd4_saved_ideas',JSON.stringify(saved));
+  try{await sbIdeaDelete(id);}catch(e){}
+  if(typeof toast==='function')toast('Устгагдлаа','ok');
+  renderIdeaBank(); // refresh inline bank
+}
+
+/* ── IDEA BANK inline ── */
+var _ideaBankOpen=false;
+function toggleIdeaBank(){
+  _ideaBankOpen=!_ideaBankOpen;
+  var chips=document.getElementById('idea-bank-chips');
+  var chev=document.getElementById('idea-bank-chev');
+  if(chips){chips.style.display=_ideaBankOpen?'flex':'none';}
+  if(chev){chev.style.transform=_ideaBankOpen?'rotate(180deg)':'rotate(0deg)';}
+  if(_ideaBankOpen) renderIdeaBank();
+}
+
+function renderIdeaBank(){
+  var chips=document.getElementById('idea-bank-chips');
+  var cnt=document.getElementById('idea-bank-count');
+  var ideas=[];
+  try{ideas=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]');}catch(e){}
+  if(cnt) cnt.textContent=ideas.length?ideas.length+' санаа':'';
+  if(!chips)return;
+  if(!ideas.length){
+    chips.innerHTML='<span style="font-size:11px;color:var(--text4);padding:4px;">Хадгалсан санаа байхгүй байна.</span>';
+    return;
+  }
+  chips.innerHTML=ideas.map(function(idea){
+    var t=encodeURIComponent(idea.title||'');
+    var p=encodeURIComponent(idea.premise||'');
+    var short=(idea.title||'').slice(0,38)+((idea.title||'').length>38?'…':'');
+    var safeShort=(idea.title||'').replace(/</g,'&lt;').replace(/>/g,'&gt;').slice(0,38);
+    return '<div style="display:flex;align-items:center;gap:0;max-width:100%;">'
+      +'<button class="idea-chip" onclick="ibUse(\''+t+'\',\''+p+'\')" title="'+safeShort+'">'
+      +'<span style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+safeShort+(safeShort.length<(idea.title||'').length?'…':'')+'</span>'
+      +'</button>'
+      +'<button class="idea-chip-del si-del-btn" onclick="siDelete(this,'+(idea.id||0)+')" title="Устгах">✕</button>'
+      +'</div>';
+  }).join('');
+}
+
+function ibUse(title,premise){
+  var f=document.getElementById('ai-idea');
+  if(f){f.value=decodeURIComponent(title)+':\n\n'+decodeURIComponent(premise);f.style.borderColor='var(--purple)';setTimeout(function(){f.style.borderColor='';},1400);f.scrollIntoView({behavior:'smooth',block:'center'});f.focus();}
+  if(typeof toast==='function')toast('⚡ Санаа нэмэгдлээ — засаад Script үүсгэ!','ok');
+  // close bank
+  _ideaBankOpen=false;
+  var chips=document.getElementById('idea-bank-chips');
+  var chev=document.getElementById('idea-bank-chev');
+  if(chips)chips.style.display='none';
+  if(chev)chev.style.transform='rotate(0deg)';
+  closeIdeaBank();
+}
+
+/* ── IDEA BANK MODAL ── */
+function openIdeaBank(){
+  var o=document.getElementById('idea-bank-overlay');if(!o)return;
+  o.style.display='flex';
+  var si=document.getElementById('ib-search');if(si)si.value='';
+  renderIdeaBankModal();
+}
+function closeIdeaBank(){
+  var o=document.getElementById('idea-bank-overlay');if(o)o.style.display='none';
+}
+function renderIdeaBankModal(){
+  var list=document.getElementById('ib-list');
+  var empty=document.getElementById('ib-empty');
+  if(!list)return;
+  var ideas=[];
+  try{ideas=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]');}catch(e){}
+  /* update main toolbar button count */
+  var mc=document.getElementById('idea-bank-main-count');
+  if(mc)mc.textContent=ideas.length?'('+ideas.length+')':'';
+  var q=(document.getElementById('ib-search')||{value:''}).value.toLowerCase();
+  var filtered=ideas.filter(function(idea){
+    if(!q)return true;
+    return (idea.title||'').toLowerCase().indexOf(q)>=0||(idea.premise||'').toLowerCase().indexOf(q)>=0;
+  });
+  if(!filtered.length){
+    list.innerHTML='';
+    if(empty)empty.style.display='block';
+    return;
+  }
+  if(empty)empty.style.display='none';
+  list.innerHTML=filtered.map(function(idea){
+    var safeTitle=(idea.title||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var safePremise=(idea.premise||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    var t=encodeURIComponent(idea.title||'');
+    var p=encodeURIComponent(idea.premise||'');
+    return '<div style="background:var(--bg3);border-radius:12px;padding:11px 14px;border:1.5px solid var(--border);display:flex;align-items:flex-start;gap:10px;">'
+      +'<div style="flex:1;min-width:0;">'
+      +'<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+safeTitle+'</div>'
+      +(safePremise?'<div style="font-size:11px;color:var(--text3);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">'+safePremise+'</div>':'')
+      +'</div>'
+      +'<div style="display:flex;gap:5px;flex-shrink:0;">'
+      +'<button onclick="ibUse(\''+t+'\',\''+p+'\');closeIdeaBank();" style="padding:5px 10px;border-radius:7px;border:none;background:var(--purplebg);color:var(--purple);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">Ашиглах</button>'
+      +'<button onclick="siDeleteFromModal('+(idea.id||0)+',\''+encodeURIComponent(idea.created_at||'')+'\')" style="padding:5px 8px;border-radius:7px;border:none;background:var(--redbg);color:var(--red);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">✕</button>'
+      +'</div>'
+      +'</div>';
+  }).join('');
+}
+function siDeleteFromModal(id,createdAt){
+  if(createdAt) try{createdAt=decodeURIComponent(createdAt);}catch(e){}
+  var ideas=[];
+  try{ideas=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]');}catch(e){}
+  if(id && id!==0){
+    ideas=ideas.filter(function(i){return i.id!==id;});
+  } else if(createdAt){
+    // fallback for legacy items without id
+    var removed=false;
+    ideas=ideas.filter(function(i){if(!removed&&i.created_at===createdAt){removed=true;return false;}return true;});
+  }
+  localStorage.setItem('pd4_saved_ideas',JSON.stringify(ideas));
+  if(typeof toast==='function')toast('Устгагдлаа','ok');
+  renderIdeaBankModal();
+  renderIdeaBank();
+}
+
+/* Refresh bank count after saving new idea */
+
+
+/* ══ HOOK BANK — Supabase + localStorage ══ */
+var SB_HOOKS=SB_URL+'/rest/v1/hook_bank';
+function getHookBank(){try{return JSON.parse(localStorage.getItem('pd_hookbank')||'[]');}catch(e){return[];}}
+function _saveHookBankLocal(arr){localStorage.setItem('pd_hookbank',JSON.stringify(arr.slice(0,200)));}
+
+async function sbHookInsert(row){var r=await fetch(SB_HOOKS,{method:'POST',headers:SB_H,body:JSON.stringify(row)});if(!r.ok)throw new Error(await r.text());var res=await r.json();return Array.isArray(res)?res[0]:res;}
+async function sbHookFetch(){var r=await fetch(SB_HOOKS+'?order=created_at.desc&limit=200',{headers:SB_H});if(!r.ok)throw new Error(r.status);return r.json();}
+async function sbHookDelete(id){if(String(id).length>10)return;var h=Object.assign({},SB_H,{'Prefer':''});await fetch(SB_HOOKS+'?id=eq.'+id,{method:'DELETE',headers:h});}
+
+async function saveHookToBank(hookText,avatarKey,cntType){
+  if(!hookText||!hookText.trim())return;
+  var row={hook_text:hookText.trim(),avatar:avatarKey||'',funnel_type:cntType||'',created_at:new Date().toISOString()};
+  var localEntry=Object.assign({id:Date.now()},row,{text:row.hook_text,type:row.funnel_type,date:row.created_at.split('T')[0]});
+  var bank=getHookBank();bank.unshift(localEntry);_saveHookBankLocal(bank);
+  if(typeof toast==='function')toast('💾 Hook Bank-д хадгалагдлаа','ok');
+  try{var saved=await sbHookInsert(row);if(saved&&saved.id){var b2=getHookBank();var idx=b2.findIndex(function(x){return x.id===localEntry.id;});if(idx>-1){b2[idx].id=saved.id;_saveHookBankLocal(b2);}}}catch(e){}
+}
+
+async function openHookBank(){
+  var overlay=document.getElementById('hook-bank-overlay');if(!overlay)return;
+  overlay.style.display='flex';renderHookBank();
+  try{var rows=await sbHookFetch();var mapped=rows.map(function(r){return{id:r.id,text:r.hook_text||'',avatar:r.avatar||'',type:r.funnel_type||'',date:(r.created_at||'').split('T')[0]};});_saveHookBankLocal(mapped);renderHookBank();}catch(e){}
 }
 function closeHookBank(){var o=document.getElementById('hook-bank-overlay');if(o)o.style.display='none';}
 
@@ -12251,39 +13195,46 @@ function renderHookBank(){
   var bank=getHookBank();
   var q=(document.getElementById('hb-search')||{value:''}).value.toLowerCase();
   var avf=(document.getElementById('hb-filter-avatar')||{value:'all'}).value;
-  var filtered=bank.filter(function(h){
-    var mq=!q||h.text.toLowerCase().includes(q);
-    var ma=avf==='all'||h.avatar===avf;
-    return mq&&ma;
-  });
+  var filtered=bank.filter(function(h){return(!q||h.text.toLowerCase().includes(q))&&(avf==='all'||h.avatar===avf);});
   if(empty)empty.style.display=filtered.length?'none':'block';
   var avatarEmoji={morodogch:'🌙',turshij:'🔥',hiij:'⚡'};
   list.innerHTML=filtered.map(function(h){
     var ae=h.avatar?((avatarEmoji[h.avatar]||'')+'<span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;background:var(--bg4);color:var(--text3);margin-left:4px;">'+(h.avatar==='morodogch'?'Мөрөөдөгч':h.avatar==='turshij'?'Туршиж':h.avatar==='hiij'?'Хийж':'')+'</span>'):'';
-    return '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;display:flex;gap:8px;align-items:flex-start;">'
+    return '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;margin-bottom:6px;">'
+      +'<div style="display:flex;align-items:flex-start;gap:8px;">'
       +'<div style="flex:1;">'
       +(ae?'<div style="display:flex;align-items:center;gap:4px;margin-bottom:5px;font-size:11px;">'+ae+(h.type?'<span style="font-size:9px;padding:1px 5px;border-radius:4px;background:var(--goldbg);color:var(--gold);font-weight:700;">'+h.type+'</span>':'')+'<span style="margin-left:auto;font-size:9px;color:var(--text4);">'+h.date+'</span></div>':'')
-      +'<div style="font-size:12px;color:var(--text);line-height:1.55;">'+x(h.text)+'</div>'
+      +'<div style="font-size:12px;color:var(--text);line-height:1.55;margin-bottom:8px;">'+x(h.text)+'</div>'
+      +'<div style="display:flex;gap:5px;">'
+      +'<button onclick="hbInstantUse(\''+h.id+'\')" style="flex:1;padding:6px 8px;border-radius:7px;border:none;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;min-height:34px;">⚡ Шууд ашиглах</button>'
+      +'<button onclick="hbUseHook(\''+h.id+'\')" style="padding:6px 8px;border-radius:7px;border:none;background:var(--goldbg);color:var(--gold);font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;min-height:34px;">+ Нэмэх</button>'
+      +'<button class="hb-del-btn" onclick="hbDeleteHook(\''+h.id+'\')" style="padding:6px 8px;border-radius:7px;border:none;background:var(--redbg);color:var(--red);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;min-height:34px;min-width:34px;">✕</button>'
       +'</div>'
-      +'<div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0;">'
-      +'<button onclick="hbUseHook(\''+h.id+'\')" style="padding:4px 8px;border-radius:6px;border:none;background:var(--goldbg);color:var(--gold);font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">+ Нэмэх</button>'
-      +'<button onclick="hbDeleteHook(\''+h.id+'\')" style="padding:4px 8px;border-radius:6px;border:none;background:var(--redbg);color:var(--red);font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;">✕</button>'
       +'</div>'
-      +'</div>';
+      +'</div></div>';
   }).join('');
 }
 
 function hbUseHook(id){
   var bank=getHookBank();var h=bank.find(function(b){return String(b.id)===String(id);});if(!h)return;
-  var el=document.getElementById('cp-hooks');
-  if(el){var cur=el.value.trim();el.value=cur?cur+'\n'+h.text:h.text;}
+  var el=document.getElementById('cp-hooks');if(el){var cur=el.value.trim();el.value=cur?cur+'\n'+h.text:h.text;}
   closeHookBank();
-  if(document.getElementById('cnt-panel').classList.contains('open')){if(typeof toast==='function')toast('Hook нэмэгдлээ ✓','ok');}
+  var panel=document.getElementById('cnt-panel');if(panel&&panel.classList.contains('open')&&typeof toast==='function')toast('Hook нэмэгдлээ ✓','ok');
 }
 
-function hbDeleteHook(id){
+function hbInstantUse(id){
+  var bank=getHookBank();var h=bank.find(function(b){return String(b.id)===String(id);});if(!h)return;
+  var el=document.getElementById('cp-hooks');
+  if(el){var cur=el.value.trim();el.value=cur?cur+'\n'+h.text:h.text;el.style.borderColor='var(--gold)';setTimeout(function(){el.style.borderColor='';},1200);}
+  closeHookBank();
+  if(typeof toast==='function')toast('⚡ Hook нэмэгдлээ — Script үүсгэ!','ok');
+}
+
+async function hbDeleteHook(id){
   var bank=getHookBank().filter(function(b){return String(b.id)!==String(id);});
-  saveHookBank(bank);renderHookBank();
+  _saveHookBankLocal(bank);renderHookBank();
+  try{await sbHookDelete(id);}catch(e){}
+  if(typeof toast==='function')toast('Hook устгагдлаа','ok');
 }
 
 // Hook into aiGen10Hooks to offer saving each hook to bank
@@ -13403,6 +14354,15 @@ document.addEventListener('click',function(e){
   refreshGreet();
   setInterval(refreshGreet, 60000);
 
+  /* Init idea bank count on load */
+  setTimeout(function(){
+    if(typeof renderIdeaBank==='function')renderIdeaBank();
+    /* also update toolbar button count */
+    var ideas=[];try{ideas=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]');}catch(e){}
+    var mc=document.getElementById('idea-bank-main-count');
+    if(mc)mc.textContent=ideas.length?'('+ideas.length+')':'';
+  },500);
+
   /* 2. Topbar dynamic page title */
   var _pageNames={
     kanban:'Ажлын самбар',content:'Контент Pipeline',analytics:'Аналитик',
@@ -13466,5 +14426,17 @@ document.addEventListener('click',function(e){
 })();
 
 </script>
+<!-- ══ SAVED IDEAS MODAL ══ -->
+<div id="saved-ideas-overlay" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(5px);z-index:9200;align-items:flex-end;justify-content:center;">
+  <div style="width:100%;max-width:600px;max-height:85vh;background:var(--bg2);border-radius:22px 22px 0 0;display:flex;flex-direction:column;box-shadow:0 -8px 40px rgba(0,0,0,.25);animation:aup .22s cubic-bezier(.25,.46,.45,.94);">
+    <div style="padding:18px 20px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;">
+      <span style="font-size:18px;">📚</span>
+      <div style="flex:1;"><div style="font-size:15px;font-weight:800;color:var(--text);">Хадгалсан санаанууд</div><div style="font-size:11px;color:var(--text3);">Санаа дарж засаад Script үүсгэ</div></div>
+      <button onclick="document.getElementById('saved-ideas-overlay').style.display='none'" style="width:30px;height:30px;border-radius:8px;border:1px solid var(--border2);background:var(--bg4);color:var(--text3);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+    <div id="saved-ideas-list" style="padding:14px 16px;flex:1;overflow-y:auto;"></div>
+  </div>
+</div>
+
 </body>
 </html>
