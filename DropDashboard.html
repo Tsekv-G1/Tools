@@ -309,6 +309,8 @@ body{
 .opc-clock{font-size:10px;font-family:'DM Mono',monospace;color:var(--text4);}
 [data-theme="dark"] .opc-clock{color:rgba(255,159,10,0.38);}
 .opc-gear{width:22px;height:22px;border-radius:6px;border:1px solid var(--border2);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text3);transition:all .15s;}
+.opc-gear.notif-on{background:var(--goldbg);color:var(--gold);border-color:rgba(255,149,0,0.40);box-shadow:0 0 6px rgba(255,149,0,0.22);}
+[data-theme="dark"] .opc-gear.notif-on{background:rgba(255,140,0,0.18);color:#FF8C00;border-color:rgba(255,140,0,0.55);box-shadow:0 0 8px rgba(255,140,0,0.30);}
 .opc-gear:hover{background:var(--bg4);color:var(--text);}
 [data-theme="dark"] .opc-gear{border-color:rgba(255,159,10,0.18);color:rgba(255,159,10,0.5);}
 [data-theme="dark"] .opc-gear:hover{background:rgba(255,159,10,0.1);color:#FF9F0A;}
@@ -456,6 +458,37 @@ body{
 
 /* ── Savings chip ── */
 .opc-save-chip{margin-top:6px;background:rgba(52,199,89,0.08);border:1px solid rgba(52,199,89,0.20);border-radius:9px;padding:6px 9px;display:flex;align-items:center;gap:7px;}
+/* ── OPC Countdown ── */
+.opc-cdw-wrap{margin-top:8px;border-radius:10px;border:1px solid var(--border2);background:var(--bg3);overflow:hidden;}
+[data-theme="dark"] .opc-cdw-wrap{background:#0d0d14;border-color:rgba(255,159,10,0.18);}
+.opc-cdw-header{display:flex;align-items:center;gap:6px;padding:7px 10px;background:var(--bg4);border-bottom:1px solid var(--border);}
+[data-theme="dark"] .opc-cdw-header{background:rgba(255,255,255,0.04);}
+.opc-cdw-icon{font-size:11px;}
+.opc-cdw-title{font-size:8px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);font-family:'DM Mono',monospace;flex:1;}
+.opc-cdw-date-wrap{flex-shrink:0;}
+.opc-cdw-input{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:3px 6px;font-size:10px;color:var(--text);font-family:inherit;outline:none;cursor:pointer;width:110px;}
+.opc-cdw-input:focus{border-color:var(--gold);}
+[data-theme="dark"] .opc-cdw-input{background:var(--bg3);color:var(--text);}
+.opc-cdw-body{padding:8px 10px;display:flex;gap:10px;align-items:flex-start;}
+.opc-cdw-main{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:52px;padding-right:10px;border-right:1px solid var(--border);}
+.opc-cdw-days{font-size:26px;font-weight:800;font-family:'DM Mono',monospace;color:var(--text);line-height:1;transition:color .3s;}
+.opc-cdw-days-lbl{font-size:8px;font-weight:700;color:var(--text4);letter-spacing:.06em;text-transform:uppercase;margin-top:2px;white-space:nowrap;}
+.opc-cdw-stats{flex:1;display:flex;flex-direction:column;gap:5px;}
+.opc-cdw-row{display:flex;align-items:center;justify-content:space-between;gap:4px;}
+.opc-cdw-rlbl{font-size:9px;color:var(--text4);font-family:'DM Mono',monospace;}
+.opc-cdw-rval{font-size:10px;font-weight:700;font-family:'DM Mono',monospace;color:var(--text2);}
+.opc-cdw-urgency{font-size:10px;font-weight:800;font-family:'DM Mono',monospace;padding:1px 7px;border-radius:99px;}
+.opc-cdw-urgency.u-crit{background:rgba(255,59,48,0.14);color:var(--red);}
+.opc-cdw-urgency.u-high{background:rgba(255,149,0,0.14);color:var(--gold);}
+.opc-cdw-urgency.u-med{background:rgba(255,204,0,0.12);color:#cc9900;}
+.opc-cdw-urgency.u-ok{background:rgba(52,199,89,0.12);color:var(--green);}
+.opc-cdw-nodate{padding:10px;text-align:center;font-size:10px;color:var(--text4);font-style:italic;display:none;}
+.opc-cdw-days.c-crit{color:var(--red);}
+.opc-cdw-days.c-high{color:var(--gold);}
+.opc-cdw-days.c-ok{color:var(--green);}
+[data-theme="dark"] .opc-cdw-urgency.u-crit{background:rgba(255,79,68,0.18);color:#FF4F44;}
+[data-theme="dark"] .opc-cdw-urgency.u-high{background:rgba(255,159,10,0.18);color:var(--gold);}
+[data-theme="dark"] .opc-cdw-urgency.u-ok{background:rgba(50,217,106,0.15);color:#32D96A;}
 [data-theme="dark"] .opc-save-chip{background:rgba(50,217,106,0.07);border-color:rgba(50,217,106,0.18);}
 .opc-save-icon{font-size:14px;flex-shrink:0;}
 .opc-save-text{flex:1;min-width:0;}
@@ -1777,6 +1810,9 @@ button:focus-visible,
           <div class="opc-hright">
             <span class="opc-streak" id="opc-streak">🔴 0:00</span>
             <span class="opc-clock" id="opc-clock">00:00:00</span>
+            <button class="opc-gear" id="opc-notif-btn" title="Мэдэгдэл асаах/унтраах" onclick="event.stopPropagation();opcToggleNotif();">
+              <svg id="opc-notif-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            </button>
             <button class="opc-gear" id="opc-gear-btn" title="Тохиргоо" onclick="event.stopPropagation();opcToggleSettings();">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </button>
@@ -1870,6 +1906,37 @@ button:focus-visible,
                     <div class="opc-save-lbl">Breakeven хүрвэл өдөрт хэмнэнэ</div>
                     <div class="opc-save-val" id="opc-save-val">₮0</div>
                   </div>
+                </div>
+                <!-- Breakeven countdown -->
+                <div class="opc-cdw-wrap" id="opc-cdw-wrap">
+                  <div class="opc-cdw-header">
+                    <span class="opc-cdw-icon">⏱</span>
+                    <span class="opc-cdw-title">BREAKEVEN ХҮРЭХ ТООЦОО</span>
+                    <div class="opc-cdw-date-wrap">
+                      <input type="date" id="opc-cdw-date" class="opc-cdw-input" placeholder="Зорилтот огноо" oninput="opcCdwUpdate()"/>
+                    </div>
+                  </div>
+                  <div class="opc-cdw-body">
+                    <div class="opc-cdw-main" id="opc-cdw-main">
+                      <div class="opc-cdw-days" id="opc-cdw-days">—</div>
+                      <div class="opc-cdw-days-lbl">өдөр үлдлээ</div>
+                    </div>
+                    <div class="opc-cdw-stats">
+                      <div class="opc-cdw-row">
+                        <span class="opc-cdw-rlbl">Хэрэгтэй гишүүн</span>
+                        <span class="opc-cdw-rval" id="opc-cdw-need">— гишүүн/өдөр</span>
+                      </div>
+                      <div class="opc-cdw-row">
+                        <span class="opc-cdw-rlbl">Нийт алдагдал</span>
+                        <span class="opc-cdw-rval" id="opc-cdw-total-loss">—</span>
+                      </div>
+                      <div class="opc-cdw-row">
+                        <span class="opc-cdw-rlbl">Urgency</span>
+                        <span class="opc-cdw-urgency" id="opc-cdw-urgency">—</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="opc-cdw-nodate" id="opc-cdw-nodate">Зорилтот огноо сонгоно уу →</div>
                 </div>
               </div>
               <div class="opc-stats">
@@ -2550,6 +2617,23 @@ button:focus-visible,
         <div class="fps-card"><div class="fps-val" id="fin-s-exp" style="color:var(--red);">₮0</div><div class="fps-lbl">Нийт зарлага</div></div>
         <div class="fps-card"><div class="fps-val" id="fin-s-net" style="color:var(--gold);">₮0</div><div class="fps-lbl">Цэвэр ашиг</div></div>
       </div>
+      <!-- Monthly trend chart -->
+      <div class="fin-card" style="margin-bottom:14px;">
+        <div class="fin-title" style="margin-bottom:10px;">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          САРЫН TREND
+          <span id="fin-trend-month-lbl" style="margin-left:auto;font-size:9px;font-weight:600;color:var(--text4);letter-spacing:.04em;"></span>
+        </div>
+        <div style="position:relative;height:90px;">
+          <canvas id="fin-trend-canvas" style="width:100%;height:90px;display:block;"></canvas>
+          <div id="fin-trend-empty" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text4);">Өгөгдөл хуримтлагдаж байна...</div>
+        </div>
+        <div id="fin-trend-legend" style="display:flex;gap:14px;margin-top:8px;font-size:10px;color:var(--text3);">
+          <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--green);margin-right:4px;vertical-align:middle;"></span>Орлого</span>
+          <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--red);margin-right:4px;vertical-align:middle;opacity:.7;"></span>Зарлага</span>
+          <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--gold);margin-right:4px;vertical-align:middle;"></span>Цэвэр</span>
+        </div>
+      </div>
       <!-- Exit threshold progress -->
       <div class="fin-card" style="margin-bottom:14px;">
         <div class="fin-title"><svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>GOGO SHOP EXIT THRESHOLD</div>
@@ -2611,9 +2695,15 @@ button:focus-visible,
         <h1>Daily Check-in</h1>
         <p>Явц · Blind spot · TOP3 · Pattern</p>
       </div>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;">
         <button class="btn-add" onclick="ciOpen()">+ Өнөөдрийн check-in</button>
-        <span style="font-size:12px;color:var(--text4);" id="ci-last-lbl"></span>
+        <div id="ci-streak-badge" style="display:none;align-items:center;gap:6px;background:var(--amberbg);border:1px solid rgba(255,149,0,0.28);border-radius:99px;padding:4px 12px;font-size:12px;font-weight:700;color:var(--amber);">
+          🔥 <span id="ci-streak-num">0</span> өдөр дараалсан
+        </div>
+        <div id="ci-streak-zero" style="display:none;align-items:center;gap:6px;background:var(--redbg);border:1px solid rgba(255,59,48,0.22);border-radius:99px;padding:4px 12px;font-size:12px;font-weight:700;color:var(--red);">
+          💤 Өнөөдөр check-in хийгээгүй
+        </div>
+        <span style="font-size:11px;color:var(--text4);" id="ci-last-lbl"></span>
       </div>
       <div id="ci-history-list">
         <div class="empty-state">
@@ -7482,17 +7572,50 @@ function ciSave(){
   ciClose(); ciRenderHistory();
   toast('Check-in хадгалагдлаа','ok');
 }
+function ciCalcStreak(){
+  if(!_ciHistory.length) return 0;
+  var sorted=_ciHistory.slice().sort(function(a,b){return b.date>a.date?1:-1;});
+  var today=new Date().toISOString().slice(0,10);
+  var streak=0;
+  var cur=new Date(today);
+  for(var i=0;i<sorted.length;i++){
+    var d=new Date(cur.getFullYear(),cur.getMonth(),cur.getDate());
+    var entryD=new Date(sorted[i].date);
+    var diff=Math.round((d-entryD)/(1000*60*60*24));
+    if(diff===0){ streak++; cur.setDate(cur.getDate()-1); }
+    else if(diff>0) break;
+  }
+  return streak;
+}
 function ciRenderHistory(){
   var el=document.getElementById('ci-history-list'); if(!el) return;
+  var today=new Date().toISOString().slice(0,10);
   var lbl=document.getElementById('ci-last-lbl');
   if(lbl) lbl.textContent=_ciHistory.length?_ciHistory.length+' бүртгэл':'';
+
+  /* ── Streak badge ── */
+  var streak=ciCalcStreak();
+  var hasToday=_ciHistory.some(function(c){return c.date===today;});
+  var sbadge=document.getElementById('ci-streak-badge');
+  var szero=document.getElementById('ci-streak-zero');
+  var snum=document.getElementById('ci-streak-num');
+  if(sbadge&&szero){
+    if(streak>=1){
+      sbadge.style.display='flex'; szero.style.display='none';
+      if(snum) snum.textContent=streak;
+    } else if(_ciHistory.length>0&&!hasToday){
+      sbadge.style.display='none'; szero.style.display='flex';
+    } else {
+      sbadge.style.display='none'; szero.style.display='none';
+    }
+  }
+
   if(!_ciHistory.length){
     el.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="empty-state-title">Check-in байхгүй байна</div><div class="empty-state-sub">Өдөр бүр 5 минут тусгаарлаж өнөөдрийн явцаа бүртгэ</div></div>';
     return;
   }
   var labels={s1:'Явц',s2:'Blind spot',s3:'TOP 3',s4:'Pattern'};
   el.innerHTML=_ciHistory.map(function(c){
-    var today=new Date().toISOString().slice(0,10);
     var isToday=c.date===today;
     return '<div class="ci-hist-item">'
       +'<div class="ci-hist-date">'+(isToday?'🔵 Өнөөдөр':c.date)+' <span style="color:var(--gold);font-weight:800;">'+(isToday?'today':'')+'</span></div>'
@@ -7502,6 +7625,204 @@ function ciRenderHistory(){
       +'</div>';
   }).join('');
 }
+
+/* ══════════════════════════════════════════════
+   🔔 BROWSER NOTIFICATIONS — OPC Loss Threshold
+══════════════════════════════════════════════ */
+var _opcNotifEnabled=(function(){
+  try{return localStorage.getItem('pd_opc_notif')==='1';}catch(e){return false;}
+})();
+var _notifSentSet={};
+
+function _opcUpdateNotifBtn(){
+  var btn=document.getElementById('opc-notif-btn');
+  if(!btn) return;
+  if(_opcNotifEnabled&&Notification.permission==='granted'){
+    btn.classList.add('notif-on');
+    btn.title='Мэдэгдэл асаалттай — унтраах';
+  } else {
+    btn.classList.remove('notif-on');
+    btn.title='Мэдэгдэл асаах';
+  }
+}
+
+window.opcToggleNotif=function(){
+  if(!('Notification' in window)){
+    toast('Таны browser мэдэгдэлийг дэмждэггүй','warn'); return;
+  }
+  if(_opcNotifEnabled){
+    _opcNotifEnabled=false;
+    try{localStorage.setItem('pd_opc_notif','0');}catch(e){}
+    toast('Мэдэгдэл унтраалаа','warn');
+    _opcUpdateNotifBtn(); return;
+  }
+  if(Notification.permission==='granted'){
+    _opcNotifEnabled=true;
+    try{localStorage.setItem('pd_opc_notif','1');}catch(e){}
+    toast('Мэдэгдэл асаалаа 🔔','ok');
+    _opcUpdateNotifBtn();
+  } else if(Notification.permission!=='denied'){
+    Notification.requestPermission().then(function(p){
+      if(p==='granted'){
+        _opcNotifEnabled=true;
+        try{localStorage.setItem('pd_opc_notif','1');}catch(e){}
+        toast('Мэдэгдэл асаалаа 🔔','ok');
+      } else {
+        toast('Зөвшөөрөл өгөөгүй байна','warn');
+      }
+      _opcUpdateNotifBtn();
+    });
+  } else {
+    toast('Browser тохиргооноос зөвшөөрөл нээнэ үү','warn');
+  }
+};
+
+function _sendLossNotif(label,amount){
+  if(!_opcNotifEnabled||Notification.permission!=='granted') return;
+  if(_notifSentSet[label]) return;
+  _notifSentSet[label]=true;
+  try{
+    new Notification('⚠️ ProductDrop — Алдагдал',{
+      body: label+' алдагдал давлаа! Одоогийн: '+amount,
+      icon: 'https://productdrop.mn/favicon.png',
+      badge: 'https://productdrop.mn/favicon.png',
+      tag: 'opc-loss-'+label,
+      silent: false
+    });
+  }catch(e){}
+}
+
+/* Init notif button state after DOM ready */
+setTimeout(_opcUpdateNotifBtn, 300);
+
+/* ══════════════════════════════════════════════
+   📊 FINANCE MONTHLY TREND CHART
+══════════════════════════════════════════════ */
+var _finMonthKey=(function(){
+  var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+})();
+
+function _finGetHistory(){
+  try{return JSON.parse(localStorage.getItem('pd_finance_monthly')||'[]');}catch(e){return [];}
+}
+function _finSaveHistory(h){
+  try{localStorage.setItem('pd_finance_monthly',JSON.stringify(h));}catch(e){}
+}
+
+/* Snapshot this month's totals — called on every finCalc */
+function finSnapshotMonth(inc,exp,net){
+  var h=_finGetHistory();
+  var idx=h.findIndex(function(m){return m.month===_finMonthKey;});
+  var entry={month:_finMonthKey,inc:inc,exp:exp,net:net};
+  if(idx>=0) h[idx]=entry; else h.push(entry);
+  /* Keep last 12 months */
+  h.sort(function(a,b){return a.month>b.month?1:-1;});
+  if(h.length>12) h=h.slice(h.length-12);
+  _finSaveHistory(h);
+}
+
+function finDrawChart(){
+  var canvas=document.getElementById('fin-trend-canvas');
+  var emptyEl=document.getElementById('fin-trend-empty');
+  if(!canvas) return;
+  var h=_finGetHistory();
+  /* Merge current month live */
+  var inc=(_fin.inc||[]).reduce(function(s,r){return s+r.amt;},0);
+  var exp=(_fin.exp||[]).reduce(function(s,r){return s+r.amt;},0);
+  var idx=h.findIndex(function(m){return m.month===_finMonthKey;});
+  var liveEntry={month:_finMonthKey,inc:inc,exp:exp,net:inc-exp};
+  if(idx>=0) h[idx]=liveEntry; else { h=h.concat([liveEntry]); h.sort(function(a,b){return a.month>b.month?1:-1;}); }
+
+  if(emptyEl) emptyEl.style.display=h.length<2?'flex':'none';
+  if(h.length<1) return;
+
+  var box=canvas.parentElement;
+  var W=box.offsetWidth||300, H=90;
+  canvas.width=W; canvas.height=H;
+  var ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+
+  var dark=document.documentElement.getAttribute('data-theme')==='dark';
+  var PAD={t:6,b:20,l:8,r:8};
+  var cw=W-PAD.l-PAD.r, ch=H-PAD.t-PAD.b;
+  var n=h.length;
+  var barW=Math.max(4,Math.floor(cw/n*0.22));
+  var gap=cw/(n);
+
+  /* Y scale */
+  var allVals=h.map(function(m){return Math.abs(m.inc);}).concat(h.map(function(m){return Math.abs(m.exp);})).concat([1]);
+  var maxV=Math.max.apply(null,allVals);
+  function toY(v){ return PAD.t+ch-(Math.max(0,v)/maxV)*ch; }
+
+  /* Month labels */
+  var mnNames=['1','2','3','4','5','6','7','8','9','10','11','12'];
+  ctx.font='9px "DM Mono",monospace';
+  ctx.textAlign='center';
+  ctx.fillStyle=dark?'rgba(255,255,255,0.28)':'rgba(0,0,0,0.32)';
+
+  h.forEach(function(m,i){
+    var cx=PAD.l+i*gap+gap/2;
+    var iy=toY(m.inc), ey=toY(m.exp), ny=toY(Math.max(0,m.net));
+    var baseY=PAD.t+ch;
+
+    /* Income bar */
+    ctx.fillStyle=dark?'rgba(50,217,106,0.7)':'rgba(52,199,89,0.75)';
+    ctx.fillRect(cx-barW*1.5,iy,barW,baseY-iy);
+
+    /* Expense bar */
+    ctx.fillStyle=dark?'rgba(255,79,68,0.55)':'rgba(255,59,48,0.55)';
+    ctx.fillRect(cx-barW*0.2,ey,barW,baseY-ey);
+
+    /* Net line dot */
+    if(i>0){
+      var prev=h[i-1];
+      var pcx=PAD.l+(i-1)*gap+gap/2;
+      var pny=toY(Math.max(0,prev.net));
+      ctx.beginPath();
+      ctx.moveTo(pcx,pny); ctx.lineTo(cx,ny);
+      ctx.strokeStyle=dark?'rgba(255,159,10,0.80)':'rgba(217,119,6,0.80)';
+      ctx.lineWidth=1.8; ctx.lineJoin='round';
+      ctx.stroke();
+    }
+    ctx.beginPath();
+    ctx.arc(cx,ny,2.5,0,Math.PI*2);
+    ctx.fillStyle=dark?'#FF9F0A':'#D97706';
+    ctx.fill();
+
+    /* Month label */
+    var mo=m.month.split('-')[1];
+    ctx.fillStyle=dark?'rgba(255,255,255,0.28)':'rgba(0,0,0,0.32)';
+    ctx.fillText(mnNames[parseInt(mo)-1]+'сар',cx,H-4);
+  });
+
+  var lbl=document.getElementById('fin-trend-month-lbl');
+  if(lbl) lbl.textContent=n+'сарын өгөгдөл';
+}
+
+/* Hook finCalc to also snapshot + redraw chart */
+var _origFinCalc=window.finCalc;
+setTimeout(function(){
+  var _base=window.finCalc;
+  window.finCalc=function(){
+    _base();
+    var inc=(_fin.inc||[]).reduce(function(s,r){return s+r.amt;},0);
+    var exp=(_fin.exp||[]).reduce(function(s,r){return s+r.amt;},0);
+    finSnapshotMonth(inc,exp,inc-exp);
+    finDrawChart();
+  };
+  /* Hook page switch to redraw */
+  var _origSP=window.showPage;
+  if(typeof _origSP==='function'){
+    window.showPage=function(name,el){
+      _origSP.call(this,name,el);
+      if(name==='finance') setTimeout(finDrawChart,80);
+      if(name==='checkin') setTimeout(ciRenderHistory,50);
+    };
+  }
+  window.addEventListener('resize',function(){ finDrawChart(); });
+  /* Initial draw */
+  setTimeout(finDrawChart,400);
+},800);
 
 /* ── ANALYTICS RENDER HOOK ── */
 var _origRenderAnalytics=null;
@@ -8939,6 +9260,11 @@ var _hookPomo=setInterval(function(){
         <span class="exp-btn-name">Контент → CSV</span>
         <span class="exp-btn-desc">Script, hook, caption бүгд</span>
       </button>
+      <button class="exp-btn" onclick="exportFinanceCSV()">
+        <div class="exp-btn-icon">💰</div>
+        <span class="exp-btn-name">Finance → CSV</span>
+        <span class="exp-btn-desc">Орлого, зарлага, цэвэр ашиг бүртгэл</span>
+      </button>
     </div>
     <div class="exp-bottom">
       <input type="file" id="exp-file-inp" accept=".json" onchange="importJSON(this)"/>
@@ -9377,6 +9703,32 @@ window.exportContentCSV=function(){
   c.forEach(function(r){rows.push([r.id,'"'+(r.title||'').replace(/"/g,'""')+'"',r.type||'',r.platform||'',r.date||'',r.status||'','"'+(r.hooks||'').slice(0,80).replace(/"/g,'""').replace(/\n/g,' ')+'"']);});
   dlFile('\uFEFF'+rows.map(function(r){return r.join(',');}).join('\r\n'),'content-'+new Date().toISOString().slice(0,10)+'.csv','text/csv;charset=utf-8');
   if(typeof toast==='function')toast('✓ Контент CSV бэлэн!');
+};
+
+window.exportFinanceCSV=function(){
+  var fin;
+  try{ fin=JSON.parse(localStorage.getItem('pd_finance')||'null')||JSON.parse(localStorage.getItem('pd4_finance')||'null')||{inc:[],exp:[],salary:0}; }
+  catch(e){ fin={inc:[],exp:[],salary:0}; }
+  var rows=[['Төрөл','Нэр','Дүн (₮)']];
+  var totalInc=0,totalExp=0;
+  (fin.inc||fin.income||[]).forEach(function(r){
+    var a=parseFloat(r.amt||r.val||r.amount||0);
+    totalInc+=a;
+    rows.push(['Орлого','"'+(r.name||r.label||'').replace(/"/g,'""')+'"',a]);
+  });
+  (fin.exp||fin.expense||[]).forEach(function(r){
+    var a=parseFloat(r.amt||r.val||r.amount||0);
+    totalExp+=a;
+    rows.push(['Зарлага','"'+(r.name||r.label||'').replace(/"/g,'""')+'"',a]);
+  });
+  rows.push(['','','']);
+  rows.push(['Нийт орлого','',totalInc]);
+  rows.push(['Нийт зарлага','',totalExp]);
+  rows.push(['Цэвэр ашиг','',totalInc-totalExp]);
+  if(fin.salary) rows.push(['GogoShop цалин','',fin.salary]);
+  var today=new Date().toISOString().slice(0,10);
+  dlFile('\uFEFF'+rows.map(function(r){return r.join(',');}).join('\r\n'),'finance-'+today+'.csv','text/csv;charset=utf-8');
+  if(typeof toast==='function') toast('✓ Finance CSV бэлэн!','ok');
 };
 
 window.importJSON=function(inp){
@@ -12407,12 +12759,12 @@ document.addEventListener('click',function(e){
   var OPC_KEY='pd_opc_state';
   function opcSaveState(){
     try{
+      var mfi=document.getElementById('opc-fi-month-loss');
+      var dfi=document.getElementById('opc-fi-day-loss');
       localStorage.setItem(OPC_KEY, JSON.stringify({
-        members: members,
-        pnl: pnl,
-        secs: secs,
-        hist: hist,
-        ts: Date.now()
+        members: members, pnl: pnl, secs: secs, hist: hist, ts: Date.now(),
+        manualLossActive: manualLossActive, manualMonthLoss: manualMonthLoss,
+        fiMonthLoss: mfi?mfi.value:'', fiDayLoss: dfi?dfi.value:''
       }));
     }catch(e){}
   }
@@ -12421,13 +12773,26 @@ document.addEventListener('click',function(e){
       var raw=localStorage.getItem(OPC_KEY);
       if(!raw) return false;
       var s=JSON.parse(raw);
-      /* Resume only if saved within last 24h */
       if(!s||!s.ts||(Date.now()-s.ts)>86400000) return false;
-      members=s.members||0;
-      pnl=s.pnl||0;
-      secs=s.secs||0;
-      hist=s.hist||[];
+      members=s.members||0; pnl=s.pnl||0; secs=s.secs||0; hist=s.hist||[];
       displayPnl=pnl; displayDrift=0;
+      if(s.manualLossActive){
+        manualLossActive=true; manualMonthLoss=s.manualMonthLoss||0;
+        setTimeout(function(){
+          var mfi=document.getElementById('opc-fi-month-loss');
+          var dfi=document.getElementById('opc-fi-day-loss');
+          var tgl=document.getElementById('opc-ml-toggle');
+          var knob=document.getElementById('opc-ml-knob');
+          var lbl=document.getElementById('opc-ml-mode-lbl');
+          var wrap=document.getElementById('opc-ml-manual-wrap');
+          if(mfi) mfi.value=s.fiMonthLoss||'';
+          if(dfi) dfi.value=s.fiDayLoss||'';
+          if(tgl) tgl.style.background='var(--red)';
+          if(knob) knob.style.transform='translateX(14px)';
+          if(lbl){ lbl.textContent='ГАРААР'; lbl.style.color='var(--red)'; }
+          if(wrap) wrap.style.display='block';
+        },50);
+      }
       return true;
     }catch(e){ return false; }
   }
@@ -12523,7 +12888,10 @@ document.addEventListener('click',function(e){
       var m=MILESTONES[i];
       if(pnlVal<=m && !milestonesHit[m]){
         milestonesHit[m]=true;
-        showToast(fmtMilestone(m)+' алдагдал давлаа!');
+        var lbl=fmtMilestone(m);
+        showToast(lbl+' алдагдал давлаа!');
+        /* Browser notification */
+        if(typeof _sendLossNotif==='function') _sendLossNotif(lbl, fmtAbs(pnlVal));
       }
     }
   }
@@ -12584,11 +12952,76 @@ document.addEventListener('click',function(e){
 
     /* Milestone check */
     checkMilestones(pnl);
+    /* Breakeven countdown live refresh */
+    if(typeof window.opcCdwUpdate==='function'){ var _cde=document.getElementById('opc-cdw-date'); if(_cde&&_cde.value) window.opcCdwUpdate(); }
   }
 
   /* ── Manual monthly loss override ── */
   var manualLossActive=false;
   var manualMonthLoss=0; /* ₮ */
+
+  /* ── Breakeven Countdown ── */
+  window.opcCdwUpdate=function(){
+    var dateEl=document.getElementById('opc-cdw-date');
+    var body=document.getElementById('opc-cdw-body');
+    var noDate=document.getElementById('opc-cdw-nodate');
+    var daysEl=document.getElementById('opc-cdw-days');
+    var needEl=document.getElementById('opc-cdw-need');
+    var lossEl=document.getElementById('opc-cdw-total-loss');
+    var urgEl=document.getElementById('opc-cdw-urgency');
+    if(!dateEl||!dateEl.value){
+      if(body) body.style.display='none';
+      if(noDate) noDate.style.display='block';
+      return;
+    }
+    if(body) body.style.display='flex';
+    if(noDate) noDate.style.display='none';
+    var targetDate=new Date(dateEl.value);
+    targetDate.setHours(23,59,59,0);
+    var now=new Date();
+    var msLeft=targetDate-now;
+    var daysLeft=Math.max(0,Math.ceil(msLeft/86400000));
+    var be=breakeven();
+    var gap=Math.max(0,be-members);
+    var dailyLoss=Math.abs(projDay());
+    var totalLoss=dailyLoss*daysLeft;
+    var memPerDay=daysLeft>0?(gap/daysLeft):Infinity;
+    var memPerDayStr=daysLeft>0?'+'+memPerDay.toFixed(1)+' гишүүн/өдөр':'⚠ Огноо өнгөрсөн';
+    function fmtTug(v){
+      if(v>=1e6) return '₮'+(v/1e6).toFixed(2)+'M';
+      if(v>=1e3) return '₮'+Math.round(v).toLocaleString('mn-MN');
+      return '₮'+v.toFixed(0);
+    }
+    var urgClass,urgText;
+    if(daysLeft===0){ urgClass='u-crit'; urgText='ДУУСЧИХСАН'; }
+    else if(gap<=0){ urgClass='u-ok'; urgText='BREAKEVEN ✓'; }
+    else if(memPerDay>10){ urgClass='u-crit'; urgText='🔴 КРИТИК'; }
+    else if(memPerDay>5){ urgClass='u-high'; urgText='🟠 ӨНДӨР'; }
+    else if(memPerDay>2){ urgClass='u-med'; urgText='🟡 ДУНД'; }
+    else { urgClass='u-ok'; urgText='🟢 ХЭВИЙН'; }
+    var dayClass=daysLeft<=7?'c-crit':daysLeft<=30?'c-high':'c-ok';
+    if(daysEl){ daysEl.textContent=daysLeft; daysEl.className='opc-cdw-days '+dayClass; }
+    if(needEl){ needEl.textContent=gap<=0?'Хангалттай ✓':memPerDayStr; needEl.style.color=gap<=0?'var(--green)':daysLeft<=7?'var(--red)':'inherit'; }
+    if(lossEl){ lossEl.textContent=fmtTug(totalLoss); lossEl.style.color=totalLoss>500000?'var(--red)':'inherit'; }
+    if(urgEl){ urgEl.textContent=urgText; urgEl.className='opc-cdw-urgency '+urgClass; }
+    try{ localStorage.setItem('opc_cdw_date',dateEl.value); }catch(e){}
+  };
+  /* Restore saved date + init */
+  (function(){
+    try{
+      var saved=localStorage.getItem('opc_cdw_date');
+      var el=document.getElementById('opc-cdw-date');
+      if(saved&&el){ el.value=saved; setTimeout(window.opcCdwUpdate,300); }
+      else{
+        var b=document.getElementById('opc-cdw-body');
+        var nd=document.getElementById('opc-cdw-nodate');
+        if(b) b.style.display='none';
+        if(nd) nd.style.display='block';
+      }
+    }catch(e){}
+  })();
+  /* Live refresh every 30s */
+  setInterval(function(){ var el=document.getElementById('opc-cdw-date'); if(el&&el.value) window.opcCdwUpdate(); },30000);
 
   window.opcToggleManualLoss=function(){
     manualLossActive=!manualLossActive;
@@ -12664,7 +13097,7 @@ document.addEventListener('click',function(e){
   function fmtProj(v){
     var a=Math.abs(v),s=v<0?'-':'';
     if(a>=1e6) return s+'₮'+(a/1e6).toFixed(2)+'M';
-    if(a>=1e3) return s+'₮'+(a/1e3).toFixed(0)+'K';
+    if(a>=1e3) return s+'₮'+Math.round(a).toLocaleString('mn-MN');
     return s+'₮'+a.toFixed(0);
   }
 
@@ -12910,18 +13343,21 @@ document.addEventListener('click',function(e){
     opcSaveState();
   }
   var bp=document.getElementById('opc-plus'), bm=document.getElementById('opc-minus');
-  if(bp) bp.addEventListener('click',function(e){e.stopPropagation();addM(CFG.STEP);});
-  if(bm) bm.addEventListener('click',function(e){e.stopPropagation();addM(-CFG.STEP);});
-  /* Hold to repeat */
+  /* Hold to repeat — single click = once, hold 500ms = repeat every 200ms */
   function holdBtn(el,fn){
-    var t=null,iv=null;
-    el.addEventListener('mousedown',function(e){e.stopPropagation();fn();t=setTimeout(function(){iv=setInterval(fn,80);},400);});
-    el.addEventListener('mouseup',function(){clearTimeout(t);clearInterval(iv);});
-    el.addEventListener('mouseleave',function(){clearTimeout(t);clearInterval(iv);});
-    el.addEventListener('touchstart',function(e){e.stopPropagation();fn();t=setTimeout(function(){iv=setInterval(fn,80);},400);},{passive:true});
-    el.addEventListener('touchend',function(){clearTimeout(t);clearInterval(iv);});
+    var t=null,iv=null,active=false;
+    function start(e){ e.stopPropagation(); active=true; fn(); t=setTimeout(function(){ iv=setInterval(fn,200); },500); }
+    function stop(){ clearTimeout(t); clearInterval(iv); t=null; iv=null; active=false; }
+    el.addEventListener('mousedown',start);
+    el.addEventListener('mouseup',stop);
+    el.addEventListener('mouseleave',stop);
+    el.addEventListener('touchstart',function(e){e.stopPropagation();start(e);},{passive:true});
+    el.addEventListener('touchend',stop);
+    el.addEventListener('touchcancel',stop);
+    /* prevent ghost click after touch */
+    el.addEventListener('click',function(e){e.stopPropagation();});
   }
-  if(bp&&bm){ holdBtn(bp,function(){addM(CFG.STEP);}); holdBtn(bm,function(){addM(-CFG.STEP);}); }
+  if(bp&&bm){ holdBtn(bp,function(){addM(1);}); holdBtn(bm,function(){addM(-1);}); }
 
   window.addEventListener('resize',drawChart);
   /* Init labels */
