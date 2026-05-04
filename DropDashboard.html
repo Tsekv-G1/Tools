@@ -2,7 +2,7 @@
 <html lang="mn" translate="no">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover,interactive-widget=resizes-content"/>
 <title>Product Drop Dashboard</title>
 <meta name="description" content="ProductDrop.MN — Бизнесийн удирдлагын систем"/>
 <meta name="theme-color" content="#ffffff" id="meta-theme-color"/>
@@ -1215,6 +1215,7 @@ html.theme-tr .pipe-table tbody tr{
   /* ── Prevent iOS auto-zoom on input focus (requires font-size ≥ 16px) ── */
   input,select,textarea,
   .fi2,.fi3,.cnt-fi,.cnt-ta,.ssel,.ai-av-select,.ai-av-textarea,
+  .opc-fi,.opc-cdw-input,
   #cal-confirm-box input[type="date"],
   #cal-confirm-box input[type="time"],
   #cal-confirm-box input[type="text"]{font-size:16px!important;}
@@ -1614,6 +1615,166 @@ button:focus-visible,
 .sync-chip{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--greenbg);color:var(--green);border:1px solid rgba(52,199,89,.2);}
 .sync-chip.syncing{background:var(--goldbg);color:var(--gold);border-color:rgba(255,149,0,.2);}
 .sync-chip.err{background:var(--redbg);color:var(--red);border-color:rgba(255,59,48,.2);}
+
+/* ══════════════════════════════════════════════════════
+   📱 MOBILE COMPREHENSIVE FIX — OPC + CNT-PANEL + UI
+══════════════════════════════════════════════════════ */
+@media(max-width:768px){
+
+  /* ── OPC (Live P&L) — full mobile reflow ── */
+  .opc-wrap{margin-bottom:10px;border-radius:14px;}
+  .opc-grid{grid-template-columns:1fr!important;gap:0;}
+  .opc-stats{
+    border-left:none!important;
+    border-top:1px solid var(--border);
+    padding-left:0!important;
+    padding-top:10px;
+    margin-top:10px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:6px;
+  }
+  [data-theme="dark"] .opc-stats{border-color:rgba(255,159,10,0.12);}
+  .opc-num{font-size:32px;}
+  .opc-chartbox{height:80px;margin-top:8px;}
+  .opc-proj{flex-direction:row;gap:5px;}
+  .opc-proj-chip{min-width:0;flex:1;}
+  .opc-settings-grid{grid-template-columns:1fr 1fr;}
+  .opc-settings{padding:12px;}
+  .opc-fi{font-size:16px!important;padding:8px 10px!important;}
+  .opc-apply-btn{
+    width:100%;padding:11px;font-size:14px;border-radius:10px;margin-top:10px;
+  }
+  .opc-mbtn{width:34px;height:34px;font-size:18px;}
+  .opc-mval{font-size:16px;min-width:36px;}
+  .opc-header{padding:12px 14px;}
+  .opc-content{padding:12px 12px 14px;}
+  .opc-gear{width:30px;height:30px;border-radius:8px;}
+  /* Countdown widget */
+  .opc-cdw-wrap{margin-top:10px;}
+  .opc-cdw-input{font-size:16px!important;padding:8px 10px!important;}
+  /* Save chip */
+  .opc-save-chip{margin-top:8px;}
+  /* BE bar */
+  .opc-be-bar-wrap{margin-top:6px;}
+  /* Toast zone */
+  .opc-toast-zone{bottom:auto;top:8px;}
+
+  /* ── CNT-PANEL (content drawer) — full mobile sheet ── */
+  .cnt-panel{
+    width:100%!important;
+    max-width:100%!important;
+    top:auto!important;
+    bottom:0!important;
+    left:0!important;
+    right:0!important;
+    border-radius:22px 22px 0 0!important;
+    border-left:none!important;
+    border-top:1px solid var(--border2);
+    transform:translateY(105%)!important;
+    max-height:92dvh!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  .cnt-panel.open{
+    transform:translateY(0)!important;
+  }
+  /* Drag handle indicator */
+  .cnt-panel::before{
+    content:'';
+    display:block;
+    width:36px;height:4px;
+    background:var(--border2);
+    border-radius:2px;
+    margin:10px auto 0;
+    flex-shrink:0;
+  }
+  /* Panel header */
+  .cnt-ph{padding:12px 16px 10px!important;}
+  .cnt-ph-title{font-size:15px!important;}
+  /* Panel body */
+  .cnt-pb{padding:0 14px 16px!important;}
+  /* Input fields — prevent iOS auto-zoom */
+  .cnt-fi,.cnt-ta,.ai-av-textarea{font-size:16px!important;}
+  /* Tabs */
+  .cnt-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;padding-bottom:2px;}
+  .cnt-tab{white-space:nowrap;padding:7px 14px;font-size:12px;}
+  /* Save button */
+  .cnt-bsave{
+    padding:13px!important;font-size:14px!important;
+    border-radius:12px!important;width:100%;
+  }
+  /* AI gen buttons */
+  .ai-gen-btn{padding:11px 10px!important;font-size:12px!important;}
+  /* Badge row */
+  .cnt-fb-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap!important;}
+  .cnt-fb{white-space:nowrap;flex-shrink:0;}
+  /* Overlay dim */
+  .cnt-overlay{backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);}
+
+  /* ── Modals — slide up from bottom ── */
+  #idea-bank-overlay > div,
+  #saved-ideas-overlay > div{
+    border-radius:22px 22px 0 0!important;
+    max-height:88dvh!important;
+  }
+  /* Idea bank search */
+  #ib-search{font-size:16px!important;padding:11px 14px!important;}
+
+  /* ── Toast position ── */
+  .toast{
+    bottom:calc(72px + env(safe-area-inset-bottom,0px))!important;
+    left:10px!important;right:10px!important;
+    max-width:none!important;width:auto!important;
+    font-size:13px;
+  }
+
+  /* ── Better touch targets everywhere ── */
+  .btn-add{min-height:40px;padding:9px 16px;}
+  .vb{min-height:36px;}
+  .bsave,.cnt-bsave{min-height:44px;}
+  .tb-rp-btn{min-width:36px;min-height:36px;}
+
+  /* ── Idea bank chips — horizontal scroll ── */
+  #idea-bank-chips{
+    display:flex!important;overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    flex-wrap:nowrap!important;
+    padding-bottom:4px;
+  }
+  .idea-chip{white-space:nowrap;flex-shrink:0;}
+
+  /* ── Notif dropdown — full width ── */
+  .notif-dropdown{
+    width:calc(100vw - 16px)!important;
+    right:-8px!important;left:auto!important;
+    max-height:70vh!important;
+    overflow-y:auto!important;
+  }
+
+  /* ── Stats — 2 col on phone ── */
+  .stats{grid-template-columns:repeat(2,1fr)!important;}
+
+  /* ── Vbar wrap ── */
+  .vbar{gap:5px;padding:6px 0;}
+
+  /* ── Content page filter bar ── */
+  .cnt-fb-wrap{gap:4px;}
+
+  /* ── Hook 10 result list ── */
+  #ai-hooks10-result{margin-top:8px;}
+}
+
+/* ── Extra small (≤390px iPhone SE/mini) ── */
+@media(max-width:390px){
+  .opc-stats{grid-template-columns:repeat(2,1fr);}
+  .opc-num{font-size:28px;}
+  .cnt-panel{max-height:95dvh!important;}
+  .stats{gap:6px;}
+  .scard{padding:10px 9px;}
+}
+
 </style>
 </head>
 <body>
@@ -1894,6 +2055,16 @@ button:focus-visible,
                 </div>
                 <div style="margin-top:6px;font-size:9px;color:var(--text4);font-family:'DM Mono',monospace;">Нэг утга оруулахад нөгөө нь автоматаар тооцогдоно</div>
               </div>
+            </div>
+
+            <!-- Starting PNL offset -->
+            <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+              <div style="font-size:9px;font-weight:700;letter-spacing:.07em;color:var(--text3);text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:7px;">Эхлэх үлдэгдэл</div>
+              <div class="opc-fi-wrap">
+                <div class="opc-fi-lbl">Одоогийн алдагдал ₮ (сөрөг эсвэл эерэг)</div>
+                <input class="opc-fi" id="opc-fi-start-pnl" type="number" placeholder="жишээ: -75.9" step="0.1" style="font-size:11px;">
+              </div>
+              <div style="margin-top:4px;font-size:9px;color:var(--text4);font-family:'DM Mono',monospace;">Тооллогоо тэр цэгээс үргэлжлүүлэх</div>
             </div>
 
             <button class="opc-apply-btn" onclick="opcApplySettings()">Хэрэгжүүлэх</button>
@@ -2751,24 +2922,43 @@ button:focus-visible,
         .rm-header{margin-bottom:22px}
         .rm-header h1{font-size:26px;font-weight:800;letter-spacing:-.5px;color:var(--text)}
         .rm-header p{font-size:13px;color:var(--text3);margin-top:3px}
-        /* Exit countdown */
-        .rm-exit-bar{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);padding:18px 22px;margin-bottom:18px;display:flex;align-items:center;gap:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-        .rm-exit-bar::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold)}
+        /* Exit countdown — richer gradient */
+        .rm-exit-bar{
+          background:linear-gradient(135deg,#1a2744 0%,#0f3460 60%,#16213e 100%);
+          border:1px solid rgba(255,149,0,0.22);
+          border-radius:var(--r);padding:20px 24px;margin-bottom:18px;
+          display:flex;align-items:center;gap:20px;
+          box-shadow:0 4px 24px rgba(0,0,0,0.18);
+          position:relative;overflow:hidden;color:#fff
+        }
+        .rm-exit-bar::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),#FF6000)}
+        .rm-exit-bar::after{content:'🚀';position:absolute;right:20px;bottom:-8px;font-size:64px;opacity:0.07;pointer-events:none}
         .rm-exit-countdown{display:flex;gap:14px;flex-shrink:0}
         .rm-cd-unit{text-align:center}
-        .rm-cd-num{font-size:30px;font-weight:800;color:var(--text);letter-spacing:-1px;line-height:1}
-        .rm-cd-lbl{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-top:3px}
-        .rm-cd-sep{font-size:26px;font-weight:800;color:var(--border2);align-self:flex-start;margin-top:2px}
+        .rm-cd-num{font-size:32px;font-weight:800;color:#fff;letter-spacing:-1.5px;line-height:1;text-shadow:0 0 20px rgba(255,149,0,.4)}
+        .rm-cd-lbl{font-size:9px;color:rgba(255,255,255,0.5);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-top:4px}
+        .rm-cd-sep{font-size:28px;font-weight:800;color:rgba(255,149,0,0.5);align-self:flex-start;margin-top:2px}
         .rm-exit-info{flex:1;min-width:0}
-        .rm-exit-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:5px}
-        .rm-exit-sub{font-size:12px;color:var(--text3);margin-bottom:9px;line-height:1.6}
-        .rm-exit-prog-wrap{background:var(--bg4);border-radius:99px;height:6px;overflow:hidden}
-        .rm-exit-prog-fill{height:100%;border-radius:99px;background:var(--gold);transition:width 1s ease}
-        .rm-exit-prog-lbl{font-size:10px;color:var(--text3);margin-top:4px;font-weight:600}
+        .rm-exit-title{font-size:14px;font-weight:800;color:#fff;margin-bottom:5px;letter-spacing:-.2px}
+        .rm-exit-sub{font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:10px;line-height:1.65}
+        .rm-exit-sub strong{color:rgba(255,255,255,0.9)}
+        .rm-exit-prog-wrap{background:rgba(255,255,255,0.12);border-radius:99px;height:7px;overflow:hidden}
+        .rm-exit-prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),#FF6000);transition:width 1.2s cubic-bezier(.25,.46,.45,.94);box-shadow:0 0 8px rgba(255,149,0,.5)}
+        .rm-exit-prog-lbl{font-size:10px;color:rgba(255,255,255,0.5);margin-top:5px;font-weight:600}
         /* Stats */
         .rm-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
         @media(max-width:700px){.rm-stat-row{grid-template-columns:repeat(2,1fr)}}
-        .rm-stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow)}
+        .rm-stat-card{
+          background:var(--bg2);border:1px solid var(--border);
+          border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);
+          position:relative;overflow:hidden;transition:box-shadow .2s
+        }
+        .rm-stat-card:hover{box-shadow:var(--shadow-md)}
+        .rm-stat-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;border-radius:2px 0 0 2px}
+        .rm-stat-card:nth-child(1)::before{background:var(--gold)}
+        .rm-stat-card:nth-child(2)::before{background:var(--blue)}
+        .rm-stat-card:nth-child(3)::before{background:var(--red)}
+        .rm-stat-card:nth-child(4)::before{background:var(--green)}
         .rm-stat-val{font-size:24px;font-weight:800;color:var(--text);letter-spacing:-1px;line-height:1}
         .rm-stat-lbl{font-size:11px;color:var(--text3);margin-top:4px;font-weight:600}
         .rm-stat-tag{display:inline-block;font-size:9px;padding:2px 7px;border-radius:4px;font-weight:700;letter-spacing:.5px;margin-top:6px}
@@ -2778,9 +2968,9 @@ button:focus-visible,
         .rm-stat-tag.pur{background:var(--purplebg);color:var(--purple)}
         /* Phase block */
         .rm-phase{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px;box-shadow:var(--shadow)}
-        .rm-phase-hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+        .rm-phase-hdr{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
         .rm-phase-hdr:hover{background:var(--bg3)}
-        .rm-phase-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:4px;text-transform:uppercase;letter-spacing:1.5px;flex-shrink:0}
+        .rm-phase-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;text-transform:uppercase;letter-spacing:1.5px;flex-shrink:0}
         .rm-phase-title{font-size:14px;font-weight:800;color:var(--text);letter-spacing:-.3px}
         .rm-phase-date{font-size:11px;color:var(--text4);margin-left:auto;font-weight:600;white-space:nowrap}
         .rm-phase-prog{font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px;margin-left:8px;flex-shrink:0}
@@ -2791,12 +2981,12 @@ button:focus-visible,
         .rm-item:hover{background:var(--bg3)}
         .rm-item.rm-done{opacity:.5}
         .rm-item.rm-done .rm-item-title{text-decoration:line-through;color:var(--text3)}
-        .rm-cb{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;margin-top:2px}
-        .rm-cb.checked{background:var(--green);border-color:var(--green)}
+        .rm-cb{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s;margin-top:2px}
+        .rm-cb.checked{background:var(--green);border-color:var(--green);box-shadow:0 0 6px rgba(52,199,89,.35)}
         .rm-cb.checked::after{content:'✓';font-size:10px;color:#fff;font-weight:800}
         .rm-item-body{flex:1;min-width:0}
         .rm-item-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
-        .rm-item-sub{font-size:11px;color:var(--text3);line-height:1.5}
+        .rm-item-sub{font-size:11px;color:var(--text3);line-height:1.55}
         .rm-item-meta{display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap}
         .rm-tag{font-size:9px;padding:2px 7px;border-radius:3px;font-weight:700;text-transform:uppercase;letter-spacing:.8px}
         .rm-tag-red{background:var(--redbg);color:var(--red)}
@@ -2830,10 +3020,16 @@ button:focus-visible,
         /* Chevron */
         .rm-chevron{width:16px;height:16px;flex-shrink:0;color:var(--text4);transition:transform .2s;margin-left:4px}
         .rm-chevron.open{transform:rotate(180deg)}
+        /* Supabase sync indicator */
+        .rm-sync-dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;margin-left:6px;vertical-align:middle;opacity:0;transition:opacity .4s}
+        .rm-sync-dot.show{opacity:1}
+        /* Dark mode overrides */
+        [data-theme="dark"] .rm-exit-bar{background:linear-gradient(135deg,#0d1b35 0%,#0a2540 60%,#0f172a 100%);border-color:rgba(255,149,0,0.18)}
+        [data-theme="dark"] .rm-stat-card{background:var(--bg2);border-color:var(--border)}
       </style>
 
       <div class="rm-header">
-        <h1>Scale Төлөвлөгөө</h1>
+        <h1>Scale Төлөвлөгөө <span class="rm-sync-dot" id="rm-sync-dot" title="Supabase-д хадгалагдлаа"></span></h1>
         <p>ProductDrop.MN · Бизнесийн гүнзгий төлөвлөгөө · 2026</p>
       </div>
 
@@ -2862,7 +3058,7 @@ button:focus-visible,
           <div class="rm-stat-tag grn">Голлох бүтээгдэхүүн</div>
         </div>
         <div class="rm-stat-card">
-          <div class="rm-stat-val">~15</div>
+          <div class="rm-stat-val" id="rm-pro-count">~15</div>
           <div class="rm-stat-lbl">Одоогийн Pro гишүүн</div>
           <div class="rm-stat-tag ylw">Зорилт: Sept → 250</div>
         </div>
@@ -3645,7 +3841,7 @@ button:focus-visible,
     </div>
 
     <!-- ── PERFORMANCE TRACKING ── -->
-    <div style="border:1.5px solid rgba(52,199,89,0.25);border-radius:12px;background:rgba(52,199,89,0.04);padding:12px 14px;margin-bottom:4px;">
+    <div id="cnt-perf-section" style="border:1.5px solid rgba(52,199,89,0.25);border-radius:12px;background:rgba(52,199,89,0.04);padding:12px 14px;margin-bottom:4px;display:none;">
       <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
         <span style="font-size:13px;">📊</span>
         <span style="font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.05em;">Гүйцэтгэл</span>
@@ -3977,8 +4173,8 @@ function cntToRow(c){
     script:c.script||'',
     orders:parseInt(c.orders||0)||0,
     revenue:parseFloat(c.revenue||0)||0,
-    views:parseInt(c.views||0)||0
-    /* dms: Supabase хүснэгтэд багана байхгүй тул илгээхгүй */
+    views:parseInt(c.views||0)||0,
+    dms:parseInt(c.dms||0)||0
   };
 }
 
@@ -5085,7 +5281,11 @@ function fmtCntDate(s){if(!s)return'—';var parts=s.split('-');if(parts.length<
 
 function refreshCntBadges(){
   var el=document.getElementById('cnt-ph-badges');if(!el)return;
-  el.innerHTML=cntTypeBadge(document.getElementById('cp-type').value)+cntStatusBadge(document.getElementById('cp-status').value);
+  var status=document.getElementById('cp-status').value;
+  el.innerHTML=cntTypeBadge(document.getElementById('cp-type').value)+cntStatusBadge(status);
+  /* Гүйцэтгэл хэсгийг зөвхөн "Нийтлэгдсэн" үед харуулах */
+  var perf=document.getElementById('cnt-perf-section');
+  if(perf) perf.style.display=(status==='pub')?'block':'none';
 }
 
 function openContentM(){
@@ -5102,7 +5302,10 @@ function openContentM(){
   document.getElementById('cnt-ov').classList.add('open');
   document.getElementById('cnt-panel').classList.add('open');
   cntPanelOpen=true;
-  setTimeout(function(){document.getElementById('cp-title').focus();},60);
+  /* cp-title focus-г зөвхөн desktop дээр хийх — mobile дээр keyboard pop болж scroll-г алдагдуулдаг */
+  if(window.innerWidth>768){
+    setTimeout(function(){document.getElementById('cp-title').focus();},60);
+  }
 }
 
 function openCntEdit(id){
@@ -5123,6 +5326,9 @@ function openCntEdit(id){
   document.getElementById('cnt-save-btn').textContent='Хадгалах';
   document.getElementById('cnt-del-btn').style.display='';
   refreshCntBadges();
+  /* Гүйцэтгэл хэсгийг status-аас хамааруулан харуулах */
+  var perf=document.getElementById('cnt-perf-section');
+  if(perf) perf.style.display=(c.status==='pub')?'block':'none';
   document.getElementById('cnt-ov').classList.add('open');
   document.getElementById('cnt-panel').classList.add('open');
   cntPanelOpen=true;
@@ -5280,6 +5486,9 @@ function updateUserStats(data){
   var proCount=data.filter(function(p){return p.plan==='pro'&&p.expiry>now;}).length;
   var starterCount=data.filter(function(p){return p.plan==='starter'&&p.expiry>now;}).length;
   analytics.pro=proCount;analytics.starter=starterCount;saveAll();renderAnalytics();
+  // Push live counts to Roadmap + AI context cards
+  var rmc=document.getElementById('rm-pro-count');if(rmc)rmc.textContent=proCount||'~15';
+  var amc=document.getElementById('ai-ctx-members');if(amc)amc.textContent=proCount+(starterCount?' (+'+starterCount+' starter)':'');
 }
 
 function delUser(pw){
@@ -5667,7 +5876,7 @@ function copyPW(){
 function doSettings(){var cur=localStorage.getItem('pd4_nm')||'Ганбаар Цэвэгмид';var n=prompt('Таны нэр:',cur);if(n!==null&&n.trim()){localStorage.setItem('pd4_nm',n.trim());setUser(n.trim());setGreet(n.trim());toast('Нэр хадгалагдлаа ✓');}}
 function setUser(name){var av=document.getElementById('u-av');if(av)av.textContent=name.charAt(0).toUpperCase();}
 function setGreet(name){
-  var h=new Date().getHours();var g=h<12?'Өглөөний мэнд':h<18?'Өдрийн мэнд':'Оройн мэнд';
+  var h=new Date().getHours();var g=h<5?'Шөнийн мэнд':h<12?'Өглөөний мэнд':h<18?'Өдрийн мэнд':'Оройн мэнд';
   var gh=document.getElementById('greet-h');if(gh)gh.textContent=g+(name?', '+name:'')+'!';
   var gs=document.getElementById('greet-sub');if(gs){var today=new Date().toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric'});gs.textContent='ProductDrop.MN · '+today;}
 }
@@ -6294,7 +6503,7 @@ var SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJl
 var SB_HDRS = {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
 
 // Keys to sync between localStorage ↔ Supabase
-var SYNC_KEYS = ['pd4_nm','pd_theme','pd_qlinks','pd_gas_url'];
+var SYNC_KEYS = ['pd4_nm','pd_theme','pd_qlinks','pd_gas_url','pd_roadmap_checks'];
 
 /* Write one key to Supabase (upsert) */
 function sbSet(key, value){
@@ -6320,6 +6529,10 @@ function sbPullAll(){
       }
     });
     if(changed) _applyAllSettings();
+    // Roadmap checkboxes — re-apply if pulled from Supabase
+    if(rows.some(function(r){return r.key==='pd_roadmap_checks';})){
+      if(typeof window.rmLoadChecks==='function') setTimeout(window.rmLoadChecks,100);
+    }
   })
   .catch(function(){/* offline — localStorage fallback */});
 }
@@ -10202,7 +10415,7 @@ scheduleAllReminders();
     if(el) el.textContent = done + '/' + total;
   }
 
-  function rmLoadChecks(){
+  window.rmLoadChecks = function rmLoadChecks(){
     var saved = JSON.parse(localStorage.getItem('pd_roadmap_checks') || '{}');
     Object.keys(saved).forEach(function(k){
       if(!saved[k]) return;
@@ -10224,6 +10437,9 @@ scheduleAllReminders();
     localStorage.setItem('pd_roadmap_checks', JSON.stringify(saved));
     var phase = key.split('_')[0];
     rmUpdatePhaseProg(phase);
+    // Flash Supabase sync dot
+    var dot = document.getElementById('rm-sync-dot');
+    if(dot){ dot.classList.add('show'); setTimeout(function(){ dot.classList.remove('show'); }, 1800); }
     if(typeof toast === 'function') toast(isChecked ? '✅ Дууслаа!' : '↩ Буцаагдлаа');
   };
 
@@ -12148,6 +12364,7 @@ JSON FORMAT ЗӨВХӨН (тайлбар, markdown, backtick хэрэггүй):
       })
     });
     var data = await resp.json();
+    if(!resp.ok){throw new Error((data.error&&data.error.message)||'HTTP '+resp.status);}
     var raw = (data.content && data.content[0] && data.content[0].text) || '';
     // JSON цэвэрлэх
     raw = raw.replace(/```json/g,'').replace(/```/g,'').trim();
@@ -12332,9 +12549,16 @@ async function aiReviseScript(){
   btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Дахин бичиж байна...';
   status.textContent='⏳ AI дахин бичиж байна...';status.style.color='var(--blue)';
 
-  var sysPrompt='Чи Alex Hormozi Content Expert. Одоо байгаа script-д feedback-д үндэслэн сайжруулна.\n\n'
+  var sysPrompt='Чи ProductDrop.MN-ийн контент стратегич. Hormozi механизмыг Монгол хүний сэтгэлзүйд тааруулдаг.\n\n'
     +'HORMOZI ЗАРЧИМ: Hook=[тоо+үр дүн+цаг+нөхцөл] · Villain frame · Value Equation · Proof tier · Offer stack · Нэг CTA · Hyper-specific · Show don\'t tell\n\n'
-    +'Avatar: '+(av.name||'')+'  Pains: '+(av.pains||'')+'  Dreams: '+(av.dreams||'')+'\n\n'
+    +'МОНГОЛ ДҮРЭМ (заавал дагана):\n'
+    +'→ "ЧИ" гэж хандана — "залуусаа / хүмүүс / бид" огт биш\n'
+    +'→ Шууд, тойруулахгүй, "зааж байгаа" биш "хэлж байгаа"\n'
+    +'→ Slightly confrontational — бага зэрэг шахна, гэхдээ доромжлохгүй\n'
+    +'→ Guru tone, western exaggeration, "passive income" хориглоно\n'
+    +'→ FLUFF хасна: хасахад утга алдагдахгүй өгүүлбэр байхгүй байх\n\n'
+    +'Avatar: '+(av.name||'')+'  Pains: '+(av.pains||'')+'  Dreams: '+(av.dreams||'')+'\n'
+    +'Хориотой: '+(av.forbidden||'')+'\n\n'
     +'JSON ЗӨВХӨН гаргана:\n{"hooks":"Hook 1:...\\nHook 2:...\\nHook 3:...","script":"[HOOK — 0-4с]\\n...\\n\\n[VILLAIN — 4-10с]\\n...\\n\\n[BRIDGE — 10-20с]\\n...\\n\\n[PROOF — 20-40с]\\n...\\n\\n[OFFER+CTA — 40-60с]\\n..."}';
 
   var userMsg='Одоо байгаа script:\n\n'+curScript+'\n\nHooks:\n'+curHooks+'\n\nFeedback (яг дагана):\n'+fb+'\n\nJSON зөвхөн гаргана.';
@@ -12346,6 +12570,7 @@ async function aiReviseScript(){
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,system:sysPrompt,messages:[{role:'user',content:userMsg}]})
     });
     var data=await resp.json();
+    if(!resp.ok){throw new Error((data.error&&data.error.message)||'HTTP '+resp.status);}
     var raw=((data.content&&data.content[0]&&data.content[0].text)||'').replace(/```json/g,'').replace(/```/g,'').trim();
     var parsed=JSON.parse(raw);
     if(parsed.hooks){var he=document.getElementById('cp-hooks');if(he)he.value=parsed.hooks;}
@@ -12402,6 +12627,7 @@ async function pbGenScript(){
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,system:sysPrompt,messages:[{role:'user',content:name+'-ийн Hormozi script үүсгэ. JSON зөвхөн.'}]})
     });
     var data=await resp.json();
+    if(!resp.ok){throw new Error((data.error&&data.error.message)||'HTTP '+resp.status);}
     var raw=((data.content&&data.content[0]&&data.content[0].text)||'').replace(/```json/g,'').replace(/```/g,'').trim();
     var parsed=JSON.parse(raw);
     if(parsed.hooks){var he=document.getElementById('cp-hooks');if(he)he.value=parsed.hooks;}
@@ -12787,6 +13013,7 @@ JSON зөвхөн. Тайлбар, markdown огт биш.`;
       })
     });
     var data = await resp.json();
+    if(!resp.ok){throw new Error((data.error&&data.error.message)||'HTTP '+resp.status);}
     var raw = (data.content && data.content[0] && data.content[0].text) || '';
     raw = raw.replace(/```json/g,'').replace(/```/g,'').trim();
     var parsed = JSON.parse(raw);
@@ -12933,6 +13160,7 @@ JSON FORMAT ЗӨВХӨН (тайлбар, markdown, backtick огт биш):
       })
     });
     var data = await resp.json();
+    if(!resp.ok){throw new Error((data.error&&data.error.message)||'HTTP '+resp.status);}
     var raw = (data.content && data.content[0] && data.content[0].text) || '';
     raw = raw.replace(/```json/g,'').replace(/```/g,'').trim();
     var parsed = JSON.parse(raw);
@@ -12945,9 +13173,8 @@ JSON FORMAT ЗӨВХӨН (тайлбар, markdown, backtick огт биш):
       div.onmouseenter = function(){ this.style.borderColor = 'var(--gold)'; };
       div.onmouseleave = function(){ this.style.borderColor = 'var(--border)'; };
       div.onclick = function(){
-        var el = document.getElementById('cp-hooks');
-        if(el){ var cur = el.value.trim(); el.value = cur ? cur + '\n' + h : h; }
-        if(typeof toast==='function') toast('Hook нэмэгдлээ ✓', 'ok');
+        addHookNumbered(h);
+        if(typeof toast==='function') toast('⚡ Hook нэмэгдлээ — Script үүсгэ!', 'ok');
       };
       div.innerHTML = '<span style="font-size:10px;font-weight:800;color:var(--gold);white-space:nowrap;padding-top:1px;">' + (typeLabels[i]||'#'+(i+1)) + '</span>'
         + '<span style="font-size:12px;color:var(--text);line-height:1.55;flex:1;">' + h + '</span>'
@@ -12976,10 +13203,100 @@ JSON FORMAT ЗӨВХӨН (тайлбар, markdown, backtick огт биш):
 /* ══ IDEA CARD HELPERS ══ */
 var _igIdeasCache = [];
 
+/* ══ SHARED HELPERS ══ */
+
+/* Санааг ai-idea талбарт оруулж, тухайн хэсэгт scroll хийх */
+function useIdeaInPanel(title, premise){
+  /* 1. Панел нээлттэй эсэхийг шалгах */
+  var panel=document.getElementById('cnt-panel');
+  var panelOpen=panel&&panel.classList.contains('open');
+  var isMobile=window.innerWidth<=768;
+  if(!panelOpen){
+    /* Panel нээх — openContentM дуудах (cp-title focus-г mobile-д хийхгүй) */
+    if(typeof openContentM==='function') openContentM();
+  }
+  /* 2. ai-idea textarea-г бөглөх */
+  function fillIdea(){
+    var f=document.getElementById('ai-idea');
+    if(!f){ setTimeout(fillIdea,80); return; } /* DOM бэлэн болоогүй бол дахин */
+    var val=(title?title+':\n\n':'')+(premise||'');
+    f.value=val;
+    try{f.dispatchEvent(new Event('input'));}catch(e){}
+    f.style.borderColor='var(--purple)';
+    f.style.boxShadow='0 0 0 3px rgba(175,82,222,0.18)';
+    setTimeout(function(){f.style.borderColor='';f.style.boxShadow='';},1800);
+    /* 3. Scroll + focus — scrollIntoView нь scroll container-с үл хамаарч ажиллана */
+    setTimeout(function(){
+      f.scrollIntoView({behavior:'smooth',block:'center'});
+      /* cnt-pbody болон cnt-panel хоёуланд scroll fallback */
+      var pb=document.querySelector('.cnt-pbody');
+      var cp=document.getElementById('cnt-panel');
+      try{
+        if(pb&&pb.scrollHeight>pb.clientHeight){
+          var fRect=f.getBoundingClientRect();var pbRect=pb.getBoundingClientRect();
+          pb.scrollTo({top:pb.scrollTop+(fRect.top-pbRect.top)-(pbRect.height/2-f.offsetHeight/2),behavior:'smooth'});
+        } else if(cp&&cp.scrollHeight>cp.clientHeight){
+          var fRect=f.getBoundingClientRect();var cpRect=cp.getBoundingClientRect();
+          cp.scrollTo({top:cp.scrollTop+(fRect.top-cpRect.top)-(cpRect.height/2-f.offsetHeight/2),behavior:'smooth'});
+        }
+      }catch(e){}
+      if(!isMobile) f.focus(); /* mobile дээр focus нь keyboard pop хийдэг */
+      else{ f.setAttribute('readonly',''); f.focus(); f.removeAttribute('readonly'); }
+      try{f.setSelectionRange(f.value.length,f.value.length);}catch(e){}
+    },60);
+  }
+  /* Panel шинээр нээгдэж байвал animation дуустал хүлээх */
+  setTimeout(fillIdea, panelOpen?30:(isMobile?550:380));
+}
+
+/* Hook-ийг Hook N: дугаарлалттайгаар cp-hooks-д нэмэх */
+function addHookNumbered(text){
+  var panel=document.getElementById('cnt-panel');
+  var panelOpen=panel&&panel.classList.contains('open');
+  /* Panel хаалттай бол нээж, дараа hook бичих */
+  if(!panelOpen){
+    if(typeof openContentM==='function') openContentM();
+  }
+  var isMobile=window.innerWidth<=768;
+  var delay=panelOpen?30:(isMobile?550:350);
+  setTimeout(function(){
+    var el=document.getElementById('cp-hooks');
+    if(!el)return;
+    /* Одоо байгаа hook-уудын тоог тоолох */
+    var cur=el.value.trim();
+    var existing=cur?cur.match(/^Hook\s*\d+\s*:/gim)||[]:[];
+    var nextN=existing.length+1;
+    /* Аль хэдийн "Hook N:" гэж эхэлсэн бол strip хийх */
+    var cleanText=text.replace(/^Hook\s*\d+\s*:\s*/i,'').trim();
+    var newLine='Hook '+nextN+': '+cleanText;
+    el.value=cur?cur+'\n'+newLine:newLine;
+    /* Flash эффект */
+    el.style.borderColor='var(--gold)';
+    el.style.boxShadow='0 0 0 3px rgba(255,149,0,0.18)';
+    setTimeout(function(){el.style.borderColor='';el.style.boxShadow='';},1400);
+    /* Hook хэсэгт scroll — scrollIntoView нь scroll container-с үл хамаарч ажиллана */
+    setTimeout(function(){
+      el.scrollIntoView({behavior:'smooth',block:'center'});
+      var pb=document.querySelector('.cnt-pbody');
+      var cp=document.getElementById('cnt-panel');
+      try{
+        if(pb&&pb.scrollHeight>pb.clientHeight){
+          var elRect=el.getBoundingClientRect();var pbRect=pb.getBoundingClientRect();
+          pb.scrollTo({top:pb.scrollTop+(elRect.top-pbRect.top)-(pbRect.height/2-el.offsetHeight/2),behavior:'smooth'});
+        } else if(cp&&cp.scrollHeight>cp.clientHeight){
+          var elRect=el.getBoundingClientRect();var cpRect=cp.getBoundingClientRect();
+          cp.scrollTo({top:cp.scrollTop+(elRect.top-cpRect.top)-(cpRect.height/2-el.offsetHeight/2),behavior:'smooth'});
+        }
+      }catch(e){}
+      el.focus();
+      el.setSelectionRange(el.value.length,el.value.length);
+    },50);
+  }, delay);
+}
+
 function igUseIdea(idx) {
   var idea = _igIdeasCache[idx]; if(!idea) return;
-  var f = document.getElementById('ai-idea');
-  if(f){ f.value = idea.title+':\n\n'+idea.premise; f.style.borderColor='var(--purple)'; setTimeout(function(){f.style.borderColor='';},1400); f.scrollIntoView({behavior:'smooth',block:'center'}); f.focus(); }
+  useIdeaInPanel(idea.title, idea.premise);
   if(typeof toast==='function') toast('⚡ Санаа нэмэгдлээ — засаад Script үүсгэ!','ok');
 }
 function igDeleteCard(btn){ var c=btn.closest('.ig-card'); if(c){c.style.opacity='0';c.style.transition='opacity .18s';setTimeout(function(){c.remove();},180);} }
@@ -12993,7 +13310,8 @@ async function sbIdeaDelete(id){ var h=Object.assign({},SB_H,{'Prefer':''}); awa
 async function igSaveIdea(ev,idx,btn){
   ev.stopPropagation(); if(btn.dataset.saved==='1')return;
   var idea=_igIdeasCache[idx]; if(!idea)return;
-  var row={id:Date.now(),idea_type:idea.type||'',emotion:idea.emotion||'',title:idea.title||'',premise:idea.premise||'',why_it_works:idea.why_it_works||'',format:idea.format||'',audience:(document.getElementById('ig-audience')||{}).value||'',funnel_stage:(document.getElementById('ai-content-type')||{value:'TOFU'}).value||'TOFU',product:'Product drop',created_at:new Date().toISOString()};
+  var localId='local_'+Date.now();
+  var row={id:localId,idea_type:idea.type||'',emotion:idea.emotion||'',title:idea.title||'',premise:idea.premise||'',why_it_works:idea.why_it_works||'',format:idea.format||'',audience:(document.getElementById('ig-audience')||{}).value||'',funnel_stage:(document.getElementById('ai-content-type')||{value:'TOFU'}).value||'TOFU',product:'Product drop',created_at:new Date().toISOString()};
   var saved=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]'); saved.unshift(row); localStorage.setItem('pd4_saved_ideas',JSON.stringify(saved.slice(0,100)));
   btn.textContent='✅'; btn.style.color='var(--green)'; btn.dataset.saved='1';
   if(typeof toast==='function')toast('💾 Санаа хадгалагдлаа!','ok');
@@ -13001,7 +13319,17 @@ async function igSaveIdea(ev,idx,btn){
   /* refresh modal count */
   var _mc=document.getElementById('idea-bank-main-count');
   if(_mc){var _ic=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]');_mc.textContent=_ic.length?'('+_ic.length+')':'';}
-  try{await sbIdeaInsert(row);}catch(e){}
+  /* Supabase руу id-гүйгээр POST — SERIAL auto-generate хийнэ */
+  try{
+    var sbRow={idea_type:row.idea_type,emotion:row.emotion,title:row.title,premise:row.premise,why_it_works:row.why_it_works,format:row.format,audience:row.audience,funnel_stage:row.funnel_stage,product:row.product,created_at:row.created_at};
+    var inserted=await sbIdeaInsert(sbRow);
+    /* Supabase-с буцаж ирсэн id-г local record-д шинэчлэх */
+    if(inserted&&inserted.id){
+      var ls=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]');
+      var fi=ls.findIndex(function(x){return x.id===localId;});
+      if(fi>-1){ls[fi].id=inserted.id;localStorage.setItem('pd4_saved_ideas',JSON.stringify(ls));}
+    }
+  }catch(e){console.warn('Supabase idea save failed:',e);}
 }
 
 async function openSavedIdeas(){
@@ -13016,7 +13344,7 @@ async function openSavedIdeas(){
   list.innerHTML=ideas.map(function(idea){
     var color=tc[idea.idea_type||idea.type]||'var(--text3)';
     var dateStr=idea.created_at?new Date(idea.created_at).toLocaleDateString('mn-MN'):'';
-    var t=(idea.title||'').replace(/'/g,'&#39;'), p=(idea.premise||'').replace(/'/g,'&#39;');
+    var t=encodeURIComponent(idea.title||''), p=encodeURIComponent(idea.premise||'');
     return '<div class="si-card" style="background:var(--bg3);border:1.5px solid var(--border);border-radius:11px;padding:11px 13px;margin-bottom:8px;">'
       +'<div style="display:flex;align-items:center;gap:5px;margin-bottom:5px;flex-wrap:wrap;">'
       +'<span style="font-size:10px;font-weight:800;color:'+color+';text-transform:uppercase;">'+(idea.idea_type||idea.type||'')+'</span>'
@@ -13024,7 +13352,7 @@ async function openSavedIdeas(){
       +(idea.funnel_stage?'<span style="font-size:10px;background:var(--bluebg);color:var(--blue);border-radius:4px;padding:1px 6px;font-weight:600;">'+idea.funnel_stage+'</span>':'')
       +'<span style="flex:1;"></span>'
       +(dateStr?'<span style="font-size:9px;color:var(--text4);">'+dateStr+'</span>':'')
-      +'<button onclick="siDelete(this,'+(idea.id||0)+')" class="si-del-btn" style="border:none;background:var(--redbg);color:var(--red);font-size:13px;cursor:pointer;padding:4px 8px;border-radius:7px;margin-left:4px;min-width:34px;min-height:34px;display:flex;align-items:center;justify-content:center;">🗑</button>'
+      +'<button onclick="siDelete(this,\''+idea.id+'\')" class="si-del-btn" style="border:none;background:var(--redbg);color:var(--red);font-size:13px;cursor:pointer;padding:4px 8px;border-radius:7px;margin-left:4px;min-width:34px;min-height:34px;display:flex;align-items:center;justify-content:center;">🗑</button>'
       +'</div>'
       +'<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:5px;">'+(idea.title||'')+'</div>'
       +'<div style="font-size:11px;color:var(--text3);line-height:1.7;margin-bottom:8px;">'+(idea.premise||'')+'</div>'
@@ -13035,16 +13363,20 @@ async function openSavedIdeas(){
 }
 
 function siUse(title,premise){
-  var f=document.getElementById('ai-idea');
-  if(f){f.value=title+':\n\n'+premise;f.style.borderColor='var(--purple)';setTimeout(function(){f.style.borderColor='';},1400);f.scrollIntoView({behavior:'smooth',block:'center'});f.focus();}
   document.getElementById('saved-ideas-overlay').style.display='none';
+  useIdeaInPanel(decodeURIComponent(title),decodeURIComponent(premise));
   if(typeof toast==='function')toast('⚡ Санаа нэмэгдлээ — засаад Script үүсгэ!','ok');
 }
 async function siDelete(btn,id){
   var card=btn.closest('.si-card');if(card){card.style.opacity='0';card.style.transition='opacity .18s';setTimeout(function(){card.remove();},160);}
-  var saved=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]').filter(function(x){return x.id!==id;});
+  /* String болгон харьцуулах — localStorage-д number эсвэл string байж болно */
+  var strId=String(id);
+  var saved=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]').filter(function(x){return String(x.id)!==strId;});
   localStorage.setItem('pd4_saved_ideas',JSON.stringify(saved));
-  try{await sbIdeaDelete(id);}catch(e){}
+  /* Local ID (local_XXXX) бол Supabase-д устгах шаардлагагүй */
+  if(!strId.startsWith('local_')){
+    try{await sbIdeaDelete(id);}catch(e){}
+  }
   if(typeof toast==='function')toast('Устгагдлаа','ok');
   renderIdeaBank(); // refresh inline bank
 }
@@ -13060,11 +13392,9 @@ function toggleIdeaBank(){
   if(_ideaBankOpen) renderIdeaBank();
 }
 
-function renderIdeaBank(){
+function _renderIdeaBankChips(ideas){
   var chips=document.getElementById('idea-bank-chips');
   var cnt=document.getElementById('idea-bank-count');
-  var ideas=[];
-  try{ideas=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]');}catch(e){}
   if(cnt) cnt.textContent=ideas.length?ideas.length+' санаа':'';
   if(!chips)return;
   if(!ideas.length){
@@ -13074,28 +13404,43 @@ function renderIdeaBank(){
   chips.innerHTML=ideas.map(function(idea){
     var t=encodeURIComponent(idea.title||'');
     var p=encodeURIComponent(idea.premise||'');
-    var short=(idea.title||'').slice(0,38)+((idea.title||'').length>38?'…':'');
     var safeShort=(idea.title||'').replace(/</g,'&lt;').replace(/>/g,'&gt;').slice(0,38);
     return '<div style="display:flex;align-items:center;gap:0;max-width:100%;">'
       +'<button class="idea-chip" onclick="ibUse(\''+t+'\',\''+p+'\')" title="'+safeShort+'">'
-      +'<span style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+safeShort+(safeShort.length<(idea.title||'').length?'…':'')+'</span>'
+      +'<span style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+safeShort+((idea.title||'').length>38?'…':'')+'</span>'
       +'</button>'
-      +'<button class="idea-chip-del si-del-btn" onclick="siDelete(this,'+(idea.id||0)+')" title="Устгах">✕</button>'
+      +'<button class="idea-chip-del si-del-btn" onclick="siDelete(this,\''+idea.id+'\')" title="Устгах">✕</button>'
       +'</div>';
   }).join('');
 }
+function renderIdeaBank(){
+  /* 1. Хурдан localStorage-с render хийх */
+  var ideas=[];
+  try{ideas=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]');}catch(e){}
+  _renderIdeaBankChips(ideas);
+  /* 2. Supabase-с background sync — шинэ санаанууд байвал шинэчлэх */
+  sbIdeaGet().then(function(rows){
+    if(!rows||!rows.length)return;
+    /* localStorage кэшийг Supabase-ийн бодит өгөгдлөөр солих */
+    localStorage.setItem('pd4_saved_ideas',JSON.stringify(rows));
+    _renderIdeaBankChips(rows);
+    var _mc=document.getElementById('idea-bank-main-count');
+    if(_mc)_mc.textContent=rows.length?'('+rows.length+')':'';
+  }).catch(function(){});/* localStorage fallback хэвээр ажиллана */
+}
 
 function ibUse(title,premise){
-  var f=document.getElementById('ai-idea');
-  if(f){f.value=decodeURIComponent(title)+':\n\n'+decodeURIComponent(premise);f.style.borderColor='var(--purple)';setTimeout(function(){f.style.borderColor='';},1400);f.scrollIntoView({behavior:'smooth',block:'center'});f.focus();}
-  if(typeof toast==='function')toast('⚡ Санаа нэмэгдлээ — засаад Script үүсгэ!','ok');
-  // close bank
+  /* Idea Bank-аас Ашиглах: modal хаасны дараа + Нэмэх panel нээж Санааны хэсэгт scroll хийх */
   _ideaBankOpen=false;
   var chips=document.getElementById('idea-bank-chips');
   var chev=document.getElementById('idea-bank-chev');
   if(chips)chips.style.display='none';
   if(chev)chev.style.transform='rotate(0deg)';
   closeIdeaBank();
+  /* Modal хаагдсаны дараа panel нээх — 80ms хүлээж, дараа нь Санаа хэсэгт scroll */
+  var t=decodeURIComponent(title), p=decodeURIComponent(premise);
+  setTimeout(function(){ useIdeaInPanel(t,p); },120);
+  if(typeof toast==='function')toast('⚡ Санаа нэмэгдлээ — засаад Script үүсгэ!','ok');
 }
 
 /* ── IDEA BANK MODAL ── */
@@ -13103,7 +13448,14 @@ function openIdeaBank(){
   var o=document.getElementById('idea-bank-overlay');if(!o)return;
   o.style.display='flex';
   var si=document.getElementById('ib-search');if(si)si.value='';
+  /* Эхлээд localStorage-с хурдан render, дараа Supabase-с шинэчлэх */
   renderIdeaBankModal();
+  sbIdeaGet().then(function(rows){
+    if(!rows||!rows.length)return;
+    localStorage.setItem('pd4_saved_ideas',JSON.stringify(rows));
+    renderIdeaBankModal();
+    renderIdeaBank();
+  }).catch(function(){});
 }
 function closeIdeaBank(){
   var o=document.getElementById('idea-bank-overlay');if(o)o.style.display='none';
@@ -13139,20 +13491,24 @@ function renderIdeaBankModal(){
       +(safePremise?'<div style="font-size:11px;color:var(--text3);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">'+safePremise+'</div>':'')
       +'</div>'
       +'<div style="display:flex;gap:5px;flex-shrink:0;">'
-      +'<button onclick="ibUse(\''+t+'\',\''+p+'\');closeIdeaBank();" style="padding:5px 10px;border-radius:7px;border:none;background:var(--purplebg);color:var(--purple);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">Ашиглах</button>'
-      +'<button onclick="siDeleteFromModal('+(idea.id||0)+',\''+encodeURIComponent(idea.created_at||'')+'\')" style="padding:5px 8px;border-radius:7px;border:none;background:var(--redbg);color:var(--red);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">✕</button>'
+      +'<button onclick="ibUse(\''+t+'\',\''+p+'\')" style="padding:5px 10px;border-radius:7px;border:none;background:var(--purplebg);color:var(--purple);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">Ашиглах</button>'
+      +'<button onclick="siDeleteFromModal(\''+idea.id+'\',\''+encodeURIComponent(idea.created_at||'')+'\')" style="padding:5px 8px;border-radius:7px;border:none;background:var(--redbg);color:var(--red);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">✕</button>'
       +'</div>'
       +'</div>';
   }).join('');
 }
 function siDeleteFromModal(id,createdAt){
   if(createdAt) try{createdAt=decodeURIComponent(createdAt);}catch(e){}
+  var strId=String(id);
   var ideas=[];
   try{ideas=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]');}catch(e){}
-  if(id && id!==0){
-    ideas=ideas.filter(function(i){return i.id!==id;});
+  if(id && id!=='0' && id!==0){
+    ideas=ideas.filter(function(i){return String(i.id)!==strId;});
+    /* Local ID (local_XXXX) бол Supabase-д устгах шаардлагагүй */
+    if(!strId.startsWith('local_')){
+      sbIdeaDelete(id).catch(function(){});
+    }
   } else if(createdAt){
-    // fallback for legacy items without id
     var removed=false;
     ideas=ideas.filter(function(i){if(!removed&&i.created_at===createdAt){removed=true;return false;}return true;});
   }
@@ -13172,7 +13528,13 @@ function _saveHookBankLocal(arr){localStorage.setItem('pd_hookbank',JSON.stringi
 
 async function sbHookInsert(row){var r=await fetch(SB_HOOKS,{method:'POST',headers:SB_H,body:JSON.stringify(row)});if(!r.ok)throw new Error(await r.text());var res=await r.json();return Array.isArray(res)?res[0]:res;}
 async function sbHookFetch(){var r=await fetch(SB_HOOKS+'?order=created_at.desc&limit=200',{headers:SB_H});if(!r.ok)throw new Error(r.status);return r.json();}
-async function sbHookDelete(id){if(String(id).length>10)return;var h=Object.assign({},SB_H,{'Prefer':''});await fetch(SB_HOOKS+'?id=eq.'+id,{method:'DELETE',headers:h});}
+async function sbHookDelete(id){
+  /* local_ prefix эсвэл Date.now() хэмжээний ID бол Supabase-д байхгүй тул skip */
+  var strId=String(id);
+  if(strId.startsWith('local_')||strId.length>12)return;
+  var h=Object.assign({},SB_H,{'Prefer':''});
+  await fetch(SB_HOOKS+'?id=eq.'+id,{method:'DELETE',headers:h});
+}
 
 async function saveHookToBank(hookText,avatarKey,cntType){
   if(!hookText||!hookText.trim())return;
@@ -13217,16 +13579,18 @@ function renderHookBank(){
 
 function hbUseHook(id){
   var bank=getHookBank();var h=bank.find(function(b){return String(b.id)===String(id);});if(!h)return;
-  var el=document.getElementById('cp-hooks');if(el){var cur=el.value.trim();el.value=cur?cur+'\n'+h.text:h.text;}
   closeHookBank();
-  var panel=document.getElementById('cnt-panel');if(panel&&panel.classList.contains('open')&&typeof toast==='function')toast('Hook нэмэгдлээ ✓','ok');
+  /* Modal хаагдсаны дараа + Нэмэх panel нээж Hook хэсэгт scroll хийх */
+  var txt=h.text;
+  setTimeout(function(){ addHookNumbered(txt); },120);
+  if(typeof toast==='function')toast('⚡ Hook нэмэгдлээ — Script үүсгэ!','ok');
 }
 
 function hbInstantUse(id){
   var bank=getHookBank();var h=bank.find(function(b){return String(b.id)===String(id);});if(!h)return;
-  var el=document.getElementById('cp-hooks');
-  if(el){var cur=el.value.trim();el.value=cur?cur+'\n'+h.text:h.text;el.style.borderColor='var(--gold)';setTimeout(function(){el.style.borderColor='';},1200);}
   closeHookBank();
+  var txt=h.text;
+  setTimeout(function(){ addHookNumbered(txt); },120);
   if(typeof toast==='function')toast('⚡ Hook нэмэгдлээ — Script үүсгэ!','ok');
 }
 
@@ -13324,6 +13688,7 @@ async function runBatchPlanner(){
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,system:sysPrompt,messages:[{role:'user',content:'7 хоногийн контент хуваарь үүсгэ.\n\nГоллох санаа: '+(idea||'ProductDrop.MN-ийн давуу талууд')+'\nПлатформ: '+platform+'\n\nАватар контекст:\n'+contextInfo+'\n\nJSON зөвхөн.'}]})
     });
     var data=await resp.json();
+    if(!resp.ok){throw new Error((data.error&&data.error.message)||'HTTP '+resp.status);}
     var raw=((data.content&&data.content[0]&&data.content[0].text)||'').replace(/```json/g,'').replace(/```/g,'').trim();
     var parsed=JSON.parse(raw);
     _batchScripts=parsed.scripts||[];
@@ -13445,6 +13810,7 @@ async function runRepurpose(){
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sysPrompt,messages:[{role:'user',content:'АНХНЫ SCRIPT:\n'+((c.script||c.hooks||'').slice(0,800))+'\n\nШИНЭ AVATAR: '+(av.emoji||'')+' '+(av.name||newAvatar)+'\nPains: '+(av.pains||'').slice(0,100)+'\nDreams: '+(av.dreams||'').slice(0,100)+'\n\nШИНЭ ПЛАТФОРМ: '+newPlatform+'\n\nДЭЭРХ САНААГ ШИНЭ AVATAR-Д ADAPT ХИЙ. Зөвхөн script.'}]})
     });
     var data=await resp.json();
+    if(!resp.ok){throw new Error((data.error&&data.error.message)||'HTTP '+resp.status);}
     var out=((data.content&&data.content[0]&&data.content[0].text)||'').trim();
     document.getElementById('rp-output').value=out;
     document.getElementById('rp-result').style.display='block';
@@ -13777,7 +14143,13 @@ document.addEventListener('click',function(e){
   window.opcToggleSettings=function(){
     var s=document.getElementById('opc-settings');
     if(!s) return;
-    s.style.display = s.style.display==='block'?'none':'block';
+    var opening = s.style.display!=='block';
+    s.style.display = opening?'block':'none';
+    /* Settings нээгдэхэд placeholder-д одоогийн PNL харуулах */
+    if(opening){
+      var spEl=document.getElementById('opc-fi-start-pnl');
+      if(spEl) spEl.placeholder='Одоо: '+pnl.toFixed(1)+' ₮';
+    }
   };
   window.opcApplySettings=function(){
     var p=parseFloat(document.getElementById('opc-fi-price').value)||59900;
@@ -13790,8 +14162,21 @@ document.addEventListener('click',function(e){
     var tl=document.getElementById('opc-target-label'); if(tl) tl.textContent=t;
     var bel=document.getElementById('opc-be-label'); if(bel) bel.textContent=breakeven()+' гишүүн';
     members=Math.min(members,t);
+    /* ── Эхлэх үлдэгдэл — хэрэглэгчийн тохируулсан PNL цэгээс үргэлжлүүлэх ── */
+    var spEl=document.getElementById('opc-fi-start-pnl');
+    if(spEl && spEl.value!==''){
+      var sp=parseFloat(spEl.value);
+      if(!isNaN(sp)){
+        pnl=sp; displayPnl=sp; hist=[];
+        /* Flash indication */
+        var pnlEl=document.getElementById('opc-pnl');
+        if(pnlEl){ pnlEl.style.outline='2px solid var(--gold)'; setTimeout(function(){if(pnlEl)pnlEl.style.outline='';},1200); }
+        /* Clear the field after applying */
+        spEl.value='';
+      }
+    }
     document.getElementById('opc-settings').style.display='none';
-    updateUI(); drawChart();
+    updateUI(); drawChart(); opcSaveState();
   };
 
   /* ── Header collapse toggle ── */
