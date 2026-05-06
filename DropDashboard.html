@@ -1276,13 +1276,18 @@ html.theme-tr .pipe-table tbody tr{
 /* ── 2. Wide screen content max-width (1440px+) ── */
 @media(min-width:1440px){
   .content{padding:26px 32px;}
-  .page{max-width:1380px;}
+  .page{max-width:1380px;margin-left:auto;margin-right:auto;}
   .stats{grid-template-columns:repeat(5,1fr);}
   .kanban{grid-template-columns:repeat(4,1fr);}
 }
 @media(min-width:1800px){
   .content{padding:28px 40px;}
-  .page{max-width:1600px;}
+  .page{max-width:1600px;margin-left:auto;margin-right:auto;}
+}
+@media(min-width:2200px){
+  .content{padding:32px 60px;}
+  .page{max-width:1900px;margin-left:auto;margin-right:auto;}
+  .stats{grid-template-columns:repeat(6,1fr);}
 }
 
 /* ── 3. Keyboard focus styles — clean, accessible ── */
@@ -5547,9 +5552,32 @@ function updatePendingBadge(count){
 }
 
 async function approveReg(phone,pw,plan,idx){
-  var days=plan==='starter'?30:90;
+  var days=plan==='starter'?30:plan==='lite'?30:plan==='business'?90:90;
   var expiry=Date.now()+days*86400000;var uid=phone.replace(/\D/g,'');
   try{await gasFetch(GAS_URL()+'?action=approveAndAdd&phone='+encodeURIComponent(phone)+'&pw='+encodeURIComponent(pw)+'&plan='+encodeURIComponent(plan)+'&uid='+encodeURIComponent(uid)+'&expiry='+expiry+'&days='+days,{mode:'no-cors'});}catch(e){}
+  // ── Telegram notification ──
+  var planPriceMap={pro:'₮49,900/3сар',starter:'₮19,900/сар',lite:'₮9,900/сар',business:'₮99,900/3сар'};
+  var planPrice=planPriceMap[plan]||'₮49,900/3сар';
+  var planLabel=plan?plan.toUpperCase():'PRO';
+  var onboardMsg='🎉 ProductDrop.MN-д тавтай морил!\n'
+    +'✅ '+planLabel+' эрх амжилттай идэвхжлээ! '+planPrice+'\n'
+    +'📞 Утас: '+phone+'\n'
+    +'🔑 Нууц үг: '+pw+'\n'
+    +'📦 Plan: '+planLabel+'\n'
+    +'🕐 Хугацаа: '+days+' хоног\n\n'
+    +'🔐 Нэвтрэх заавар:\n'
+    +'productdrops.netlify.app/landing сайт руу орж, утасны дугаараа ашиглан нэвтэрнэ үү.\n\n'
+    +'💬 Асуулт & Санал хүсэлт чөлөөтэй. 😊\n'
+    +'ProductDrop баг хамт олон 🚀';
+  var tgMsg='✅ Шинэ гишүүн батлагдлаа · '+planLabel+'\n'
+    +'📱 '+phone+'\n\n'
+    +'📋 Onboarding мессеж (хуулж илгээ):\n\n'
+    +onboardMsg;
+  fetch('https://api.telegram.org/bot'+TELEGRAM_BOT_TOKEN+'/sendMessage',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({chat_id:TELEGRAM_CHAT_ID,text:tgMsg,parse_mode:'HTML'})
+  }).catch(function(){});
   toast('✓ '+phone+' баталгаажлаа!');
   setTimeout(function(){loadRegistrations();loadUsers();},1000);
 }
@@ -8165,9 +8193,12 @@ function finDrawChart(){
   if(h.length<1) return;
 
   var box=canvas.parentElement;
+  var dpr=window.devicePixelRatio||1;
   var W=box.offsetWidth||300, H=90;
-  canvas.width=W; canvas.height=H;
+  canvas.width=W*dpr; canvas.height=H*dpr;
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
   var ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
   ctx.clearRect(0,0,W,H);
 
   var dark=document.documentElement.getAttribute('data-theme')==='dark';
@@ -14536,9 +14567,14 @@ document.addEventListener('click',function(e){
   function drawChart(){
     if(!ctx) return;
     var box=canvas.parentElement;
+    var dpr=window.devicePixelRatio||1;
     var W=box.offsetWidth, H=box.offsetHeight;
     if(W<=0||H<=0) return;
-    if(canvas.width!==W||canvas.height!==H){ canvas.width=W; canvas.height=H; }
+    if(canvas.width!==W*dpr||canvas.height!==H*dpr){
+      canvas.width=W*dpr; canvas.height=H*dpr;
+      canvas.style.width=W+'px'; canvas.style.height=H+'px';
+      ctx.scale(dpr,dpr);
+    }
     ctx.clearRect(0,0,W,H);
     if(hist.length<1) return;
 
