@@ -1811,9 +1811,9 @@ button:focus-visible,
   <div class="mob-nav-item" onclick="mobNav('admin')"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin</div>
   <div class="mob-nav-item" onclick="mobNav('focus')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Focus</div>
   <div class="mob-nav-item" onclick="mobNav('finance')"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Finance</div>
-  <div class="mob-nav-item" onclick="mobNav('checkin')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>Check-in</div>
   <div class="mob-nav-item" onclick="mobNav('roadmap')"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Төлөвлөгөө</div>
   <div class="mob-nav-item" onclick="mobNav('ai')" style="border:1px solid rgba(175,82,222,.25);background:var(--purplebg,#f5f0ff)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>🤖 AI Зөвлөгч</div>
+  <div class="mob-nav-item" onclick="mobNav('reel-script')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><polygon points="10,8 16,11 10,14" fill="currentColor" stroke="none"/></svg>Reel Script</div>
 </div></div>
 
 <!-- ══ SIDEBAR STRIP — 3 тусдаа floating pill ══ -->
@@ -1856,14 +1856,14 @@ button:focus-visible,
     <div class="ni" onclick="showPage('finance',this)" title="Finance">
       <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
     </div>
-    <div class="ni" onclick="showPage('checkin',this)" title="Daily Check-in">
-      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-    </div>
     <div class="ni" id="nav-roadmap" onclick="showPage('roadmap',this)" title="Scale Төлөвлөгөө">
       <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
     </div>
     <div class="ni" id="nav-ai" onclick="showPage('ai',this)" title="AI Зөвлөгч">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M12 12v4M8 20h8M9 16l-2 4M15 16l2 4"/><circle cx="12" cy="8" r="1.5" fill="currentColor" stroke="none"/></svg>
+    </div>
+    <div class="ni" id="nav-reel-script" onclick="showPage('reel-script',this)" title="Reel → Script">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><polygon points="10,8 16,11 10,14" fill="currentColor" stroke="none"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
     </div>
     <div class="ni" onclick="doSettings()" title="Тохиргоо">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -1912,7 +1912,6 @@ button:focus-visible,
       <button class="ttab" onclick="setTabBtn(this,'admin')">Admin</button>
       <button class="ttab" onclick="setTabBtn(this,'focus')">Focus</button>
       <button class="ttab" onclick="setTabBtn(this,'finance')">Finance</button>
-      <button class="ttab" onclick="setTabBtn(this,'checkin')" id="checkin-tab-btn">Check-in</button>
       <button class="ttab" onclick="setTabBtn(this,'roadmap')" id="roadmap-tab-btn">Төлөвлөгөө</button>
       <button class="ttab" onclick="setTabBtn(this,'ai')" id="ai-tab-btn">🤖 AI</button>
     </div>
@@ -2723,9 +2722,9 @@ button:focus-visible,
           <div class="pm-cfg">
             <div class="fp-title" style="margin-bottom:7px;"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>ЦАГ ТОХИРУУЛАХ (мин)</div>
             <div class="pm-cfg-row">
-              <div class="pm-cfg-item"><label>Focus</label><input type="number" class="pm-cfg-inp" id="cfg-focus" value="25" min="1" max="90" onchange="pmApplyCfg()"/></div>
-              <div class="pm-cfg-item"><label>Завсарлага</label><input type="number" class="pm-cfg-inp" id="cfg-short" value="5" min="1" max="30" onchange="pmApplyCfg()"/></div>
-              <div class="pm-cfg-item"><label>Урт завсар</label><input type="number" class="pm-cfg-inp" id="cfg-long" value="15" min="1" max="60" onchange="pmApplyCfg()"/></div>
+              <div class="pm-cfg-item"><label>Focus</label><input type="number" class="pm-cfg-inp" id="cfg-focus" min="1" max="90" onchange="pmApplyCfg()"/></div>
+              <div class="pm-cfg-item"><label>Завсарлага</label><input type="number" class="pm-cfg-inp" id="cfg-short" min="1" max="30" onchange="pmApplyCfg()"/></div>
+              <div class="pm-cfg-item"><label>Урт завсар</label><input type="number" class="pm-cfg-inp" id="cfg-long" min="1" max="60" onchange="pmApplyCfg()"/></div>
             </div>
           </div>
         </div>
@@ -2830,7 +2829,9 @@ button:focus-visible,
           <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
           САРЫН TREND
           <span id="fin-trend-month-lbl" style="margin-left:auto;font-size:9px;font-weight:600;color:var(--text4);letter-spacing:.04em;"></span>
+          <button onclick="if(typeof loadUsers==='function')loadUsers()" style="margin-left:6px;padding:2px 8px;border-radius:6px;border:1px solid var(--border2);background:transparent;font-size:10px;font-weight:700;color:var(--blue);cursor:pointer;font-family:inherit;" title="GAS-с Pro гишүүдийн тоо татах">↻ Sync</button>
         </div>
+        <div id="fin-pro-lbl" style="font-size:10px;color:var(--text3);margin-bottom:8px;display:none;"></div>
         <div style="position:relative;height:90px;">
           <canvas id="fin-trend-canvas" style="width:100%;height:90px;display:block;"></canvas>
           <div id="fin-trend-empty" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text4);">Өгөгдөл хуримтлагдаж байна...</div>
@@ -3540,9 +3541,1197 @@ button:focus-visible,
       </div>
     </div><!-- /page-ai -->
 
-  </div><!-- /content -->
-</div><!-- /main -->
-</div><!-- /app-wrap -->
+    <!-- ══════════════════════════════════════════
+         PAGE: REEL SCRIPT
+    ══════════════════════════════════════════ -->
+    <div class="page" id="page-reel-script">
+    <style>
+      /* ── RS: Reel Script Page ── */
+      .rs-wrap{max-width:960px;margin:0 auto;padding:20px 0 60px;}
+      .rs-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow);margin-bottom:14px;}
+      .rs-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+      .rs-row{display:flex;gap:10px;flex-wrap:wrap;}
+      .rs-inp{width:100%;background:var(--bg3);border:1.5px solid var(--border2);border-radius:10px;padding:9px 12px;font-size:13px;font-family:inherit;color:var(--text);outline:none;transition:border-color .15s;}
+      .rs-inp:focus{border-color:var(--blue);}
+      .rs-inp::placeholder{color:var(--text3);}
+      .rs-sel{width:100%;background:var(--bg3);border:1.5px solid var(--border2);border-radius:10px;padding:9px 12px;font-size:13px;font-family:inherit;color:var(--text);outline:none;appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238E8E93' stroke-width='1.5' stroke-linecap='round' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
+      .rs-sel:focus{border-color:var(--blue);}
+      .rs-sel option{background:var(--bg2);}
+      .rs-ta{width:100%;background:var(--bg3);border:1.5px solid var(--border2);border-radius:10px;padding:10px 13px;font-size:13px;font-family:inherit;color:var(--text);outline:none;resize:vertical;line-height:1.6;}
+      .rs-ta:focus{border-color:var(--blue);}
+      .rs-ta::placeholder{color:var(--text3);}
+      .rs-lbl{font-size:11px;font-weight:600;color:var(--text3);margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;}
+      .rs-fld{display:flex;flex-direction:column;gap:3px;}
+      .rs-key-ok{font-size:10px;font-weight:700;color:var(--green);}
+      .rs-run-btn{width:100%;padding:13px;background:var(--text);color:var(--bg);border:none;border-radius:var(--r);font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:opacity .2s;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:2px;}
+      .rs-run-btn:hover{opacity:.85;}
+      .rs-run-btn:disabled{opacity:.45;cursor:not-allowed;}
+      [data-theme="dark"] .rs-run-btn{background:var(--blue);color:#fff;}
+      /* Work area */
+      .rs-work{display:grid;grid-template-columns:300px 1fr;gap:14px;align-items:start;}
+      @media(max-width:768px){.rs-work{grid-template-columns:1fr;}.rs-wrap{padding:12px 0 90px;}}
+      /* Pipeline stepper */
+      .rs-stepper{display:flex;flex-direction:column;gap:0;}
+      .rs-step{display:flex;gap:12px;align-items:flex-start;padding:10px 0;position:relative;}
+      .rs-step:not(:last-child)::after{content:'';position:absolute;left:15px;top:40px;bottom:0;width:1.5px;background:var(--border2);}
+      .rs-step.ps-done::after{background:var(--green);}
+      .rs-step.ps-run::after{background:var(--blue);}
+      .rs-orb{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:'DM Mono',monospace;border:2px solid var(--border2);background:var(--bg3);color:var(--text3);transition:all .25s;}
+      .rs-orb.run{border-color:var(--blue);background:var(--bluebg);color:var(--blue);}
+      .rs-orb.done{border-color:var(--green);background:var(--greenbg);color:var(--green);}
+      .rs-orb.err{border-color:var(--red);background:var(--redbg);color:var(--red);}
+      .rs-step-info{flex:1;padding-top:5px;}
+      .rs-step-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;}
+      .rs-step-chip{display:inline-block;font-size:9px;font-weight:700;font-family:'DM Mono',monospace;padding:1px 7px;border-radius:6px;background:var(--bg4);color:var(--text3);letter-spacing:.04em;}
+      .rs-step-status{font-size:11px;color:var(--text3);margin-top:4px;line-height:1.5;display:none;}
+      .rs-step-status.show{display:block;}
+      .rs-step-out{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px;padding:6px 8px;background:var(--bg3);border-radius:8px;word-break:break-all;line-height:1.6;display:none;max-height:60px;overflow:hidden;}
+      .rs-step-out.show{display:block;}
+      .rs-cost-row{display:flex;gap:6px;margin-top:10px;}
+      .rs-chip{flex:1;font-size:10px;font-family:'DM Mono',monospace;padding:5px 8px;border-radius:8px;border:1px solid var(--border2);background:var(--bg3);color:var(--text3);text-align:center;}
+      .rs-chip b{color:var(--text);font-size:11px;}
+      .rs-err{display:none;margin-top:8px;padding:10px 12px;background:var(--redbg);border:1px solid rgba(255,59,48,.2);border-radius:10px;font-size:12px;color:var(--red);line-height:1.6;}
+      .rs-err.show{display:block;}
+      /* Script output */
+      .rs-out-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;}
+      .rs-out-hd{padding:13px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg3);}
+      .rs-out-title{font-size:12px;font-weight:800;color:var(--text);letter-spacing:-.02em;}
+      .rs-out-actions{display:flex;gap:6px;}
+      .rs-out-btn{padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;border:1.5px solid var(--border2);background:var(--bg4);color:var(--text2);transition:all .14s;}
+      .rs-out-btn:hover:not(:disabled){background:var(--bg2);color:var(--text);}
+      .rs-out-btn:disabled{opacity:.3;cursor:not-allowed;}
+      .rs-out-btn.save{background:var(--greenbg);border-color:rgba(52,199,89,.25);color:var(--green);}
+      .rs-out-btn.save:hover:not(:disabled){background:rgba(52,199,89,.18);}
+      /* Meta badges */
+      .rs-meta-row{display:flex;gap:6px;align-items:center;padding:8px 16px 0;flex-wrap:wrap;display:none;}
+      .rs-meta-row.show{display:flex;}
+      .rs-badge{font-size:9.5px;font-weight:700;font-family:'DM Mono',monospace;padding:3px 9px;border-radius:20px;}
+      .rs-badge.fmt{background:var(--bluebg);color:var(--blue);border:1px solid rgba(0,122,255,.2);}
+      .rs-badge.typ{background:var(--purplebg);color:var(--purple);border:1px solid rgba(175,82,222,.2);}
+      /* Script sections */
+      .rs-section{border-bottom:1px solid var(--border);}
+      .rs-section:last-child{border-bottom:none;}
+      .rs-sec-hd{padding:11px 16px 4px;display:flex;align-items:center;gap:8px;}
+      .rs-sec-tag{font-size:9px;font-weight:800;font-family:'DM Mono',monospace;letter-spacing:.15em;padding:3px 9px;border-radius:20px;border:1.5px solid;}
+      .rs-sec-tag.h{background:var(--amberbg);color:var(--amber);border-color:rgba(255,149,0,.25);}
+      .rs-sec-tag.b{background:var(--bluebg);color:var(--blue);border-color:rgba(0,122,255,.2);}
+      .rs-sec-tag.c{background:var(--greenbg);color:var(--green);border-color:rgba(52,199,89,.2);}
+      .rs-sec-line{flex:1;height:1px;}
+      .rs-sec-line.h{background:linear-gradient(90deg,rgba(255,149,0,.3),transparent);}
+      .rs-sec-line.b{background:linear-gradient(90deg,rgba(0,122,255,.25),transparent);}
+      .rs-sec-line.c{background:linear-gradient(90deg,rgba(52,199,89,.3),transparent);}
+      .rs-sec-copy{padding:3px 8px;border-radius:6px;background:transparent;border:1px solid var(--border2);color:var(--text3);font-size:10px;cursor:pointer;font-family:inherit;transition:all .13s;}
+      .rs-sec-copy:hover{background:var(--bg4);color:var(--text);}
+      .rs-sec-copy.copied{background:var(--greenbg);color:var(--green);border-color:rgba(52,199,89,.2);}
+      .rs-sec-text{padding:6px 16px 16px;white-space:pre-wrap;word-break:break-word;line-height:1.8;}
+      .rs-sec-text.h{font-size:17px;font-weight:800;color:var(--text);letter-spacing:-.02em;border-left:2.5px solid var(--amber);margin-left:16px;padding-left:12px;}
+      .rs-sec-text.b{font-size:13px;color:var(--text);border-left:2.5px solid var(--blue);margin-left:16px;padding-left:12px;opacity:.92;}
+      .rs-sec-text.c{font-size:13px;font-weight:600;color:var(--green);border-left:2.5px solid rgba(52,199,89,.5);margin-left:16px;padding-left:12px;}
+      /* Empty state */
+      .rs-empty{padding:48px 20px;text-align:center;color:var(--text3);}
+      .rs-empty-ico{font-size:32px;margin-bottom:12px;opacity:.4;}
+      .rs-empty-lbl{font-size:12px;font-weight:600;margin-bottom:4px;}
+      .rs-empty-sub{font-size:11px;color:var(--text4);}
+      /* Shimmer */
+      .rs-shim{height:12px;border-radius:6px;background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%);background-size:200% 100%;animation:rs-shim 1.4s ease-in-out infinite;}
+      @keyframes rs-shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+      /* ══ PIPELINE ANIMATIONS 10x ══ */
+      @keyframes rs-shim-spin{to{transform:rotate(360deg)}}
+
+      /* ── Run button ── */
+      .rs-run-btn{position:relative;overflow:hidden;}
+      /* Ripple */
+      .rs-ripple{position:absolute;border-radius:50%;transform:scale(0);pointer-events:none;background:rgba(255,255,255,0.28);animation:rs-ripple-out .65s cubic-bezier(.25,.46,.45,.94) forwards;}
+      @keyframes rs-ripple-out{to{transform:scale(4);opacity:0}}
+      /* Press */
+      @keyframes rs-btn-press{0%{transform:scale(1)}25%{transform:scale(.95)}65%{transform:scale(1.02)}100%{transform:scale(1)}}
+      .rs-run-btn.pressing{animation:rs-btn-press .35s cubic-bezier(.34,1.56,.64,1);}
+      /* Loading — gradient sweep + subtle pulse */
+      @keyframes rs-btn-sweep{0%{background-position:200% center}100%{background-position:-200% center}}
+      @keyframes rs-btn-pulse{0%,100%{opacity:1}50%{opacity:.82}}
+      .rs-run-btn.rs-loading{
+        background:linear-gradient(90deg,var(--blue) 0%,#6db3ff 40%,var(--blue) 60%,#3a8eea 100%);
+        background-size:300% 100%;
+        animation:rs-btn-sweep 1.8s linear infinite, rs-btn-pulse 1.4s ease-in-out infinite;
+        color:#fff;
+      }
+      [data-theme="dark"] .rs-run-btn.rs-loading{background:linear-gradient(90deg,#1a6edc 0%,#5aaeff 40%,#1a6edc 60%,#2a7de0 100%);background-size:300% 100%;}
+
+      /* ── Orbs ── */
+      /* run: conic-gradient spinner ring */
+      @keyframes rs-orb-conic{to{--rs-conic-angle:360deg}}
+      @property --rs-conic-angle{syntax:'<angle>';initial-value:0deg;inherits:false}
+      .rs-orb.run{
+        background:conic-gradient(from var(--rs-conic-angle,0deg),rgba(74,158,255,0) 0%,var(--blue) 30%,rgba(74,158,255,0) 50%),var(--bg3);
+        border-color:rgba(74,158,255,0.5);
+        animation:rs-orb-conic .75s linear infinite;
+        box-shadow:0 0 0 3px rgba(74,158,255,0.12),0 0 12px rgba(74,158,255,0.15);
+      }
+      /* done: pop + green glow */
+      @keyframes rs-orb-pop{0%{transform:scale(.6);opacity:.4}55%{transform:scale(1.22)}78%{transform:scale(.94)}100%{transform:scale(1);opacity:1}}
+      .rs-orb.done{
+        animation:rs-orb-pop .42s cubic-bezier(.34,1.56,.64,1);
+        box-shadow:0 0 0 4px rgba(52,199,89,0.18),0 0 14px rgba(52,199,89,0.18);
+      }
+      /* checkmark draw */
+      .rs-check-path{stroke-dasharray:28;stroke-dashoffset:28;animation:rs-check-draw .42s cubic-bezier(.25,.46,.45,.94) .08s both;}
+      @keyframes rs-check-draw{to{stroke-dashoffset:0}}
+      /* err: shake */
+      @keyframes rs-orb-shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-5px) rotate(-3deg)}35%{transform:translateX(5px) rotate(2deg)}55%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+      .rs-orb.err{animation:rs-orb-shake .45s ease;box-shadow:0 0 0 4px rgba(255,59,48,0.15);}
+
+      /* ── Connector lines ── */
+      /* flowing shimmer during run */
+      @keyframes rs-line-flow{0%{background-position:0% 0}100%{background-position:0% 200%}}
+      .rs-step.ps-run::after{
+        background:linear-gradient(to bottom,transparent,var(--blue),rgba(74,158,255,0.4),var(--blue),transparent);
+        background-size:100% 200%;
+        animation:rs-line-flow .9s linear infinite;
+      }
+      /* fill on done */
+      @keyframes rs-line-fill{from{transform:scaleY(0);transform-origin:top}to{transform:scaleY(1);transform-origin:top}}
+      .rs-step.ps-done::after{background:linear-gradient(to bottom,var(--green),rgba(52,199,89,.55));animation:rs-line-fill .5s cubic-bezier(.25,.46,.45,.94);}
+
+      /* ── Step status ── */
+      @keyframes rs-status-in{from{opacity:0;transform:translateY(5px);filter:blur(3px)}to{opacity:1;transform:none;filter:blur(0)}}
+      .rs-step-status.show{animation:rs-status-in .28s cubic-bezier(.25,.46,.45,.94);}
+      @keyframes rs-out-in{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:none}}
+      .rs-step-out.show{animation:rs-out-in .22s ease .06s both;}
+
+      /* ── Progress bar on output card ── */
+      .rs-progress-bar{height:2px;background:transparent;border-radius:2px;overflow:hidden;transition:background .3s;}
+      .rs-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:2px;transition:width .6s cubic-bezier(.25,.46,.45,.94);}
+
+      /* ── Script sections: word-level entrance ── */
+      @keyframes rs-word-in{from{opacity:0;transform:translateY(10px);filter:blur(4px)}to{opacity:1;transform:none;filter:blur(0)}}
+      .rs-word{display:inline-block;animation:rs-word-in .4s cubic-bezier(.25,.46,.45,.94) both;}
+      @keyframes rs-sec-in{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+      .rs-section.rs-anim{opacity:0;}
+      .rs-section.rs-anim.rs-visible{opacity:1;}
+      .rs-section.rs-anim{animation:rs-sec-in .42s cubic-bezier(.25,.46,.45,.94) both;}
+
+      /* Accent line grow on sections */
+      @keyframes rs-accent-grow{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0% 0)}}
+      .rs-sec-text.h,.rs-sec-text.b,.rs-sec-text.c{position:relative;}
+
+      /* ── Output card ── */
+      @keyframes rs-card-in{0%{opacity:0;transform:scale(.97) translateY(12px)}70%{transform:scale(1.005) translateY(0)}100%{opacity:1;transform:none}}
+      .rs-out-card.rs-reveal{animation:rs-card-in .48s cubic-bezier(.34,1.2,.64,1);}
+      /* Success flash */
+      @keyframes rs-card-flash{0%,100%{box-shadow:var(--shadow)}40%{box-shadow:0 0 0 3px rgba(52,199,89,0.35),0 8px 32px rgba(52,199,89,0.15)}}
+      .rs-out-card.rs-done-flash{animation:rs-card-flash .9s cubic-bezier(.25,.46,.45,.94);}
+
+      /* ── Action buttons pop ── */
+      @keyframes rs-btn-pop{0%{transform:scale(.82)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
+      .rs-out-btn.rs-popped{animation:rs-btn-pop .32s cubic-bezier(.34,1.56,.64,1);}
+
+      /* ── Progress card pulse ── */
+      @keyframes rs-card-run{0%,100%{border-color:var(--border)}50%{border-color:rgba(74,158,255,0.4)}}
+      .rs-card.rs-active{animation:rs-card-run 1.8s ease-in-out infinite;}
+
+      /* ── Meta badges ── */
+      @keyframes rs-badge-in{from{opacity:0;transform:scale(.75) translateY(-4px)}to{opacity:1;transform:none}}
+      .rs-badge{animation:rs-badge-in .3s cubic-bezier(.34,1.56,.64,1) both;}
+      .rs-badge.fmt{animation-delay:.04s;}.rs-badge.typ{animation-delay:.1s;}
+      /* Save modal */
+      .rs-modal-ov{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.5);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;animation:rsmo .15s ease;}
+      @keyframes rsmo{from{opacity:0}to{opacity:1}}
+      .rs-modal{width:420px;max-width:92vw;background:var(--bg2);border:1px solid var(--border2);border-radius:20px;box-shadow:var(--shadow-lg);overflow:hidden;animation:rsms .18s cubic-bezier(.4,0,.2,1);}
+      @keyframes rsms{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}
+      .rs-mhd{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg3);}
+      .rs-mhd-title{font-size:13px;font-weight:800;color:var(--text);}
+      .rs-mclose{background:none;border:none;font-size:16px;color:var(--text3);cursor:pointer;padding:2px 6px;border-radius:6px;}
+      .rs-mclose:hover{background:var(--bg4);color:var(--text);}
+      .rs-mbody{padding:16px 18px;display:flex;flex-direction:column;gap:11px;}
+      .rs-mfoot{padding:12px 18px 16px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;}
+      .rs-mpreview{border-radius:10px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);font-size:12px;color:var(--text2);line-height:1.7;max-height:64px;overflow:hidden;position:relative;}
+      .rs-mpreview::after{content:'';position:absolute;bottom:0;left:0;right:0;height:20px;background:linear-gradient(transparent,var(--bg3));}
+      .rs-msave-btn{padding:11px 22px;background:var(--text);color:var(--bg);border:none;border-radius:var(--rsm);font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;transition:opacity .2s;}
+      .rs-msave-btn:hover{opacity:.85;}
+      .rs-msave-btn:disabled{opacity:.45;cursor:not-allowed;}
+      [data-theme="dark"] .rs-msave-btn{background:var(--green);color:#fff;}
+      .rs-mcancel{padding:11px 16px;background:transparent;border:1.5px solid var(--border2);border-radius:var(--rsm);font-size:13px;color:var(--text3);font-family:inherit;cursor:pointer;}
+      .rs-mcancel:hover{background:var(--bg3);color:var(--text);}
+      .rs-ok-bar{display:none;padding:9px 12px;border-radius:10px;background:var(--greenbg);border:1px solid rgba(52,199,89,.2);font-size:11px;color:var(--green);font-weight:600;text-align:center;}
+      /* Edit mode */
+      .rs-fmt-guide-item:hover{border-color:var(--border2)!important;background:var(--bg4)!important;}
+      .rs-fmt-guide-item.selected{border-color:var(--blue)!important;background:var(--bluebg)!important;}
+      .rs-sec-text[contenteditable="true"]{outline:none;border-left-width:2.5px;border-left-style:solid;padding-left:12px;margin-left:16px;background:var(--bg3);border-radius:0 8px 8px 0;min-height:24px;caret-color:var(--blue);}
+      .rs-sec-text.h[contenteditable="true"]{border-left-color:var(--amber);background:var(--amberbg);}
+      .rs-sec-text.b[contenteditable="true"]{border-left-color:var(--blue);background:var(--bluebg);}
+      .rs-sec-text.c[contenteditable="true"]{border-left-color:var(--green);background:var(--greenbg);}
+      .rs-edit-bar{display:none;padding:10px 16px;border-top:1px solid var(--border);background:var(--bg3);align-items:center;gap:8px;}
+      .rs-edit-bar.show{display:flex;}
+      .rs-edit-save{padding:7px 18px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:opacity .15s;}
+      .rs-edit-save:hover{opacity:.85;}
+      .rs-edit-cancel{padding:7px 14px;background:transparent;border:1.5px solid var(--border2);border-radius:8px;font-size:12px;color:var(--text3);font-family:inherit;cursor:pointer;}
+      .rs-edit-cancel:hover{background:var(--bg4);color:var(--text);}
+      .rs-edit-hint{font-size:10px;color:var(--text3);flex:1;}
+      /* iOS font-size fix */
+      @media(max-width:768px){
+        .rs-inp,.rs-sel,.rs-ta{font-size:16px!important;}
+        .rs-run-btn{min-height:50px;}
+      }
+    </style>
+
+    <div class="rs-wrap">
+      <div class="greet">
+        <h1>▶ Reel → Монгол Script</h1>
+        <p>Instagram · Facebook Reels — автомат транскрипт → Монгол контент script</p>
+      </div>
+
+      <!-- Hidden inputs — values loaded from localStorage via Settings (sidebar ⚙) -->
+      <div style="display:none">
+        <input id="rs-rapid-key" autocomplete="off"><span id="rs-rapid-ok"></span>
+        <input id="rs-oai-key" autocomplete="off"><span id="rs-oai-ok"></span>
+        <input id="rs-server-url" value="http://localhost:3000">
+      </div>
+      <!-- API key hint banner -->
+      <div id="rs-key-banner" style="display:none;margin-bottom:12px;padding:10px 14px;background:var(--amberbg);border:1px solid rgba(255,149,0,.25);border-radius:12px;font-size:12px;font-weight:600;color:var(--amber);display:flex;align-items:center;gap:8px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        API Keys тохируулаагүй байна —
+        <span onclick="openGlobalSettings()" style="text-decoration:underline;cursor:pointer;">⚙ Settings нээх</span>
+      </div>
+
+      <!-- ── Config + Run ── -->
+      <div class="rs-card">
+        <div class="rs-title">🔗 Pipeline тохиргоо</div>
+        <div class="rs-fld" style="margin-bottom:10px">
+          <div class="rs-lbl">Reel URL <span style="color:var(--text4);font-weight:400">IG · FB — нийтийн (public) reel</span></div>
+          <textarea class="rs-ta rs-inp" id="rs-url" rows="2" placeholder="https://www.instagram.com/reel/XXXX/&#10;https://www.facebook.com/reel/XXXX"></textarea>
+        </div>
+        <div class="rs-row" style="margin-bottom:10px">
+          <div class="rs-fld" style="flex:1">
+            <div class="rs-lbl">Script Формат <span id="rs-chosen-fmt" style="color:var(--amber);font-size:10px;font-family:'DM Mono',monospace;text-transform:none;letter-spacing:0;font-weight:400"></span></div>
+            <select class="rs-sel" id="rs-format">
+              <option value="random">🎲 Санамсаргүй</option>
+              <option value="standard">① Стандарт+</option>
+              <option value="story">② Story-first</option>
+              <option value="casestudy">③ Case study</option>
+              <option value="mistake">④ Mistake breakdown</option>
+              <option value="pov">⑤ POV</option>
+              <option value="donot">⑥ Don't start unless</option>
+            </select>
+          </div>
+          <div class="rs-fld" style="width:110px">
+            <div class="rs-lbl">Series Part</div>
+            <input type="number" class="rs-inp" id="rs-part" placeholder="хоосон=дараалалгүй" min="1" max="99">
+          </div>
+        </div>
+        <button class="rs-run-btn" id="rs-run-btn" onclick="rsAddRipple(this,event);this.classList.add('pressing');setTimeout(()=>this.classList.remove('pressing'),380);rsRun();" title="⌘+Enter">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Run Pipeline
+          <span style="font-size:10px;opacity:.55;font-weight:500;margin-left:4px;">⌘↵</span>
+        </button>
+
+        <!-- ── Format Guide ── -->
+        <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px;">
+          <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+            📋 Хээзээ аль форматыг сонгох вэ?
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+            <div class="rs-fmt-guide-item" style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:9px 11px;cursor:pointer;transition:all .14s;" onclick="rsFmtGuideSelect('standard')" title="Сонгох">
+              <div style="font-size:11px;font-weight:700;color:var(--amber);margin-bottom:3px;">① Стандарт+</div>
+              <div style="font-size:10px;color:var(--text3);line-height:1.5;">Ерөнхий мэдээлэл, tips — бүх төрлийн контентод ажилдаг сайн <em>default</em></div>
+            </div>
+            <div class="rs-fmt-guide-item" style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:9px 11px;cursor:pointer;transition:all .14s;" onclick="rsFmtGuideSelect('story')" title="Сонгох">
+              <div style="font-size:11px;font-weight:700;color:var(--purple);margin-bottom:3px;">② Story-first</div>
+              <div style="font-size:10px;color:var(--text3);line-height:1.5;">Хувийн туршлага, эмоцитэй контент — өөрийн болон буслын жинхэнэ <em>түүх байвал</em></div>
+            </div>
+            <div class="rs-fmt-guide-item" style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:9px 11px;cursor:pointer;transition:all .14s;" onclick="rsFmtGuideSelect('casestudy')" title="Сонгох">
+              <div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:3px;">③ Case study</div>
+              <div style="font-size:10px;color:var(--text3);line-height:1.5;">Тоо, үр дүн баттай байх үед — <em>"Ххоногт Үүр дүн"</em> гэсэн тодорхой <em>data байвал</em></div>
+            </div>
+            <div class="rs-fmt-guide-item" style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:9px 11px;cursor:pointer;transition:all .14s;" onclick="rsFmtGuideSelect('mistake')" title="Сонгох">
+              <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:3px;">④ Mistake breakdown</div>
+              <div style="font-size:10px;color:var(--text3);line-height:1.5;">Боловсролын контент — нийтлэг алдааг тайлбарлах, <em>"хийж болохгүй"</em> зүйл заах</div>
+            </div>
+            <div class="rs-fmt-guide-item" style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:9px 11px;cursor:pointer;transition:all .14s;" onclick="rsFmtGuideSelect('pov')" title="Сонгох">
+              <div style="font-size:11px;font-weight:700;color:var(--amber);margin-bottom:3px;">⑤ POV</div>
+              <div style="font-size:10px;color:var(--text3);line-height:1.5;">Маргаантай, controversial сэдэв — <em>"чи байсан бол яах байсан бэ?"</em> гэсэн өнцөгтэй</div>
+            </div>
+            <div class="rs-fmt-guide-item" style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:9px 11px;cursor:pointer;transition:all .14s;" onclick="rsFmtGuideSelect('donot')" title="Сонгох">
+              <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:3px;">⑥ Don't start unless</div>
+              <div style="font-size:10px;color:var(--text3);line-height:1.5;">Саад тотгор ихтэй сэдэв — <em>"яагаад ихэнх нь хийдэггүй"</em> anxiety-г ашиглах</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Work area ── -->
+      <div class="rs-work">
+
+        <!-- Left: Pipeline Progress -->
+        <div>
+          <div class="rs-card" style="margin-bottom:0">
+            <div class="rs-title">Pipeline Progress</div>
+            <div class="rs-stepper">
+              <!-- Step 1 -->
+              <div class="rs-step" id="rs-pstep1">
+                <div class="rs-orb" id="rs-n1">01</div>
+                <div class="rs-step-info">
+                  <div class="rs-step-name">URL Татах</div>
+                  <span class="rs-step-chip" style="background:var(--bluebg);color:var(--blue)">RapidAPI</span>
+                  <div class="rs-step-status" id="rs-s1"></div>
+                  <div class="rs-step-out" id="rs-o1"></div>
+                </div>
+              </div>
+              <!-- Step 2 -->
+              <div class="rs-step" id="rs-pstep2">
+                <div class="rs-orb" id="rs-n2">02</div>
+                <div class="rs-step-info">
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <div class="rs-step-name">Транскрипт</div>
+                    <button id="rs-transcript-copy" onclick="if(window._rsLastTranscript){var ta=document.createElement('textarea');ta.value=window._rsLastTranscript;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast('Транскрипт хуулагдлаа 📋','ok');}catch(e){}document.body.removeChild(ta);}" disabled title="Транскрипт хуулах" style="padding:2px 7px;border-radius:6px;border:1px solid var(--border2);background:transparent;color:var(--text4);font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;">⌘C</button>
+                  </div>
+                  <span class="rs-step-chip" style="background:var(--purplebg);color:var(--purple)">Whisper-1</span>
+                  <div class="rs-step-status" id="rs-s2"></div>
+                  <div class="rs-step-out" id="rs-o2"></div>
+                </div>
+              </div>
+              <!-- Step 3 -->
+              <div class="rs-step" id="rs-pstep3">
+                <div class="rs-orb" id="rs-n3">03</div>
+                <div class="rs-step-info">
+                  <div class="rs-step-name">МН Script</div>
+                  <span class="rs-step-chip" style="background:var(--greenbg);color:var(--green)">GPT-4o</span>
+                  <div class="rs-step-status" id="rs-s3"></div>
+                  <div class="rs-step-out" id="rs-o3"></div>
+                </div>
+              </div>
+            </div>
+            <div class="rs-err" id="rs-err"></div>
+            <div class="rs-cost-row">
+              <div class="rs-chip">Whisper <b id="rs-cw">—</b></div>
+              <div class="rs-chip">GPT-4o <b id="rs-cg">—</b></div>
+            </div>
+            <!-- Cost totals -->
+            <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
+              <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">📊 Хуримтлагдсан зардал</div>
+              <div class="rs-cost-row">
+                <div class="rs-chip" style="background:var(--amberbg);border-color:rgba(255,149,0,.2);">Өнөөдөр <b id="rs-cost-today" style="color:var(--amber);">$0.00</b></div>
+                <div class="rs-chip" style="background:var(--purplebg);border-color:rgba(175,82,222,.2);">Энэ сар <b id="rs-cost-month" style="color:var(--purple);">$0.00</b></div>
+              </div>
+              <div style="font-size:9px;color:var(--text4);margin-top:4px;text-align:right;font-family:'DM Mono',monospace;" id="rs-cost-runs">0 run</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Script Output -->
+        <div class="rs-out-card">
+          <div class="rs-progress-bar" id="rs-prog-bar"><div class="rs-progress-fill" id="rs-prog-fill"></div></div>
+          <div class="rs-out-hd">
+            <div class="rs-out-title">✦ Монгол Script · Гаралт</div>
+            <div class="rs-out-actions">
+              <button class="rs-out-btn save" id="rs-save-btn" onclick="rsOpenSave()" disabled>💾 Хадгалах</button>
+              <button class="rs-out-btn" id="rs-edit-btn" onclick="rsToggleEdit()" disabled>✏️ Засах</button>
+              <button class="rs-out-btn" id="rs-copy-btn" onclick="rsCopyAll()" disabled>⌘ Бүгд хуулах</button>
+              <button class="rs-out-btn" id="rs-caption-btn" onclick="rsCopyCaption()" disabled title="Hook + CTA — post caption-д тохиромжтой">✂ Caption</button>
+              <button class="rs-out-btn" onclick="rsReset()">↺</button>
+            </div>
+          </div>
+          <div class="rs-meta-row" id="rs-meta-row">
+            <span style="font-size:9px;color:var(--text4)">Арга:</span>
+            <span class="rs-badge fmt" id="rs-fmt-badge"></span>
+            <span style="font-size:9px;color:var(--text4)">Агуулга:</span>
+            <span class="rs-badge typ" id="rs-typ-badge"></span>
+          </div>
+          <div id="rs-out-body">
+            <div class="rs-empty">
+              <div class="rs-empty-ico">▶</div>
+              <div class="rs-empty-lbl">Pipeline эхлүүлнэ үү</div>
+              <div class="rs-empty-sub">HOOK · BODY · CTA хэсэг болгон гарна</div>
+            </div>
+          </div>
+          <div class="rs-edit-bar" id="rs-edit-bar">
+            <span class="rs-edit-hint">✏️ Текст дээр шууд засах боломжтой</span>
+            <button class="rs-edit-cancel" onclick="rsEditCancel()">Болих</button>
+            <button class="rs-edit-save" onclick="rsEditSave()">✓ Хадгалах</button>
+          </div>
+        </div>
+
+      </div><!-- /rs-work -->
+
+      <!-- ── Format Performance ── -->
+      <div class="rs-card" id="rs-fmt-perf-card" style="margin-top:14px;">
+        <div class="rs-title">📈 Format Performance <span style="font-size:9px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text4);">Хадгалсан script-үүдээс</span></div>
+        <div id="rs-fmt-perf-body" style="display:flex;flex-direction:column;gap:6px;">
+          <div style="text-align:center;padding:12px;color:var(--text4);font-size:11px;">Script хадгалах үед статистик энд харагдана</div>
+        </div>
+      </div>
+
+    </div><!-- /rs-wrap -->
+
+    <!-- ═══ SAVE MODAL ═══ -->
+    <div class="rs-modal-ov" id="rs-modal" style="display:none" onclick="if(event.target===this)rsCloseSave()">
+      <div class="rs-modal">
+        <div class="rs-mhd">
+          <div class="rs-mhd-title">💾 Scripts-д хадгалах</div>
+          <button class="rs-mclose" onclick="rsCloseSave()">✕</button>
+        </div>
+        <div class="rs-mbody">
+          <div class="rs-mpreview" id="rs-mpreview"></div>
+          <div class="rs-fld">
+            <div class="rs-lbl">Гарчиг <span style="color:var(--red)">*</span></div>
+            <input type="text" class="rs-inp" id="rs-m-title" placeholder="Script-ийн товч гарчиг...">
+          </div>
+          <div class="rs-row" style="gap:8px">
+            <div class="rs-fld" style="flex:1">
+              <div class="rs-lbl">Контент төрөл</div>
+              <select class="rs-sel" id="rs-m-type">
+                <option value="tofu">TOFU — Awareness</option>
+                <option value="mofu">MOFU — Consideration</option>
+                <option value="bofu">BOFU — Sales</option>
+              </select>
+            </div>
+            <div class="rs-fld" style="flex:1">
+              <div class="rs-lbl">Platform</div>
+              <select class="rs-sel" id="rs-m-platform">
+                <option value="IG Reel">IG Reel</option>
+                <option value="TikTok">TikTok</option>
+                <option value="FB Reel">FB Reel</option>
+              </select>
+            </div>
+          </div>
+          <div class="rs-fld">
+            <div class="rs-lbl">Нийтлэх огноо <span style="font-weight:400;color:var(--text4)">(заавал биш)</span></div>
+            <input type="date" class="rs-inp" id="rs-m-date">
+          </div>
+          <div class="rs-fld">
+            <div class="rs-lbl">🔗 Эх Reel URL <span style="font-weight:400;color:var(--text4)">(дараа нь үзэхэд)</span></div>
+            <input type="text" class="rs-inp" id="rs-m-ig-url" placeholder="https://www.instagram.com/reel/...">
+          </div>
+          <div style="font-size:10px;color:var(--text3);padding:6px 8px;background:var(--greenbg);border:1px solid rgba(52,199,89,.15);border-radius:8px;">
+            ✓ Hook → hooks · Body+CTA → script · Контент таб-д шууд харагдана
+          </div>
+          <div class="rs-ok-bar" id="rs-ok-bar">✓ Амжилттай хадгаллаа — Контент таб-д харагдана</div>
+        </div>
+        <div class="rs-mfoot">
+          <button class="rs-mcancel" onclick="rsCloseSave()">Болих</button>
+          <button class="rs-msave-btn" id="rs-msave-btn" onclick="rsConfirmSave()">💾 Хадгалах</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    (function(){
+    /* ─── RS constants ─── */
+    var RS_SB_URL='https://xpxotgpqxrupkgcppzmn.supabase.co';
+    var RS_SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhweG90Z3BxeHJ1cGtnY3Bwem1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyOTk4NTUsImV4cCI6MjA4ODg3NTg1NX0.7wtm3YXDj2lWL61y4pfZFud4LL2BkchAjGkTJMvhLqo';
+    var rs_running=false, rs_lastRaw='', rs_lastFmt='', rs_lastType='';
+    var RS_FL={standard:'① Стандарт+',story:'② Story-first',casestudy:'③ Case study',mistake:'④ Mistake breakdown',pov:'⑤ POV',donot:"⑥ Don't start unless"};
+
+    /* ─── DOM helpers ─── */
+    function rq(id){return document.getElementById(id);}
+    function rsSetOrb(n,state){
+      var o=rq('rs-n'+n),s=rq('rs-pstep'+n);
+      o.className='rs-orb'+(state==='run'?' run':state==='done'?' done':state==='err'?' err':'');
+      if(state==='run'){
+        o.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9" stroke-opacity=".18"/><path d="M12 3a9 9 0 0 1 9 9"/></svg>';
+      } else if(state==='done'){
+        o.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12" class="rs-check-path"/></svg>';
+      } else if(state==='err'){
+        o.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+      } else {
+        o.textContent='0'+n;
+      }
+      /* Progress bar update */
+      var pf=rq('rs-prog-fill');
+      if(pf){if(state==='done'){pf.style.width=(n*33.33)+'%';if(n===3)pf.style.background='linear-gradient(90deg,var(--blue),var(--green))';}else if(state==='run'){pf.style.width=((n-1)*33.33+10)+'%';}}
+      if(s){s.classList.remove('ps-done','ps-run','ps-err');if(state==='done')s.classList.add('ps-done');else if(state==='run')s.classList.add('ps-run');}
+    }
+    function rsSetStatus(n,type,msg){
+      var el=rq('rs-s'+n);el.className='rs-step-status show';
+      el.innerHTML=(type==='run'?'<span style="color:var(--blue)">⟳</span> ':type==='done'?'<span style="color:var(--green)">✓</span> ':'<span style="color:var(--red)">✕</span> ')+msg;
+    }
+    function rsSetOut(n,t){var e=rq('rs-o'+n);e.textContent=t;e.className='rs-step-out show';}
+    function rsShowErr(m){var e=rq('rs-err');e.innerHTML=m;e.className='rs-err show';}
+    function rsHideErr(){rq('rs-err').className='rs-err';}
+
+    /* ─── Keys ─── */
+    window.rsSaveKey=function(k,v){if(v.trim())localStorage.setItem('rp_'+k,v.trim());}
+    window.rsCheckKeys=function(){
+      var rk=rq('rs-rapid-key').value.trim(),ok=rq('rs-oai-key').value.trim();
+      rq('rs-rapid-ok').textContent=rk?'✓':'';
+      rq('rs-oai-ok').textContent=ok?'✓':'';
+    }
+    function rsLoadKeys(){
+      var rk=localStorage.getItem('rp_rapidKey'),ok=localStorage.getItem('rp_oaiKey');
+      if(rk){rq('rs-rapid-key').value=rk;}
+      if(ok){rq('rs-oai-key').value=ok;}
+      var su=localStorage.getItem('rp_serverUrl');if(su){rq('rs-server-url').value=su;}
+      rsCheckKeys();
+      var banner=rq('rs-key-banner');if(banner)banner.style.display=(rk&&ok)?'none':'flex';
+    }
+
+    /* ── Ripple ── */
+    window.rsAddRipple=function(btn,e){
+      var r=btn.getBoundingClientRect();
+      var x=(e&&e.clientX?e.clientX:r.left+r.width/2)-r.left;
+      var y=(e&&e.clientY?e.clientY:r.top+r.height/2)-r.top;
+      var sz=Math.max(r.width,r.height)*2;
+      var span=document.createElement('span');
+      span.className='rs-ripple';
+      span.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+(x-sz/2)+'px;top:'+(y-sz/2)+'px;';
+      btn.appendChild(span);
+      setTimeout(function(){span.remove();},700);
+    };
+
+    /* ── Count-up ── */
+    function rsCountUp(el,to,prefix,decimals){
+      var start=Date.now(),dur=700,from=0;
+      function tick(){
+        var p=Math.min(1,(Date.now()-start)/dur);
+        var ease=1-Math.pow(1-p,3);
+        el.textContent=prefix+(from+(to-from)*ease).toFixed(decimals);
+        if(p<1)requestAnimationFrame(tick);else el.textContent=prefix+to.toFixed(decimals);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    /* ─── Reset ─── */
+    window.rsReset=function(){
+      [1,2,3].forEach(function(n){rsSetOrb(n,'idle');rq('rs-s'+n).className='rs-step-status';rq('rs-o'+n).className='rs-step-out';});
+      var pf=rq('rs-prog-fill');if(pf){pf.style.width='0%';pf.style.background='linear-gradient(90deg,var(--blue),var(--purple))';}
+      rq('rs-err').className='rs-err';
+      rq('rs-out-body').innerHTML='<div class="rs-empty"><div class="rs-empty-ico">▶</div><div class="rs-empty-lbl">Pipeline эхлүүлнэ үү</div><div class="rs-empty-sub">HOOK · BODY · CTA хэсэг болгон гарна</div></div>';
+      var outCard=rq('rs-out-body').closest('.rs-out-card');if(outCard)outCard.classList.remove('rs-reveal');
+      rq('rs-save-btn').disabled=true;rq('rs-copy-btn').disabled=true;rq('rs-edit-btn').disabled=true;
+      var _rcb=rq('rs-caption-btn');if(_rcb)_rcb.disabled=true;
+      rq('rs-edit-btn').textContent='✏️ Засах';rq('rs-edit-btn').classList.remove('edit-on');
+      rq('rs-edit-bar').className='rs-edit-bar';
+      rq('rs-meta-row').className='rs-meta-row';
+      rq('rs-cw').textContent='—';rq('rs-cg').textContent='—';
+      rs_running=false;rs_lastRaw='';rs_editMode=false;window._rsLastTranscript='';
+      var _tcb=rq('rs-transcript-copy');if(_tcb){_tcb.disabled=true;_tcb.style.color='var(--text4)';_tcb.style.borderColor='';}
+      var b=rq('rs-run-btn');b.disabled=false;b.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg> Run Pipeline';
+    }
+
+    /* ─── Video info fetch (RapidAPI) ─── */
+    async function rsFetchVideoInfo(url,rKey){
+      var isFB=/facebook\.com|fb\.watch/i.test(url),isIG=/instagram\.com/i.test(url);
+      if(isIG){
+        var m=url.match(/instagram\.com\/(?:reel|p)\/([A-Za-z0-9_\-]+)/);
+        if(!m)throw new Error('Instagram URL-с shortcode олдсонгүй.');
+        var sc=m[1];
+        var r=await fetch('https://social-media-video-downloader.p.rapidapi.com/instagram/v3/media/post/details?renderableFormats=720p%2Chighres&shortcode='+sc,{headers:{'X-RapidAPI-Key':rKey,'X-RapidAPI-Host':'social-media-video-downloader.p.rapidapi.com','Content-Type':'application/json'}});
+        if(r.status===401||r.status===403)throw new Error('RapidAPI key буруу.');
+        if(!r.ok){var t=await r.text();throw new Error('RapidAPI алдаа ('+r.status+'): '+t.slice(0,200));}
+        var d=await r.json();var videoUrl=null,audioUrl=null;
+        if(d?.contents?.length>0){for(var c of d.contents){if(!videoUrl&&c?.videos?.length>0){var s=[...c.videos].sort((a,b)=>(parseInt(b.label)||0)-(parseInt(a.label)||0));if(s[0]?.url)videoUrl=s[0].url;}if(!audioUrl&&c?.audios?.length>0)audioUrl=c.audios[0]?.url||null;if(!audioUrl&&c?.audio?.url)audioUrl=c.audio.url;}}
+        if(!videoUrl&&d?.data?.videoUrl)videoUrl=d.data.videoUrl;
+        if(!audioUrl&&d?.data?.audioUrl)audioUrl=d.data.audioUrl;
+        if(!videoUrl&&d?.video_url)videoUrl=d.video_url;
+        if(!videoUrl&&d?.url)videoUrl=d.url;
+        if(!videoUrl)throw new Error('Видео URL олдсонгүй. Reel нийтийн байх ёстой.');
+        return{videoUrl,audioUrl,platform:'Instagram'};
+      }
+      if(isFB){
+        var apiUrl='https://social-media-video-downloader.p.rapidapi.com/social/auto-link?url='+encodeURIComponent(url);
+        var r2=await fetch(apiUrl,{headers:{'X-RapidAPI-Key':rKey,'X-RapidAPI-Host':'social-media-video-downloader.p.rapidapi.com','Content-Type':'application/json'}});
+        if(!r2.ok){var fb='https://social-media-video-downloader.p.rapidapi.com/facebook/post?url='+encodeURIComponent(url);var r3=await fetch(fb,{headers:{'X-RapidAPI-Key':rKey,'X-RapidAPI-Host':'social-media-video-downloader.p.rapidapi.com'}});if(!r3.ok)throw new Error('Facebook API алдаа');return rsParseFB(await r3.json());}
+        return rsParseFB(await r2.json());
+      }
+      throw new Error('IG эсвэл FB Reels URL байх ёстой.');
+    }
+    function rsParseFB(d){
+      var v=null;
+      if(d?.links?.length>0){var hq=d.links.find(l=>l.quality==='hd')||d.links[0];if(hq?.link)v=hq.link;}
+      if(!v&&d?.url)v=d.url;if(!v&&d?.video_url)v=d.video_url;if(!v&&d?.hd)v=d.hd;if(!v&&d?.sd)v=d.sd;
+      if(!v)throw new Error('Facebook видео URL олдсонгүй.');
+      return{videoUrl:v,audioUrl:null,platform:'Facebook'};
+    }
+
+    /* ─── Media buffer fetch (direct CDN + 7 proxy fallback) ─── */
+    async function rsFetchMediaBuffer(mediaUrl,statusCb){
+      var enc=encodeURIComponent;
+      var strategies=[
+        {name:'Шууд татаж байна...',          makeUrl:function(u){return u;},                                                         proxy:false},
+        {name:'Proxy 1 · corsproxy.io...',    makeUrl:function(u){return 'https://corsproxy.io/?'+enc(u);},                          proxy:true},
+        {name:'Proxy 2 · allorigins...',       makeUrl:function(u){return 'https://api.allorigins.win/raw?url='+enc(u);},             proxy:true},
+        {name:'Proxy 3 · codetabs...',         makeUrl:function(u){return 'https://api.codetabs.com/v1/proxy?quest='+enc(u);},        proxy:true},
+        {name:'Proxy 4 · cors.sh...',          makeUrl:function(u){return 'https://proxy.cors.sh/'+u;},                               proxy:true},
+        {name:'Proxy 5 · thingproxy...',       makeUrl:function(u){return 'https://thingproxy.freeboard.io/fetch/'+u;},               proxy:true},
+        {name:'Proxy 6 · htmldriven...',       makeUrl:function(u){return 'https://cors-proxy.htmldriven.com/?url='+enc(u);},         proxy:true},
+      ];
+      var errors=[];
+      for(var s of strategies){
+        try{
+          statusCb(s.name,s.proxy);
+          var _ac=new AbortController();var _to=setTimeout(function(){_ac.abort();},30000);var res;try{res=await fetch(s.makeUrl(mediaUrl),{signal:_ac.signal});}finally{clearTimeout(_to);}
+          if(!res.ok){errors.push(s.name+': HTTP '+res.status);continue;}
+          var buf=await res.arrayBuffer();
+          if(buf.byteLength>5000)return{buf,usedProxy:s.proxy};
+          errors.push(s.name+': хэт жижиг хариу ('+buf.byteLength+'B)');
+        }catch(e){errors.push(s.name+': '+(e.message||'timeout'));}
+      }
+      throw new Error('Медиа файл татаж чадсангүй (7 proxy туршсан).<br>→ Reel <b>нийтийн (public)</b> байгааг шалгана уу.<br>→ Өөр reel туршина уу.');
+    }
+
+    /* ─── System Prompt ─── */
+    function rsBuildPrompt(format,seriesLine){
+      var FORMATS=['standard','story','casestudy','mistake','pov','donot'];
+      var cf=format==='random'?FORMATS[Math.floor(Math.random()*FORMATS.length)]:format;
+      window._rsCf=cf;
+      var UNIVERSAL=`━━━ УНИВЕРСАЛЬ ДҮРЭМ (бүх type-д хамаарна) ━━━
+TRANSFORMATION: Transcript-г орчуулж болохгүй. Гол concept авч Монголд тохируулан бүтэн шинэ script бич. Монгол үнэ (₮), platform (IG/TikTok) нэмнэ.
+VOICE: "чи" гэж хандана — "та" хориглоно. 5-10 үгтэй богино өгүүлбэр. Бичгийн хэл хориглоно.
+EMOJI: Нийт script-д max 1 emoji зөвшөөрнө.
+HOOK: 1 өгүүлбэр, MAX 10 үг. Камерт шууд. Hook уншсан хүн тайван байж чадахгүй байх ёстой.
+BODY УРТ: ЗААВАЛ 12-16 өгүүлбэр. Story arc-н 6 алхам бүрийг 2-3 өгүүлбэрээр дэлгэрүүлж бич. Хэт товчлох = ДАХИН БИЧ.
+STORY ARC: Body = narrative. Feature list, bullet, тоолсон жагсаалт хориглоно.
+AAA VIRAL ENGINE — 3-г ЗААВАЛ тараа:
+  ① AWE     → шок, гайхшрал, "энэ боломжтой юу?"
+  ② ANGER   → маргаан, зөрчилдөх санаа, controversial angle
+  ③ ANXIETY → FOMO, urgency, "хоцрогдож байна уу?"
+CTA БҮТЭЦ — 2 хэсэг:
+  1. Debate асуулт: хоёр тал маргаж болохуйц, specific, comment bait
+  2. Дагалтын уриалга: "Иймэрхүү санаануудаар дагаарай 🤗" ХОРИГЛОНО — оронд нь байгалийн хэллэг ашигла:
+     → "Ийм мэдээлэл цаг алдалгүй авахыг хүсвэл дагаарай"
+     → "Энэ мэт санааг тогтмол авахыг хүсвэл дагаарай"
+     → "Ийм боломжийг эхэлж мэдэхийг хүсвэл дагаарай"${seriesLine}
+
+━━━ МОНГОЛ ХЭЛ ЧАНАРЫН ДҮРЭМ ━━━
+ХЭЛЗҮЙН АЛДАА — дараахыг ХОРИГЛОНО:
+  ✗ "сонслоо юу" → зөв: "сонссон уу"
+  ✗ "үзлээ юу" → зөв: "үзсэн үү"
+  ✗ "хийлээ юу" → зөв: "хийсэн үү"
+  ✗ "мэдлээ юу" → зөв: "мэдсэн үү"
+  (Асуултын өгүүлбэр: -лаа/-лоо биш -сан/-сэн/-сон + уу/үү)
+
+ТЕХНИКИЙН НЭРШИЛ — буруу орчуулгаас зайлс:
+  ✗ "шүтэн бишрэгч" → зөв: "сэнс" (fan буюу агаарын сэнс)
+  ✗ "хэрэглэгч интерфейс" → зөв: "цэс" эсвэл "удирдах самбар"
+  ✗ "дэлгэц хамгаалагч" → зөв: "дэлгэцийн хамгаалалт"
+  Тоног төхөөрөмжийн нэрийг Монголд ярьдаг байдлаар бич — шууд орчуулж болохгүй.
+
+HOOK БҮТЭЦ:
+  ✗ "Зун мөнгө хийх..." гэж тодорхойлогч үггүй эхлүүлэх → зөв: "Энэ зун...", "Дараагийн зун...", "Зун ирэхэд..."
+  ✗ Асуулт hook-д "тухай сонслоо юу?" → "тухай сонссон уу?"
+  Hook-д заавал контекст тодорхойлогч үг (Энэ, Тэр, Яг, Дөнгөж гэх мэт) эхэнд байх ёстой.
+
+БАЙГАЛИЙН МОНГОЛ ХЭЛЛЭГ:
+  ✗ "Иймэрхүү санаануудаар" → хиймэл AI үг, хориглоно
+  ✗ "Энэхүү боломжийг" → хэт бичгийн хэл, хориглоно
+  ✗ "...болон..." гэж олон удаа давтах → "мөн", "түүнчлэн" гэж сол
+  Камерт чангаар уншихад хэвийн, байгалийн сонсогдох ёстой.`;
+
+      var TAXONOMY=`
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+АЛХАМ 1: TRANSCRIPT-АС CONTENT TYPE ТОДОРХОЙЛ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Доорх 10 type-с НЭГИЙГ сонго — хамгийн тохирохыг:
+
+【T1 · AI_TECH】
+Тодорхойлолт: AI хэрэгсэл, шинэ технологи, automation, robot, GPT, machine learning
+Hook стратеги: CONTROVERSY — "AI [X] хийж чадна гэвэл итгэх үү?"
+Body focus: юу хийдэг биш → яагаад хүн бодохоосоо илүү ажиллах боломж олдож байна
+Viral trigger: AWE (capability шок) + ANXIETY (хоцрогдох айдас) + ANGER (ethical debate)
+CTA: "AI [X] хийх болвол чиний [ажил/амьдрал] дуусах уу эсвэл дээжрэх үү?"
+
+【T2 · ECOMMERCE】
+Тодорхойлолт: дропшиппинг, онлайн дэлгүүр, бараа зарах, margin, sourcing, profit
+Hook стратеги: INCOME PROOF — тодорхой тоо + богино хугацаа
+Body focus: margin reveal → supplier нуудал → яг ямар бараа → profit тооцоо
+Viral trigger: AWE (profit шок) + ANXIETY (энэ боломжийг алдаж болохгүй) + ANGER (нуугдсан мэдээлэл)
+CTA: "Монголд энэ бараа зарах гэж оролдсон хүн байна уу — ашигтай уу алдагдалтай уу?"
+
+【T3 · MN_OPPORTUNITY】
+Тодорхойлолт: гадаадад байгаа ч Монголд байхгүй бизнес санаа, нэвтрүүлэх боломж, market gap
+Hook стратеги: GAP REVEAL — "Гадаадад [X] сая хийж байхад Монголд энэ байхгүй."
+Body focus: яагаад ажилладаг → Монголын зах зээл + хэрэглэгч → эхлэх хялбар алхам → тоо
+Viral trigger: ANGER (яагаад хэн ч хийгээгүй юм?) + AWE (боломжийн хэмжээ) + ANXIETY (өрсөлдөгч орж ирнэ)
+CTA: "Монголд хэн нь эхэлж энэ бизнесийг хийх вэ — чи үү эсвэл хэн нэгэн өөр хүн үү?"
+
+【T4 · VIRAL_NEWS】
+Тодорхойлолт: "Ийм зүйл болжээ", breaking event, viral story, нийгмийн хэлэлцэж буй зүйл
+Hook стратеги: SHOCK FACT — хамгийн гайхалтай 1 баримтыг statement болго (асуулт биш)
+Body focus: юу болсон → яагаад чухал → ертөнц/индустри хаашаа явж байна → Монголд холбогдох нь
+Viral trigger: AWE (шок баримт) + ANGER (энэ зөв үү?) + ANXIETY (хойш ямар болох вэ?)
+CTA: "Энэ [явдал]-д чи ямар талд байна — [A тал] уу эсвэл [B тал] уу?"
+
+【T5 · BUSINESS_IDEA】
+Тодорхойлолт: бизнес загвар, startup санаа, орлогын эх үүсвэр, хажуугийн бизнес
+Hook стратеги: CONTRARIAN — нийтлэг бодлыг эргүүл
+Body focus: яагаад ихэнх нь анзаарахгүй → механизм → бодит тоо → эхлэх арга
+Viral trigger: AWE (энгийн мэт атал их орлого) + ANGER (яагаад хэн ч яридаггүй?) + ANXIETY (энэ цонх хаагдна)
+CTA: "Энэ бизнес санааг [X] хүн хэрэгжүүлж амжаагүй Монголд ажиллах уу?"
+
+【T6 · PRODUCT_REVEAL】
+Тодорхойлолт: шинэ бүтээгдэхүүн, gadget, хэрэгсэл, demo, review
+Hook стратеги: SENSORY SHOCK — хамгийн гайхалтай зүйлийг эхэнд
+Body focus: асуудал → энэ бүтээгдэхүүн яаж шийдэх → яг хэрхэн ажилладаг → үнэ vs өмнөх шийдэл
+Viral trigger: AWE (capability демо) + ANXIETY (энэ байхгүйгээр яаж амьдарсан юм?) + ANGER (яагаад хэн ч мэдэхгүй байна?)
+CTA: "Энэ [бүтээгдэхүүн] ₮[үнэ] байвал чи худалдаж авах уу — зөвтгөнө үү эсвэл хэтэрхий үнэтэй үү?"
+
+【T7 · MONEY_FINANCE】
+Тодорхойлолт: хөрөнгө оруулалт, хуримтлал, орлого нэмэх, мөнгөний зөвлөгөө, санхүүгийн мэдлэг
+Hook стратеги: NUMBER SHOCK — тодорхой тоо + богино хугацаа + unexpected result
+Body focus: нийтлэг алдаа → зөв арга → механизм → тоон баталгаа → эхлэх алхам
+Viral trigger: AWE (тоон шок) + ANGER (яагаад сургуульд заадаггүй?) + ANXIETY (одоо эхлэхгүй бол алдагдал)
+CTA: "Монголд [X] арга ашиглаж мөнгө хуримтлуулж байгаа хүн байна уу — хэдэн жилд хүрсэн бэ?"
+
+【T8 · CONTROVERSY】
+Тодорхойлолт: маргаантай сэдэв, нийгмийн асуудал, хэн нэгний хийсэн зүйлд өөр өнцөг
+Hook стратеги: HARD TAKE — 1 өгүүлбэр, хүн уурлах эсвэл дэмжих
+Body focus: нийтлэг буруу ойлголт → яагаад тийм биш → бодит байдал → Монголд холбогдох нь
+Viral trigger: ANGER (MAX — disagree хийхийг өдөөх) + AWE (өөр өнцөг) + ANXIETY (энэ мэдэхгүй байсан бол?)
+CTA: "Чи [A санал] уу эсвэл [B санал] уу — коммент-д хэл."
+
+【T9 · LIFESTYLE_HACK】
+Тодорхойлолт: амьдралын зуршил, productivity, биеийн эрүүл мэнд, цаг менежмент, хувийн хөгжил
+Hook стратеги: EASE FLIP — "Чи [хэцүү зүйл]-г хэцүү гэж бодож байгаа — буруу."
+Body focus: яагаад хэцүү мэт санагддаг → яг юу өөрчлөх → механизм → 30 хоногийн дараа ямар болох
+Viral trigger: AWE (энгийн арга) + ANXIETY (одоо эхлэхгүй бол хожигдоно) + ANGER (биднийг тэгж амьдруулсан)
+CTA: "Чи [X зуршил]-г өөрчилсний дараа ямар болсон бэ — туршсан хүн байна уу?"
+
+【T10 · TREND_ALERT】
+Тодорхойлолт: нэгж санаанаас том болж буй тренд, индустрийн шилжилт, ирэх 1-3 жилийн өөрчлөлт
+Hook стратеги: URGENCY BOMB — "Энэ тренд дөнгөж эхэлж байна — 2 жилийн дараа хожигдоно."
+Body focus: тренд яаж эхэлсэн → одоо хаана байна → хаашаа явах нь → Монголд хамаарал
+Viral trigger: ANXIETY (early mover advantage) + AWE (хэмжээ ба хурд) + ANGER (яагаад хэн яридаггүй?)
+CTA: "Монголд энэ тренд хэзээ ирэх бол гэж бодож байна — 1 жилд үү 3 жилд үү?"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+АЛХАМ 2: СОНГОСОН TYPE-ИЙН СТРАТЕГИЙГ БҮРЭН ХЭРЭГЖҮҮЛ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+→ Hook стратеги заасан аргаар
+→ Body focus-д заасан зүйлийг гол болго
+→ Viral trigger 3-г script дотор тараа
+→ CTA жишээг тухайн контентод тааруулж өөрчил`;
+
+      var OVERLAYS={
+        standard: 'BODY БҮТЭЦ: [1]Нөхцөл+контекст [2]Twist "гэхдээ яг энд нэг зүйл байна…" [3]Механизм [4]Тоон баталгаа [5]Bigger picture [6]Signature line (5-8 үг, clip-able)',
+        story:    'BODY БҮТЭЦ: Конкрет хүний тохиолдолоор эхэл → [1]Тохиолдол [2]Шилжилт [3]Механизм [4]Тоон баталгаа [5]Bigger picture [6]Signature line',
+        casestudy:'BODY БҮТЭЦ: "[Хүн/компани] [X хоногт] [Y үр дүн]—яаж вэ?" → [1]Хэн [2]Юу болсон [3]Механизм [4]Тоонууд [5]Bigger picture [6]Signature line',
+        mistake:  'BODY БҮТЭЦ: Алдааг controversy болго → [1]Нийтлэг алдаа (AWE) [2]Юу болдог (ANXIETY) [3]Зөв арга+механизм [4]Тоонууд [5]Bigger picture [6]Signature line',
+        pov:      'BODY БҮТЭЦ: "Хэрэв [нөхцөл] байсан бол чи юу хийх байсан?" → [1]Нөхцөл [2]Controversy angle [3]Механизм [4]Тоонууд [5]Bigger picture [6]Signature line',
+        donot:    'BODY БҮТЭЦ: ANXIETY MAX → [1]Яагаад ихэнх нь хийдэггүй [2]Гэхдээ энэ байвал [3]Механизм [4]Тоонууд [5]Bigger picture [6]Signature line'
+      };
+
+      var ENFORCE=`
+━━━ ENFORCEMENT ━━━
+✗ Content type тодорхойлоогүй → ДАХИН БИЧ
+✗ Body 12 өгүүлбэрээс бага → ДАХИН БИЧ
+✗ Story arc алхам алгасагдсан → ДАХИН БИЧ
+✗ AAA-ийн 1 ч алга → ДАХИН БИЧ
+✗ Hook 10 үгнээс их / асуулт / safe opener → ДАХИН БИЧ
+✗ Body = feature list / bullet / тоолсон → ДАХИН БИЧ
+✗ "та" гэж хандсан → ДАХИН БИЧ
+✗ CTA debate асуулт байхгүй → ДАХИН БИЧ
+✗ Emoji 2+ → ДАХИН БИЧ
+✗ "сонслоо юу / үзлээ юу / мэдлээ юу" гэсэн буруу хэлзүй → ДАХИН БИЧ
+✗ "Иймэрхүү санаануудаар дагаарай 🤗" хэллэг → ДАХИН БИЧ
+✗ "шүтэн бишрэгч" эсвэл техникийн буруу орчуулга → ДАХИН БИЧ
+✗ Hook тодорхойлогч үггүй эхэлсэн → ДАХИН БИЧ`;
+
+      var OUTPUT=`
+━━━ ГАРАЛТ ФОРМАТ ━━━
+===TYPE===
+[Сонгосон content type: жишээ нь T2 · ECOMMERCE]
+===HOOK===
+[hook]
+===BODY===
+[body]
+===CTA===
+[cta]
+
+Маркеруудаас өмнө, дараа ямар нэг тайлбар ОГТХОН Ч бичихгүй.`;
+
+      return UNIVERSAL+'\n'+TAXONOMY+'\n'+(OVERLAYS[cf]||OVERLAYS.standard)+ENFORCE+OUTPUT;
+    }
+
+    /* ─── Parse script ─── */
+    function rsParseScript(text){
+      var s={hook:'',body:'',cta:'',type:''};
+      var tm=text.match(/===TYPE===\s*([\s\S]*?)(?====HOOK===|$)/i);
+      var hm=text.match(/===HOOK===\s*([\s\S]*?)(?====BODY===|$)/i);
+      var bm=text.match(/===BODY===\s*([\s\S]*?)(?====CTA===|$)/i);
+      var cm=text.match(/===CTA===\s*([\s\S]*?)$/i);
+      if(tm)s.type=tm[1].trim();if(hm)s.hook=hm[1].trim();if(bm)s.body=bm[1].trim();if(cm)s.cta=cm[1].trim();
+      if(!s.hook&&!s.body&&!s.cta)s.body=text.trim();
+      return s;
+    }
+
+    /* ─── Render script output ─── */
+    function rsRenderScript(p,raw,fmtLabel,typeLabel){
+      function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+      function enc(s){return s.replace(/'/g,"\\'").replace(/\n/g,'\\n');}
+      /* Word-by-word reveal for hook text */
+      function wrapWords(s,baseDelay){
+        return s.split(/(\s+)/).map(function(tok,i){
+          if(/^\s+$/.test(tok))return tok;
+          var d=baseDelay+Math.floor(i/2)*38;
+          return '<span class="rs-word" style="animation-delay:'+d+'ms">'+esc(tok)+'</span>';
+        }).join('');
+      }
+      var mr=rq('rs-meta-row'),fb=rq('rs-fmt-badge'),tb=rq('rs-typ-badge');
+      if(fmtLabel){fb.textContent=fmtLabel;tb.textContent=typeLabel||'';mr.className='rs-meta-row show';}
+      var h='';
+      if(p.hook)h+='<div class="rs-section"><div class="rs-sec-hd"><span class="rs-sec-tag h">HOOK</span><div class="rs-sec-line h"></div><button class="rs-sec-copy" onclick="rsCopySec(this,\''+enc(p.hook)+'\')">⌘</button></div><div class="rs-sec-text h">'+wrapWords(p.hook,80)+'</div></div>';
+      if(p.body)h+='<div class="rs-section"><div class="rs-sec-hd"><span class="rs-sec-tag b">BODY</span><div class="rs-sec-line b"></div><button class="rs-sec-copy" onclick="rsCopySec(this,\''+enc(p.body)+'\')">⌘</button></div><div class="rs-sec-text b">'+esc(p.body)+'</div></div>';
+      if(p.cta)h+='<div class="rs-section"><div class="rs-sec-hd"><span class="rs-sec-tag c">CTA</span><div class="rs-sec-line c"></div><button class="rs-sec-copy" onclick="rsCopySec(this,\''+enc(p.cta)+'\')">⌘</button></div><div class="rs-sec-text c">'+esc(p.cta)+'</div></div>';
+      if(!h)h='<div class="rs-sec-text b rs-section" style="padding:20px">'+esc(raw)+'</div>';
+      rq('rs-out-body').innerHTML=h;
+      /* Output card reveal + success flash */
+      var outCard=rq('rs-out-body').closest('.rs-out-card');
+      if(outCard){
+        outCard.classList.remove('rs-reveal','rs-done-flash');
+        void outCard.offsetWidth;
+        outCard.classList.add('rs-reveal');
+        setTimeout(function(){outCard.classList.add('rs-done-flash');setTimeout(function(){outCard.classList.remove('rs-done-flash');},950);},420);
+      }
+      /* Progress bar complete → fade out */
+      var pf=rq('rs-prog-fill');
+      if(pf){pf.style.width='100%';pf.style.background='linear-gradient(90deg,var(--blue),var(--green))';setTimeout(function(){var pb=rq('rs-prog-bar');if(pb)pb.style.opacity='0';setTimeout(function(){if(pb)pb.style.opacity='1';if(pf)pf.style.width='0%';},800);},700);}
+      /* Staggered section entrance */
+      var secs=rq('rs-out-body').querySelectorAll('.rs-section');
+      secs.forEach(function(sec,i){
+        sec.style.animationDelay=(i*120)+'ms';
+        sec.classList.add('rs-anim');
+        setTimeout(function(){sec.classList.add('rs-visible');},i*120+420);
+      });
+      rs_lastRaw=raw;
+      /* Pop action buttons */
+      ['rs-save-btn','rs-copy-btn','rs-edit-btn','rs-caption-btn'].forEach(function(id,i){
+        var b=rq(id);if(!b)return;
+        b.disabled=false;
+        setTimeout(function(){b.classList.add('rs-popped');setTimeout(function(){b.classList.remove('rs-popped');},340);},i*60+300);
+      });
+    }
+
+    /* ─── Copy helpers ─── */
+    window.rsCopySec=function(btn,text){
+      navigator.clipboard.writeText(text).then(function(){btn.textContent='✓';btn.classList.add('copied');setTimeout(function(){btn.textContent='⌘';btn.classList.remove('copied');},1800);});
+    }
+    window.rsCopyAll=function(){
+      if(!rs_lastRaw)return;
+      navigator.clipboard.writeText(rs_lastRaw).then(function(){toast('Script хуулагдлаа ✓','ok');});
+    }
+    window.rsCopyCaption=function(){
+      if(!rs_lastRaw)return;
+      var p=rsParseScript(rs_lastRaw);
+      var parts=[];
+      if(p.hook)parts.push(p.hook);
+      if(p.cta)parts.push(p.cta);
+      var caption=parts.join('\n\n')||(p.body||rs_lastRaw);
+      navigator.clipboard.writeText(caption).then(function(){
+        var btn=rq('rs-caption-btn');
+        if(btn){var orig=btn.textContent;btn.textContent='✓ Хуулагдлаа';setTimeout(function(){btn.textContent=orig;},1800);}
+        toast('Caption хуулагдлаа (Hook+CTA) ✓','ok');
+      });
+    }
+
+    /* ─── Edit mode ─── */
+    var rs_editMode=false;
+    var rs_editBackup=''; // backup of innerHTML before editing
+    window.rsToggleEdit=function(){
+      if(!rs_lastRaw)return;
+      if(rs_editMode){ rsEditCancel(); return; }
+      rs_editMode=true;
+      rs_editBackup=rq('rs-out-body').innerHTML;
+      // Make each rs-sec-text contenteditable
+      rq('rs-out-body').querySelectorAll('.rs-sec-text').forEach(function(el){
+        el.contentEditable='true';
+        el.spellcheck=false;
+      });
+      // Hide copy buttons in section headers during edit
+      rq('rs-out-body').querySelectorAll('.rs-sec-copy').forEach(function(el){el.style.display='none';});
+      rq('rs-edit-btn').textContent='↩ Болих';
+      rq('rs-edit-btn').classList.add('edit-on');
+      rq('rs-edit-bar').className='rs-edit-bar show';
+      // Focus first editable
+      var first=rq('rs-out-body').querySelector('[contenteditable="true"]');
+      if(first){first.focus();var r=document.createRange();r.selectNodeContents(first);r.collapse(false);var sel=window.getSelection();sel.removeAllRanges();sel.addRange(r);}
+    }
+    window.rsEditCancel=function(){
+      rs_editMode=false;
+      rq('rs-out-body').innerHTML=rs_editBackup;
+      rq('rs-edit-btn').textContent='✏️ Засах';
+      rq('rs-edit-btn').classList.remove('edit-on');
+      rq('rs-edit-bar').className='rs-edit-bar';
+    }
+    window.rsEditSave=function(){
+      // Reconstruct rs_lastRaw from edited content
+      var hook='',body='',cta='';
+      rq('rs-out-body').querySelectorAll('.rs-section').forEach(function(sec){
+        var tag=sec.querySelector('.rs-sec-tag');
+        var txt=sec.querySelector('.rs-sec-text');
+        if(!tag||!txt)return;
+        var tagTxt=tag.textContent.trim().toUpperCase();
+        var content=txt.innerText||txt.textContent;
+        if(tagTxt==='HOOK')hook=content.trim();
+        else if(tagTxt==='BODY')body=content.trim();
+        else if(tagTxt==='CTA')cta=content.trim();
+      });
+      // If no sections parsed, take full body text
+      var newRaw='';
+      if(hook||body||cta){
+        newRaw='===TYPE===\n'+rs_lastType+'\n===HOOK===\n'+hook+'\n===BODY===\n'+body+'\n===CTA===\n'+cta;
+      } else {
+        var fb=rq('rs-out-body').querySelector('.rs-sec-text');
+        newRaw=fb?fb.innerText:rs_lastRaw;
+      }
+      rs_lastRaw=newRaw;
+      rs_editMode=false;
+      // Re-render from edited data (turn off contenteditable, show copy btns)
+      rq('rs-out-body').querySelectorAll('.rs-sec-text').forEach(function(el){el.contentEditable='false';});
+      rq('rs-out-body').querySelectorAll('.rs-sec-copy').forEach(function(el){el.style.display='';});
+      rq('rs-edit-btn').textContent='✏️ Засах';
+      rq('rs-edit-btn').classList.remove('edit-on');
+      rq('rs-edit-bar').className='rs-edit-bar';
+      // Update enc references on copy buttons
+      var p=rsParseScript(rs_lastRaw);
+      rsRenderScript(p,rs_lastRaw,rs_lastFmt,rs_lastType);
+      toast('Засвар хадгалагдлаа ✓','ok');
+    }
+
+    /* ─── Cost tracking (localStorage) ─── */
+    function rsCostKey(type){
+      var d=new Date();
+      if(type==='day')return 'pd4_rscost_'+d.getFullYear()+'_'+(d.getMonth()+1)+'_'+d.getDate();
+      if(type==='month')return 'pd4_rscost_'+d.getFullYear()+'_'+(d.getMonth()+1);
+      if(type==='runs_day')return 'pd4_rsruns_'+d.getFullYear()+'_'+(d.getMonth()+1)+'_'+d.getDate();
+    }
+    function rsCostAdd(w,g){
+      var total=w+g;
+      // Day
+      var dk=rsCostKey('day');
+      var dv=parseFloat(localStorage.getItem(dk)||'0')+total;
+      localStorage.setItem(dk,dv.toFixed(6));
+      // Month
+      var mk=rsCostKey('month');
+      var mv=parseFloat(localStorage.getItem(mk)||'0')+total;
+      localStorage.setItem(mk,mv.toFixed(6));
+      // Run count today
+      var rk=rsCostKey('runs_day');
+      localStorage.setItem(rk,(parseInt(localStorage.getItem(rk)||'0')+1));
+      rsCostRender();
+    }
+    function rsCostRender(){
+      var dt=parseFloat(localStorage.getItem(rsCostKey('day'))||'0');
+      var mt=parseFloat(localStorage.getItem(rsCostKey('month'))||'0');
+      var rc=parseInt(localStorage.getItem(rsCostKey('runs_day'))||'0');
+      var et=rq('rs-cost-today');if(et)et.textContent='$'+dt.toFixed(4);
+      var em=rq('rs-cost-month');if(em)em.textContent='$'+mt.toFixed(4);
+      var er=rq('rs-cost-runs');if(er)er.textContent=rc+' run өнөөдөр';
+    }
+
+    /* ─── Format performance ─── */
+    function rsFmtPerf(){
+      var el=rq('rs-fmt-perf-body');if(!el)return;
+      // Collect format usage from localStorage saved scripts
+      var scripts=[];
+      try{scripts=JSON.parse(localStorage.getItem('pd4_scripts')||'[]');}catch(e){}
+      // Also check pd4_cnt_scripts key (content pipeline)
+      var scripts2=[];
+      try{scripts2=JSON.parse(localStorage.getItem('pd4_cnt_items')||'[]');}catch(e){}
+      var all=scripts.concat(scripts2);
+      // Also count from rs cost run format tracking
+      var fmtMap={};
+      try{var fm=JSON.parse(localStorage.getItem('pd4_rs_fmtlog')||'{}');fmtMap=fm;}catch(e){}
+      if(Object.keys(fmtMap).length===0&&all.length===0){
+        el.innerHTML='<div style="text-align:center;padding:12px;color:var(--text4);font-size:11px;">Script хадгалах үед статистик энд харагдана</div>';
+        return;
+      }
+      var total=Object.values(fmtMap).reduce(function(a,b){return a+b;},0)||1;
+      var sorted=Object.entries(fmtMap).sort(function(a,b){return b[1]-a[1];});
+      var fmtLabels={'standard':'① Стандарт+','story':'② Story-first','casestudy':'③ Case study','mistake':'④ Mistake breakdown','pov':'⑤ POV','donot':"⑥ Don't start unless",'random':'🎲 Санамсаргүй'};
+      var colors=['var(--blue)','var(--green)','var(--amber)','var(--purple)','var(--red)'];
+      var h='';
+      sorted.forEach(function(entry,i){
+        var key=entry[0],cnt=entry[1];
+        var pct=Math.round(cnt/total*100);
+        var label=fmtLabels[key]||key;
+        var color=colors[i%colors.length];
+        h+='<div style="display:flex;align-items:center;gap:8px;">'
+          +'<div style="font-size:10px;color:var(--text2);width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+label+'</div>'
+          +'<div style="flex:1;height:6px;border-radius:99px;background:var(--bg4);overflow:hidden;"><div style="height:100%;width:'+pct+'%;background:'+color+';border-radius:99px;transition:width .4s;"></div></div>'
+          +'<div style="font-size:10px;font-family:\'DM Mono\',monospace;color:var(--text3);width:44px;text-align:right;">'+cnt+'x · '+pct+'%</div>'
+          +'</div>';
+      });
+      if(h)el.innerHTML=h;
+    }
+
+    /* Track format on each successful run */
+    function rsFmtTrack(fmt){
+      try{
+        var fm=JSON.parse(localStorage.getItem('pd4_rs_fmtlog')||'{}');
+        fm[fmt]=(fm[fmt]||0)+1;
+        localStorage.setItem('pd4_rs_fmtlog',JSON.stringify(fm));
+      }catch(e){}
+      rsFmtPerf();
+    }
+
+    /* ─── MAIN PIPELINE ─── */
+    window.rsRun=async function(){
+      if(rs_running)return;
+      var url=rq('rs-url').value.trim();
+      var rKey=rq('rs-rapid-key').value.trim();
+      var oKey=rq('rs-oai-key').value.trim();
+      var sUrl=(localStorage.getItem('rp_serverUrl')||rq('rs-server-url').value.trim()||'http://localhost:3000').replace(/\/$/,'');
+      var lang='en';
+      var partNum=(rq('rs-part').value||'').trim();
+      var format=rq('rs-format').value;
+
+      if(!url){toast('Reel URL оруулна уу','err');return;}
+      if(!rKey){toast('RapidAPI key оруулна уу','err');return;}
+      if(!oKey){toast('OpenAI key оруулна уу','err');return;}
+      if(!/instagram\.com\/(reel|p)\/|facebook\.com\/(reel|watch|video)|fb\.watch/i.test(url)){toast('IG эсвэл FB Reels URL байх ёстой','err');return;}
+
+      rs_running=true;rsHideErr();
+      var btn=rq('rs-run-btn');
+      /* Press animation */
+      btn.classList.add('pressing');
+      setTimeout(function(){btn.classList.remove('pressing');},350);
+      /* Active card glow */
+      var progCard=btn.closest('.rs-card');if(progCard)progCard.classList.add('rs-active');
+      btn.disabled=true;btn.classList.add('rs-loading');btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:rs-shim-spin 1s linear infinite;flex-shrink:0"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg> Боловсруулж байна...';
+      rq('rs-cw').textContent='—';rq('rs-cg').textContent='—';
+
+      var videoUrl,audioUrl,rawText;
+      var wCost=0,gCost=0;
+      var seriesLine=partNum?'\n⑧ SERIES: body эхэнд "Танд хэрэгтэй business санаа PART '+partNum+'" нэмнэ.':'';
+
+      // STEP 1: RapidAPI
+      try{
+        rsSetOrb(1,'run');rsSetStatus(1,'run','RapidAPI-д холбогдож байна...');
+        var info=await rsFetchVideoInfo(url,rKey);
+        videoUrl=info.videoUrl;audioUrl=info.audioUrl;
+        rsSetOrb(1,'done');rsSetStatus(1,'done',info.platform+(audioUrl?' · DASH аудио+видео':' · Merged видео'));
+        rsSetOut(1,(audioUrl?'🔊 '+audioUrl.slice(0,60)+'...':'🎬 '+videoUrl.slice(0,60)+'...'));
+      }catch(e){rsSetOrb(1,'err');rsSetStatus(1,'err',e.message);rsShowErr('1-р алхам алдаа: '+e.message);rs_running=false;btn.disabled=false;btn.classList.remove('rs-loading');var _pc=btn.closest('.rs-card');if(_pc)_pc.classList.remove('rs-active');btn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg> Run Pipeline';return;}
+
+      // STEP 2: Direct media fetch → Whisper
+      try{
+        rsSetOrb(2,'run');rsSetStatus(2,'run','Медиа файл татаж байна...');
+        var mediaUrl=audioUrl||videoUrl;
+        var mediaResult=await rsFetchMediaBuffer(mediaUrl,function(statusMsg,isProxy){
+          rsSetStatus(2,'run',statusMsg);
+        });
+        var mediaBuf=mediaResult.buf;
+        var szMB=(mediaBuf.byteLength/1024/1024).toFixed(2);
+        if(mediaBuf.byteLength>25*1024*1024)throw new Error('Файл хэт том ('+szMB+'MB). 25MB хүртэл.');
+        rsSetStatus(2,'run','Whisper-т илгээж байна · '+szMB+' MB...');
+        var ext=audioUrl?'m4a':'mp4';
+        var mime=audioUrl?'audio/mp4':'video/mp4';
+        var form=new FormData();
+        form.append('file',new File([mediaBuf],'media.'+ext,{type:mime}));
+        form.append('model','whisper-1');form.append('language',lang);
+        var wr=await fetch('https://api.openai.com/v1/audio/transcriptions',{method:'POST',headers:{'Authorization':'Bearer '+oKey},body:form});
+        if(!wr.ok){var we=await wr.json().catch(function(){return{};});throw new Error(we.error?.message||'Whisper алдаа '+wr.status);}
+        var wd=await wr.json();
+        rawText=wd.text;
+        if(!rawText?.trim())throw new Error('Whisper хоосон текст буцааллаа.');
+        window._rsLastTranscript=rawText;
+        var tcb=rq('rs-transcript-copy');if(tcb){tcb.disabled=false;tcb.style.color='var(--purple)';tcb.style.borderColor='rgba(175,82,222,0.4)';}
+        var estMin=Math.max(mediaBuf.byteLength/(128*1024/8)/60,0.5);
+        wCost=estMin*0.006;
+        rsCountUp(rq('rs-cw'),wCost,'$',4);
+        rsSetOrb(2,'done');rsSetStatus(2,'done','Transcript бэлэн · '+rawText.length+' тэмдэгт');
+        rsSetOut(2,rawText.slice(0,100)+'...');
+      }catch(e){rsSetOrb(2,'err');rsSetStatus(2,'err',e.message);rsShowErr('2-р алхам алдаа: '+e.message);rs_running=false;btn.disabled=false;btn.classList.remove('rs-loading');var _pc=btn.closest('.rs-card');if(_pc)_pc.classList.remove('rs-active');btn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg> Run Pipeline';return;}
+
+      // STEP 3: GPT-4o script
+      try{
+        rsSetOrb(3,'run');rsSetStatus(3,'run','GPT-4o — Монгол script үүсгэж байна...');
+        rq('rs-out-body').innerHTML='<div style="padding:20px 16px;display:flex;flex-direction:column;gap:10px"><div class="rs-shim" style="width:65%;height:18px"></div><div class="rs-shim" style="width:50%;height:14px"></div><div class="rs-shim" style="width:90%;margin-top:8px"></div><div class="rs-shim" style="width:85%"></div><div class="rs-shim" style="width:88%"></div><div class="rs-shim" style="width:75%"></div><div class="rs-shim" style="width:60%;margin-top:6px"></div></div>';
+        var sysPrompt=rsBuildPrompt(format,seriesLine);
+        var gr=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+oKey,'Content-Type':'application/json'},body:JSON.stringify({model:'gpt-4o',max_tokens:3500,messages:[{role:'system',content:sysPrompt},{role:'user',content:'Доорх transcript-ийн гол санааг аваад монгол reel script бич:\n\n'+rawText}]})});
+        if(!gr.ok){var ge=await gr.json().catch(function(){return{};});throw new Error(ge.error?.message||'GPT-4o алдаа '+gr.status);}
+        var gd=await gr.json();
+        var finalScript=gd.choices[0].message.content;
+        var inT=gd.usage?.prompt_tokens||0,outT=gd.usage?.completion_tokens||0;
+        gCost=(inT*0.000005)+(outT*0.000015);
+        rsCountUp(rq('rs-cg'),gCost,'$',5);
+        var cf=window._rsCf||'standard';
+        rs_lastFmt=RS_FL[cf]||cf;
+        var parsed=rsParseScript(finalScript);
+        rs_lastType=parsed.type||'';
+        rq('rs-fmt-badge').textContent=rs_lastFmt;
+        rq('rs-typ-badge').textContent=rs_lastType;
+        var fmt2=rq('rs-chosen-fmt');if(fmt2)fmt2.textContent='→ '+rs_lastFmt;
+        rsSetOrb(3,'done');rsSetStatus(3,'done','Script бэлэн · '+rs_lastFmt+' · '+finalScript.length+' тэмдэгт');
+        rsSetOut(3,finalScript.slice(0,100)+(finalScript.length>100?'…':''));
+        rsRenderScript(parsed,finalScript,rs_lastFmt,rs_lastType);
+        var pEl=rq('rs-part');if(pEl.value){pEl.value=+pEl.value+1;}
+        // Track cost + format
+        rsCostAdd(wCost||0,gCost||0);
+        rsFmtTrack(cf);
+      }catch(e){rsSetOrb(3,'err');rsSetStatus(3,'err',e.message);rsShowErr('3-р алхам алдаа: '+e.message);rs_running=false;btn.disabled=false;btn.classList.remove('rs-loading');var _pc=btn.closest('.rs-card');if(_pc)_pc.classList.remove('rs-active');btn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg> Run Pipeline';return;}
+
+      rs_running=false;
+      btn.disabled=false;btn.classList.remove('rs-loading');btn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg> Run Pipeline';
+      var progCard=btn.closest('.rs-card');if(progCard)progCard.classList.remove('rs-active');
+      toast('Script амжилттай үүслээ ✓','ok');
+    }
+
+    /* ─── Save Modal ─── */
+    window.rsOpenSave=function(){
+      if(!rs_lastRaw)return;
+      var p=rsParseScript(rs_lastRaw);
+      rq('rs-mpreview').textContent=(p.hook||rs_lastRaw).slice(0,100);
+      var ti=rq('rs-m-title');if(!ti.value)ti.value=(p.hook||'').slice(0,52).trim();
+      var di=rq('rs-m-date');if(!di.value)di.value=new Date().toISOString().slice(0,10);
+      var tb=rq('rs-typ-badge').textContent.toLowerCase();
+      var typeEl=rq('rs-m-type');
+      if(tb.includes('bofu')||tb.includes('sales'))typeEl.value='bofu';
+      else if(tb.includes('mofu')||tb.includes('consideration'))typeEl.value='mofu';
+      else typeEl.value='tofu';
+      rq('rs-ok-bar').style.display='none';
+      rq('rs-msave-btn').disabled=false;rq('rs-msave-btn').textContent='💾 Хадгалах';
+      var ui=rq('rs-m-ig-url');if(ui&&!ui.value)ui.value=(rq('rs-url').value.trim().split('\n')[0]||'').trim();
+      rq('rs-modal').style.display='flex';
+      setTimeout(function(){rq('rs-m-title').focus();},100);
+    }
+    window.rsCloseSave=function(){rq('rs-modal').style.display='none';}
+    window.rsFmtGuideSelect=function(fmt){
+      var sel=rq('rs-format');if(sel)sel.value=fmt;
+      document.querySelectorAll('.rs-fmt-guide-item').forEach(function(el){
+        el.style.borderColor='';el.style.background='var(--bg3)';el.style.boxShadow='';
+      });
+      var clicked=document.querySelector('.rs-fmt-guide-item[onclick*="\''+fmt+'\'"]');
+      if(clicked){clicked.style.borderColor='var(--blue)';clicked.style.background='var(--bluebg)';clicked.style.boxShadow='0 0 0 2px rgba(0,122,255,0.15)';}
+      var label={standard:'① Стандарт+',story:'② Story-first',casestudy:'③ Case study',mistake:'④ Mistake breakdown',pov:'⑤ POV',donot:"⑥ Don't start unless"}[fmt]||fmt;
+      var cf=rq('rs-chosen-fmt');if(cf)cf.textContent='→ '+label;
+      toast('Format: '+label,'ok');
+    }
+    window.rsConfirmSave=async function(){
+      var title=rq('rs-m-title').value.trim();
+      if(!title){rq('rs-m-title').style.borderColor='var(--red)';rq('rs-m-title').focus();return;}
+      rq('rs-m-title').style.borderColor='';
+      var btn=rq('rs-msave-btn');btn.disabled=true;btn.textContent='Хадгалж байна...';
+      var p=rsParseScript(rs_lastRaw);
+      var payload={title,type:rq('rs-m-type').value,platform:rq('rs-m-platform').value,post_date:rq('rs-m-date').value||null,status:'idea',hooks:p.hook||'',script:[p.body,p.cta].filter(Boolean).join('\n\n')||rs_lastRaw,orders:0,revenue:0,views:0,dms:0,ig_url:rq('rs-m-ig-url')?.value.trim()||''};
+      try{
+        var res=await fetch(RS_SB_URL+'/rest/v1/scripts',{method:'POST',headers:{'apikey':RS_SB_KEY,'Authorization':'Bearer '+RS_SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(payload)});
+        if(!res.ok)throw new Error(await res.text());
+        rq('rs-ok-bar').style.display='block';
+        btn.textContent='✓ Хадгалагдлаа';
+        setTimeout(function(){rsCloseSave();toast('Script хадгалагдлаа — Контент таб-д харагдана ✓','ok');},1600);
+      }catch(e){btn.disabled=false;btn.textContent='💾 Хадгалах';toast('Алдаа: '+e.message,'err');}
+    }
+
+    /* ─── Init ─── */
+    rsLoadKeys();
+    rsCostRender();
+    rsFmtPerf();
+
+    /* ─── ⌘+Enter → Run Pipeline (only when reel-script page is active) ─── */
+    document.addEventListener('keydown',function(e){
+      if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){
+        var pg=document.getElementById('page-reel-script');
+        if(pg&&pg.classList.contains('active')){
+          e.preventDefault();
+          if(typeof window.rsRun==='function'&&!rs_running)window.rsRun();
+        }
+      }
+    });
+    })();
+    </script>
+
+    </div><!-- /page-reel-script -->
 </div><!-- /desktop-window -->
 
 <!-- ADD QUICK LINK MODAL -->
@@ -3697,6 +4886,9 @@ button:focus-visible,
       </div>
     </div>
 
+    <label class="cnt-lbl">🔗 Reel URL <span style="font-weight:400;color:var(--text3);font-size:11px;">(харах линк)</span></label>
+    <input class="cnt-fi" id="cp-ig-url" placeholder="https://www.instagram.com/reel/..." type="url"/>
+
     <!-- ── AI AVATAR SCRIPT GENERATOR ── -->
     <div class="ai-av-box">
       <div class="ai-av-header">
@@ -3759,11 +4951,6 @@ button:focus-visible,
           <div id="pb-gen-status" style="font-size:11px;color:var(--green);text-align:center;margin-top:6px;min-height:16px;"></div>
         </div>
       </div>
-      <div style="display:flex;gap:6px;align-items:center;">
-        <input type="password" id="ai-api-key" class="ai-av-select" style="flex:1;font-family:'DM Mono',monospace;font-size:12px;" placeholder="sk-ant-api03-..." oninput="localStorage.setItem('pd_ak',this.value.trim())"/>
-        <button onclick="var e=document.getElementById('ai-api-key');e.type=e.type==='password'?'text':'password'" style="padding:7px 10px;border-radius:8px;border:1px solid var(--border2);background:var(--bg4);color:var(--text2);font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;">👁 Харах</button>
-      </div>
-      <div style="font-size:11px;color:var(--text3);margin:4px 0 10px;">Нэг удаа оруулахад браузерт хадгалагдана. <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:var(--purple);">Key авах →</a></div>
       <!-- ── ГОЛ САНАА ҮҮСГЭГЧ ── -->
       <div style="margin-bottom:10px;">
         <div id="idea-gen-toggle" onclick="(function(){var b=document.getElementById('idea-gen-box');var ic=document.getElementById('idea-gen-chev');var open=b.style.display==='block';b.style.display=open?'none':'block';ic.style.transform=open?'rotate(0deg)':'rotate(180deg)';})()" style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 11px;border-radius:10px;background:linear-gradient(135deg,rgba(175,82,222,0.12),rgba(0,122,255,0.08));border:1.5px solid rgba(175,82,222,0.28);user-select:none;transition:all .15s;">
@@ -3988,10 +5175,6 @@ button:focus-visible,
         <label style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px;">Голлох санаа / Контекст</label>
         <textarea id="batch-idea" placeholder="Жишээ: ProductDrop-ийн давуу талууд — хугацаа хэмнэлт, ашигтай бараа, орлогын тооцоо..." style="width:100%;padding:10px 12px;border-radius:10px;border:1.5px solid var(--border2);background:var(--bg3);color:var(--text);font-size:13px;font-family:inherit;outline:none;resize:vertical;min-height:70px;line-height:1.6;"></textarea>
       </div>
-      <div style="margin-bottom:14px;">
-        <label style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px;">API Key</label>
-        <input type="password" id="batch-api-key" placeholder="sk-ant-api03-..." style="width:100%;padding:9px 12px;border-radius:10px;border:1.5px solid var(--border2);background:var(--bg3);color:var(--text);font-size:13px;font-family:'DM Mono',monospace;outline:none;" oninput="localStorage.setItem('pd_ak',this.value.trim())"/>
-      </div>
       <button id="batch-gen-btn" onclick="runBatchPlanner()" style="width:100%;padding:12px;border-radius:11px;border:none;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
         7 Script нэг дор үүсгэх
@@ -4164,7 +5347,8 @@ function rowToCnt(r){
     orders:parseInt(r.orders||0)||0,
     revenue:parseFloat(r.revenue||0)||0,
     views:parseInt(r.views||0)||0,
-    dms:parseInt(r.dms||0)||0
+    dms:parseInt(r.dms||0)||0,
+    ig_url:r.ig_url||''
   };
 }
 function cntToRow(c){
@@ -4179,11 +5363,10 @@ function cntToRow(c){
     orders:parseInt(c.orders||0)||0,
     revenue:parseFloat(c.revenue||0)||0,
     views:parseInt(c.views||0)||0,
-    dms:parseInt(c.dms||0)||0
+    dms:parseInt(c.dms||0)||0,
+    ig_url:c.ig_url||''
   };
 }
-
-/* content loading spinner helper */
 function cntLoading(on,msg){
   var el=document.getElementById('cnt-card-list');
   if(on&&el)el.innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--text3);font-size:13px;">⏳ '+(msg||'Уншиж байна...')+'</div>';
@@ -4881,8 +6064,8 @@ function saveAll(){
 }
 
 /* ── NAVIGATION ── */
-var PAGES=['kanban','content','analytics','users','admin','focus','finance','checkin','roadmap','ai'];
-var PAGE_IDX={kanban:0,content:1,analytics:2,users:3,admin:4,focus:5,finance:6,checkin:7,roadmap:8,ai:9};
+var PAGES=['kanban','content','analytics','users','admin','focus','finance','checkin','roadmap','ai','reel-script'];
+var PAGE_IDX={kanban:0,content:1,analytics:2,users:3,admin:4,focus:5,finance:6,checkin:7,roadmap:8,ai:9,'reel-script':10};
 function showPage(name,sidebarEl){
   PAGES.forEach(function(p){document.getElementById('page-'+p).classList.remove('active');});
   document.getElementById('page-'+name).classList.add('active');
@@ -4922,7 +6105,7 @@ function setTabBtn(el,name){
 
 /* ── HELPERS ── */
 function x(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function toast(msg,type){var old=document.querySelector('.toast');if(old)old.remove();var t=document.createElement('div');t.className='toast';if(type==='ok')t.style.cssText='background:var(--greenbg);color:var(--green);border-color:rgba(52,199,89,0.3);';else if(type==='err')t.style.cssText='background:var(--redbg);color:var(--red);border-color:rgba(255,59,48,0.3);';else if(type==='warn')t.style.cssText='background:var(--amberbg);color:var(--amber);border-color:rgba(255,149,0,0.3);';t.textContent=msg;document.body.appendChild(t);setTimeout(function(){if(t.parentNode)t.remove();},2600);}
+/* toast(): better version defined below at line ~7970 */
 
 /* ── KANBAN ── */
 function render(){
@@ -5005,16 +6188,7 @@ function renderList(){
     return '<tr><td><div style="font-weight:700;color:var(--text);font-size:13px;">'+x(t.name)+'</div><div style="font-size:11px;color:var(--text3);">'+x(t.sub||'')+'</div></td><td><span class="tbadge '+bc+'" style="margin:0;">'+bl+'</span></td><td style="color:'+stC[t.status]+';font-weight:700;font-size:12px;">'+stL[t.status]+'</td><td style="font-size:12px;">'+due+'</td><td><div style="display:flex;align-items:center;gap:7px;min-width:90px;"><div style="flex:1;height:4px;background:var(--bg4);border-radius:99px;overflow:hidden;"><div style="width:'+pct+'%;height:100%;background:'+stC[t.status]+';border-radius:99px;"></div></div><span style="font-size:10px;color:var(--text3);font-weight:700;">'+pct+'%</span></div></td><td><button class="dbtn" onclick="del('+t.id+')" style="width:auto;padding:3px 9px;font-size:11px;">Устгах</button></td></tr>';
   }).join('');
 }
-function switchView(type,el){
-  document.querySelectorAll('.vb').forEach(function(b){b.classList.remove('active');});
-  if(el)el.classList.add('active');
-  var views=['kanban-board','list-view','week-view','month-view'];
-  views.forEach(function(v){var e=document.getElementById(v);if(e)e.classList.add('hidden');});
-  if(type==='kanban'){document.getElementById('kanban-board').classList.remove('hidden');}
-  else if(type==='list'){document.getElementById('list-view').classList.remove('hidden');renderList();}
-  else if(type==='week'){document.getElementById('week-view').classList.remove('hidden');renderWeek();}
-  else if(type==='month'){document.getElementById('month-view').classList.remove('hidden');renderMonth();}
-}
+/* switchView defined below */
 function chg(id,ns){
   var t=tasks.find(function(a){return a.id===id;});
   if(t){t.status=ns;saveAll();render();sbTaskUpdate(t).catch(function(){});toast('Статус шинэчлэгдлээ ✓');}
@@ -5263,9 +6437,9 @@ function renderContent(){
           +'</div>':'')
         // Perf
         +perfRow
-        // Action buttons
         +'<div style="display:flex;gap:5px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">'
         +'<button onclick="event.stopPropagation();openScriptView('+c.id+')" style="flex:1;padding:7px 8px;border-radius:9px;border:none;background:var(--text);color:var(--bg2);font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:4px;transition:all .18s;" onmouseenter="this.style.opacity=\'0.85\'" onmouseleave="this.style.opacity=\'1\'"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Script харах</button>'
+        +(c.ig_url?'<a href="'+c.ig_url+'" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="flex:0 0 auto;padding:7px 10px;border-radius:9px;border:1.5px solid var(--border2);background:transparent;color:var(--purple);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;text-decoration:none;display:flex;align-items:center;" title="Эх Reel үзэх">🔗</a>':'')
         +'<button onclick="event.stopPropagation();openRepurpose('+c.id+')" style="flex:0 0 auto;padding:7px 10px;border-radius:9px;border:1.5px solid var(--border2);background:transparent;color:var(--amber);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;" onmouseenter="this.style.background=\'var(--amberbg)\'" onmouseleave="this.style.background=\'transparent\'">♻️</button>'
         +'<button onclick="event.stopPropagation();openCntEdit('+c.id+')" style="flex:0 0 auto;padding:7px 10px;border-radius:9px;border:1.5px solid var(--border2);background:transparent;color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;" onmouseenter="this.style.background=\'var(--bluebg)\'" onmouseleave="this.style.background=\'transparent\'">✏️</button>'
         +'</div>'
@@ -5295,7 +6469,7 @@ function refreshCntBadges(){
 
 function openContentM(){
   cntEditId=null;
-  ['cp-title','cp-hooks','cp-script','cp-orders','cp-revenue','cp-views','cp-dms'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+  ['cp-title','cp-hooks','cp-script','cp-orders','cp-revenue','cp-views','cp-dms','cp-ig-url'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
   document.getElementById('cp-date').value=new Date().toISOString().split('T')[0];
   document.getElementById('cp-type').value='TOFU';
   document.getElementById('cp-platform').value='IG Reel';
@@ -5327,6 +6501,7 @@ function openCntEdit(id){
   var vEl=document.getElementById('cp-views');var dEl=document.getElementById('cp-dms');
   if(oEl)oEl.value=c.orders||'';if(rEl)rEl.value=c.revenue||'';
   if(vEl)vEl.value=c.views||'';if(dEl)dEl.value=c.dms||'';
+  var uEl=document.getElementById('cp-ig-url');if(uEl)uEl.value=c.ig_url||'';
   perfCalc();
   document.getElementById('cnt-save-btn').textContent='Хадгалах';
   document.getElementById('cnt-del-btn').style.display='';
@@ -5370,7 +6545,8 @@ async function saveCntPanel(){
     orders:parseInt((document.getElementById('cp-orders')||{}).value||0)||0,
     revenue:parseFloat((document.getElementById('cp-revenue')||{}).value||0)||0,
     views:parseInt((document.getElementById('cp-views')||{}).value||0)||0,
-    dms:parseInt((document.getElementById('cp-dms')||{}).value||0)||0
+    dms:parseInt((document.getElementById('cp-dms')||{}).value||0)||0,
+    ig_url:(document.getElementById('cp-ig-url')||{}).value||''
   };
   var btn=document.getElementById('cnt-save-btn');
   if(btn){btn.disabled=true;btn.textContent='⏳ Хадгалж байна...';}
@@ -5494,6 +6670,17 @@ function updateUserStats(data){
   // Push live counts to Roadmap + AI context cards
   var rmc=document.getElementById('rm-pro-count');if(rmc)rmc.textContent=proCount||'~15';
   var amc=document.getElementById('ai-ctx-members');if(amc)amc.textContent=proCount+(starterCount?' (+'+starterCount+' starter)':'');
+  // ── Finance auto-sync: Pro plan revenue ──
+  if(proCount>0 && typeof _fin!=='undefined'){
+    var proRevMonthly=Math.round(proCount*49900/3);
+    var proRow=_fin.inc.find(function(r){return r.name==='Pro план'||r.id===1;});
+    if(proRow){proRow.amt=proRevMonthly;}
+    else{_fin.inc.unshift({id:1,name:'Pro план',amt:proRevMonthly});}
+    _saveFin();
+    if(typeof finRender==='function')finRender();
+    var lbl=document.getElementById('fin-pro-lbl');
+    if(lbl){lbl.style.display='block';lbl.innerHTML='<span style="color:var(--blue);font-weight:700;">'+proCount+' Pro гишүүн</span> · ₮'+proRevMonthly.toLocaleString()+'/сар автоматаар тооцогдлоо';}
+  }
 }
 
 function delUser(pw){
@@ -5509,31 +6696,59 @@ function loadRegistrations(){
   container.innerHTML='<div style="text-align:center;color:var(--text3);padding:24px;">⏳ Уншиж байна...</div>';
   var _gu=localStorage.getItem('pd_gas_url');
   if(!_gu||_gu.indexOf('script.google.com')===-1){container.innerHTML='<div style="text-align:center;color:var(--amber);padding:24px;">⚙️ GAS URL тохируулна уу</div>';updatePendingBadge(0);return;}
-  gasFetch(_gu+'?action=listRegistrations')
-    .then(function(r){return r.json();})
-    .then(function(regs){
-      if(!regs||!regs.length){container.innerHTML='<div style="text-align:center;color:var(--text3);padding:24px;">Бүртгэл байхгүй</div>';updatePendingBadge(0);return;}
-      var pending=regs.filter(function(r){return r.status==='PENDING';}).length;
-      updatePendingBadge(pending);
-      container.innerHTML='';
-      regs.forEach(function(r,idx){
-        var isPending=r.status==='PENDING';
+  // Sheets (source of truth) + Registrations хоёрыг зэрэг татна
+  Promise.all([
+    gasFetch(_gu+'?action=list').then(function(r){return r.json();}).catch(function(){return [];}),
+    gasFetch(_gu+'?action=listRegistrations').then(function(r){return r.json();}).catch(function(){return [];})
+  ]).then(function(results){
+    var sheetUsers=results[0]||[];
+    var regs=results[1]||[];
+    // Sheets дээрх дугааруудын map
+    var sheetsPhones={};
+    sheetUsers.forEach(function(u){
+      var ph=String(u.uid||u.phone||u.name||'').replace(/\D/g,'');
+      if(ph) sheetsPhones[ph]=u;
+    });
+    // Pending = registrations дотор байгаа боловч Sheets дээр байхгүй
+    var pendingList=regs.filter(function(r){
+      var ph=String(r.phone||'').replace(/\D/g,'');
+      return ph&&!sheetsPhones[ph];
+    });
+    // Approved = Sheets дээрх бүх хүн (source of truth)
+    var regByPhone={};
+    regs.forEach(function(r){regByPhone[String(r.phone||'').replace(/\D/g,'')]=r;});
+    var approvedList=sheetUsers.map(function(u){
+      var ph=String(u.uid||u.phone||u.name||'').replace(/\D/g,'');
+      var reg=regByPhone[ph]||{};
+      return {phone:ph,pw:u.pw||reg.pw||'—',plan:u.plan||reg.plan||'pro',date:reg.date||(u.registered?String(u.registered):'—'),status:'APPROVED'};
+    });
+    updatePendingBadge(pendingList.length);
+    if(!pendingList.length&&!approvedList.length){
+      container.innerHTML='<div style="text-align:center;color:var(--text3);padding:24px;">Бүртгэл байхгүй</div>';
+      return;
+    }
+    container.innerHTML='';
+    // ── PENDING хэсэг дээр ──
+    if(pendingList.length){
+      var ph=document.createElement('div');
+      ph.style.cssText='font-size:11px;font-weight:800;color:var(--amber);letter-spacing:.06em;padding:6px 4px 8px;';
+      ph.textContent='⏳ ХҮЛЭЭГДЭЖ БУЙ — '+pendingList.length;
+      container.appendChild(ph);
+      pendingList.forEach(function(r,idx){
         var planCls=r.plan==='pro'?'tag-pro':r.plan==='business'?'tag-business':'tag-lite';
         var card=document.createElement('div');card.className='reg-card';
-        var topHtml='<div class="reg-card-top">'
+        card.style.cssText='border:1.5px solid rgba(255,149,0,0.35);background:rgba(255,149,0,0.05);';
+        card.innerHTML='<div class="reg-card-top">'
           +'<span class="reg-card-phone">'+x(r.phone)+'</span>'
           +'<span class="tag-pill '+planCls+'">'+(r.plan||'pro').toUpperCase()+'</span>'
-          +(isPending?'<span class="tag-pill tag-pending">⏳</span>':'<span class="tag-pill tag-ok">✓</span>')
+          +'<span class="tag-pill tag-pending">⏳ Pending</span>'
           +'</div>'
           +'<div class="reg-card-meta">🔑 '+x(r.pw)+'&nbsp;&nbsp;·&nbsp;&nbsp;'+x(r.date||'—')+'</div>';
-        card.innerHTML=topHtml;
         var actDiv=document.createElement('div');actDiv.className='reg-card-actions';
-        if(isPending){
-          var bA=document.createElement('button');bA.className='btn-approve';bA.textContent='✓ Зөвшөөрөх';
-          bA.dataset.phone=r.phone;bA.dataset.pw=r.pw;bA.dataset.plan=r.plan||'pro';bA.dataset.idx=idx;
-          bA.addEventListener('click',function(){approveReg(this.dataset.phone,this.dataset.pw,this.dataset.plan,this.dataset.idx);});
-          actDiv.appendChild(bA);
-        }
+        var bA=document.createElement('button');bA.className='btn-approve';bA.textContent='✓ Зөвшөөрөх';
+        bA.dataset.phone=r.phone;bA.dataset.pw=r.pw;bA.dataset.plan=r.plan||'pro';bA.dataset.idx=idx;
+        bA.addEventListener('click',function(){approveReg(this.dataset.phone,this.dataset.pw,this.dataset.plan,this.dataset.idx);});
+        actDiv.appendChild(bA);
         var bR=document.createElement('button');bR.className='btn-reject';bR.textContent='✕ Устгах';
         bR.style.cssText='flex:0;padding:8px 14px;font-size:12px;background:var(--redbg);color:var(--red);border:1px solid rgba(255,59,48,0.25);border-radius:8px;cursor:pointer;font-family:inherit;font-weight:700;transition:all .15s;';
         bR.dataset.phone=r.phone;bR.dataset.idx=idx;
@@ -5542,8 +6757,37 @@ function loadRegistrations(){
         card.appendChild(actDiv);
         container.appendChild(card);
       });
-    })
-    .catch(function(){container.innerHTML='<div style="text-align:center;color:var(--red);padding:24px;">⚠ GAS холбогдсонгүй</div>';});
+      var sep=document.createElement('div');
+      sep.style.cssText='font-size:11px;font-weight:800;color:var(--text3);letter-spacing:.06em;padding:12px 4px 8px;border-top:1px solid var(--border);margin-top:4px;';
+      sep.textContent='✓ SHEETS — '+approvedList.length+' хэрэглэгч';
+      container.appendChild(sep);
+    }
+    // ── APPROVED (Sheets-ээс) ──
+    approvedList.forEach(function(r,idx){
+      var planCls=r.plan==='pro'?'tag-pro':r.plan==='business'?'tag-business':'tag-lite';
+      var card=document.createElement('div');card.className='reg-card';
+      card.innerHTML='<div class="reg-card-top">'
+        +'<span class="reg-card-phone">'+x(r.phone)+'</span>'
+        +'<span class="tag-pill '+planCls+'">'+(r.plan||'pro').toUpperCase()+'</span>'
+        +'<span class="tag-pill tag-ok">✓</span>'
+        +'</div>'
+        +'<div class="reg-card-meta">🔑 '+x(r.pw)+'&nbsp;&nbsp;·&nbsp;&nbsp;'+x(r.date||'—')+'</div>';
+      var actDiv=document.createElement('div');actDiv.className='reg-card-actions';
+      var bR=document.createElement('button');bR.className='btn-reject';bR.textContent='✕ Устгах';
+      bR.style.cssText='flex:0;padding:8px 14px;font-size:12px;background:var(--redbg);color:var(--red);border:1px solid rgba(255,59,48,0.25);border-radius:8px;cursor:pointer;font-family:inherit;font-weight:700;transition:all .15s;';
+      bR.dataset.phone=r.phone;bR.dataset.pw=r.pw;
+      bR.addEventListener('click',function(){
+        if(!confirm(this.dataset.phone+' хэрэглэгчийг Sheets-ээс устгах уу?'))return;
+        delUser(this.dataset.pw);
+      });
+      actDiv.appendChild(bR);
+      card.appendChild(actDiv);
+      container.appendChild(card);
+    });
+  }).catch(function(){
+    container.innerHTML='<div style="text-align:center;color:var(--red);padding:24px;">⚠ GAS холбогдсонгүй</div>';
+    updatePendingBadge(0);
+  });
 }
 
 function updatePendingBadge(count){
@@ -5881,7 +7125,38 @@ function copyPW(){
 }
 
 /* ── SETTINGS ── */
-function doSettings(){var cur=localStorage.getItem('pd4_nm')||'Ганбаар Цэвэгмид';var n=prompt('Таны нэр:',cur);if(n!==null&&n.trim()){localStorage.setItem('pd4_nm',n.trim());setUser(n.trim());setGreet(n.trim());toast('Нэр хадгалагдлаа ✓');}}
+function doSettings(){openGlobalSettings();}
+function openGlobalSettings(){
+  var modal=document.getElementById('global-settings-modal');
+  if(!modal)return;
+  document.getElementById('gs-name').value=localStorage.getItem('pd4_nm')||'Ганбаяр Цэвэгмид';
+  document.getElementById('gs-rapid').value=localStorage.getItem('rp_rapidKey')||'';
+  document.getElementById('gs-oai').value=localStorage.getItem('rp_oaiKey')||'';
+  document.getElementById('gs-server').value=localStorage.getItem('rp_serverUrl')||'http://localhost:3000';
+  document.getElementById('gs-claude').value=localStorage.getItem('pd_ak')||'';
+  modal.style.display='flex';
+}
+function closeGlobalSettings(){document.getElementById('global-settings-modal').style.display='none';}
+function saveGlobalSettings(){
+  var name=document.getElementById('gs-name').value.trim();
+  var rapid=document.getElementById('gs-rapid').value.trim();
+  var oai=document.getElementById('gs-oai').value.trim();
+  var server=document.getElementById('gs-server').value.trim()||'http://localhost:3000';
+  var claude=document.getElementById('gs-claude').value.trim();
+  if(name){localStorage.setItem('pd4_nm',name);if(typeof setUser==='function')setUser(name);if(typeof setGreet==='function')setGreet(name);}
+  if(rapid){localStorage.setItem('rp_rapidKey',rapid);}
+  if(oai){localStorage.setItem('rp_oaiKey',oai);}
+  localStorage.setItem('rp_serverUrl',server);
+  if(claude){localStorage.setItem('pd_ak',claude);}
+  /* sync hidden pipeline inputs */
+  var rr=document.getElementById('rs-rapid-key');if(rr)rr.value=rapid;
+  var ro=document.getElementById('rs-oai-key');if(ro)ro.value=oai;
+  var rs=document.getElementById('rs-server-url');if(rs)rs.value=server;
+  if(typeof rsCheckKeys==='function')rsCheckKeys();
+  var banner=document.getElementById('rs-key-banner');if(banner)banner.style.display=(rapid&&oai)?'none':'flex';
+  closeGlobalSettings();
+  toast('Тохиргоо хадгалагдлаа ✓','ok');
+}
 function setUser(name){var av=document.getElementById('u-av');if(av)av.textContent=name.charAt(0).toUpperCase();}
 function setGreet(name){
   var h=new Date().getHours();var g=h<5?'Шөнийн мэнд':h<12?'Өглөөний мэнд':h<18?'Өдрийн мэнд':'Оройн мэнд';
@@ -6077,7 +7352,7 @@ updatePendingBadge=function(count){
 };
 
 /* Auto-poll every 45s for new registrations — pause when tab is hidden */
-setInterval(function(){if(!document.hidden)loadRegistrations();},45000);
+setInterval(function(){if(!document.hidden&&document.getElementById('page-admin')&&document.getElementById('page-admin').classList.contains('active'))loadRegistrations();},45000);
 
 /* Init notifications */
 renderNotifBadge();
@@ -6676,9 +7951,10 @@ window.stNext=function(){
 };
 
 /* ── POMODORO ── */
+var _pmCfgSaved=fpSbGetObj('fp_pm_cfg',{focus:25,short:5,long:15});
 var PM={
-  cfg:{focus:25,short:5,long:15},
-  mode:'focus', total:25*60, left:25*60,
+  cfg:{focus:_pmCfgSaved.focus||25,short:_pmCfgSaved.short||5,long:_pmCfgSaved.long||15},
+  mode:'focus', total:(_pmCfgSaved.focus||25)*60, left:(_pmCfgSaved.focus||25)*60,
   running:false, timer:null, cycle:0,
   stats:fpSbGetObj('fp_pomo',{today:0,week:0,all:0,date:'',wk:''})
 };
@@ -6697,6 +7973,7 @@ window.pmApplyCfg=function(){
   PM.cfg.short=Math.max(1,Math.min(30,parseInt(document.getElementById('cfg-short').value)||5));
   PM.cfg.long=Math.max(1,Math.min(60,parseInt(document.getElementById('cfg-long').value)||15));
   PM.total=PM.cfg[PM.mode]*60; PM.left=PM.total;
+  fpSbSet('fp_pm_cfg',PM.cfg);
   _pmDraw(); _pmRing();
   var lbl=document.getElementById('pm-lbl'); if(lbl) lbl.textContent='Бэлэн';
 };
@@ -7039,6 +8316,9 @@ function _fpStatCards(){
 
 /* ── MAIN REFRESH ── */
 window.fpRefresh=function(){
+  // Restore PM config inputs from saved values
+  var cfi=document.getElementById('cfg-focus'),csi=document.getElementById('cfg-short'),cli=document.getElementById('cfg-long');
+  if(cfi) cfi.value=PM.cfg.focus; if(csi) csi.value=PM.cfg.short; if(cli) cli.value=PM.cfg.long;
   _fpSub(); _stShow(); _pmDraw(); _pmRing(); _pmDots(); _pmStatCards();
   _t3Render(); _hRender(); _dwRender(); _eRender(); _wpRender(); _fpStatCards();
 };
@@ -7048,6 +8328,8 @@ window.fpRefresh=function(){
 fpSbPull(function(){
   // Re-load data after Supabase pull
   PM.stats=fpSbGetObj('fp_pomo',{today:0,week:0,all:0,date:'',wk:''});
+  var cfgPulled=fpSbGetObj('fp_pm_cfg',null);
+  if(cfgPulled){PM.cfg.focus=cfgPulled.focus||PM.cfg.focus;PM.cfg.short=cfgPulled.short||PM.cfg.short;PM.cfg.long=cfgPulled.long||PM.cfg.long;PM.total=PM.cfg[PM.mode]*60;PM.left=PM.total;}
   _habits=fpSbGetObj('fp_habits',_habits);
   _dw=fpSbGetObj(_dwKey,[]);
   _eWeek=fpSbGetObj('fp_eweek',[]);
@@ -7917,8 +9199,8 @@ function finChangeAmt(type,id,val){
   _saveFin(); finCalc();
 }
 function finCalc(){
-  var sal=parseFloat(document.getElementById('fin-salary').value)||_fin.salary;
-  _fin.salary=sal;
+  var sal=parseFloat(document.getElementById('fin-salary').value)||_fin.salary||800000;
+  _fin.salary=sal; _saveFin();
   var totalInc=_fin.inc.reduce(function(s,r){return s+r.amt;},0);
   var totalExp=_fin.exp.reduce(function(s,r){return s+r.amt;},0);
   var net=totalInc-totalExp;
@@ -12090,15 +13372,6 @@ async function wqGenAI(idx) {
 // ── Хуудас хаахын өмнө автоматаар хадгалах ──
 window.addEventListener('beforeunload', function(){ try{ wqAutoSave(); }catch(e){} });
 
-// API key auto-load from localStorage
-(function(){
-  var saved = localStorage.getItem('pd_ak');
-  if (saved) {
-    var el = document.getElementById('ai-api-key');
-    if (el) el.value = saved;
-  }
-})();
-
 // ══════════════════════════════════════════════
 // 🤖 AI AVATAR SCRIPT GENERATOR
 // ══════════════════════════════════════════════
@@ -14827,6 +16100,45 @@ document.addEventListener('click',function(e){
 })();
 
 </script>
+<!-- ══ GLOBAL SETTINGS MODAL ══ -->
+<div id="global-settings-modal" onclick="if(event.target===this)closeGlobalSettings()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(5px);z-index:9300;align-items:flex-end;justify-content:center;">
+  <div style="width:100%;max-width:520px;background:var(--bg2);border-radius:22px 22px 0 0;display:flex;flex-direction:column;box-shadow:0 -8px 40px rgba(0,0,0,.25);animation:aup .22s cubic-bezier(.25,.46,.45,.94);">
+    <div style="padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;">
+      <span style="font-size:18px;">⚙️</span>
+      <div style="flex:1;"><div style="font-size:15px;font-weight:800;color:var(--text);">Тохиргоо</div><div style="font-size:11px;color:var(--text3);">localStorage-д хадгалагдана</div></div>
+      <button onclick="closeGlobalSettings()" style="width:30px;height:30px;border-radius:8px;border:1px solid var(--border2);background:var(--bg4);color:var(--text3);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+    <div style="padding:16px 20px;overflow-y:auto;max-height:70vh;display:flex;flex-direction:column;gap:14px;">
+      <!-- Name -->
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:6px;">👤 Нэр</div>
+        <input id="gs-name" class="cnt-fi" placeholder="Таны нэр..." style="margin-bottom:0;">
+      </div>
+      <!-- Divider -->
+      <div style="border-top:1px solid var(--border);padding-top:14px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--amber);margin-bottom:10px;">🔑 Reel → Script Pipeline (OpenAI · RapidAPI)</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;">▶ Reel → Монгол Script хэсэгт ашиглагдана</div>
+        <label style="font-size:11px;font-weight:700;color:var(--text2);display:block;margin-bottom:4px;">RapidAPI Key</label>
+        <input id="gs-rapid" type="password" class="cnt-fi" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" autocomplete="off" style="margin-bottom:10px;font-family:'DM Mono',monospace;font-size:12px;">
+        <label style="font-size:11px;font-weight:700;color:var(--text2);display:block;margin-bottom:4px;">OpenAI Key</label>
+        <input id="gs-oai" type="password" class="cnt-fi" placeholder="sk-proj-..." autocomplete="off" style="margin-bottom:10px;font-family:'DM Mono',monospace;font-size:12px;">
+        <label style="font-size:11px;font-weight:700;color:var(--text2);display:block;margin-bottom:4px;">Server URL</label>
+        <input id="gs-server" type="text" class="cnt-fi" placeholder="http://localhost:3000" style="margin-bottom:0;font-family:'DM Mono',monospace;font-size:12px;">
+      </div>
+      <!-- Claude API -->
+      <div style="border-top:1px solid var(--border);padding-top:14px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--purple);margin-bottom:10px;">🤖 Claude API Key (Контент Pipeline AI)</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;">Контент Pipeline · AI Avatar Script Generator хэсэгт ашиглагдана</div>
+        <input id="gs-claude" type="password" class="cnt-fi" placeholder="sk-ant-api03-..." autocomplete="off" style="margin-bottom:0;font-family:'DM Mono',monospace;font-size:12px;">
+      </div>
+    </div>
+    <div style="padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:10px;">
+      <button onclick="closeGlobalSettings()" style="flex:1;padding:11px;border-radius:11px;border:1.5px solid var(--border2);background:transparent;color:var(--text2);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">Болих</button>
+      <button onclick="saveGlobalSettings()" style="flex:2;padding:11px;border-radius:11px;border:none;background:var(--gold);color:#fff;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;">✓ Хадгалах</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══ SAVED IDEAS MODAL ══ -->
 <div id="saved-ideas-overlay" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(5px);z-index:9200;align-items:flex-end;justify-content:center;">
   <div style="width:100%;max-width:600px;max-height:85vh;background:var(--bg2);border-radius:22px 22px 0 0;display:flex;flex-direction:column;box-shadow:0 -8px 40px rgba(0,0,0,.25);animation:aup .22s cubic-bezier(.25,.46,.45,.94);">
