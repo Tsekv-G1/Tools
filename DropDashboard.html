@@ -1781,6 +1781,215 @@ button:focus-visible,
 }
 
 </style>
+
+<!-- ══════════════════════════════════════════════════════════
+     📱 MOBILE POLISH — COMPREHENSIVE FIX (added layer)
+══════════════════════════════════════════════════════════ -->
+<style>
+/* ── 1. iOS auto-zoom бүрэн засах — БҮГД 768px-д 16px ── */
+@media(max-width:768px){
+  input,select,textarea,
+  .fi2,.fi3,.cnt-fi,.cnt-ta,.ssel,
+  .ai-av-select,.ai-av-textarea,
+  .opc-fi,.opc-cdw-input,.dpt-inp,
+  .dw-inp,.dw-sel,.h-add-inp,.pm-cfg-inp,
+  .fin-inp,.t3-ta,
+  input[type="text"],input[type="number"],
+  input[type="password"],input[type="email"],
+  input[type="date"],input[type="time"]{
+    font-size:16px!important;
+  }
+  textarea{resize:none!important;}
+}
+
+/* ── 2. Touch target бүх товч 44px ── */
+@media(max-width:768px){
+  .btn-add,.btn-green,.bsave,.cnt-bsave,
+  .pf-btn,.vb,.mass-seg-btn,
+  .cal-nav-btn,.cal-today-btn{
+    min-height:44px;
+  }
+  .mbn-item{
+    min-height:52px;
+    padding:10px 4px 8px;
+  }
+  .tb-rp-btn{
+    width:38px!important;height:38px!important;
+  }
+  .mob-menu-btn{
+    width:40px!important;height:40px!important;
+  }
+  /* Stat card icon дотор SVG хөнгөн */
+  .sc-icon{min-width:28px;min-height:28px;}
+}
+
+/* ── 3. Vbar — утасны дэлгэцэнд wrap+scroll ── */
+@media(max-width:768px){
+  .vbar{
+    display:flex;flex-wrap:nowrap;
+    overflow-x:auto;-webkit-overflow-scrolling:touch;
+    gap:6px;padding:6px 0;
+    scrollbar-width:none;
+  }
+  .vbar::-webkit-scrollbar{display:none;}
+  .vg{flex-shrink:0;}
+  .vsp{display:none;}
+  .vbar .btn-add{flex-shrink:0;margin-left:auto;}
+}
+
+/* ── 4. Table overflow — horizontal scroll ── */
+@media(max-width:768px){
+  .list-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--r);}
+  .pipe-table{min-width:520px;}
+  /* Week calendar */
+  .week-cal{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .week-grid{min-width:480px;}
+}
+
+/* ── 5. Content padding-bottom — нэгдмэл ── */
+@media(max-width:768px){
+  .content{
+    padding:14px 14px calc(72px + env(safe-area-inset-bottom,0px)) 14px!important;
+  }
+}
+@media(max-width:480px){
+  .content{
+    padding:10px 10px calc(76px + env(safe-area-inset-bottom,0px)) 10px!important;
+  }
+}
+@media(max-width:375px){
+  .content{
+    padding:8px 8px calc(76px + env(safe-area-inset-bottom,0px)) 8px!important;
+  }
+}
+
+/* ── 6. Bottom nav — тогтмол, аюулгүй ── */
+.mob-bottom-nav{
+  padding-bottom:max(env(safe-area-inset-bottom,0px),4px);
+}
+
+/* ── 7. Stat cards — утасны дэлгэцэнд compact ── */
+@media(max-width:480px){
+  .scard{padding:11px 10px;}
+  .sc-label{font-size:10px!important;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .sc-sub{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .sc-val{font-size:20px!important;letter-spacing:-0.5px;}
+  .sc-icon{width:26px!important;height:26px!important;border-radius:8px;}
+}
+
+/* ── 8. Drop grid — 1 col on very small ── */
+@media(max-width:390px){
+  .drop-grid{grid-template-columns:1fr!important;}
+}
+
+/* ── 9. Notif dropdown — гар дэлгэц рүү хамаарах ── */
+@media(max-width:768px){
+  .notif-dropdown{
+    position:fixed!important;
+    top:58px!important;
+    left:8px!important;right:8px!important;
+    width:auto!important;
+    max-height:75dvh!important;
+    overflow-y:auto!important;
+    border-radius:18px!important;
+  }
+}
+
+/* ── 10. Modal — full-sheet ── */
+@media(max-width:768px){
+  .mbox,.mcard,.ci-box{
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    border-radius:22px 22px 0 0!important;
+    max-height:92dvh!important;
+    overflow-y:auto!important;
+  }
+  .modal-wrap{
+    align-items:flex-end!important;
+  }
+}
+
+/* ── 11. Kanban card — overflow засах ── */
+@media(max-width:768px){
+  .tc{
+    word-break:break-word;
+    overflow-wrap:break-word;
+  }
+  .tname,.tsub,.tc-stages{
+    overflow-wrap:break-word;
+    word-break:break-word;
+  }
+}
+
+/* ── 12. Brand nav pill — утасны дэлгэцэнд бичил ── */
+@media(max-width:768px){
+  .brand-nav-pill{
+    max-width:none;
+    min-width:0;
+  }
+  .topbar{
+    gap:4px;
+  }
+}
+
+/* ── 13. OPC settings form — 1 column on small ── */
+@media(max-width:390px){
+  .opc-settings-grid{grid-template-columns:1fr!important;}
+  .opc-fi{padding:8px 10px;}
+}
+
+/* ── 14. Focus zone / pomodoro ring — утасны дэлгэцэнд ── */
+@media(max-width:480px){
+  .fp-stats{grid-template-columns:repeat(2,1fr)!important;}
+  .pm-ring-wrap{width:130px!important;height:130px!important;}
+  .pm-time{font-size:28px!important;}
+}
+
+/* ── 15. Horizontal overflow бүрэн хориглох ── */
+@media(max-width:768px){
+  .page{
+    max-width:100%;
+    overflow-x:hidden;
+  }
+  body{overflow-x:hidden;}
+  .app-wrap{overflow-x:hidden;}
+}
+
+/* ── 16. Mob sidebar — safe area тооцсон padding ── */
+.mob-sidebar{
+  padding-top:max(env(safe-area-inset-top,0px),0px);
+}
+
+/* ── 17. fgrid (quick access) — 2 col тогтмол ── */
+@media(max-width:480px){
+  .fgrid{grid-template-columns:repeat(2,1fr)!important;}
+  .fc-s{max-width:none;}
+}
+
+/* ── 18. Finance input — утасны дэлгэцэнд дэлгэрэнгүй ── */
+@media(max-width:480px){
+  .fin-inp{width:85px!important;}
+}
+
+/* ── 19. Scroll snap for kanban on mobile ── */
+@media(max-width:768px){
+  #kanban-board{
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+  }
+}
+
+/* ── 20. Button active states — тодорхой feedback ── */
+@media(max-width:768px){
+  .btn-add:active,.btn-green:active,.bsave:active,.cnt-bsave:active,
+  .mbn-item:active,.mob-nav-item:active{
+    opacity:0.75;
+    transform:scale(0.97);
+    transition:transform 0.08s,opacity 0.08s;
+  }
+}
+</style>
 </head>
 <body>
 <div class="desktop-window">
@@ -1814,6 +2023,21 @@ button:focus-visible,
   <div class="mob-nav-item" onclick="mobNav('roadmap')"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Төлөвлөгөө</div>
   <div class="mob-nav-item" onclick="mobNav('ai')" style="border:1px solid rgba(175,82,222,.25);background:var(--purplebg,#f5f0ff)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>🤖 AI Зөвлөгч</div>
   <div class="mob-nav-item" onclick="mobNav('reel-script')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><polygon points="10,8 16,11 10,14" fill="currentColor" stroke="none"/></svg>Reel Script</div>
+
+  <!-- Mobile theme toggle -->
+  <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin-bottom:8px;padding:0 4px;">Горим</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+      <button id="mob-btn-sun" onclick="setSidebarTheme('light');closeMobSidebar();" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:10px;border-radius:12px;border:1.5px solid var(--border2);background:var(--bg4);color:var(--text2);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;">
+        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke-linecap="round"/></svg>
+        Цайвар
+      </button>
+      <button id="mob-btn-moon" onclick="setSidebarTheme('dark');closeMobSidebar();" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:10px;border-radius:12px;border:1.5px solid var(--border2);background:var(--bg4);color:var(--text2);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;">
+        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        Харанхуй
+      </button>
+    </div>
+  </div>
 </div></div>
 
 <!-- ══ SIDEBAR STRIP — 3 тусдаа floating pill ══ -->
@@ -1918,7 +2142,7 @@ button:focus-visible,
     <div class="tb-gap"></div>
     <!-- Revenue -->
     <div class="rev-chip" id="total-rev-chip">₮0</div>
-    <!-- RIGHT PILL: search + bell + avatar + chevron -->
+    <!-- RIGHT PILL: search + bell + kbd-hint + avatar + chevron -->
     <div class="tb-right-pill">
       <button class="tb-rp-btn" onclick="if(typeof openCmd==='function')openCmd()" title="Хайх — ⌘K">
         <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -1934,6 +2158,10 @@ button:focus-visible,
           <div class="nd-footer"><div class="nd-viewall" onclick="viewAllNotifs()">Бүгдийг харах &nbsp;→</div></div>
         </div>
       </div>
+      <!-- Keyboard hint — desktop only -->
+      <button class="tb-rp-btn" id="kbd-hint-btn" onclick="var ko=document.getElementById('kbd-overlay');if(ko)ko.style.display=ko.style.display==='none'?'flex':'none';" title="Гарын товч — ⌘/" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="6" width="20" height="12" rx="3"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M8 14h8"/></svg>
+      </button>
       <div class="tb-rp-avatar" id="u-av" onclick="doSettings()" title="Профайл">Ц</div>
       <button class="tb-rp-chevron" onclick="doSettings()">
         <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
@@ -6065,7 +6293,10 @@ function saveAll(){
 
 /* ── NAVIGATION ── */
 var PAGES=['kanban','content','analytics','users','admin','focus','finance','checkin','roadmap','ai','reel-script'];
-var PAGE_IDX={kanban:0,content:1,analytics:2,users:3,admin:4,focus:5,finance:6,checkin:7,roadmap:8,ai:9,'reel-script':10};
+/* PAGE_IDX maps page name → .ni index AND .ttab index
+   checkin has no sidebar ni / topbar tab → omitted
+   reel-script has ni[9] but no ttab → tabs[9] is undefined (safe) */
+var PAGE_IDX={kanban:0,content:1,analytics:2,users:3,admin:4,focus:5,finance:6,roadmap:7,ai:8,'reel-script':9};
 function showPage(name,sidebarEl){
   PAGES.forEach(function(p){document.getElementById('page-'+p).classList.remove('active');});
   document.getElementById('page-'+name).classList.add('active');
@@ -7185,9 +7416,22 @@ function setSidebarTheme(mode){
 }
 function _syncThemeIcons(){
   var isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  // Desktop sidebar buttons
   var s=document.getElementById('btn-sun'),m=document.getElementById('btn-moon');
   if(s)s.classList.toggle('active',!isDark);
   if(m)m.classList.toggle('active',isDark);
+  // Mobile sidebar buttons
+  var ms=document.getElementById('mob-btn-sun'),mm=document.getElementById('mob-btn-moon');
+  if(ms){
+    ms.style.background=!isDark?'var(--gold)':'var(--bg4)';
+    ms.style.color=!isDark?'#fff':'var(--text2)';
+    ms.style.borderColor=!isDark?'var(--gold)':'var(--border2)';
+  }
+  if(mm){
+    mm.style.background=isDark?'var(--bg3)':'var(--bg4)';
+    mm.style.color=isDark?'var(--text)':'var(--text2)';
+    mm.style.borderColor=isDark?'var(--border2)':'var(--border2)';
+  }
 }
 function toggleTheme(){
   var isDark=document.documentElement.getAttribute('data-theme')==='dark';
@@ -7195,7 +7439,7 @@ function toggleTheme(){
 }
 (function(){
   var t=localStorage.getItem('pd_theme')||'light';
-  document.documentElement.setAttribute('data-theme',t);
+  document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'');
   var mc=document.getElementById('meta-theme-color');
   if(mc)mc.setAttribute('content',t==='dark'?'#0A0A0E':'#ffffff');
   setTimeout(_syncThemeIcons,0);
@@ -8405,7 +8649,7 @@ function closeMobSidebar(){
 function mobNav(page){
   closeMobSidebar();
   showPage(page,null);
-  var pageOrder=['kanban','content','analytics','users','admin','focus','finance','checkin','roadmap','ai'];
+  var pageOrder=['kanban','content','analytics','users','admin','focus','finance','roadmap','ai','reel-script'];
   document.querySelectorAll('.mob-nav-item').forEach(function(el,i){
     el.classList.toggle('active', pageOrder[i]===page);
   });
@@ -8416,10 +8660,8 @@ function mobNav(page){
 function mbnNav(page){
   showPage(page,null);
   mbnSync(page);
-  // Haptic feedback
   if(navigator.vibrate) navigator.vibrate(8);
-  // sync mob-sidebar items
-  var pageOrder=['kanban','content','analytics','users','admin','focus','finance','checkin','roadmap','ai'];
+  var pageOrder=['kanban','content','analytics','users','admin','focus','finance','roadmap','ai','reel-script'];
   document.querySelectorAll('.mob-nav-item').forEach(function(el,i){
     el.classList.toggle('active', pageOrder[i]===page);
   });
@@ -8468,7 +8710,7 @@ document.addEventListener('keydown',function(e){
     if(typeof cntPanelOpen!=='undefined'&&cntPanelOpen) saveCntPanel();
     return;
   }
-  // New shortcuts
+  // Shortcuts
   if(mod){
     switch(e.key){
       case 'n': case 'N':
@@ -8482,22 +8724,29 @@ document.addEventListener('keydown',function(e){
       case '/':
         e.preventDefault();
         var ko=document.getElementById('kbd-overlay');
-        ko.style.display=ko.style.display==='none'?'block':'none';
+        if(ko) ko.style.display=ko.style.display==='none'?'flex':'none';
         break;
-      case '1': e.preventDefault(); _kbNav('kanban'); break;
-      case '3': e.preventDefault(); _kbNav('content'); break;
-      case '4': e.preventDefault(); _kbNav('analytics'); break;
-      case '5': e.preventDefault(); _kbNav('users'); break;
-      case '6': e.preventDefault(); _kbNav('admin'); break;
-      case '7': e.preventDefault(); _kbNav('focus'); break;
+      case '1': e.preventDefault(); _kbNav('kanban');    break;
+      case '2': e.preventDefault(); _kbNav('content');   break;
+      case '3': e.preventDefault(); _kbNav('analytics'); break;
+      case '4': e.preventDefault(); _kbNav('users');     break;
+      case '5': e.preventDefault(); _kbNav('admin');     break;
+      case '6': e.preventDefault(); _kbNav('focus');     break;
+      case '7': e.preventDefault(); _kbNav('finance');   break;
+      case '8': e.preventDefault(); _kbNav('roadmap');   break;
+      case '9': e.preventDefault(); _kbNav('ai');        break;
     }
   }
 });
+var _kbNavLabels={
+  kanban:'Ерөнхий',content:'Контент',analytics:'Аналитик',
+  users:'Хэрэглэгчид',admin:'Admin',focus:'Focus Zone',
+  finance:'Finance',roadmap:'Төлөвлөгөө',ai:'AI Зөвлөгч',
+  'reel-script':'Reel Script'
+};
 function _kbNav(page){
-  var tabs=document.querySelectorAll('.ttab');
-  var idx={kanban:0,content:1,analytics:2,users:3,admin:4,focus:5};
   showPage(page,null);
-  toast('→ '+(page==='kanban'?'Ерөнхий':page==='focus'?'Focus Zone':page.charAt(0).toUpperCase()+page.slice(1)));
+  toast('→ '+(_kbNavLabels[page]||page));
 }
 
 /* ── RIGHT-CLICK CONTEXT MENU ── */
@@ -10084,43 +10333,77 @@ function exportCSV(type){
 </div>
 
 <!-- Keyboard shortcut hint overlay -->
-<div id="kbd-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:99996;backdrop-filter:blur(4px);animation:fadeIn .2s ease;" onclick="this.style.display='none'">
-  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:24px 28px;min-width:320px;box-shadow:var(--shadow-lg);">
-    <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:16px;">Гарын товчнууд</div>
-    <div style="display:flex;flex-direction:column;gap:10px;">
+<div id="kbd-overlay" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:99996;backdrop-filter:blur(4px);animation:fadeIn .2s ease;align-items:center;justify-content:center;">
+  <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:22px 26px;width:min(440px,calc(100vw - 32px));box-shadow:var(--shadow-lg);max-height:90dvh;overflow-y:auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div style="font-size:15px;font-weight:800;color:var(--text);">⌨️ Гарын товчнууд</div>
+      <button onclick="document.getElementById('kbd-overlay').style.display='none'" style="width:28px;height:28px;border-radius:8px;border:1px solid var(--border2);background:var(--bg4);color:var(--text3);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+    <!-- Section: Actions -->
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin-bottom:8px;">Үйлдлүүд</div>
+    <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:16px;">
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <span style="font-size:12px;color:var(--text2);">Шинэ даалгавар нэмэх</span>
         <div style="display:flex;gap:4px;"><span class="kbd">⌘</span><span class="kbd">N</span></div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:12px;color:var(--text2);">Хайх</span>
+        <span style="font-size:12px;color:var(--text2);">Хайх / Command Palette</span>
         <div style="display:flex;gap:4px;"><span class="kbd">⌘</span><span class="kbd">K</span></div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:12px;color:var(--text2);">Ерөнхий хуудас</span>
-        <div style="display:flex;gap:4px;"><span class="kbd">⌘</span><span class="kbd">1</span></div>
+        <span style="font-size:12px;color:var(--text2);">Хадгалах (modal дотор)</span>
+        <div style="display:flex;gap:4px;"><span class="kbd">⌘</span><span class="kbd">↵</span></div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:12px;color:var(--text2);">Drops</span>
-        <div style="display:flex;gap:4px;"><span class="kbd">⌘</span><span class="kbd">2</span></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:12px;color:var(--text2);">Контент</span>
-        <div style="display:flex;gap:4px;"><span class="kbd">⌘</span><span class="kbd">3</span></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:12px;color:var(--text2);">Focus Zone</span>
-        <div style="display:flex;gap:4px;"><span class="kbd">⌘</span><span class="kbd">7</span></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:12px;color:var(--text2);">Гарын товч харах</span>
+        <span style="font-size:12px;color:var(--text2);">Товч харах / хаах</span>
         <div style="display:flex;gap:4px;"><span class="kbd">⌘</span><span class="kbd">/</span></div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:12px;color:var(--text2);">Хаах</span>
+        <span style="font-size:12px;color:var(--text2);">Хаах / цуцлах</span>
         <span class="kbd">Esc</span>
       </div>
     </div>
+    <!-- Section: Navigation -->
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin-bottom:8px;">Хуудас шилжих</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+        <span style="font-size:12px;color:var(--text2);">Ерөнхий</span>
+        <div style="display:flex;gap:4px;flex-shrink:0;"><span class="kbd">⌘</span><span class="kbd">1</span></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+        <span style="font-size:12px;color:var(--text2);">Контент</span>
+        <div style="display:flex;gap:4px;flex-shrink:0;"><span class="kbd">⌘</span><span class="kbd">2</span></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+        <span style="font-size:12px;color:var(--text2);">Аналитик</span>
+        <div style="display:flex;gap:4px;flex-shrink:0;"><span class="kbd">⌘</span><span class="kbd">3</span></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+        <span style="font-size:12px;color:var(--text2);">Хэрэглэгчид</span>
+        <div style="display:flex;gap:4px;flex-shrink:0;"><span class="kbd">⌘</span><span class="kbd">4</span></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+        <span style="font-size:12px;color:var(--text2);">Admin</span>
+        <div style="display:flex;gap:4px;flex-shrink:0;"><span class="kbd">⌘</span><span class="kbd">5</span></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+        <span style="font-size:12px;color:var(--text2);">Focus Zone</span>
+        <div style="display:flex;gap:4px;flex-shrink:0;"><span class="kbd">⌘</span><span class="kbd">6</span></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+        <span style="font-size:12px;color:var(--text2);">Finance</span>
+        <div style="display:flex;gap:4px;flex-shrink:0;"><span class="kbd">⌘</span><span class="kbd">7</span></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+        <span style="font-size:12px;color:var(--text2);">Төлөвлөгөө</span>
+        <div style="display:flex;gap:4px;flex-shrink:0;"><span class="kbd">⌘</span><span class="kbd">8</span></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+        <span style="font-size:12px;color:var(--text2);">AI Зөвлөгч</span>
+        <div style="display:flex;gap:4px;flex-shrink:0;"><span class="kbd">⌘</span><span class="kbd">9</span></div>
+      </div>
+    </div>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:10px;color:var(--text4);text-align:center;">Mac: ⌘ (Command) · Windows/Linux: Ctrl</div>
   </div>
 </div>
 <!-- Daily Check-in Modal -->
@@ -10935,6 +11218,8 @@ var _hookPomo=setInterval(function(){
 /* Cmd+K badge on search btn */
 .cmd-k-badge{font-size:9px;background:var(--bg4);border:1px solid var(--border2);border-radius:4px;padding:1px 5px;margin-left:3px;font-family:'DM Mono',monospace;color:var(--text4);display:none;}
 @media(min-width:769px){.cmd-k-badge{display:inline;}}
+@media(min-width:769px){#kbd-hint-btn{display:flex!important;}}
+@media(max-width:768px){#kbd-hint-btn{display:none!important;}}
 </style>
 
 <!-- ── COMMAND PALETTE ── -->
@@ -11044,14 +11329,17 @@ var _hookPomo=setInterval(function(){
 var cmdOpen=false, cmdIdx=0, _cmdItems=[];
 
 var CMD_PAGES=[
-  {icon:'📋',name:'Ерөнхий',sub:'Ажлын самбар / Kanban',key:'kanban'},
-{icon:'✍️',name:'Контент',sub:'Script & pipeline',key:'content'},
-  {icon:'📊',name:'Аналитик',sub:'Статистик, орлого',key:'analytics'},
-  {icon:'👥',name:'Хэрэглэгчид',sub:'Гишүүдийн жагсаалт',key:'users'},
-  {icon:'⚙️',name:'Admin',sub:'Нэвтрэх мэдээлэл',key:'admin'},
-  {icon:'🎯',name:'Focus Zone',sub:'Pomodoro, top 3 ажил',key:'focus'},
-  {icon:'💰',name:'Finance',sub:'Орлого, зарлага',key:'finance'},
+  {icon:'📋',name:'Ерөнхий',sub:'Ажлын самбар / Kanban',key:'kanban',kbd:'1'},
+  {icon:'✍️',name:'Контент',sub:'Script & pipeline',key:'content',kbd:'2'},
+  {icon:'📊',name:'Аналитик',sub:'Статистик, орлого',key:'analytics',kbd:'3'},
+  {icon:'👥',name:'Хэрэглэгчид',sub:'Гишүүдийн жагсаалт',key:'users',kbd:'4'},
+  {icon:'⚙️',name:'Admin',sub:'Нэвтрэх мэдээлэл',key:'admin',kbd:'5'},
+  {icon:'🎯',name:'Focus Zone',sub:'Pomodoro, top 3 ажил',key:'focus',kbd:'6'},
+  {icon:'💰',name:'Finance',sub:'Орлого, зарлага',key:'finance',kbd:'7'},
   {icon:'📓',name:'Daily Check-in',sub:'Өдрийн тэмдэглэл',key:'checkin'},
+  {icon:'🗺️',name:'Төлөвлөгөө',sub:'Scale Roadmap',key:'roadmap',kbd:'8'},
+  {icon:'🤖',name:'AI Зөвлөгч',sub:'AI coaching',key:'ai',kbd:'9'},
+  {icon:'🎬',name:'Reel Script',sub:'Reel → Script pipeline',key:'reel-script'},
 ];
 
 var CMD_ACTIONS=[
@@ -11091,8 +11379,9 @@ function renderCmd(q){
     pages.forEach(function(p){
       html+='<div class="cmd-item" data-ci="'+items.length+'" onclick="cmdExec('+items.length+')">'
         +'<div class="cmd-item-icon" style="background:var(--bg4);">'+p.icon+'</div>'
-        +'<div class="cmd-item-name">'+p.name+'</div>'
-        +'<div class="cmd-item-sub">'+p.sub+'</div></div>';
+        +'<div style="flex:1;min-width:0;"><div class="cmd-item-name">'+p.name+'</div><div class="cmd-item-sub">'+p.sub+'</div></div>'
+        +(p.kbd?'<span class="cmd-item-kbd">⌘'+p.kbd+'</span>':'')
+        +'</div>';
       items.push({type:'page',data:p});
     });
   }
