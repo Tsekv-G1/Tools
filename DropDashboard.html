@@ -2189,7 +2189,129 @@ body{overflow-x:hidden;}
 
     <!-- ── KANBAN PAGE ── -->
     <div class="page active" id="page-kanban">
-      <div class="greet"><h1 id="greet-h">Сайн уу, Цэвэгмид!</h1><p id="greet-sub">ProductDrop.MN</p></div>
+      <div class="greet"><h1 id="greet-h" style="background:linear-gradient(90deg,var(--text) 60%,var(--text3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Сайн уу, Цэвэгмид!</h1><p id="greet-sub">ProductDrop.MN</p></div>
+
+      <!-- ── STOIC QUOTE ── -->
+      <style>
+        #stoic-card{
+          margin-bottom:14px;
+          background:var(--bg2);
+          border:1px solid var(--border2);
+          border-left:3px solid var(--text);
+          border-radius:var(--r);
+          padding:18px 20px 16px;
+          box-shadow:var(--shadow);
+          cursor:pointer;
+          position:relative;
+          overflow:hidden;
+          transition:border-color .25s, box-shadow .25s;
+        }
+        #stoic-card:active{box-shadow:var(--shadow-md);}
+        [data-theme="dark"] #stoic-card{border-left-color:var(--gold);}
+        #stoic-card::before{
+          content:'\201C';
+          position:absolute;
+          top:-4px;right:14px;
+          font-size:72px;line-height:1;
+          font-family:Georgia,serif;
+          color:var(--text);opacity:0.05;
+          pointer-events:none;user-select:none;
+        }
+        #stoic-text{
+          font-size:15px;font-weight:700;
+          color:var(--text);
+          line-height:1.65;
+          margin:0 0 10px;
+          letter-spacing:-.1px;
+        }
+        #stoic-author{
+          font-size:11px;font-weight:700;
+          color:var(--text3);
+          letter-spacing:.08em;
+          text-transform:uppercase;
+          margin-bottom:12px;
+        }
+        #stoic-q{
+          font-size:12px;
+          color:var(--text2);
+          line-height:1.6;
+          padding:10px 13px;
+          background:var(--bg3);
+          border-radius:9px;
+          border:1px solid var(--border);
+        }
+        [data-theme="dark"] #stoic-q{background:var(--bg4);}
+        #stoic-q::before{content:'💭  ';font-size:12px;}
+        .stoic-footer{
+          display:flex;align-items:center;
+          justify-content:space-between;
+          margin-top:12px;
+        }
+        .stoic-hint{font-size:10px;color:var(--text4);font-weight:500;}
+        .stoic-next{
+          width:26px;height:26px;border-radius:50%;
+          background:var(--bg4);border:1px solid var(--border2);
+          display:flex;align-items:center;justify-content:center;
+          color:var(--text3);font-size:13px;
+          transition:background .15s,color .15s;
+          flex-shrink:0;
+        }
+        #stoic-card:hover .stoic-next{background:var(--text);color:var(--bg2);}
+        [data-theme="dark"] #stoic-card:hover .stoic-next{background:var(--gold);color:#fff;}
+      </style>
+      <div id="stoic-card" onclick="nextStoicQuote()">
+        <p id="stoic-text"></p>
+        <div id="stoic-author"></div>
+        <div id="stoic-q"></div>
+        <div class="stoic-footer">
+          <span class="stoic-hint">дарж дараагийн ишлэл харах</span>
+          <div class="stoic-next">↻</div>
+        </div>
+      </div>
+      <script>
+      (function(){
+        var _sq=[
+          {t:'Зогсмоор санагдах тэр мөчид чи дөнгөж 40%-ийн хүчээрээ ажилласан байдаг.',a:'Дэвид Гоггинс',q:'Өнөөдөр хэдэн удаа 40%-дээ зогссон бэ?'},
+          {t:'Өвдөлт дайсан биш — чамайг өсгөж байгаа багш чинь.',a:'Дэвид Гоггинс',q:'Сүүлийн удаа өвдөлтөөс зугтсан чинь чамайг хаашаа аваачсан бэ?'},
+          {t:'Тархи чинь зогс гэнэ — биеийн чадал чинь тэрнээс хавьгүй илүү.',a:'Дэвид Гоггинс',q:'Өнөөдөр тархи чинь хэдэн удаа зогсоохыг оролдсон бэ?'},
+          {t:'Аятайхан байдал ухрал — хэцүүрэл урагшлал.',a:'Дэвид Гоггинс',q:'Чи одоо аятайхан байдлаасаа юунаас татгалзах хэрэгтэй вэ?'},
+          {t:'Бусад хүн унтаж байхад чи ажиллаж байвал ялна.',a:'Эндрю Тэйт',q:'Өнөөдрийн 24 цагаасаа хамгийн сайн ашигласан 3 цаг нь хэдийнх байсан бэ?'},
+          {t:'Чи хаана байгаа нь чухал биш — хаашаа явж байгаа нь чухал.',a:'Эндрю Тэйт',q:'Чи одоо хаашаа явж байгааг үнэхээр мэдэж байна уу?'},
+          {t:'Хэцүү нөхцөл байдал хүчтэй хүнийг илчилдэг.',a:'Эндрю Тэйт',q:'Сүүлийн хэцүү үед чинь чиний ямар тал илчлэгдсэн бэ?'},
+          {t:'Сахилга бат нь эрх чөлөөг авчирдаг.',a:'Жоко Виллинк',q:'Өнөөдрийн сахилга бат чинь маргаашийн эрх чөлөөг тань тодорхойлж байна — юуг сонгох вэ?'},
+          {t:'Хэцүү зүйл тохиолдвол? — Сайн. Тэр бол өсөх боломж.',a:'Жоко Виллинк',q:'Өнөөдрийн хамгийн хэцүү зүйл чинь ямар боломжийг далдалж байсан бэ?'},
+          {t:'Хожим харамсах биш, одоо хэцүүрэх — тэр л ялгаа.',a:'Жоко Виллинк',q:'10 жилийн дараа өнөөдрийн шийдвэрийнхээ тухай юу бодох вэ?'},
+          {t:'Нийтийн хүн зовлонгоос зугтдаг, ялагч зовлонд дасдаг.',a:'Арнольд Шварценеггер',q:'Чи зовлонгоос зугтаж байна уу, эсвэл дасч байна уу?'},
+          {t:'Гомдол нэг ч асуудлыг шийдэхгүй — ажил шийддэг.',a:'Марк Аврелий',q:'Өнөөдөр гомдоллохын оронд тэр цагаа ажилд зарцуулсан бол яах байсан бэ?'},
+          {t:'Гадна нөхцөл биш, тэдэнд өгөх хариу нь чиний гарт байдаг.',a:'Марк Аврелий',q:'Өнөөдрийн хамгийн хэцүү нөхцөлд чи хэрхэн хариулсан бэ — зохистой байсан уу?'},
+          {t:'Чиний бодол чиний ертөнцийг байгуулдаг — анхаарлаа тавь.',a:'Марк Аврелий',q:'Өнөөдөр чиний тархиндаа хамгийн их давтаж бодсон зүйл нь юу байсан бэ?'},
+          {t:'Цагийг дэмий үрэх нь амьдралаа дэмий үрнэ гэсэн үг.',a:'Сенека',q:'Өнөөдөр хэдэн цагаа дэмий үрсэн бэ — тэр цаг буцаж ирэхгүй гэдгийг мэдэж байна уу?'},
+          {t:'Хожмогүй болохоос нь өмнө амьдар — цаг хүлээдэггүй.',a:'Сенека',q:'Хойшлуулсан хамгийн чухал зүйл чинь юу вэ — яагаад хойшлуулж байгаа вэ?'},
+          {t:'Чиний эрхэнд байгаа зүйлд анхаарлаа тавь — бусдыг орхи.',a:'Эпиктет',q:'Өнөөдөр эрхэндээ байхгүй зүйлд хэдэн минут, хэдэн цаг зарцуулав?'},
+          {t:'Алдаагаа хүлээн зөвшөөрвөл засах боломж нээгдэнэ.',a:'Эпиктет',q:'Хамгийн ойрын алдаа чинь чамд юу заасан бэ — эсвэл одоо хүртэл хүлээн зөвшөөрөөгүй байна уу?'}
+        ];
+        var _si=Math.floor(Math.random()*_sq.length);
+        function _sr(){
+          var q=_sq[_si];
+          var t=document.getElementById('stoic-text');
+          var a=document.getElementById('stoic-author');
+          var qel=document.getElementById('stoic-q');
+          if(t)t.textContent=q.t;
+          if(a)a.textContent='— '+q.a;
+          if(qel)qel.textContent=q.q;
+        }
+        window.nextStoicQuote=function(){
+          _si=(_si+1)%_sq.length;
+          _sr();
+        };
+        _sr();
+        /* 5 цаг тутамд автоматаар солих */
+        setInterval(function(){
+          _si=(_si+1)%_sq.length;
+          _sr();
+        }, 5*60*60*1000);
+      })();
+      </script>
 
       <!-- ── TODAY AT A GLANCE ── -->
       <div id="today-glance" style="margin-bottom:14px;border-radius:18px;overflow:hidden;background:linear-gradient(135deg,#1e3a5f 0%,#0f4c75 60%,#1a6b8a 100%);padding:20px;color:#fff;position:relative;display:none;">
@@ -2200,227 +2322,66 @@ body{overflow-x:hidden;}
             <div id="tg-greeting" style="font-size:18px;font-weight:800;letter-spacing:-.3px;">Өглөөний мэнд 👋</div>
             <div id="tg-date" style="font-size:11px;opacity:0.6;margin-top:2px;font-weight:500;"></div>
           </div>
-          <div id="tg-momentum-ring" style="position:relative;width:56px;height:56px;flex-shrink:0;">
-            <svg viewBox="0 0 56 56" style="width:56px;height:56px;transform:rotate(-90deg);">
-              <circle cx="28" cy="28" r="22" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="5"/>
-              <circle id="tg-ring-arc" cx="28" cy="28" r="22" fill="none" stroke="#FF9500" stroke-width="5" stroke-linecap="round" stroke-dasharray="138" stroke-dashoffset="138" style="transition:stroke-dashoffset 1.2s cubic-bezier(.25,.46,.45,.94);"/>
+          <div id="tg-momentum-ring" style="position:relative;width:68px;height:68px;flex-shrink:0;">
+            <svg viewBox="0 0 68 68" style="width:68px;height:68px;transform:rotate(-90deg);">
+              <circle cx="34" cy="34" r="28" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="5"/>
+              <circle id="tg-ring-arc" cx="34" cy="34" r="28" fill="none" stroke="#FF9500" stroke-width="5" stroke-linecap="round" stroke-dasharray="176" stroke-dashoffset="176" style="transition:stroke-dashoffset 1.2s cubic-bezier(.25,.46,.45,.94);"/>
             </svg>
-            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-              <div id="tg-score-num" style="font-size:14px;font-weight:800;color:#fff;line-height:1;">0</div>
-              <div style="font-size:7px;opacity:0.55;font-weight:700;letter-spacing:.03em;">SCORE</div>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;">
+              <div id="tg-score-num" style="font-size:19px;font-weight:800;color:#fff;line-height:1;">0</div>
+              <div style="font-size:7px;opacity:0.45;font-weight:700;letter-spacing:.08em;">SCORE</div>
             </div>
           </div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;position:relative;">
-          <div id="tg-stat-todo" style="background:rgba(255,255,255,0.09);border-radius:12px;padding:10px;text-align:center;">
-            <div style="font-size:20px;font-weight:800;" id="tg-n-todo">0</div>
-            <div style="font-size:10px;opacity:0.65;font-weight:600;margin-top:2px;">Хийх ажил</div>
+          <div id="tg-stat-todo" style="background:rgba(255,255,255,0.09);border-radius:13px;padding:13px 8px;text-align:center;border:1px solid rgba(255,255,255,0.07);">
+            <div style="font-size:32px;font-weight:800;line-height:1;" id="tg-n-todo">0</div>
+            <div style="font-size:9px;opacity:0.5;font-weight:700;margin-top:5px;letter-spacing:.05em;text-transform:uppercase;">Хийх ажил</div>
           </div>
-          <div style="background:rgba(255,149,0,0.18);border-radius:12px;padding:10px;text-align:center;border:1px solid rgba(255,149,0,0.3);">
-            <div style="font-size:20px;font-weight:800;color:#FF9500;" id="tg-n-overdue">0</div>
-            <div style="font-size:10px;opacity:0.75;font-weight:600;margin-top:2px;">Хоцорсон</div>
+          <div style="background:rgba(255,149,0,0.2);border-radius:13px;padding:13px 8px;text-align:center;border:1px solid rgba(255,149,0,0.38);">
+            <div style="font-size:32px;font-weight:800;color:#FF9500;line-height:1;" id="tg-n-overdue">0</div>
+            <div style="font-size:9px;opacity:0.85;font-weight:700;margin-top:5px;letter-spacing:.05em;text-transform:uppercase;color:#FF9500;">Хоцорсон</div>
           </div>
-          <div style="background:rgba(52,199,89,0.15);border-radius:12px;padding:10px;text-align:center;border:1px solid rgba(52,199,89,0.2);">
-            <div style="font-size:20px;font-weight:800;color:#32D96A;" id="tg-n-done">0</div>
-            <div style="font-size:10px;opacity:0.75;font-weight:600;margin-top:2px;">Дууссан</div>
+          <div style="background:rgba(52,199,89,0.16);border-radius:13px;padding:13px 8px;text-align:center;border:1px solid rgba(52,199,89,0.3);">
+            <div style="font-size:32px;font-weight:800;color:#32D96A;line-height:1;" id="tg-n-done">0</div>
+            <div style="font-size:9px;opacity:0.85;font-weight:700;margin-top:5px;letter-spacing:.05em;text-transform:uppercase;color:#32D96A;">Дуусгасан</div>
           </div>
         </div>
-        <div id="tg-overdue-alert" style="display:none;margin-top:10px;background:rgba(255,59,48,0.18);border:1px solid rgba(255,59,48,0.3);border-radius:10px;padding:8px 11px;font-size:11px;font-weight:700;color:#FF6B60;position:relative;"></div>
+        <div id="tg-overdue-alert" style="display:none;margin-top:10px;background:rgba(255,59,48,0.15);border:1px solid rgba(255,59,48,0.35);border-left:3px solid #FF3B30;border-radius:10px;padding:9px 12px;font-size:11px;font-weight:700;color:#FF6B60;position:relative;display:none;"></div>
       </div>
-      <div class="banner" id="banner">
+      <div class="banner" id="banner" style="border-left:3px solid var(--gold);">
         <div class="ban-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
         <div class="ban-txt"><strong>Drop #05 бэлдэж байна!</strong> — 8/10 бараа баталгаажсан. BOFU контент хийхгүй байна.</div>
         <button class="ban-close" onclick="document.getElementById('banner').remove()">✕</button>
       </div>
       <div class="stats">
-        <div class="scard"><div class="sc-icon" style="background:rgba(0,0,0,0.045);"><svg viewBox="0 0 24 24" stroke="var(--text2)"><rect x="3" y="3" width="7" height="18" rx="1.5"/><rect x="14" y="3" width="7" height="11" rx="1.5"/></svg></div><div class="sc-label">Нийт ажил</div><div class="sc-val" id="st-tot">0</div><div class="sc-sub">Бүх даалгавар</div></div>
-        <div class="scard"><div class="sc-icon" style="background:var(--bluebg);"><svg viewBox="0 0 24 24" stroke="var(--blue)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="sc-label">Хийгдэж байна</div><div class="sc-val" id="st-ip" style="color:var(--blue);">0</div><div class="sc-sub">Идэвхтэй</div></div>
-        <div class="scard"><div class="sc-icon" style="background:var(--amberbg);"><svg viewBox="0 0 24 24" stroke="var(--amber)"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div><div class="sc-label">Хянагдаж байна</div><div class="sc-val" id="st-rv" style="color:var(--amber);">0</div><div class="sc-sub">Хяналтад</div></div>
-        <div class="scard"><div class="sc-icon" style="background:var(--greenbg);"><svg viewBox="0 0 24 24" stroke="var(--green)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="sc-label">Дуусгасан</div><div class="sc-val" id="st-dn" style="color:var(--green);">0</div><div class="sc-sub">Амжилттай</div></div>
+        <div class="scard" style="border-left:3px solid var(--text3);"><div class="sc-icon" style="background:rgba(0,0,0,0.045);"><svg viewBox="0 0 24 24" stroke="var(--text2)"><rect x="3" y="3" width="7" height="18" rx="1.5"/><rect x="14" y="3" width="7" height="11" rx="1.5"/></svg></div><div class="sc-label">Нийт ажил</div><div class="sc-val" id="st-tot">0</div><div class="sc-sub">Бүх даалгавар</div></div>
+        <div class="scard" style="border-left:3px solid var(--blue);"><div class="sc-icon" style="background:var(--bluebg);"><svg viewBox="0 0 24 24" stroke="var(--blue)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="sc-label">Хийгдэж байна</div><div class="sc-val" id="st-ip" style="color:var(--blue);">0</div><div class="sc-sub">Идэвхтэй</div></div>
+        <div class="scard" style="border-left:3px solid var(--amber);"><div class="sc-icon" style="background:var(--amberbg);"><svg viewBox="0 0 24 24" stroke="var(--amber)"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div><div class="sc-label">Хянагдаж байна</div><div class="sc-val" id="st-rv" style="color:var(--amber);">0</div><div class="sc-sub">Хяналтад</div></div>
+        <div class="scard" style="border-left:3px solid var(--green);"><div class="sc-icon" style="background:var(--greenbg);"><svg viewBox="0 0 24 24" stroke="var(--green)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="sc-label">Дуусгасан</div><div class="sc-val" id="st-dn" style="color:var(--green);">0</div><div class="sc-sub">Амжилттай</div></div>
       </div>
 
-      <!-- ── OPPORTUNITY COST METER ── -->
-      <div class="opc-wrap" id="opc-wrap">
-        <div class="opc-header" id="opc-header-toggle">
-          <div class="opc-dot"></div>
-          <div class="opc-title">LIVE P&amp;L // БОЛОМЖИЙН ӨРТӨГ</div>
-          <div class="opc-hright">
-            <span class="opc-streak" id="opc-streak">🔴 0:00</span>
-            <span class="opc-clock" id="opc-clock">00:00:00</span>
-            <button class="opc-gear" id="opc-notif-btn" title="Мэдэгдэл асаах/унтраах" onclick="event.stopPropagation();opcToggleNotif();">
-              <svg id="opc-notif-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            </button>
-            <button class="opc-gear" id="opc-gear-btn" title="Тохиргоо" onclick="event.stopPropagation();opcToggleSettings();">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            </button>
-            <svg id="opc-arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px;flex-shrink:0;transition:transform .2s;transform:rotate(180deg);color:var(--text3);"><polyline points="6 9 12 15 18 9"/></svg>
-          </div>
+      <!-- ── DEBT TRACKER ── -->
+      <div id="debt-wrap" style="margin-bottom:14px;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);background:var(--bg2);border:1px solid var(--border);">
+        <div onclick="debtToggle()" style="display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;user-select:none;">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--red);animation:dtpulse 2s ease-in-out infinite;flex-shrink:0;"></div>
+          <div style="font-size:11px;font-weight:800;letter-spacing:1.5px;color:var(--text);font-family:'DM Mono',monospace;">ЗЭЭЛ TRACKER</div>
+          <div style="flex:1;"></div>
+          <div id="debt-total-badge" style="font-size:14px;font-weight:800;color:var(--red);font-family:'DM Mono',monospace;">₮8,792,000</div>
+          <svg id="debt-arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px;flex-shrink:0;transition:transform .2s;color:var(--text3);transform:rotate(180deg);"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="opc-body" id="opc-body">
-          <!-- Settings panel (hidden by default) -->
-          <div class="opc-settings" id="opc-settings">
-            <div class="opc-settings-grid">
-              <div class="opc-fi-wrap">
-                <div class="opc-fi-lbl">Сарын үнэ ₮</div>
-                <input class="opc-fi" id="opc-fi-price" type="number" value="59900" min="1000" step="100">
-              </div>
-              <div class="opc-fi-wrap">
-                <div class="opc-fi-lbl">Зорилт гишүүн</div>
-                <input class="opc-fi" id="opc-fi-target" type="number" value="250" min="10" step="10">
-              </div>
-              <div class="opc-fi-wrap">
-                <div class="opc-fi-lbl">Нэмэх алхам</div>
-                <input class="opc-fi" id="opc-fi-step" type="number" value="10" min="1" max="50" step="1">
-              </div>
-              <div class="opc-fi-wrap">
-                <div class="opc-fi-lbl">Хурд (÷хуваагч)</div>
-                <input class="opc-fi" id="opc-fi-scale" type="number" value="10" min="1" max="100" step="1">
-              </div>
-            </div>
-
-            <!-- Manual monthly loss override -->
-            <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
-                <div style="font-size:9px;font-weight:700;letter-spacing:.07em;color:var(--text3);text-transform:uppercase;font-family:'DM Mono',monospace;">Сарын алдагдал</div>
-                <!-- Toggle switch -->
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <span id="opc-ml-mode-lbl" style="font-size:9px;font-family:'DM Mono',monospace;color:var(--text4);">АВТО</span>
-                  <div id="opc-ml-toggle" onclick="opcToggleManualLoss()" style="width:32px;height:18px;border-radius:99px;background:var(--bg4);border:1px solid var(--border2);cursor:pointer;position:relative;transition:background .2s;">
-                    <div id="opc-ml-knob" style="width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.18);position:absolute;top:1px;left:1px;transition:transform .2s;"></div>
-                  </div>
-                </div>
-              </div>
-              <div id="opc-ml-manual-wrap" style="display:none;">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                  <div class="opc-fi-wrap">
-                    <div class="opc-fi-lbl">Сарын алдагдал ₮</div>
-                    <input class="opc-fi" id="opc-fi-month-loss" type="number" placeholder="жишээ: 150000" min="0" step="1000" style="font-size:11px;">
-                  </div>
-                  <div class="opc-fi-wrap">
-                    <div class="opc-fi-lbl">Өдрийн алдагдал ₮</div>
-                    <input class="opc-fi" id="opc-fi-day-loss" type="number" placeholder="жишээ: 5000" min="0" step="100" style="font-size:11px;" oninput="opcSyncDayFromMonth()">
-                  </div>
-                </div>
-                <div style="margin-top:6px;font-size:9px;color:var(--text4);font-family:'DM Mono',monospace;">Нэг утга оруулахад нөгөө нь автоматаар тооцогдоно</div>
-              </div>
-            </div>
-
-            <!-- Starting PNL offset -->
-            <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
-              <div style="font-size:9px;font-weight:700;letter-spacing:.07em;color:var(--text3);text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:7px;">Эхлэх үлдэгдэл</div>
-              <div class="opc-fi-wrap">
-                <div class="opc-fi-lbl">Одоогийн алдагдал ₮ (сөрөг эсвэл эерэг)</div>
-                <input class="opc-fi" id="opc-fi-start-pnl" type="number" placeholder="жишээ: -75.9" step="0.1" style="font-size:11px;">
-              </div>
-              <div style="margin-top:4px;font-size:9px;color:var(--text4);font-family:'DM Mono',monospace;">Тооллогоо тэр цэгээс үргэлжлүүлэх</div>
-            </div>
-
-            <button class="opc-apply-btn" onclick="opcApplySettings()">Хэрэгжүүлэх</button>
+        <div id="debt-body" style="padding:0 14px 14px;border-top:1px solid var(--border);">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:10px;background:rgba(255,59,48,0.07);border:1px solid rgba(255,59,48,0.15);margin-bottom:12px;margin-top:12px;">
+            <span style="font-size:10px;font-weight:800;color:var(--text3);letter-spacing:1.2px;font-family:'DM Mono',monospace;">НИЙТ ЗЭЭЛ</span>
+            <span id="debt-grand-total" style="font-size:22px;font-weight:800;color:var(--red);font-family:'DM Mono',monospace;">₮8,792,000</span>
           </div>
-          <!-- Chart + stats -->
-          <div class="opc-content" style="position:relative;">
-            <!-- Toast zone -->
-            <div class="opc-toast-zone" id="opc-toast-zone"></div>
-            <div class="opc-grid">
-              <div>
-                <div class="opc-lbl">Алдагдсан боломж</div>
-                <div class="opc-num" id="opc-pnl">-₮0</div>
-                <div class="opc-rate">DRIFT <span id="opc-drift-rate" style="color:var(--red);">−₮0.58/сек</span><span class="opc-vel stable" id="opc-vel">→</span> &nbsp;·&nbsp; BREAKEVEN <span id="opc-be-label" style="color:var(--text3);">125 гишүүн</span></div>
-                <div class="opc-chartbox"><canvas id="opc-canvas" role="img" aria-label="Боломжийн өртгийн chart"></canvas></div>
-                <!-- Projection chips -->
-                <div class="opc-proj">
-                  <div class="opc-proj-chip" id="opc-proj-day-wrap">
-                    <div class="opc-proj-lbl">Өнөөдөр</div>
-                    <div class="opc-proj-val" id="opc-proj-day">−₮0</div>
-                  </div>
-                  <div class="opc-proj-chip" id="opc-proj-month-wrap">
-                    <div class="opc-proj-lbl">Энэ сар</div>
-                    <div class="opc-proj-val" id="opc-proj-month">−₮0</div>
-                  </div>
-                </div>
-                <!-- Breakeven gap bar -->
-                <div class="opc-be-gap">
-                  <div class="opc-be-gap-lbl">Breakeven хүртэл</div>
-                  <div class="opc-be-gap-right">
-                    <div class="opc-be-bar-wrap"><div class="opc-be-bar-fill" id="opc-be-bar" style="width:0%;background:var(--red);"></div></div>
-                    <div class="opc-be-gap-num" id="opc-be-gap-num">−125 гишүүн</div>
-                  </div>
-                </div>
-                <!-- Savings chip -->
-                <div class="opc-save-chip" id="opc-save-chip">
-                  <div class="opc-save-icon">💡</div>
-                  <div class="opc-save-text">
-                    <div class="opc-save-lbl">Breakeven хүрвэл өдөрт хэмнэнэ</div>
-                    <div class="opc-save-val" id="opc-save-val">₮0</div>
-                  </div>
-                </div>
-                <!-- Breakeven countdown -->
-                <div class="opc-cdw-wrap" id="opc-cdw-wrap">
-                  <div class="opc-cdw-header">
-                    <span class="opc-cdw-icon">⏱</span>
-                    <span class="opc-cdw-title">BREAKEVEN ХҮРЭХ ТООЦОО</span>
-                    <div class="opc-cdw-date-wrap">
-                      <input type="date" id="opc-cdw-date" class="opc-cdw-input" placeholder="Зорилтот огноо" oninput="opcCdwUpdate()"/>
-                    </div>
-                  </div>
-                  <div class="opc-cdw-body">
-                    <div class="opc-cdw-main" id="opc-cdw-main">
-                      <div class="opc-cdw-days" id="opc-cdw-days">—</div>
-                      <div class="opc-cdw-days-lbl">өдөр үлдлээ</div>
-                    </div>
-                    <div class="opc-cdw-stats">
-                      <div class="opc-cdw-row">
-                        <span class="opc-cdw-rlbl">Хэрэгтэй гишүүн</span>
-                        <span class="opc-cdw-rval" id="opc-cdw-need">— гишүүн/өдөр</span>
-                      </div>
-                      <div class="opc-cdw-row">
-                        <span class="opc-cdw-rlbl">Нийт алдагдал</span>
-                        <span class="opc-cdw-rval" id="opc-cdw-total-loss">—</span>
-                      </div>
-                      <div class="opc-cdw-row">
-                        <span class="opc-cdw-rlbl">Urgency</span>
-                        <span class="opc-cdw-urgency" id="opc-cdw-urgency">—</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="opc-cdw-nodate" id="opc-cdw-nodate">Зорилтот огноо сонгоно уу →</div>
-                </div>
-              </div>
-              <div class="opc-stats">
-                <div>
-                  <div class="opc-sl">Drift/сек</div>
-                  <div class="opc-sv neg" id="opc-drift">−₮0.58</div>
-                </div>
-                <div>
-                  <div class="opc-sl">Гишүүн</div>
-                  <div class="opc-mrow">
-                    <button class="opc-mbtn" id="opc-minus">−</button>
-                    <span class="opc-mval" id="opc-members">0</span>
-                    <button class="opc-mbtn" id="opc-plus">+</button>
-                  </div>
-                  <div class="opc-step-hint">/ <span id="opc-target-label">250</span> · алхам <span id="opc-step-label">10</span></div>
-                </div>
-                <div>
-                  <div class="opc-sl">Явц</div>
-                  <!-- Progress ring -->
-                  <div class="opc-ring-wrap">
-                    <svg class="opc-ring" width="36" height="36" viewBox="0 0 36 36">
-                      <circle class="opc-ring-track" cx="18" cy="18" r="14"/>
-                      <circle class="opc-ring-fill" id="opc-ring-fill" cx="18" cy="18" r="14"
-                        stroke="var(--gold)"
-                        stroke-dasharray="87.96"
-                        stroke-dashoffset="87.96"
-                        transform="rotate(-90 18 18)"/>
-                    </svg>
-                    <div class="opc-sv" id="opc-conv" style="color:var(--gold);">0%</div>
-                  </div>
-                </div>
-                <div>
-                  <div class="opc-sl">Heat</div>
-                  <div class="opc-sv neg" id="opc-heat">LOW</div>
-                </div>
-              </div>
+          <div id="debt-list"></div>
+          <div id="debt-hist-panel" style="display:none;margin-top:12px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);overflow:hidden;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);">
+              <span id="debt-hist-title" style="font-size:11px;font-weight:800;color:var(--text2);letter-spacing:1px;font-family:'DM Mono',monospace;">HISTORY</span>
+              <button onclick="document.getElementById('debt-hist-panel').style.display='none'" style="border:none;background:none;color:var(--text3);cursor:pointer;font-size:14px;line-height:1;">✕</button>
             </div>
+            <div id="debt-hist-list" style="max-height:240px;overflow-y:auto;padding:8px 14px;"></div>
           </div>
         </div>
       </div>
@@ -10727,7 +10688,7 @@ var _hookPomo=setInterval(function(){
     var scoreEl=document.getElementById('tg-score-num');if(scoreEl) scoreEl.textContent=score;
     var arc=document.getElementById('tg-ring-arc');
     if(arc){
-      var circ=138;
+      var circ=176;
       var offset=circ-(score/100)*circ;
       setTimeout(function(){arc.style.strokeDashoffset=offset;},100);
       arc.style.stroke=score>=80?'#32D96A':score>=50?'#FF9500':'#FF4F44';
@@ -15505,661 +15466,257 @@ document.addEventListener('click',function(e){
 
 </script>
 <script>
-/* ── OPPORTUNITY COST METER ── */
+/* ── DEBT TRACKER ── */
 (function(){
-  /* ── Config (editable via settings panel) ── */
-  var CFG = { PRICE:59900, TARGET:250, STEP:10, SCALE:10 };
-  try{ var _sc=JSON.parse(localStorage.getItem('pd_opc_cfg')||'null'); if(_sc&&_sc.PRICE) Object.assign(CFG,_sc); }catch(e){}
-  var SECS_DAY   = 86400;      // 24 * 3600
-  var SECS_MONTH = 2592000;    // 30 * 24 * 3600
+  var KEY = 'pd_debt_v1';
+  var INITIAL = [
+    { id:'khan',     name:'Khan Bank', bal:3400000 },
+    { id:'pocket3',  name:'Pocket3',   bal:2000000 },
+    { id:'mcredit',  name:'Mcredit',   bal:990000  },
+    { id:'storepay', name:'Storepay',  bal:500000  },
+    { id:'numur',    name:'Numur',     bal:412000  },
+    { id:'pocket',   name:'Pocket',    bal:580000  },
+    { id:'sister',   name:'Sister',    bal:450000  },
+    { id:'zeely',    name:'Zeely',     bal:250000  },
+    { id:'toki',     name:'Toki',      bal:210000  }
+  ];
+  var state = { loans: [], hist: {} };
 
-  /* ── Persist OPC state across refresh ── */
-  var OPC_KEY='pd_opc_state';
-  function opcSaveState(){
-    try{
-      var mfi=document.getElementById('opc-fi-month-loss');
-      var dfi=document.getElementById('opc-fi-day-loss');
-      localStorage.setItem(OPC_KEY, JSON.stringify({
-        members: members, pnl: pnl, secs: secs, hist: hist, ts: Date.now(),
-        manualLossActive: manualLossActive, manualMonthLoss: manualMonthLoss,
-        fiMonthLoss: mfi?mfi.value:'', fiDayLoss: dfi?dfi.value:''
-      }));
-    }catch(e){}
+  function load() {
+    try {
+      var s = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (s && s.loans && s.loans.length) { state = s; return; }
+    } catch(e) {}
+    state.loans = INITIAL.map(function(l){ return { id:l.id, name:l.name, bal:l.bal }; });
+    state.hist = {};
+    INITIAL.forEach(function(l){ state.hist[l.id] = []; });
+    save();
   }
-  function opcLoadState(){
-    try{
-      var raw=localStorage.getItem(OPC_KEY);
-      if(!raw) return false;
-      var s=JSON.parse(raw);
-      if(!s||!s.ts||(Date.now()-s.ts)>86400000) return false;
-      members=s.members||0; pnl=s.pnl||0; secs=s.secs||0; hist=s.hist||[];
-      displayPnl=pnl; displayDrift=0;
-      if(s.manualLossActive){
-        manualLossActive=true; manualMonthLoss=s.manualMonthLoss||0;
-        setTimeout(function(){
-          var mfi=document.getElementById('opc-fi-month-loss');
-          var dfi=document.getElementById('opc-fi-day-loss');
-          var tgl=document.getElementById('opc-ml-toggle');
-          var knob=document.getElementById('opc-ml-knob');
-          var lbl=document.getElementById('opc-ml-mode-lbl');
-          var wrap=document.getElementById('opc-ml-manual-wrap');
-          if(mfi) mfi.value=s.fiMonthLoss||'';
-          if(dfi) dfi.value=s.fiDayLoss||'';
-          if(tgl) tgl.style.background='var(--red)';
-          if(knob) knob.style.transform='translateX(14px)';
-          if(lbl){ lbl.textContent='ГАРААР'; lbl.style.color='var(--red)'; }
-          if(wrap) wrap.style.display='block';
-        },50);
+
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+  }
+
+  function fmt(v) {
+    var n = Math.round(Math.abs(v));
+    return (v < 0 ? '-' : '') + '\u20AE' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  function totalDebt() {
+    return state.loans.reduce(function(s,l){ return s + l.bal; }, 0);
+  }
+
+  function updateTotals() {
+    var t = totalDebt();
+    var tf = fmt(t);
+    var tb = document.getElementById('debt-total-badge');
+    if(tb) tb.textContent = tf;
+    var gt = document.getElementById('debt-grand-total');
+    if(gt) gt.textContent = tf;
+  }
+
+  var PRESETS = [10000, 50000, 100000, 500000, 1000000];
+  var expandedId = null;
+
+  function fmtShort(v) {
+    if(v >= 1000000) return (v/1000000)+'M';
+    if(v >= 1000) return (v/1000)+'K';
+    return v;
+  }
+
+  function render() {
+    var list = document.getElementById('debt-list');
+    if(!list) return;
+    list.innerHTML = '';
+    state.loans.forEach(function(loan) {
+      var wrap = document.createElement('div');
+      wrap.id = 'dwrap-' + loan.id;
+      wrap.style.cssText = 'border-radius:12px;border:1px solid var(--border);background:var(--bg3);margin-bottom:7px;overflow:hidden;transition:border-color .2s;';
+
+      /* ── Row ── */
+      var row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;gap:0;cursor:pointer;padding:12px 14px;';
+      row.onclick = (function(id){ return function(e){ toggleExpand(id); }; })(loan.id);
+
+      var nameEl = document.createElement('div');
+      nameEl.style.cssText = 'font-size:13px;font-weight:700;color:var(--text);flex:1;';
+      nameEl.textContent = loan.name;
+
+      var balEl = document.createElement('div');
+      balEl.id = 'dbal-' + loan.id;
+      balEl.style.cssText = 'font-size:15px;font-weight:800;font-family:"DM Mono",monospace;color:' + (loan.bal > 0 ? 'var(--red)' : 'var(--green)') + ';margin-right:10px;';
+      balEl.textContent = fmt(loan.bal);
+
+      var histBtn = document.createElement('button');
+      histBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+      histBtn.title = 'History';
+      histBtn.style.cssText = 'width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:var(--bg4);color:var(--text3);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;';
+      histBtn.onclick = (function(id, name){ return function(e){ e.stopPropagation(); showHist(id, name); }; })(loan.id, loan.name);
+
+      row.appendChild(nameEl);
+      row.appendChild(balEl);
+      row.appendChild(histBtn);
+
+      /* ── Expand panel ── */
+      var panel = document.createElement('div');
+      panel.id = 'dpanel-' + loan.id;
+      panel.style.cssText = 'display:none;border-top:1px solid var(--border);padding:12px 14px 14px;background:var(--bg2);';
+
+      /* Preset chips */
+      var chips = document.createElement('div');
+      chips.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;';
+      PRESETS.forEach(function(p){
+        var chip = document.createElement('button');
+        chip.textContent = fmtShort(p);
+        chip.style.cssText = 'padding:5px 10px;border-radius:20px;border:1px solid var(--border2);background:var(--bg4);color:var(--text2);font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.3px;';
+        chip.onclick = (function(id, val){
+          return function(){
+            var inp = document.getElementById('din-'+id);
+            if(inp){ inp.value = val; inp.focus(); }
+          };
+        })(loan.id, p);
+        chips.appendChild(chip);
+      });
+
+      /* Input row */
+      var inpRow = document.createElement('div');
+      inpRow.style.cssText = 'display:flex;gap:8px;align-items:stretch;';
+
+      var inp = document.createElement('input');
+      inp.type = 'number';
+      inp.id = 'din-' + loan.id;
+      inp.placeholder = '₮ дүн';
+      inp.min = '0';
+      inp.style.cssText = 'flex:1;padding:10px 12px;border-radius:10px;border:1.5px solid var(--border2);background:var(--bg);color:var(--text);font-size:14px;font-weight:600;outline:none;min-width:0;font-family:"DM Mono",monospace;';
+      inp.addEventListener('keydown', (function(id){ return function(e){ if(e.key==='Enter') debtChange(id, -1); }; })(loan.id));
+
+      var btnSub = document.createElement('button');
+      btnSub.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px;"><path d="M20 12H4"/></svg><span style="font-size:12px;font-weight:800;margin-left:4px;">ТӨЛСӨН</span>';
+      btnSub.style.cssText = 'display:flex;align-items:center;padding:0 14px;border-radius:10px;border:none;background:var(--green);color:#fff;font-weight:700;cursor:pointer;white-space:nowrap;height:42px;';
+      btnSub.onclick = (function(id){ return function(){ debtChange(id, -1); }; })(loan.id);
+
+      var btnAdd = document.createElement('button');
+      btnAdd.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px;"><path d="M12 5v14M5 12h14"/></svg><span style="font-size:12px;font-weight:800;margin-left:4px;">НЭМЭХ</span>';
+      btnAdd.style.cssText = 'display:flex;align-items:center;padding:0 14px;border-radius:10px;border:none;background:var(--red);color:#fff;font-weight:700;cursor:pointer;white-space:nowrap;height:42px;';
+      btnAdd.onclick = (function(id){ return function(){ debtChange(id, 1); }; })(loan.id);
+
+      inpRow.appendChild(inp);
+      inpRow.appendChild(btnSub);
+      inpRow.appendChild(btnAdd);
+
+      panel.appendChild(chips);
+      panel.appendChild(inpRow);
+
+      wrap.appendChild(row);
+      wrap.appendChild(panel);
+      list.appendChild(wrap);
+    });
+    updateTotals();
+  }
+
+  function toggleExpand(id) {
+    if(expandedId && expandedId !== id) {
+      var prev = document.getElementById('dpanel-'+expandedId);
+      var prevWrap = document.getElementById('dwrap-'+expandedId);
+      if(prev) prev.style.display = 'none';
+      if(prevWrap) prevWrap.style.borderColor = '';
+    }
+    var panel = document.getElementById('dpanel-'+id);
+    var wrap = document.getElementById('dwrap-'+id);
+    if(!panel) return;
+    var open = panel.style.display !== 'none';
+    panel.style.display = open ? 'none' : 'block';
+    if(wrap) wrap.style.borderColor = open ? '' : 'var(--blue)';
+    expandedId = open ? null : id;
+    if(!open) {
+      var inp = document.getElementById('din-'+id);
+      if(inp) setTimeout(function(){ inp.focus(); }, 80);
+    }
+  }
+
+  function debtChange(id, sign) {
+    var inp = document.getElementById('din-' + id);
+    var val = parseFloat(inp ? inp.value : '');
+    if (!val || val <= 0) {
+      if(inp){
+        inp.style.borderColor = 'var(--red)';
+        inp.style.animation = 'dtshake .3s ease';
+        setTimeout(function(){ inp.style.borderColor = ''; inp.style.animation = ''; }, 700);
       }
-      return true;
-    }catch(e){ return false; }
-  }
-
-  var members=0, pnl=0, secs=0;
-  var hist=[], MAXH=240;
-  /* Smooth animation: interpolate displayPnl & displayDrift toward real values */
-  var displayPnl=0, displayDrift=0, rafId=null;
-
-  function PMS(){ return CFG.PRICE/(30*24*3600)/CFG.SCALE; }
-  function drift(m){ return m*PMS()-(CFG.TARGET-m)*PMS(); }
-  function breakeven(){ return Math.ceil(CFG.TARGET/2); }
-
-  function fmtS(v){
-    var a=Math.abs(v),s=v<0?'−':'+';
-    if(a>=1e6) return s+'₮'+(a/1e6).toFixed(2)+'M';
-    if(a>=1e3) return s+'₮'+(a/1e3).toFixed(1)+'K';
-    return s+'₮'+a.toFixed(2);
-  }
-  function fmtAbs(v){
-    var a=Math.abs(v),s=v<0?'-':'';
-    if(a>=1e6) return s+'₮'+(a/1e6).toFixed(3)+'M';
-    if(a>=1e3) return s+'₮'+Math.round(a/1e3).toLocaleString()+'K';
-    return s+'₮'+a.toFixed(1);
-  }
-  function fmtT(s){ return [Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(function(x){return String(x).padStart(2,'0');}).join(':'); }
-
-  function isDark(){ return document.documentElement.getAttribute('data-theme')==='dark'; }
-
-  /* ── Settings toggle ── */
-  window.opcToggleSettings=function(){
-    var s=document.getElementById('opc-settings');
-    if(!s) return;
-    var opening = s.style.display!=='block';
-    s.style.display = opening?'block':'none';
-    /* Settings нээгдэхэд placeholder-д одоогийн PNL харуулах */
-    if(opening){
-      var spEl=document.getElementById('opc-fi-start-pnl');
-      if(spEl) spEl.placeholder='Одоо: '+pnl.toFixed(1)+' ₮';
-    }
-  };
-  window.opcApplySettings=function(){
-    var p=parseFloat(document.getElementById('opc-fi-price').value)||59900;
-    var t=parseInt(document.getElementById('opc-fi-target').value)||250;
-    var st=parseInt(document.getElementById('opc-fi-step').value)||10;
-    var sc=parseInt(document.getElementById('opc-fi-scale').value)||10;
-    CFG.PRICE=p; CFG.TARGET=t; CFG.STEP=st; CFG.SCALE=sc;
-    try{ localStorage.setItem('pd_opc_cfg', JSON.stringify(CFG)); }catch(e){}
-    var sl=document.getElementById('opc-step-label'); if(sl) sl.textContent=st;
-    var tl=document.getElementById('opc-target-label'); if(tl) tl.textContent=t;
-    var bel=document.getElementById('opc-be-label'); if(bel) bel.textContent=breakeven()+' гишүүн';
-    members=Math.min(members,t);
-    /* ── Эхлэх үлдэгдэл — хэрэглэгчийн тохируулсан PNL цэгээс үргэлжлүүлэх ── */
-    var spEl=document.getElementById('opc-fi-start-pnl');
-    if(spEl && spEl.value!==''){
-      var sp=parseFloat(spEl.value);
-      if(!isNaN(sp)){
-        pnl=sp; displayPnl=sp; hist=[];
-        /* Flash indication */
-        var pnlEl=document.getElementById('opc-pnl');
-        if(pnlEl){ pnlEl.style.outline='2px solid var(--gold)'; setTimeout(function(){if(pnlEl)pnlEl.style.outline='';},1200); }
-        /* Clear the field after applying */
-        spEl.value='';
-      }
-    }
-    document.getElementById('opc-settings').style.display='none';
-    updateUI(); drawChart(); opcSaveState();
-  };
-
-  /* ── Header collapse toggle ── */
-  var hdr=document.getElementById('opc-header-toggle');
-  if(hdr) hdr.addEventListener('click',function(){
-    var b=document.getElementById('opc-body');
-    var a=document.getElementById('opc-arr');
-    if(!b) return;
-    var open=b.style.display!=='none';
-    b.style.display=open?'none':'block';
-    if(a) a.style.transform=open?'rotate(0deg)':'rotate(180deg)';
-  });
-
-  /* ═══════════════════════════════════════
-     PRESSURE SYSTEM
-  ═══════════════════════════════════════ */
-
-  /* Milestones — negative PNL thresholds */
-  var MILESTONES=[-50,-100,-250,-500,-1000,-2500,-5000,-10000,-25000,-50000,-100000];
-  var milestonesHit={};
-  var lossStreakSecs=0;
-
-  function fmtMilestone(v){
-    var a=Math.abs(v);
-    if(a>=1e6) return '-₮'+(a/1e6).toFixed(1)+'M';
-    if(a>=1e3) return '-₮'+(a/1e3).toFixed(0)+'K';
-    return '-₮'+a;
-  }
-
-  function showToast(msg){
-    var zone=document.getElementById('opc-toast-zone'); if(!zone) return;
-    var el=document.createElement('div');
-    el.className='opc-toast';
-    el.innerHTML='<span class="opc-toast-icon">⚠️</span>'+msg;
-    zone.appendChild(el);
-    setTimeout(function(){
-      el.classList.add('out');
-      setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); },250);
-    },3800);
-  }
-
-  function checkMilestones(pnlVal){
-    if(pnlVal>=0) return;
-    for(var i=0;i<MILESTONES.length;i++){
-      var m=MILESTONES[i];
-      if(pnlVal<=m && !milestonesHit[m]){
-        milestonesHit[m]=true;
-        var lbl=fmtMilestone(m);
-        showToast(lbl+' алдагдал давлаа!');
-        /* Browser notification */
-        if(typeof _sendLossNotif==='function') _sendLossNotif(lbl, fmtAbs(pnlVal));
-      }
-    }
-  }
-
-  function getSeverity(pnlVal){
-    if(pnlVal>=-50) return 0;
-    if(pnlVal>=-250) return 1;
-    if(pnlVal>=-1000) return 2;
-    if(pnlVal>=-5000) return 3;
-    return 4;
-  }
-
-  function updatePressure(){
-    var sev=getSeverity(pnl);
-    var wrap=document.getElementById('opc-wrap');
-    if(wrap){
-      wrap.classList.remove('sev-1','sev-2','sev-3','sev-4');
-      if(sev>0) wrap.classList.add('sev-'+sev);
-    }
-
-    /* Loss streak */
-    if(pnl<0){ lossStreakSecs++; } else { lossStreakSecs=0; }
-    var sk=document.getElementById('opc-streak');
-    if(sk){
-      if(lossStreakSecs>=10){
-        var sm=Math.floor(lossStreakSecs/60), ss=lossStreakSecs%60;
-        sk.textContent='🔴 '+sm+':'+(ss<10?'0':'')+ss;
-        sk.className='opc-streak visible';
-      } else {
-        sk.className='opc-streak';
-      }
-    }
-
-    /* Breakeven gap */
-    var be=breakeven();
-    var gap=be-members; /* how many more members needed */
-    var bgn=document.getElementById('opc-be-gap-num');
-    var bbf=document.getElementById('opc-be-bar');
-    if(bgn){
-      if(gap<=0){
-        bgn.textContent='✓ Ашигтай';
-        bgn.className='opc-be-gap-num zero';
-      } else {
-        bgn.textContent='+'+gap+' гишүүн';
-        bgn.className='opc-be-gap-num';
-      }
-    }
-    if(bbf){
-      var pct=Math.min(100,Math.round((members/be)*100));
-      bbf.style.width=pct+'%';
-      bbf.style.background=pct>=100?'var(--green)':pct>=60?'var(--gold)':'var(--red)';
-    }
-
-    /* Savings chip — daily loss saved if at breakeven now */
-    var dailyLoss=Math.abs(projDay());
-    var sv=document.getElementById('opc-save-val');
-    if(sv){ sv.textContent='₮'+fmtProj(dailyLoss).replace('-','').replace('₮',''); }
-
-    /* Milestone check */
-    checkMilestones(pnl);
-    /* Breakeven countdown live refresh */
-    if(typeof window.opcCdwUpdate==='function'){ var _cde=document.getElementById('opc-cdw-date'); if(_cde&&_cde.value) window.opcCdwUpdate(); }
-  }
-
-  /* ── Manual monthly loss override ── */
-  var manualLossActive=false;
-  var manualMonthLoss=0; /* ₮ */
-
-  /* ── Breakeven Countdown ── */
-  window.opcCdwUpdate=function(){
-    var dateEl=document.getElementById('opc-cdw-date');
-    var body=document.getElementById('opc-cdw-body');
-    var noDate=document.getElementById('opc-cdw-nodate');
-    var daysEl=document.getElementById('opc-cdw-days');
-    var needEl=document.getElementById('opc-cdw-need');
-    var lossEl=document.getElementById('opc-cdw-total-loss');
-    var urgEl=document.getElementById('opc-cdw-urgency');
-    if(!dateEl||!dateEl.value){
-      if(body) body.style.display='none';
-      if(noDate) noDate.style.display='block';
       return;
     }
-    if(body) body.style.display='flex';
-    if(noDate) noDate.style.display='none';
-    var targetDate=new Date(dateEl.value);
-    targetDate.setHours(23,59,59,0);
-    var now=new Date();
-    var msLeft=targetDate-now;
-    var daysLeft=Math.max(0,Math.ceil(msLeft/86400000));
-    var be=breakeven();
-    var gap=Math.max(0,be-members);
-    var dailyLoss=Math.abs(projDay());
-    var totalLoss=dailyLoss*daysLeft;
-    var memPerDay=daysLeft>0?(gap/daysLeft):Infinity;
-    var memPerDayStr=daysLeft>0?'+'+memPerDay.toFixed(1)+' гишүүн/өдөр':'⚠ Огноо өнгөрсөн';
-    function fmtTug(v){
-      if(v>=1e6) return '₮'+(v/1e6).toFixed(2)+'M';
-      if(v>=1e3) return '₮'+Math.round(v).toLocaleString('mn-MN');
-      return '₮'+v.toFixed(0);
+    var loan = null;
+    for(var i=0;i<state.loans.length;i++){ if(state.loans[i].id===id){ loan=state.loans[i]; break; } }
+    if(!loan) return;
+    loan.bal += sign * val;
+    var now = new Date();
+    var pad = function(n){ return n<10?'0'+n:n; };
+    var dateStr = now.getFullYear()+'.'+pad(now.getMonth()+1)+'.'+pad(now.getDate())+' '+pad(now.getHours())+':'+pad(now.getMinutes());
+    if(!state.hist[id]) state.hist[id] = [];
+    state.hist[id].unshift({ ts:now.getTime(), date:dateStr, type:sign>0?'add':'sub', amount:val, bal:loan.bal });
+    if(inp){ inp.value = ''; inp.blur(); }
+    // close panel
+    toggleExpand(id);
+    save();
+    var balEl = document.getElementById('dbal-' + id);
+    if(balEl) {
+      balEl.textContent = fmt(loan.bal);
+      balEl.style.color = loan.bal > 0 ? 'var(--red)' : 'var(--green)';
+      balEl.style.transition = 'transform .15s';
+      balEl.style.transform = 'scale(1.15)';
+      setTimeout(function(){ if(balEl){ balEl.style.transform = ''; } }, 200);
     }
-    var urgClass,urgText;
-    if(daysLeft===0){ urgClass='u-crit'; urgText='ДУУСЧИХСАН'; }
-    else if(gap<=0){ urgClass='u-ok'; urgText='BREAKEVEN ✓'; }
-    else if(memPerDay>10){ urgClass='u-crit'; urgText='🔴 КРИТИК'; }
-    else if(memPerDay>5){ urgClass='u-high'; urgText='🟠 ӨНДӨР'; }
-    else if(memPerDay>2){ urgClass='u-med'; urgText='🟡 ДУНД'; }
-    else { urgClass='u-ok'; urgText='🟢 ХЭВИЙН'; }
-    var dayClass=daysLeft<=7?'c-crit':daysLeft<=30?'c-high':'c-ok';
-    if(daysEl){ daysEl.textContent=daysLeft; daysEl.className='opc-cdw-days '+dayClass; }
-    if(needEl){ needEl.textContent=gap<=0?'Хангалттай ✓':memPerDayStr; needEl.style.color=gap<=0?'var(--green)':daysLeft<=7?'var(--red)':'inherit'; }
-    if(lossEl){ lossEl.textContent=fmtTug(totalLoss); lossEl.style.color=totalLoss>500000?'var(--red)':'inherit'; }
-    if(urgEl){ urgEl.textContent=urgText; urgEl.className='opc-cdw-urgency '+urgClass; }
-    try{ localStorage.setItem('opc_cdw_date',dateEl.value); }catch(e){}
-  };
-  /* Restore saved date + init */
-  (function(){
-    try{
-      var saved=localStorage.getItem('opc_cdw_date');
-      var el=document.getElementById('opc-cdw-date');
-      if(saved&&el){ el.value=saved; setTimeout(window.opcCdwUpdate,300); }
-      else{
-        var b=document.getElementById('opc-cdw-body');
-        var nd=document.getElementById('opc-cdw-nodate');
-        if(b) b.style.display='none';
-        if(nd) nd.style.display='block';
-      }
-    }catch(e){}
-  })();
-  /* Live refresh every 30s */
-  setInterval(function(){ var el=document.getElementById('opc-cdw-date'); if(el&&el.value) window.opcCdwUpdate(); },30000);
+    updateTotals();
+  }
 
-  window.opcToggleManualLoss=function(){
-    manualLossActive=!manualLossActive;
-    var tgl=document.getElementById('opc-ml-toggle');
-    var knob=document.getElementById('opc-ml-knob');
-    var lbl=document.getElementById('opc-ml-mode-lbl');
-    var wrap=document.getElementById('opc-ml-manual-wrap');
-    if(manualLossActive){
-      tgl.style.background='var(--red)';
-      knob.style.transform='translateX(14px)';
-      lbl.textContent='ГАРААР';
-      lbl.style.color='var(--red)';
-      wrap.style.display='block';
-      /* pre-fill with current auto value */
-      var autoMonth=Math.abs(projMonthAuto());
-      var autoDay=Math.abs(projDayAuto());
-      var mfi=document.getElementById('opc-fi-month-loss');
-      var dfi=document.getElementById('opc-fi-day-loss');
-      if(mfi && !mfi.value) mfi.value=Math.round(autoMonth);
-      if(dfi && !dfi.value) dfi.value=Math.round(autoDay);
-      manualMonthLoss=parseFloat(document.getElementById('opc-fi-month-loss').value)||autoMonth;
+  function showHist(id, name) {
+    var panel = document.getElementById('debt-hist-panel');
+    var title = document.getElementById('debt-hist-title');
+    var listEl = document.getElementById('debt-hist-list');
+    if(!panel || !listEl) return;
+    // toggle off if same
+    if(panel.style.display !== 'none' && title && title.dataset.activeId === id) {
+      panel.style.display = 'none'; return;
+    }
+    if(title){ title.textContent = name + ' — түүх'; title.dataset.activeId = id; }
+    var hist = state.hist[id] || [];
+    if(!hist.length) {
+      listEl.innerHTML = '<div style="color:var(--text3);font-size:12px;padding:16px 0;text-align:center;">Бүртгэл байхгүй</div>';
     } else {
-      tgl.style.background='var(--bg4)';
-      knob.style.transform='translateX(0)';
-      lbl.textContent='АВТО';
-      lbl.style.color='var(--text4)';
-      wrap.style.display='none';
-      manualMonthLoss=0;
+      listEl.innerHTML = hist.map(function(e){
+        var isAdd = e.type === 'add';
+        return '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);">' +
+          '<div style="width:28px;height:28px;border-radius:8px;background:' + (isAdd ? 'rgba(255,59,48,.12)' : 'rgba(52,199,89,.12)') + ';display:flex;align-items:center;justify-content:center;flex-shrink:0;">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="' + (isAdd ? 'var(--red)' : 'var(--green)') + '" stroke-width="2.5" style="width:12px;height:12px;"><path d="' + (isAdd ? 'M12 5v14M5 12h14' : 'M20 12H4') + '"/></svg>' +
+          '</div>' +
+          '<div style="flex:1;min-width:0;">' +
+            '<div style="font-size:13px;font-weight:700;color:' + (isAdd ? 'var(--red)' : 'var(--green)') + ';">' + (isAdd ? '+' : '\u2212') + fmt(e.amount) + '</div>' +
+            '<div style="font-size:10px;color:var(--text3);margin-top:1px;">' + e.date + '</div>' +
+          '</div>' +
+          '<div style="font-size:12px;font-weight:600;color:var(--text2);font-family:\'DM Mono\',monospace;">' + fmt(e.bal) + '</div>' +
+        '</div>';
+      }).join('');
     }
+    panel.style.display = 'block';
+    setTimeout(function(){ panel.scrollIntoView({ behavior:'smooth', block:'nearest' }); }, 50);
+  }
+
+  window.debtToggle = function() {
+    var body = document.getElementById('debt-body');
+    var arr = document.getElementById('debt-arr');
+    if(!body) return;
+    var open = body.style.display !== 'none';
+    body.style.display = open ? 'none' : '';
+    if(arr) arr.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
   };
 
-  /* Sync: when month loss changes → update day field */
-  window.opcSyncDayFromMonth=function(){
-    var mfi=document.getElementById('opc-fi-month-loss');
-    var dfi=document.getElementById('opc-fi-day-loss');
-    var mv=parseFloat(mfi&&mfi.value)||0;
-    if(dfi) dfi.value=mv?Math.round(mv/30):'';
-    manualMonthLoss=mv;
-  };
+  // Animations
+  var st = document.createElement('style');
+  st.textContent = '@keyframes dtpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.85)}}@keyframes dtshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}';
+  document.head.appendChild(st);
 
-  /* Listen for day field changes → update month */
-  document.addEventListener('DOMContentLoaded',function(){
-    var dfi=document.getElementById('opc-fi-day-loss');
-    if(dfi) dfi.addEventListener('input',function(){
-      var dv=parseFloat(dfi.value)||0;
-      var mfi=document.getElementById('opc-fi-month-loss');
-      if(mfi) mfi.value=dv?Math.round(dv*30):'';
-      manualMonthLoss=dv*30;
-    });
-    var mfi=document.getElementById('opc-fi-month-loss');
-    if(mfi) mfi.addEventListener('input',function(){
-      window.opcSyncDayFromMonth();
-    });
-  });
-
-  function projDayAuto(){ return drift(members)*SECS_DAY/CFG.SCALE; }
-  function projMonthAuto(){ return drift(members)*SECS_MONTH/CFG.SCALE; }
-
-  function projDay(){
-    if(manualLossActive && manualMonthLoss){
-      return -(manualMonthLoss/30);
-    }
-    return projDayAuto();
-  }
-  function projMonth(){
-    if(manualLossActive && manualMonthLoss){
-      var mfi=document.getElementById('opc-fi-month-loss');
-      return -(parseFloat(mfi&&mfi.value)||manualMonthLoss);
-    }
-    return projMonthAuto();
-  }
-
-  function fmtProj(v){
-    var a=Math.abs(v),s=v<0?'-':'';
-    if(a>=1e6) return s+'₮'+(a/1e6).toFixed(2)+'M';
-    if(a>=1e3) return s+'₮'+Math.round(a).toLocaleString('mn-MN');
-    return s+'₮'+a.toFixed(0);
-  }
-
-  /* ── UI update ── */
-  var prevDrift=null, prevPnl=null;
-  function updateUI(){
-    var d=drift(members);
-    var conv=Math.round((members/CFG.TARGET)*100);
-    var heat=conv<20?'LOW':conv<50?'MED':conv<80?'HIGH':'MAX';
-    var hc=conv<20?'var(--red)':conv<50?'var(--gold)':conv<80?'var(--green)':'var(--blue)';
-
-    /* PNL number — flash on whole-number boundary cross */
-    var pnlEl=document.getElementById('opc-pnl');
-    if(pnlEl){
-      var curFloor=Math.floor(Math.abs(displayPnl));
-      var prevFloor=prevPnl!==null?Math.floor(Math.abs(prevPnl)):-1;
-      if(prevPnl!==null && curFloor!==prevFloor){
-        pnlEl.classList.remove('flash');
-        void pnlEl.offsetWidth;
-        pnlEl.classList.add('flash');
-      }
-      pnlEl.textContent=fmtAbs(displayPnl);
-      pnlEl.className=(pnlEl.classList.contains('flash')?'opc-num flash':'opc-num')+(displayPnl>=0?' pos':'');
-      prevPnl=displayPnl;
-    }
-
-    var dr=document.getElementById('opc-drift');
-    if(dr){ dr.textContent=fmtS(d); dr.className='opc-sv'+(d<0?' neg':d>0?' pos':''); }
-
-    /* Velocity badge */
-    var vel=document.getElementById('opc-vel');
-    if(vel && prevDrift!==null){
-      var diff=Math.abs(d)-Math.abs(prevDrift);
-      if(Math.abs(diff)<0.0001){ vel.textContent='→'; vel.className='opc-vel stable'; }
-      else if(diff>0){ vel.textContent='↓'; vel.className='opc-vel worse'; }
-      else { vel.textContent='↑'; vel.className='opc-vel better'; }
-    }
-    prevDrift=d;
-
-    var mv=document.getElementById('opc-members'); if(mv) mv.textContent=members;
-    var cv=document.getElementById('opc-conv'); if(cv){ cv.textContent=conv+'%'; cv.style.color=hc; }
-
-    /* Progress ring — circumference = 2π×14 ≈ 87.96 */
-    var rf=document.getElementById('opc-ring-fill');
-    if(rf){
-      var circ=87.96;
-      var offset=circ*(1-Math.min(conv/100,1));
-      rf.style.strokeDashoffset=offset;
-      rf.style.stroke=hc;
-    }
-
-    /* Keep old flat bar hidden — ring replaces it */
-    var pf=document.getElementById('opc-prog-fill'); if(pf){ pf.style.width=conv+'%'; pf.style.background=hc; }
-
-    /* Heat glow on MAX */
-    var hv=document.getElementById('opc-heat');
-    if(hv){
-      hv.textContent=heat; hv.style.color=hc;
-      hv.className='opc-sv'+(heat==='MAX'?' heat-max':'');
-    }
-
-    /* Projections */
-    var pd=projDay(), pm=projMonth();
-    var pdw=document.getElementById('opc-proj-day-wrap');
-    var pmw=document.getElementById('opc-proj-month-wrap');
-    var pdv=document.getElementById('opc-proj-day');
-    var pmv=document.getElementById('opc-proj-month');
-    if(pdv){ pdv.textContent=fmtProj(pd); pdv.className='opc-proj-val'+(pd>=0?' pos':''); }
-    if(pmv){ pmv.textContent=fmtProj(pm); pmv.className='opc-proj-val'+(pm>=0?' pos':''); }
-    if(pdw){ pdw.className='opc-proj-chip'+(pd>=0?' pos':''); }
-    if(pmw){ pmw.className='opc-proj-chip'+(pm>=0?' pos':''); }
-  }
-
-  /* ── Smooth animation loop ── */
-  function animLoop(){
-    /* Lerp PnL — 0.14 = snappier but still fluid */
-    var deltaPnl=pnl-displayPnl;
-    if(Math.abs(deltaPnl)>0.001){ displayPnl+=deltaPnl*0.14; } else { displayPnl=pnl; }
-
-    /* Lerp Drift for sidebar chip */
-    var targetDrift=drift(members);
-    var deltaDrift=targetDrift-displayDrift;
-    if(Math.abs(deltaDrift)>0.0001){ displayDrift+=deltaDrift*0.10; } else { displayDrift=targetDrift; }
-
-    /* Update DOM every frame — buttery smooth numbers */
-    var pnlEl=document.getElementById('opc-pnl');
-    if(pnlEl){ pnlEl.textContent=fmtAbs(displayPnl); pnlEl.className='opc-num'+(displayPnl>=0?' pos':''); }
-
-    var drr=document.getElementById('opc-drift-rate');
-    if(drr){ drr.textContent=fmtS(displayDrift)+'/сек'; drr.style.color=displayDrift<0?'var(--red)':'var(--green)'; }
-
-    drawChart();
-    rafId=requestAnimationFrame(animLoop);
-  }
-
-  /* ── Canvas chart with smooth bezier curve ── */
-  var canvas=document.getElementById('opc-canvas');
-  var ctx=canvas?canvas.getContext('2d'):null;
-
-  function drawChart(){
-    if(!ctx) return;
-    var box=canvas.parentElement;
-    var dpr=window.devicePixelRatio||1;
-    var W=box.offsetWidth, H=box.offsetHeight;
-    if(W<=0||H<=0) return;
-    if(canvas.width!==W*dpr||canvas.height!==H*dpr){
-      canvas.width=W*dpr; canvas.height=H*dpr;
-      canvas.style.width=W+'px'; canvas.style.height=H+'px';
-      ctx.scale(dpr,dpr);
-    }
-    ctx.clearRect(0,0,W,H);
-    if(hist.length<1) return;
-
-    var dark=isDark();
-    /* include displayPnl as synthetic last point for smooth live animation */
-    var pts=hist.slice();
-    pts[pts.length-1]=displayPnl; /* animate last point */
-
-    var mn=Math.min.apply(null,pts.concat([0]));
-    var mx=Math.max.apply(null,pts.concat([0]));
-    var rng=mx-mn||1;
-    var pd=5, pdR=4;
-    function toY(v){ return H-pd-((v-mn)/rng)*(H-pd*2); }
-    function toX(i){ return pdR+(i/(Math.max(pts.length-1,1)))*(W-pdR*2); }
-
-    var dark=isDark();
-    /* Grid lines */
-    ctx.lineWidth=0.5;
-    for(var g=0;g<=3;g++){
-      var gy=pd+(g/3)*(H-pd*2);
-      ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke();
-    }
-
-    /* Zero line */
-    var zy=toY(0);
-    ctx.strokeStyle=dark?'rgba(255,159,10,0.18)':'rgba(0,0,0,0.12)';
-    ctx.lineWidth=1; ctx.setLineDash([3,4]);
-    ctx.beginPath(); ctx.moveTo(0,zy); ctx.lineTo(W,zy); ctx.stroke();
-    ctx.setLineDash([]);
-
-    if(pts.length<2) return;
-
-    var last=pts[pts.length-1];
-    var lineColor=last<0?(dark?'#FF4F44':'#FF3B30'):(dark?'#32D96A':'#34C759');
-    var fillColorA=last<0?(dark?'rgba(255,79,68,0.18)':'rgba(255,59,48,0.10)'):(dark?'rgba(50,217,106,0.18)':'rgba(52,199,89,0.10)');
-    var fillColorB=last<0?(dark?'rgba(255,79,68,0.0)':'rgba(255,59,48,0.0)'):(dark?'rgba(50,217,106,0.0)':'rgba(52,199,89,0.0)');
-
-    /* Build smooth bezier path */
-    ctx.beginPath();
-    ctx.moveTo(toX(0),toY(pts[0]));
-    for(var i=1;i<pts.length;i++){
-      var x0=toX(i-1),y0=toY(pts[i-1]);
-      var x1=toX(i),y1=toY(pts[i]);
-      var cpx=(x0+x1)/2;
-      ctx.bezierCurveTo(cpx,y0,cpx,y1,x1,y1);
-    }
-
-    /* Area fill */
-    ctx.lineTo(toX(pts.length-1),zy);
-    ctx.lineTo(toX(0),zy);
-    ctx.closePath();
-    var grad=ctx.createLinearGradient(0,Math.min(zy,toY(last)),0,Math.max(zy,toY(last))+20);
-    grad.addColorStop(0,fillColorA);
-    grad.addColorStop(1,fillColorB);
-    ctx.fillStyle=grad;
-    ctx.fill();
-
-    /* Stroke the smooth line */
-    ctx.beginPath();
-    ctx.moveTo(toX(0),toY(pts[0]));
-    for(var i=1;i<pts.length;i++){
-      var x0=toX(i-1),y0=toY(pts[i-1]);
-      var x1=toX(i),y1=toY(pts[i]);
-      var cpx=(x0+x1)/2;
-      ctx.bezierCurveTo(cpx,y0,cpx,y1,x1,y1);
-    }
-    ctx.strokeStyle=lineColor;
-    ctx.lineWidth=2.2;
-    ctx.lineJoin='round';
-    ctx.lineCap='round';
-    ctx.stroke();
-
-    /* Live dot — pulsing ring effect */
-    var lx=toX(pts.length-1), ly=toY(last);
-    /* outer glow ring */
-    ctx.beginPath(); ctx.arc(lx,ly,5.5,0,Math.PI*2);
-    ctx.fillStyle=last<0?(dark?'rgba(255,79,68,0.22)':'rgba(255,59,48,0.18)'):(dark?'rgba(50,217,106,0.22)':'rgba(52,199,89,0.18)');
-    ctx.fill();
-    /* solid dot */
-    ctx.fillStyle=lineColor;
-    ctx.beginPath(); ctx.arc(lx,ly,3.5,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle=dark?'rgba(11,11,16,0.65)':'rgba(255,255,255,0.8)';
-    ctx.beginPath(); ctx.arc(lx,ly,1.4,0,Math.PI*2); ctx.fill();
-
-    /* Value callout label — positioned LEFT of dot */
-    var labelText=fmtAbs(last);
-    ctx.font='bold 9px "DM Mono", monospace';
-    ctx.textBaseline='middle';
-    ctx.textAlign='left';
-    var tw=ctx.measureText(labelText).width;
-    var lpad=5, lpy=3.5;
-    var pillW=tw+lpad*2, pillH=lpy*2+1;
-    /* Dot is at right edge — place pill to the left */
-    var pillX=lx-pillW-14;
-    var pillY=ly-pillH/2;
-    /* Clamp so it doesn't go off canvas */
-    pillX=Math.max(2,pillX);
-    pillY=Math.max(2,Math.min(H-pillH-2,pillY));
-    /* Draw rounded pill manually (no ctx.roundRect for compat) */
-    var r2=4;
-    ctx.fillStyle=last<0?(dark?'rgba(255,79,68,0.88)':'rgba(255,59,48,0.92)'):(dark?'rgba(50,217,106,0.88)':'rgba(52,199,89,0.92)');
-    ctx.beginPath();
-    ctx.moveTo(pillX+r2,pillY);
-    ctx.lineTo(pillX+pillW-r2,pillY);
-    ctx.arcTo(pillX+pillW,pillY,pillX+pillW,pillY+r2,r2);
-    ctx.lineTo(pillX+pillW,pillY+pillH-r2);
-    ctx.arcTo(pillX+pillW,pillY+pillH,pillX+pillW-r2,pillY+pillH,r2);
-    ctx.lineTo(pillX+r2,pillY+pillH);
-    ctx.arcTo(pillX,pillY+pillH,pillX,pillY+pillH-r2,r2);
-    ctx.lineTo(pillX,pillY+r2);
-    ctx.arcTo(pillX,pillY,pillX+r2,pillY,r2);
-    ctx.closePath();
-    ctx.fill();
-    /* Text */
-    ctx.fillStyle='#fff';
-    ctx.fillText(labelText,pillX+lpad,pillY+pillH/2);
-  }
-
-  /* ── Tick every second — clock + history push only ── */
-  setInterval(function(){
-    secs++;
-    hist.push(pnl); if(hist.length>MAXH) hist.shift();
-    var cl=document.getElementById('opc-clock'); if(cl) cl.textContent=fmtT(secs);
-    updateUI();
-    updatePressure();
-    opcSaveState();
-  },1000);
-
-  /* ── Sub-tick every 100ms — smooth continuous PNL drift (10 steps/sec) ── */
-  setInterval(function(){
-    pnl+=drift(members)*0.1;
-  },100);
-
-  /* ── Member controls ── */
-  function addM(n){
-    members=Math.max(0,Math.min(CFG.TARGET,members+n));
-    updateUI();
-    opcSaveState();
-  }
-  var bp=document.getElementById('opc-plus'), bm=document.getElementById('opc-minus');
-  /* Hold to repeat — single click = once, hold 500ms = repeat every 200ms */
-  function holdBtn(el,fn){
-    var t=null,iv=null,active=false;
-    function start(e){ e.stopPropagation(); active=true; fn(); t=setTimeout(function(){ iv=setInterval(fn,200); },500); }
-    function stop(){ clearTimeout(t); clearInterval(iv); t=null; iv=null; active=false; }
-    el.addEventListener('mousedown',start);
-    el.addEventListener('mouseup',stop);
-    el.addEventListener('mouseleave',stop);
-    el.addEventListener('touchstart',function(e){e.stopPropagation();start(e);},{passive:true});
-    el.addEventListener('touchend',stop);
-    el.addEventListener('touchcancel',stop);
-    /* prevent ghost click after touch */
-    el.addEventListener('click',function(e){e.stopPropagation();});
-  }
-  if(bp&&bm){ holdBtn(bp,function(){addM(1);}); holdBtn(bm,function(){addM(-1);}); }
-
-  window.addEventListener('resize',drawChart);
-  /* Init labels */
-  var sl=document.getElementById('opc-step-label'); if(sl) sl.textContent=CFG.STEP;
-  var tl=document.getElementById('opc-target-label'); if(tl) tl.textContent=CFG.TARGET;
-  var bel=document.getElementById('opc-be-label'); if(bel) bel.textContent=breakeven()+' гишүүн';
-  /* Load persisted OPC state (survives refresh) */
-  opcLoadState();
-  /* Restore input field values from saved CFG */
-  (function(){
-    var ep=document.getElementById('opc-fi-price'); if(ep) ep.value=CFG.PRICE;
-    var et=document.getElementById('opc-fi-target'); if(et) et.value=CFG.TARGET;
-    var est=document.getElementById('opc-fi-step'); if(est) est.value=CFG.STEP;
-    var esc=document.getElementById('opc-fi-scale'); if(esc) esc.value=CFG.SCALE;
-    var sl2=document.getElementById('opc-step-label'); if(sl2) sl2.textContent=CFG.STEP;
-    var tl2=document.getElementById('opc-target-label'); if(tl2) tl2.textContent=CFG.TARGET;
-    var bel2=document.getElementById('opc-be-label'); if(bel2) bel2.textContent=breakeven()+' гишүүн';
-  })();
-  updateUI();
-  animLoop();
+  load();
+  render();
 })();
 
 /* ══════════════════════════════════════════════════
