@@ -581,6 +581,8 @@ body{
 .ssel:hover,.ssel:focus{border-color:var(--blue);}
 .dbtn{width:24px;height:24px;border-radius:7px;border:none;background:transparent;color:var(--text4);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;font-size:13px;}
 .dbtn:hover{background:var(--redbg);color:var(--red);}
+.cbtn{width:24px;height:24px;border-radius:7px;border:none;background:transparent;color:var(--text4);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;font-size:12px;}
+.cbtn:hover{background:var(--bluebg);color:var(--blue);}
 .addcol{width:100%;padding:8px;border-radius:10px;border:1.5px dashed var(--border2);background:transparent;color:var(--text3);font-size:12px;cursor:pointer;font-family:inherit;margin-top:7px;transition:all .15s;font-weight:600;}
 .addcol:hover{border-color:var(--gold);color:var(--gold);background:var(--goldbg);}
 
@@ -1373,6 +1375,90 @@ button:focus-visible,
 /* ── 11. Selection color matches brand ── */
 ::selection{background:rgba(255,149,0,0.18);color:var(--text);}
 [data-theme="dark"] ::selection{background:rgba(255,159,10,0.22);}
+
+/* ══════════════════════════════════════════
+   UI POLISH v2 — Visual Clarity Upgrade
+══════════════════════════════════════════ */
+
+/* ── Kanban column: colored top accent bar ── */
+.kcol{border-top-width:3px;border-top-style:solid;border-top-color:var(--border2);}
+.kcol:has(#col-todo)   {border-top-color:var(--text4);}
+.kcol:has(#col-inprogress){border-top-color:var(--blue);}
+.kcol:has(#col-review) {border-top-color:var(--amber);}
+.kcol:has(#col-done)   {border-top-color:var(--green);}
+
+/* ── Column count badge: colored by status ── */
+.kcol:has(#col-inprogress) .kc{color:var(--blue);background:var(--bluebg);}
+.kcol:has(#col-review) .kc{color:var(--amber);background:var(--amberbg);}
+.kcol:has(#col-done)   .kc{color:var(--green);background:var(--greenbg);}
+
+/* ── Column title: uppercase caps ── */
+.kt{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--text3);}
+
+/* ── kplus button ── */
+.kplus{font-size:20px;font-weight:300;transition:all .14s;}
+.kplus:hover{background:rgba(0,0,0,0.07);color:var(--text);transform:scale(1.12);}
+.kplus:active{transform:scale(0.9);}
+[data-theme="dark"] .kplus:hover{background:rgba(255,255,255,0.10);}
+
+/* ── Task card: priority-colored left accent ── */
+.tc:has(.bhi){border-left:3px solid var(--red);padding-left:11px;}
+.tc:has(.bme){border-left:3px solid var(--amber);padding-left:11px;}
+.tc:has(.blo){border-left:3px solid var(--blue);padding-left:11px;}
+.tc:has(.bhi):hover{box-shadow:0 6px 24px rgba(255,59,48,0.11),0 1px 4px rgba(0,0,0,0.05);transform:translateY(-2px);}
+.tc:has(.bme):hover{box-shadow:0 6px 24px rgba(255,149,0,0.10),0 1px 4px rgba(0,0,0,0.05);transform:translateY(-2px);}
+.tc:has(.blo):hover{box-shadow:0 6px 24px rgba(0,122,255,0.09),0 1px 4px rgba(0,0,0,0.05);transform:translateY(-2px);}
+
+/* ── Footer separator inside task card ── */
+.tfoot{border-top:1px solid var(--border);padding-top:8px;margin-top:3px;}
+
+/* ── Empty column placeholder ── */
+#col-todo:empty::after,#col-inprogress:empty::after,
+#col-review:empty::after,#col-done:empty::after{
+  content:'Ажил байхгүй';display:block;text-align:center;
+  padding:28px 8px;font-size:11px;font-weight:600;color:var(--text4);
+  border:1.5px dashed var(--border2);border-radius:10px;
+  margin-bottom:2px;
+}
+
+/* ── Stage progress gradient ── */
+.tc-stage-fill{background:linear-gradient(90deg,var(--green) 0%,#2db54d 100%);}
+
+/* ── Drag visual: rotation effect ── */
+.tc.dragging{opacity:.35;transform:scale(.96) rotate(.8deg);box-shadow:0 16px 48px rgba(0,0,0,0.18);}
+
+/* ── Stat card: animated number on hover ── */
+.scard{position:relative;overflow:hidden;}
+.scard::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 60%,rgba(255,255,255,0.04));
+  pointer-events:none;
+}
+[data-theme="dark"] .scard::after{background:linear-gradient(135deg,transparent 60%,rgba(255,255,255,0.02));}
+.scard:hover .sc-val{transform:scale(1.04);}
+.sc-val{transition:transform .18s cubic-bezier(.25,.46,.45,.94);display:inline-block;}
+
+/* ── addcol button refinement ── */
+.addcol{margin-top:5px;font-size:11.5px;letter-spacing:.02em;}
+
+/* ── Progress bar: subtle shimmer on filled cells ── */
+@keyframes shimmer{0%{opacity:.7}50%{opacity:1}100%{opacity:.7}}
+.tc-stage-fill{animation:shimmer 2.5s ease-in-out infinite;}
+.tfill{transition:width .5s cubic-bezier(.25,.46,.45,.94);}
+
+/* ── Priority badge refinement ── */
+.tbadge{font-size:10px;font-weight:800;letter-spacing:.04em;padding:2px 8px;border-radius:5px;}
+
+/* ── Due date badge refinement ── */
+.tdue-badge{font-weight:800;letter-spacing:.01em;}
+
+/* ── Task name line height ── */
+.tname{line-height:1.4;letter-spacing:-.1px;}
+
+/* ── Collapse chevron smoother ── */
+.tc-chev{transition:transform .2s cubic-bezier(.25,.46,.45,.94),color .15s;}
+.tc:not(.collapsed) .tc-chev{color:var(--text4);}
+.tc:not(.collapsed):hover .tc-chev{color:var(--text3);}
 
 
 
@@ -6176,7 +6262,7 @@ var PAGES=['kanban','content','analytics','admin','focus','finance','checkin','r
 /* PAGE_IDX maps page name → .ni index AND .ttab index
    checkin has no sidebar ni / topbar tab → omitted
    reel-script has ni[9] but no ttab → tabs[9] is undefined (safe) */
-var PAGE_IDX={kanban:0,content:1,analytics:2,users:3,admin:4,focus:5,finance:6,roadmap:7,ai:8,'reel-script':9};
+var PAGE_IDX={kanban:0,content:1,analytics:2,admin:3,focus:4,finance:5,roadmap:6,ai:7,'reel-script':2};
 function showPage(name,sidebarEl){
   // reel-script is now merged into analytics (Script page)
   if(name==='reel-script') name='analytics';
@@ -6224,6 +6310,23 @@ function x(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replac
 /* toast(): better version defined below at line ~7970 */
 
 /* ── KANBAN ── */
+function copyTask(id){
+  var t=tasks.find(function(tt){return tt.id===id;});
+  if(!t)return;
+  var stL={todo:'Эхлээгүй',inprogress:'Хийгдэж байна',review:'Хянагдаж байна',done:'Дууссан'};
+  var lines=[t.name];
+  if(t.sub)lines.push(t.sub);
+  if(t.stages&&t.stages.length){
+    t.stages.forEach(function(s){lines.push((s.done?'✓ ':'☐ ')+s.name);});
+  }
+  lines.push('Төлөв: '+(stL[t.status]||t.status));
+  if(t.due)lines.push('Дуусах: '+t.due);
+  navigator.clipboard.writeText(lines.join('\n')).then(function(){toast('📋 Хуулсан');}).catch(function(){
+    var ta=document.createElement('textarea');ta.value=lines.join('\n');
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    toast('📋 Хуулсан');
+  });
+}
 function render(){
   ['todo','inprogress','review','done'].forEach(function(s){
     var el=document.getElementById('col-'+s);
@@ -6292,7 +6395,7 @@ function cardH(t){
     +'<option value="inprogress"'+(t.status==='inprogress'?' selected':'')+'>Хийгдэж байна</option>'
     +'<option value="review"'+(t.status==='review'?' selected':'')+'>Хянагдаж байна</option>'
     +'<option value="done"'+(t.status==='done'?' selected':'')+'>Дууссан</option>'
-    +'</select><button class="dbtn" onclick="del('+t.id+')">✕</button></div></div>';
+    +'</select><button class="cbtn" onclick="event.stopPropagation();copyTask('+t.id+')" title="Хуулах"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button><button class="dbtn" onclick="del('+t.id+')">✕</button></div></div>';
 }
 function renderList(){
   var lb=document.getElementById('list-body');if(!lb)return;
@@ -6502,7 +6605,7 @@ function applyCollapsedState(){
     var card=e.target.closest('.tc');
     if(!card) return;
     /* Skip clicks on interactive children */
-    if(e.target.closest('.ssel,.dbtn,.tc-stage-item,.remind-btn,.ctx-btn')) return;
+    if(e.target.closest('.ssel,.dbtn,.cbtn,.tc-stage-item,.remind-btn,.ctx-btn')) return;
     tcToggleCollapse(card);
   });
 })();
@@ -7524,7 +7627,7 @@ function markNotifRead(id){
   }else if(n.type==='newuser'||n.type==='approved'){
     dest='admin';
   }else if(n.type==='expiry'||n.type==='deadline_soon'){
-    dest='users';
+    dest='admin';
   }
   if(dest&&typeof showPage==='function')showPage(dest,null);
 }
@@ -8698,18 +8801,17 @@ document.addEventListener('keydown',function(e){
       case '1': e.preventDefault(); _kbNav('kanban');    break;
       case '2': e.preventDefault(); _kbNav('content');   break;
       case '3': e.preventDefault(); _kbNav('analytics'); break;
-      case '4': e.preventDefault(); _kbNav('users');     break;
-      case '5': e.preventDefault(); _kbNav('admin');     break;
-      case '6': e.preventDefault(); _kbNav('focus');     break;
-      case '7': e.preventDefault(); _kbNav('finance');   break;
-      case '8': e.preventDefault(); _kbNav('roadmap');   break;
-      case '9': e.preventDefault(); _kbNav('ai');        break;
+      case '4': e.preventDefault(); _kbNav('admin');     break;
+      case '5': e.preventDefault(); _kbNav('focus');     break;
+      case '6': e.preventDefault(); _kbNav('finance');   break;
+      case '7': e.preventDefault(); _kbNav('roadmap');   break;
+      case '8': e.preventDefault(); _kbNav('ai');        break;
     }
   }
 });
 var _kbNavLabels={
   kanban:'Ерөнхий',content:'Контент',analytics:'Script',
-  users:'Хэрэглэгчид',admin:'Admin',focus:'Focus Zone',
+  admin:'Admin',focus:'Focus Zone',
   finance:'Finance',roadmap:'Төлөвлөгөө',ai:'AI Зөвлөгч',
   'reel-script':'Script'
 };
@@ -10280,28 +10382,24 @@ function exportCSV(type){
         <div style="display:flex;gap:4px;flex-shrink:0;"><span class="kbd">⌘</span><span class="kbd">3</span></div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-        <span style="font-size:12px;color:var(--text2);">Хэрэглэгчид</span>
+        <span style="font-size:12px;color:var(--text2);">Admin</span>
         <div style="display:flex;gap:4px;flex-shrink:0;"><span class="kbd">⌘</span><span class="kbd">4</span></div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-        <span style="font-size:12px;color:var(--text2);">Admin</span>
+        <span style="font-size:12px;color:var(--text2);">Focus Zone</span>
         <div style="display:flex;gap:4px;flex-shrink:0;"><span class="kbd">⌘</span><span class="kbd">5</span></div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-        <span style="font-size:12px;color:var(--text2);">Focus Zone</span>
+        <span style="font-size:12px;color:var(--text2);">Finance</span>
         <div style="display:flex;gap:4px;flex-shrink:0;"><span class="kbd">⌘</span><span class="kbd">6</span></div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-        <span style="font-size:12px;color:var(--text2);">Finance</span>
+        <span style="font-size:12px;color:var(--text2);">Төлөвлөгөө</span>
         <div style="display:flex;gap:4px;flex-shrink:0;"><span class="kbd">⌘</span><span class="kbd">7</span></div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-        <span style="font-size:12px;color:var(--text2);">Төлөвлөгөө</span>
-        <div style="display:flex;gap:4px;flex-shrink:0;"><span class="kbd">⌘</span><span class="kbd">8</span></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
         <span style="font-size:12px;color:var(--text2);">AI Зөвлөгч</span>
-        <div style="display:flex;gap:4px;flex-shrink:0;"><span class="kbd">⌘</span><span class="kbd">9</span></div>
+        <div style="display:flex;gap:4px;flex-shrink:0;"><span class="kbd">⌘</span><span class="kbd">8</span></div>
       </div>
     </div>
     <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:10px;color:var(--text4);text-align:center;">Mac: ⌘ (Command) · Windows/Linux: Ctrl</div>
@@ -11083,13 +11181,12 @@ var CMD_PAGES=[
   {icon:'📋',name:'Ерөнхий',sub:'Ажлын самбар / Kanban',key:'kanban',kbd:'1'},
   {icon:'✍️',name:'Контент',sub:'Script & pipeline',key:'content',kbd:'2'},
   {icon:'🎬',name:'Script',sub:'Reel → Монгол Script',key:'analytics',kbd:'3'},
-  {icon:'👥',name:'Хэрэглэгчид',sub:'Гишүүдийн жагсаалт',key:'users',kbd:'4'},
-  {icon:'⚙️',name:'Admin',sub:'Нэвтрэх мэдээлэл',key:'admin',kbd:'5'},
-  {icon:'🎯',name:'Focus Zone',sub:'Pomodoro, top 3 ажил',key:'focus',kbd:'6'},
-  {icon:'💰',name:'Finance',sub:'Орлого, зарлага',key:'finance',kbd:'7'},
+  {icon:'⚙️',name:'Admin',sub:'Нэвтрэх мэдээлэл',key:'admin',kbd:'4'},
+  {icon:'🎯',name:'Focus Zone',sub:'Pomodoro, top 3 ажил',key:'focus',kbd:'5'},
+  {icon:'💰',name:'Finance',sub:'Орлого, зарлага',key:'finance',kbd:'6'},
   {icon:'📓',name:'Daily Check-in',sub:'Өдрийн тэмдэглэл',key:'checkin'},
-  {icon:'🗺️',name:'Төлөвлөгөө',sub:'Scale Roadmap',key:'roadmap',kbd:'8'},
-  {icon:'🤖',name:'AI Зөвлөгч',sub:'AI coaching',key:'ai',kbd:'9'},
+  {icon:'🗺️',name:'Төлөвлөгөө',sub:'Scale Roadmap',key:'roadmap',kbd:'7'},
+  {icon:'🤖',name:'AI Зөвлөгч',sub:'AI coaching',key:'ai',kbd:'8'},
   {icon:'🎬',name:'Script (Reel)',sub:'Reel → Монгол Script',key:'analytics'},
 ];
 
