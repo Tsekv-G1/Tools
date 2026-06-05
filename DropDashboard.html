@@ -2435,11 +2435,6 @@ body{overflow-x:hidden;}
         </div>
         <div id="tg-overdue-alert" style="display:none;margin-top:10px;background:rgba(255,59,48,0.15);border:1px solid rgba(255,59,48,0.35);border-left:3px solid #FF3B30;border-radius:10px;padding:9px 12px;font-size:11px;font-weight:700;color:#FF6B60;position:relative;display:none;"></div>
       </div>
-      <div class="banner" id="banner" style="border-left:3px solid var(--gold);">
-        <div class="ban-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-        <div class="ban-txt"><strong>Drop #05 бэлдэж байна!</strong> — 8/10 бараа баталгаажсан. BOFU контент хийхгүй байна.</div>
-        <button class="ban-close" onclick="document.getElementById('banner').remove()">✕</button>
-      </div>
       <div class="stats">
         <div class="scard" style="border-left:3px solid var(--text3);"><div class="sc-icon" style="background:rgba(0,0,0,0.045);"><svg viewBox="0 0 24 24" stroke="var(--text2)"><rect x="3" y="3" width="7" height="18" rx="1.5"/><rect x="14" y="3" width="7" height="11" rx="1.5"/></svg></div><div class="sc-label">Нийт ажил</div><div class="sc-val" id="st-tot">0</div><div class="sc-sub">Бүх даалгавар</div></div>
         <div class="scard" style="border-left:3px solid var(--blue);"><div class="sc-icon" style="background:var(--bluebg);"><svg viewBox="0 0 24 24" stroke="var(--blue)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="sc-label">Хийгдэж байна</div><div class="sc-val" id="st-ip" style="color:var(--blue);">0</div><div class="sc-sub">Идэвхтэй</div></div>
@@ -2984,6 +2979,7 @@ body{overflow-x:hidden;}
               <button class="rs-out-btn" id="rs-edit-btn" onclick="rsToggleEdit()" disabled>✏️ Засах</button>
               <button class="rs-out-btn" id="rs-copy-btn" onclick="rsCopyAll()" disabled>⌘ Бүгд хуулах</button>
               <button class="rs-out-btn" id="rs-caption-btn" onclick="rsCopyCaption()" disabled title="Hook + CTA — post caption-д тохиромжтой">✂ Caption</button>
+              <button class="rs-out-btn" id="rs-tele-btn" onclick="rsTeleOpen()" disabled title="Teleprompter">▶ Teleprompter</button>
               <button class="rs-out-btn" onclick="rsReset()">↺</button>
             </div>
           </div>
@@ -3049,6 +3045,18 @@ body{overflow-x:hidden;}
                 <option value="FB Reel">FB Reel</option>
               </select>
             </div>
+          </div>
+          <div class="rs-fld">
+            <div class="rs-lbl">Script формат</div>
+            <select class="rs-sel" id="rs-m-format">
+              <option value="">— Тодорхойгүй —</option>
+              <option value="standard">① Стандарт+</option>
+              <option value="story">② Story-first</option>
+              <option value="casestudy">③ Case study</option>
+              <option value="mistake">④ Mistake breakdown</option>
+              <option value="pov">⑤ POV</option>
+              <option value="donot">⑥ Don't start unless</option>
+            </select>
           </div>
           <div class="rs-fld">
             <div class="rs-lbl">Нийтлэх огноо <span style="font-weight:400;color:var(--text4)">(заавал биш)</span></div>
@@ -3153,7 +3161,7 @@ body{overflow-x:hidden;}
       rq('rs-err').className='rs-err';
       rq('rs-out-body').innerHTML='<div class="rs-empty"><div class="rs-empty-ico">▶</div><div class="rs-empty-lbl">Pipeline эхлүүлнэ үү</div><div class="rs-empty-sub">HOOK · BODY · CTA хэсэг болгон гарна</div></div>';
       var outCard=rq('rs-out-body').closest('.rs-out-card');if(outCard)outCard.classList.remove('rs-reveal');
-      rq('rs-save-btn').disabled=true;rq('rs-copy-btn').disabled=true;rq('rs-edit-btn').disabled=true;
+      rq('rs-save-btn').disabled=true;rq('rs-copy-btn').disabled=true;rq('rs-edit-btn').disabled=true;rq('rs-tele-btn').disabled=true;
       var _rcb=rq('rs-caption-btn');if(_rcb)_rcb.disabled=true;
       rq('rs-edit-btn').textContent='✏️ Засах';rq('rs-edit-btn').classList.remove('edit-on');
       rq('rs-edit-bar').className='rs-edit-bar';
@@ -3232,9 +3240,15 @@ body{overflow-x:hidden;}
       window._rsCf=cf;
       var UNIVERSAL=`━━━ УНИВЕРСАЛЬ ДҮРЭМ (бүх type-д хамаарна) ━━━
 TRANSFORMATION: Transcript-г орчуулж болохгүй. Гол concept авч Монголд тохируулан бүтэн шинэ script бич. Монгол үнэ (₮), platform (IG/TikTok) нэмнэ.
-VOICE: "чи" гэж хандана — "та" хориглоно. 5-10 үгтэй богино өгүүлбэр. Бичгийн хэл хориглоно.
+VOICE: Дүрмийн дагуу хандлага сонго — 5-10 үгтэй богино өгүүлбэр. Бичгийн хэл хориглоно.
+  → B2B контент (ресторан/кафе/дэлгүүр/бизнес эрхлэгчид): "Та" гэж хандана
+  → Consumer контент (ерөнхий хэрэглэгч): "Чи" гэж хандана
+  → Нэг script дотор "Та" болон "Чи" хольж болохгүй — аль нэгийг л ашигла
 EMOJI: Нийт script-д max 1 emoji зөвшөөрнө.
 HOOK: 1 өгүүлбэр, MAX 10 үг. Камерт шууд. Hook уншсан хүн тайван байж чадахгүй байх ёстой.
+  ✗ Recap/geographic hook ХОРИГЛОНО: "[Улс/Хүний нэр] [юм] болгожээ/хийжээ!" — story дүгнэж байна, curiosity gap байхгүй
+  ✗ "Швейцарьчууд X болгожээ", "Японы залуу X хийжээ" загвар → зүгээр тайлбар, шок байхгүй
+  ✓ Hook = tension + unanswered question. Уншигч "яаж?" "яагаад?" "боломжтой юу?" гэж асуух ёстой
 BODY УРТ: ЗААВАЛ 12-16 өгүүлбэр. Story arc-н 6 алхам бүрийг 2-3 өгүүлбэрээр дэлгэрүүлж бич. Хэт товчлох = ДАХИН БИЧ.
 STORY ARC: Body = narrative. Feature list, bullet, тоолсон жагсаалт хориглоно.
 AAA VIRAL ENGINE — 3-г ЗААВАЛ тараа:
@@ -3242,11 +3256,16 @@ AAA VIRAL ENGINE — 3-г ЗААВАЛ тараа:
   ② ANGER   → маргаан, зөрчилдөх санаа, controversial angle
   ③ ANXIETY → FOMO, urgency, "хоцрогдож байна уу?"
 CTA БҮТЭЦ — 2 хэсэг:
-  1. Debate асуулт: хоёр тал маргаж болохуйц, specific, comment bait
-  2. Дагалтын уриалга: "Иймэрхүү санаануудаар дагаарай 🤗" ХОРИГЛОНО — оронд нь байгалийн хэллэг ашигла:
-     → "Ийм мэдээлэл цаг алдалгүй авахыг хүсвэл дагаарай"
-     → "Энэ мэт санааг тогтмол авахыг хүсвэл дагаарай"
-     → "Ийм боломжийг эхэлж мэдэхийг хүсвэл дагаарай"${seriesLine}
+  1. Debate асуулт: хоёр тал маргаж болохуйц, specific, comment bait — АЛГОРИТМЫН ГОЛ ХӨДӨЛГҮҮР
+     → Comment авсан бичлэгийг алгоритм Follow-оос 3-5x илүү түгээдэг
+     → Асуулт 2 тодорхой эсрэг үр дүнтэй байх: "Ашигтай болох уу, алдагдал хүлээх үү?"
+  2. Дагалтын уриалга: байгалийн хэллэг — шахалтгүй, органик
+     ✗ "Намайг дагаарай" — шууд, borлуулалтын шахалт, хориглоно
+     ✗ "Иймэрхүү санаануудаар дагаарай 🤗" — хиймэл, хориглоно
+     ✓ "Ийм мэдээлэл цаг алдалгүй авахыг хүсвэл дагаарай"
+     ✓ "Энэ мэт санааг тогтмол авахыг хүсвэл дагаарай"
+     ✓ "Ийм боломжийг эхэлж мэдэхийг хүсвэл дагаарай"
+     → 6 script цуваа болох үед: зөвхөн 2-3 script-д л follow CTA тавь, бусад нь comment-only${seriesLine}
 
 ━━━ МОНГОЛ ХЭЛ ЧАНАРЫН ДҮРЭМ ━━━
 ХЭЛЗҮЙН АЛДАА — дараахыг ХОРИГЛОНО:
@@ -3271,9 +3290,151 @@ HOOK БҮТЭЦ:
   ✗ "Иймэрхүү санаануудаар" → хиймэл AI үг, хориглоно
   ✗ "Энэхүү боломжийг" → хэт бичгийн хэл, хориглоно
   ✗ "...болон..." гэж олон удаа давтах → "мөн", "түүнчлэн" гэж сол
-  Камерт чангаар уншихад хэвийн, байгалийн сонсогдох ёстой.`;
+  Камерт чангаар уншихад хэвийн, байгалийн сонсогдох ёстой.
+
+ШУУД ОРЧУУЛГЫН АЛДАА — хориглоно:
+  ✗ "эсэргүүцэлтэй тулгарах" → зөв: "хэцүү байдаг", "амаргүй"
+  ✗ "байрлуулж" → зөв: "тавьдаг", "байдаг"
+  ✗ "унагахад" → зөв: "оруулахад", "хийхэд"
+  ✗ "хожих боломжтой" → зөв: "авч болно", "хожно"
+  ✗ "хэрвээ ... чадвал" → зөв: "... вол", "... бол"
+  ✗ "үр дүнд нь" → зөв: "ингэж", "тийм болохоор"
+  ✗ "нэмэлт орлого олох" → зөв: "мөнгө нэмж олох", "дагалдсан орлого"
+  ✗ "залилаад", "заль мэх" → energy-г буруу дамжуулдаг — зөв: "арга", "систем", "механизм"
+  ✗ Verb-ийн бичгийн хэлбэр: "байрлуулж", "тулгарч", "нэмэгдэж" → ярианы хэлбэр: "тавьдаг", "тулдаг", "нэмэгддэг"
+  ✗ "их мөнгө хийх" (making big money үгчилсэн) → зөв: "их мөнгөөр эхлэх", "том капитал хэрэгтэй"
+  ✗ "вэбсайт бүтээх" → зөв: "вэбсайт хийх", "вэбсайт босгох"
+  ✗ "Түгээмэл нь энэ" (Commonly/Basically-г буруу буулгасан) → зөв: "Үндсэн зарчим нь ердөө л энэ"
+  ✗ "орлого орж ирсэн" гэдгийг "захиалга орж ирэхэд" гэсний дараа дахин хэрэглэх — давталт → зөв: "борлуулалт хийчихсэн байсан"
+  ✗ "Дараагийн видеоноор орно" (дутуу, идэвхгүй) → зөв: "Дараагийн видеоноороо дэлгэрэнгүй зааж өгье"
+  ✗ "утасны хуудас" (phone page үгчилсэн) → зөв: "утасны дэлгэц"
+  ✗ "эхлэнэ" → зөв: "эхэлнэ" (үндэс "эхэл" + "-нэ")
+  ✗ "Чи бодож байгаагаасаа өөр" (өгүүлбэр бүрэн гарахгүй) → зөв: "Үндсэндээ чиний бодож байгаагаас тэс өөр"
+  ✗ "мөнгө үү, бараа үү, эхлэх үү" (асуух сул үг буруу) → зөв: "мөнгө үү, бараа юу, эсвэл хаанаас эхлэх вэ гэдэг дээр үү"
+  ✗ "яг тэр асуудал дээр орно" / "яг тэр дээр орно" (дутуу, идэвхгүй) → зөв: "яг тэр асуудлыг чинь дараагийн видеоноороо шийдэж өгье"
+  ✗ "тэнүүчилж байна" (wandering around үгчилсэн) → зөв: "барьц алдаж, будилаад байгаа"
+  ✗ "үүрд гүйглэдэг" (keeps scrolling үгчилсэн + механик шивэлт) → зөв: "нэг газраа үүрд гацаагаад байгаа"
+  ✗ "4 хоног дараа" (4 days later бүтэц) → зөв: "4 хоногийн дараа"
+  ✗ "орж ирэв" (номын хэл, хиймэл) → зөв: "орж ирсэн", "авчихсан"
+  ✗ Нэг контентод "Та" болон "Чи" хольж ашиглах — ХАТУУ ХОРИГЛОНО: Reels/TikTok контентод заавал "Чи" гэж хандана
+  ✗ "маргааш нь" (The next day үгчилсэн) → зөв: "маргаашнаас л эхэлнэ гэсээр" эсвэл "маргааш л эхэлье гэсээр"
+  ✗ "төгс мөнгө" (perfect money үгчилсэн) → зөв: "хангалттай их мөнгө", "төгс төсөв"
+  ✗ "веб сайт" (хоёр үг) → зөв: "вэбсайт" (нэг үг)
+  ✗ "аль дээр гацаж байгаагаа" (дутуу) → зөв: "аль алхам дээр нь гацаад байгаагаа"
+  ✗ "Чи ч мөн үү?" (дутуу, хагас өгүүлбэр) → зөв: "Чи ч гэсэн яг ингэж гацаад байна уу?"
+  ✗ "хүүхэд" (бизнес контентод насны хувьд бага ангийн шиг) → зөв: "нэг залуу", "үеийнх маань"
+  ✗ "Миний анхны захиалга нь" ("Миний" + "нь" давхар) → зөв: "Миний хамгийн анхны захиалга бол"
+  ✗ Monglish гажиг — доорхыг бүрэн монгол хэллэгт шилжүүл:
+     "Продукт drop" → "дропшиппинг бараа"
+     "Review сайтай" → "хэрэглэгчийн сэтгэгдэл сайтай"
+     "Profit нь" → "цэвэр ашиг нь"
+     "Facebook ad" → "Фэйсбүүк сурталчилгаа"
+  ✗ Валютын тэмдэгт — монгол найруулгад ард нь бич: "$5" → "5 доллар" эсвэл "5$"; "1400%" → "1400 хувь"
+  ✗ "анхаарлаа төвлөр" (дутуу) → зөв: "анхаарлаа төвлөрүүл"
+  ✗ "Маргааш нь эхэлнэ" (start the next day үгчилсэн) → зөв: "маргааш л эхэлнэ гэсээр" эсвэл "маргааш л эхэлье гэж өөртөө хэлсээр"
+  ✗ "аль нэгийг нь дагах ёстой юу гэж мэдэхгүй" (бөөрөнхий, урсгал гацаадаг) → зөв: "алийг нь дагахаа мэдэхгүй төөрөх"
+  ✗ "гэр бүлийнхэнтэйгээ зурагжуулсан" (харь хэллэг) → зөв: "гэр бүлээрээ бөөн баяр болж, зургаа авахуулж байсан"
+  ✗ Нэг өгүүлбэрт "Чиний...энэ чинь танд" гэж холих (жишээ: "Чиний толгойд... энэ чинь танд") → заавал бүх өгүүлбэрт "Чи" гэж нэгдмэл барь
+  ✗ "хэзээ нэг алхам хийгээгүй" (never made a single step үгчилсэн) → зөв: "нэг ч алхам хийж зүрхлээгүй"
+  ✗ "Бэлэн болно гэдэг байхгүй" (түүхий бүтэц) → зөв: "Бүрэн бэлэн болох үе гэж хэзээ ч ирдэггүй"
+  ✗ "Screenshot авчихлаа" (дутуу төгсгөл) → зөв: "шууд скриншот (дэлгэцийн зураг) авч байлаа"
+  ✗ "Хоёрдохь" БУРУУ → "Хоёр дахь" ЗӨВ
+  ✗ "Дараалалаар" БУРУУ → "Дарааллаар" ЗӨВ (дундах эгшиг гээгдэнэ)
+  ✗ "4 дахь өдөр" БУРУУ → "4 дэх өдөр" ЗӨВ (дөрөв дэх)
+  ✗ "Shopify 14 хоногийн үнэгүй туршилт" — ХУУЧИРСАН МЭДЭЭЛЭЛl (коммент дээр алдаа гэж залруулагдах эрсдэл) → зөв: "үнэгүй туршилтын хугацаа" эсвэл "ердөө 1 долларын урамшуулал" гэж аюулгүй хэлэх
+  ✗ "Танихуу?" (Relatable? үгчилсэн + шивэлтийн алдаа) → зөв: "Чамд танил сонсогдож байна уу?" эсвэл "Яг ийм үе чамд байсан уу?"
+  ✗ Скрипт дундуур англи үг "budget" холих → зөв: "30,000 төгрөгийн төсөв" гэж бүрэн монголчлох
+  ✗ "Мөнгө олсон гэдэг биш" (орчуулгын гажиг бүтэц) → зөв: "Маш их мөнгө олсондоо гол нь биш"
+  ✗ "зайлсхийж байна" (avoiding үгчилсэн — татвараас зайлсхийх мэт) → зөв: "өөрийгөө хуурч байна", "хоосон хойшлуулж байна"
+  ✗ "зогсоож байна" (механик — машин зогсох мэт) → зөв: "хөдөлгөхгүй уяад байна", "нэг газраа гацаагаад байна"
+  ✗ "Product", "Drop" хадмал текст / скриптэд англиар → зөв: "Бараа", "Дропшиппинг" (алгоритм хайлтад илүү өртдөг)
+  ✗ "Drop эхлэхийн тулд танд..." гэж Чи→Та шилжих → зөв: "Дропшиппинг эхлүүлэхэд чамд..."
+  ✗ "4 хоногт хийгдэнэ" (passive, "in 4 days" бүтэц) → зөв: "ердөө 4 хоногийн дотор амжуулна"
+  ✗ "Хайдагийг" БУРУУ → "Хайдгийг" ЗӨВ (дундах эгшиг гээгдэх дүрэм)
+  ✗ "Хүмүүс ямар өвдөлттэй байдаг?" (pain points үгчилсэн) → зөв: "Хүмүүст ямар тулгамдсан асуудал, өвдөлт байна вэ?"
+  ✗ "Тээврийн компанийн дундуур бараагаа..." → зөв: "Карго компаниар дамжуулаад барааг шууд хэрэглэгч рүү хүргүүлэх"
+  ✗ "мөнгө хийх" (make money үгчилсэн — хуурамч мөнгө хэвлэх мэт) → зөв: "мөнгө олох", "ашиг олох", "борлуулалт хийх"
+  ✗ "траффик жолоодох" (drive traffic үгчилсэн) → зөв: "вэбсайт руу хэрэглэгчдийг татах"
+  ✗ "миний шиг", "чиний шиг", "чиний адил" → зөв: "над шиг", "чам шиг", "чамтай адилхан"
+  ✗ "мөнгө гаргахыг эсэргүүцэх" → зөв: "картнаасаа мөнгө гаргахаасаа харамлах", "татагнах"
+  ✗ "Проблем" → зөв: "асуудал"
+  ✗ "Эхлэж" БУРУУ → "эхэлж" ЗӨВ
+  ✗ "Дагаваал" БУРУУ → "дагавал" ЗӨВ
+  ✗ "Видеоонд" БУРУУ → "видеондоо" эсвэл "видеогоороо" ЗӨВ
+
+НАЙРУУЛГЫН АЛТАН ДҮРМҮҮД:
+  ✗ Хуучинсаг нөхцөл — "дагаваас", "хийвээс", "болбоос" → зөв: "дагавал", "хийчихвэл", "болвол"
+  ✗ Идэвхгүй (пассив) хэллэг — "хийгдэнэ", "үзэгдэнэ", "захиалга хүлээж болно" → заавал идэвхтэй болго: "хийж чадна", "амжуулна", "захиалгаа авна"
+  ✗ Нэр үгээр хуурай дуусгах — "...арга нь энэ.", "...түүх нь энэ." → заавал үйл үгээр дуусга
+  ✗ "Гэхдээ" холбоос үгийг давтан тавих → уусгаж, шууд өгүүлбэрт нэгтгэ: "Гэхдээ хаанаас эхлэх вэ" → "Хийе гэж бодсоор... гацаад байна уу?"
+  ✗ Хэт тасархай өгүүлбэр ("₮28,000. Агуулах байхгүй.") → амьд болгох: "Ердөө 28-хан мянган төгрөг. Надад ямар ч агуулах хэрэг болоогүй. Зөвхөн гар утас, интернэт байхад л бүтчихсэн."
+  ✗ "Тэр маргааш хэзээ ч ирэхгүй." (хэт богино, урсгал тасардаг) → "Тэгсээр байтал тэр маргааш чинь хэзээ ч ирэхгүй уусаад алга болчихно шүү дээ"
+  → Алтан дүрэм: Чангаар уншихад хэл орооцолдвол эсвэл найздаа ингэж хэлэхгүй бол — тэр өгүүлбэрийг ярианы хэлбэрт шилжүүл
+
+CAMERA-READY ШАЛГАЛТ — script бичиж дуусаад:
+  → Өгүүлбэр бүрийг "камерт чангаар уншихад хэвийн уу?" гэж асуу
+  → "Тийм" бол үлдээ, "Үгүй" бол ярианы хэлбэрт шилжүүл
+  → Жишээ: "Уг савны ёроолд таваг байрлуулж" ❌ → "Савны доод талд жижиг аяга тавьдаг" ✓
+  → Жишээ: "зоос унагахад эсэргүүцэлтэй тулгардаг" ❌ → "зоосоо хийхэд ус зөөлрүүлдэг учир хэцүү" ✓
+
+ФИЗИК ҮЙЛДЛИЙН ЗӨВ ҮЙЛ ҮГ:
+  ✗ "углах" → биет зүйл хийх/унагахад ХОРИГЛОНО (углах = зүүлт/хувцас зүүхэд л хэрэглэнэ)
+  ✓ "зоос унагах", "зоос хийх", "зоосоо оруулах" — зөв хэлбэр
+  ✗ "гэмтэлгүй" (successfully/without fail орчуулга) → зөв: "зөв хийвэл", "чадвал"
+  ✗ "унталгүй ус" (still water орчуулга) → зөв: "тайван ус", "хөдөлгөөнгүй ус"
+  ✗ "сум" (sum орчуулга) → зөв: "нийт дүн", "нийлбэр"
+  → Дүрэм: техник нэр орчуулахдаа хамгийн энгийн өдөр тутмын Монгол үгийг ашигла
+
+ЯРИАНЫ БҮТЭЭГДЭХҮҮНИЙ НЭР:
+  ✗ "гутал" → хожих/авах контекстэд ХОРИГЛОНО
+  ✓ "пүүз", "кет" — Монголчуудын өдөр тутам ярьдаг хэлбэр
+  → Дүрэм: ярианы контекстэд хүмүүс яг ингэж хэлдэг байдлаар бич
+
+СЭТГЭЛ ЗҮЙН ДАВТАЛТЫН ХЭЛЛЭГ:
+  ✗ "хүмүүс дахин оролдоход хүргэдэг" → хэт хийсвэр, хүйтэн
+  ✓ "хор шарандаа дахин дахин оролддог"
+  ✓ "азаа үзэхээр дахин дахин хичээдэг"
+  ✓ "дараагийн удаа лав болно гэж бодоод оролдсоор байдаг"
+  → Хүний psychology-г ярианы quote хэлбэрт оруул — тэгвэл уншигч өөрийгөө тэр дүрд хардаг
+
+ШАЛТГААНЫ ХЭЛЛЭГ:
+  ✓ "...аас болоод", "...учраас", "...тул" — байгалийн ярианы шалтгаан
+  ✗ "...ийн улмаас", "...ийн нөлөөгөөр" — хэт бичгийн хэл, хэт хүнд
+
+ӨГҮҮЛБЭРИЙН УРТ:
+  → Нэг өгүүлбэрт 15-аас дээш үг = хэт урт, 2 болго
+  ✗ "Савны ёроолд нэг аяга байрлуулж, дээрээс зоос унагаахад ус чиглэлийг өөрчилдөг болохоор бараг боломжгүй." ❌
+  ✓ "Савны ёроолд аяга байна. Гэхдээ ус зоосны чиглэлийг өөрчилдөг. Тэгэхэд бараг боломжгүй болдог." ✓
+
+МЕХАНИЗМ ТАЙЛБАРЛАХ БҮТЭЦ:
+  → 1 мөр summary → 2-3 мөр жижиг алхмаар тайлбар
+  ✗ Нэг урт өгүүлбэрт бүгдийг багтаах ❌
+  ✓ "Дүрэм нь маш энгийн. Эхлээд [X]. Тэгэхэд [Y]. Үр дүн нь [Z]." ✓
+  → Механизмийг тайлбарлахдаа хүний psychology-г quote хэлбэрт оруул:
+    "[хүмүүс 'дараагийн удаа лав болно' гэж бодоод] дахин дахин оролддог" загвараар
+
+AWE→ANXIETY ШИЛЖИЛТ:
+  → Хялбар мэт харагдуулсны дараа заавал эргүүл:
+    "Сонсоход амархан юм шиг байгаа биз? Гэхдээ..."
+    "Энгийн юм шиг харагдаж байна. Харин бодит байдал нь..."
+    "[X] хийхэд л хангалттай. Гэтэл..."
+  → Transition үг: "Гэхдээ", "Харин", "Гэтэл" — эдгээрээр AWE→ANXIETY шилж
+
+TRANSITION ДҮРЭМ:
+  → Body дотор AWE→ANXIETY шилжилт заавал "Гэхдээ" / "Харин" / "Гэтэл" үгээр хий
+  ✗ Шилжилтгүйгээр шууд хэцүү гэдгийг хэлэх ❌
+  ✓ "Амархан санагдаж байна биз? Харин [X] учраас бодитдоо хэцүү." ✓`;
 
       var TAXONOMY=`
+━━━ БАТАЛГААЖСАН СКРИПТИЙН ЗАГВАР — ЯАГЧААНЫ ЭНЭ ХЭЛБЭРТ ОЙРТУУЛ ━━━
+[HOOK 1] Хийе гэж бодсоор бүтэн 3 сар өнгөрчихлөө. Гэхдээ яг хаанаас, яаж эхлэхээ мэдэхгүй гацаад байна уу?
+[HOOK 2] Дропшиппинг эхлэх гээд Alibaba нээсэн чинь 5-хан минутын дараа юу ч ойлгохгүй буцаагаад хаачихсан уу? Чамд танил сонсогдож байна уу?
+[HOOK 3] Асуудал чиний бодож байгаа шиг хэцүүдээ биш ээ. Чи зүгээр л яг ямар дарааллаар явахаа мэдэхгүй байгаа хэрэг.
+[VILLAIN] Ихэнх хүмүүс бүх зүйлийг төгс сурч аваад эхэлнэ гэж боддог. Энэ бол хамгийн том алдаа. Учир нь чи хэзээ ч бүрэн бэлэн болохгүй.
+[BRIDGE] Би ч яг ингэж 4 сар гацсан. Юүтүбээр 50 гаруй видео үзэж, ТикТок дээрх амжилтын түүхүүдийг ширтсээр байсан ч нэг ч алхам хийж зүрхлээгүй. Тэгж явж байгаад л нэг зүйлийг маш сайн ойлгосон юм.
+[VALUE] Асуудал чинь мэдлэггүйд биш, ердөө л дарааллаагүй байсанд байгаа юм. Эхлэх зөв дараалал ердөө л энэ: 1-рт Shopify дэлгүүрээ нээгээд үнэгүй туршилтын хугацааг нь идэвхжүүл. 2-рт нэг л төрлийн бараа сонго, 10 биш шүү ердөө ганцхан бараа. 3-рт анхны сурталчилгаагаа ердөө 30,000 төгрөгийн төсвөөр тавьж үз. 4-рт 48 цагийн дараа үр дүнг нь дүгнэ. Ердөө л энэ 4 алхам.
+[PROOF] Яг энэ дарааллыг дагаад Сарантуяа эхний 5 хоногтоо л 3 захиалга авчихсан. Маш их мөнгө олсондоо гол нь биш, хамгийн чухал нь хөөх, би үнэхээр хийж чаддаг юм байна гэдэг итгэлийг өөртөө авсан нь.
+[CTA] Чи одоо яг аль алхам дээр нь гацаад байна? Сэтгэгдэл хэсэгт бичээрэй, дараагийн видеогоороо яг тэр алхмыг чинь гүнзгийрүүлэн шийдэж өгье.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 АЛХАМ 1: TRANSCRIPT-АС CONTENT TYPE ТОДОРХОЙЛ
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -3361,9 +3522,9 @@ CTA: "Монголд энэ тренд хэзээ ирэх бол гэж бод�
         standard: 'BODY БҮТЭЦ: [1]Нөхцөл+контекст [2]Twist "гэхдээ яг энд нэг зүйл байна…" [3]Механизм [4]Тоон баталгаа [5]Bigger picture [6]Signature line (5-8 үг, clip-able)',
         story:    'BODY БҮТЭЦ: Конкрет хүний тохиолдолоор эхэл → [1]Тохиолдол [2]Шилжилт [3]Механизм [4]Тоон баталгаа [5]Bigger picture [6]Signature line',
         casestudy:'BODY БҮТЭЦ: "[Хүн/компани] [X хоногт] [Y үр дүн]—яаж вэ?" → [1]Хэн [2]Юу болсон [3]Механизм [4]Тоонууд [5]Bigger picture [6]Signature line',
-        mistake:  'BODY БҮТЭЦ: Алдааг controversy болго → [1]Нийтлэг алдаа (AWE) [2]Юу болдог (ANXIETY) [3]Зөв арга+механизм [4]Тоонууд [5]Bigger picture [6]Signature line',
+        mistake:  'BODY БҮТЭЦ: Алдааг controversy болго → [1]ЯАГ ямар алдааг гаргадагыг НЭРЛЭЖбич (ерөнхий биш) [2]Тэр алдааны тодорхой үр дагавар (ANXIETY) [3]Зөв арга+механизм [4]Тоонууд [5]Bigger picture [6]Signature line — АНХААРУУЛГА: story дахин тайлбарлах биш, тодорхой алдааг нэрлэн задал',
         pov:      'BODY БҮТЭЦ: "Хэрэв [нөхцөл] байсан бол чи юу хийх байсан?" → [1]Нөхцөл [2]Controversy angle [3]Механизм [4]Тоонууд [5]Bigger picture [6]Signature line',
-        donot:    'BODY БҮТЭЦ: ANXIETY MAX → [1]Яагаад ихэнх нь хийдэггүй [2]Гэхдээ энэ байвал [3]Механизм [4]Тоонууд [5]Bigger picture [6]Signature line'
+        donot:    'BODY БҮТЭЦ: ANXIETY MAX → [1]X БАЙХГҮЙ бол яагаад тохиромжгүйг тайлбарла [2]X БАЙВАЛ яагаад хийх ёстойг хэл [3]Механизм [4]Тоонууд [5]Bigger picture [6]Signature line — ЛОГИКИЙН АЛДАА ХОРИГЛОНО: "X байхгүй бол хий, байвал бол..." урвуу логик огт хийхгүй'
       };
 
       var ENFORCE=`
@@ -3380,7 +3541,54 @@ CTA: "Монголд энэ тренд хэзээ ирэх бол гэж бод�
 ✗ "сонслоо юу / үзлээ юу / мэдлээ юу" гэсэн буруу хэлзүй → ДАХИН БИЧ
 ✗ "Иймэрхүү санаануудаар дагаарай 🤗" хэллэг → ДАХИН БИЧ
 ✗ "шүтэн бишрэгч" эсвэл техникийн буруу орчуулга → ДАХИН БИЧ
-✗ Hook тодорхойлогч үггүй эхэлсэн → ДАХИН БИЧ`;
+✗ Hook тодорхойлогч үггүй эхэлсэн → ДАХИН БИЧ
+✗ Шууд орчуулгын хэллэг ("эсэргүүцэлтэй тулгарах", "байрлуулж", "унагахад") → ДАХИН БИЧ
+✗ "залилаад" / "заль" / утга буруу үг hook-д → ДАХИН БИЧ
+✗ "их мөнгө хийх" / "вэбсайт бүтээх" / "Түгээмэл нь энэ" гэсэн шууд орчуулга → ДАХИН БИЧ
+✗ "Дараагийн видеоноор орно" / "яг тэр асуудал дээр орно" (дутуу CTA) → ДАХИН БИЧ
+✗ "утасны хуудас" / "тэнүүчилж байна" / "мөнгө хийх" / "траффик жолоодох" → ДАХИН БИЧ
+✗ "миний шиг" / "чиний шиг" / "чиний адил" (харьяалахын тийн ялгал дээр шиг/адил) → ДАХИН БИЧ
+✗ "дагаваас / хийвээс / болбоос" (хуучинсаг нөхцөл) → ДАХИН БИЧ
+✗ Өгүүлбэр нэр үгээр дуусгасан ("...арга нь энэ", "...түүх нь энэ") → ДАХИН БИЧ
+✗ Идэвхгүй пассив төгсгөл ("захиалга хүлээж болно", "бараа харагдана") → ДАХИН БИЧ
+✗ "Чи бодож байгаагаасаа өөр" (өгүүлбэр бүрэн гарахгүй) → ДАХИН БИЧ
+✗ "Проблем" (монгол бус) → ДАХИН БИЧ
+✗ Нэг өгүүлбэрт "орж ирэх" давхарласан → ДАХИН БИЧ
+✗ Нэг контентод "Та" болон "Чи" хольсон → ДАХИН БИЧ
+✗ "үүрд гүйглэдэг" / "4 хоног дараа" / "орж ирэв" (номын хэл) → ДАХИН БИЧ
+✗ "маргааш нь" / "төгс мөнгө" / "веб сайт" (2 үг) → ДАХИН БИЧ
+✗ Monglish: "Review сайтай", "Profit нь", "Facebook ad" → ДАХИН БИЧ
+✗ "хүүхэд" бизнес контентод → ДАХИН БИЧ
+✗ "$5" хэлбэрийн валют (монгол найруулгад ард нь бич) → ДАХИН БИЧ
+✗ Дутуу өгүүлбэр ("Чи ч мөн үү?", "аль дээр гацаж байгаагаа") → ДАХИН БИЧ
+✗ "анхаарлаа төвлөр" (дутуу үйл үг) → ДАХИН БИЧ
+✗ "аль нэгийг нь дагах ёстой юу гэж мэдэхгүй" (бөөрөнхий) → ДАХИН БИЧ
+✗ "гэр бүлийнхэнтэйгээ зурагжуулсан" (харь хэллэг) → ДАХИН БИЧ
+✗ Нэг өгүүлбэрт "Чиний...танд" гэж Чи/Та холих → ДАХИН БИЧ
+✗ "хэзээ нэг алхам хийгээгүй" / "Бэлэн болно гэдэг байхгүй" → ДАХИН БИЧ
+✗ "Хоёрдохь" / "Дараалалаар" / "4 дахь өдөр" (зөв бичих алдаа) → ДАХИН БИЧ
+✗ "Screenshot авчихлаа" (дутуу, англи үг) → ДАХИН БИЧ
+✗ "Shopify 14 хоногийн үнэгүй туршилт" (хуучирсан мэдээлэл) → ДАХИН БИЧ
+✗ "Танихуу?" / "budget" / "Мөнгө олсон гэдэг биш" → ДАХИН БИЧ
+✗ "хийгдэнэ" / "үзэгдэнэ" (passive) → ДАХИН БИЧ
+✗ "зайлсхийж байна" / "зогсоож байна" (механик орчуулга) → ДАХИН БИЧ
+✗ "Product" / "Drop" англиар скриптэд → ДАХИН БИЧ
+✗ "Гэхдээ" холбоос үг 3+ удаа давтсан → ДАХИН БИЧ
+✗ CTA дутуу: "яг тэр дээр орно" → ДАХИН БИЧ
+✗ Camera-ready шалгалт давсан өгүүлбэр байвал → ДАХИН БИЧ
+✗ B2B контентод "Чи" хэрэглэсэн → ДАХИН БИЧ
+✗ Нэг script дотор "Та" болон "Чи" холилдсон → ДАХИН БИЧ
+✗ "Намайг дагаарай" шууд хэллэг → ДАХИН БИЧ
+✗ Recap hook: "[Улс/Хүн] [зүйл] болгожээ" загвар → ДАХИН БИЧ
+✗ Mistake breakdown-д ерөнхий биш тодорхой алдааг нэрлээгүй → ДАХИН БИЧ
+✗ Don't start unless-д логик урвуу (X байхгүй бол хий, байвал...) → ДАХИН БИЧ
+✗ Нэг өгүүлбэрт 15+ үг → ДАХИН БИЧ
+✗ Механизм нэг урт өгүүлбэрт багтаасан → ДАХИН БИЧ
+✗ AWE→ANXIETY шилжилтэнд "Гэхдээ"/"Харин"/"Гэтэл" байхгүй → ДАХИН БИЧ
+✗ "углах" үйл үгийг биет зүйлд хэрэглэсэн → ДАХИН БИЧ
+✗ "гутал" (хожих контекстэд) оронд "пүүз"/"кет" биш → ДАХИН БИЧ
+✗ Сэтгэл зүйн давталт тайлбарлахдаа quote хэлбэр байхгүй → ДАХИН БИЧ
+✗ Шалтгааны хэллэгт "...ийн улмаас"/"...ийн нөлөөгөөр" ашигласан → ДАХИН БИЧ`;
 
       var OUTPUT=`
 ━━━ ГАРАЛТ ФОРМАТ ━━━
@@ -3450,7 +3658,7 @@ CTA: "Монголд энэ тренд хэзээ ирэх бол гэж бод�
       });
       rs_lastRaw=raw;
       /* Pop action buttons */
-      ['rs-save-btn','rs-copy-btn','rs-edit-btn','rs-caption-btn'].forEach(function(id,i){
+      ['rs-save-btn','rs-copy-btn','rs-edit-btn','rs-caption-btn','rs-tele-btn'].forEach(function(id,i){
         var b=rq(id);if(!b)return;
         b.disabled=false;
         setTimeout(function(){b.classList.add('rs-popped');setTimeout(function(){b.classList.remove('rs-popped');},340);},i*60+300);
@@ -3738,6 +3946,11 @@ CTA: "Монголд энэ тренд хэзээ ирэх бол гэж бод�
       rq('rs-ok-bar').style.display='none';
       rq('rs-msave-btn').disabled=false;rq('rs-msave-btn').textContent='💾 Хадгалах';
       var ui=rq('rs-m-ig-url');if(ui&&!ui.value)ui.value=(rq('rs-url').value.trim().split('\n')[0]||'').trim();
+      var fi=rq('rs-m-format');if(fi){
+        var fmtMap={standard:'standard',story:'story',casestudy:'casestudy',mistake:'mistake',pov:'pov',donot:'donot'};
+        var curFmt=(rs_lastFmt||'').toLowerCase().replace(/[①②③④⑤⑥\s]/g,'').replace('стандарт+','standard').replace('story-first','story').replace('casestudy','casestudy').replace('mistakebreakdown','mistake').replace('pov','pov').replace("don'tstartunless",'donot');
+        fi.value=fmtMap[curFmt]||'';
+      }
       rq('rs-modal').style.display='flex';
       setTimeout(function(){rq('rs-m-title').focus();},100);
     }
@@ -3759,7 +3972,7 @@ CTA: "Монголд энэ тренд хэзээ ирэх бол гэж бод�
       rq('rs-m-title').style.borderColor='';
       var btn=rq('rs-msave-btn');btn.disabled=true;btn.textContent='Хадгалж байна...';
       var p=rsParseScript(rs_lastRaw);
-      var payload={title,type:rq('rs-m-type').value,platform:rq('rs-m-platform').value,post_date:rq('rs-m-date').value||null,status:'idea',hooks:p.hook||'',script:[p.body,p.cta].filter(Boolean).join('\n\n')||rs_lastRaw,orders:0,revenue:0,views:0,dms:0,ig_url:rq('rs-m-ig-url')?.value.trim()||''};
+      var payload={title,type:rq('rs-m-type').value,platform:rq('rs-m-platform').value,format:rq('rs-m-format')?.value||'',post_date:rq('rs-m-date').value||null,status:'idea',hooks:p.hook||'',script:[p.body,p.cta].filter(Boolean).join('\n\n')||rs_lastRaw,orders:0,revenue:0,views:0,dms:0,ig_url:rq('rs-m-ig-url')?.value.trim()||''};
       try{
         var res=await fetch(RS_SB_URL+'/rest/v1/scripts',{method:'POST',headers:{'apikey':RS_SB_KEY,'Authorization':'Bearer '+RS_SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(payload)});
         if(!res.ok)throw new Error(await res.text());
@@ -3968,12 +4181,20 @@ CTA: "Монголд энэ тренд хэзээ ирэх бол гэж бод�
           <svg id="wq-toggle-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.2" style="transition:transform .22s;transform:rotate(-90deg);"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div id="wq-body" style="display:none;">
-          <div class="info-box" style="margin-bottom:14px;margin-top:12px;"><span style="flex-shrink:0">💡</span><div>7 өдрийн бараагаа урьдчилж бөглөөд нэг дор хадгалснаар GAS өдөр бүр 08:00 цагт <strong>@ProductDropFree</strong> channel-д автоматаар нийтлэнэ. Зургийг <strong>Cloudinary URL</strong> ашиглах нь хамгийн найдвартай.</div></div>
-          <div id="wq-week-label" style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;"></div>
-          <div id="wq-slots" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
-          <div style="display:flex;gap:8px;">
-            <button class="btn-add" onclick="wqLoad()" style="flex:1;justify-content:center;font-size:12px;">↻ Sheet-ээс ачаалах</button>
-            <button class="btn-green" id="wq-save-btn" onclick="wqSave()" style="flex:2;justify-content:center;">📅 Queue-д хадгалах (GAS)</button>
+          <div class="info-box" style="margin-bottom:12px;margin-top:12px;"><span style="flex-shrink:0">💡</span><div>7 өдрийн бараагаа урьдчилж бөглөөд нэг дор хадгалснаар GAS өдөр бүр 08:00 цагт <strong>@ProductDropFree</strong> channel-д автоматаар нийтлэнэ.</div></div>
+          <!-- Week navigation + progress -->
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+            <button onclick="wqPrevWeek()" style="width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border2);background:var(--bg3);color:var(--text2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">‹</button>
+            <div style="flex:1;text-align:center;">
+              <div id="wq-week-label" style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;"></div>
+            </div>
+            <button onclick="wqNextWeek()" style="width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border2);background:var(--bg3);color:var(--text2);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">›</button>
+            <span id="wq-progress-badge" style="font-size:11px;font-weight:700;background:var(--bg4);color:var(--text3);padding:3px 10px;border-radius:6px;white-space:nowrap;">0/7</span>
+          </div>
+          <div id="wq-slots" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;"></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button onclick="wqBulkAI()" style="flex:1;min-width:120px;padding:9px 14px;border-radius:10px;border:1.5px solid var(--purple);background:var(--purplebg);color:var(--purple);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px;" id="wq-bulk-ai-btn">🤖 Бүгд AI</button>
+            <button class="btn-green" id="wq-save-btn" onclick="wqSave()" style="flex:2;min-width:140px;justify-content:center;">📅 Queue-д хадгалах</button>
           </div>
           <div id="wq-status" style="font-size:11px;margin-top:8px;text-align:right;color:var(--text3);"></div>
         </div>
@@ -5479,12 +5700,14 @@ async function autoGA4Sync(){
     if(!res.ok) throw new Error('HTTP '+res.status);
     var data = await res.json();
     var users = data.activeUsers || '0';
-    localStorage.setItem('pd_ga4_monthly', users);
+    var monthKey = (function(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); })();
+    localStorage.setItem('pd_ga4_'+monthKey, users);
     if(el) el.textContent = users + '/сар';
     console.log('GA4 sync OK:', data);
   }catch(e){
     console.warn('GA4 sync алдаа:', e);
-    var cached = localStorage.getItem('pd_ga4_monthly') || '308';
+    var monthKey2 = (function(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); })();
+    var cached = localStorage.getItem('pd_ga4_'+monthKey2) || '0';
     var el2 = document.getElementById('ai-ctx-ga4');
     if(el2) el2.textContent = cached + '/сар';
   }
@@ -5558,7 +5781,8 @@ function cntToRow(c){
     revenue:parseFloat(c.revenue||0)||0,
     views:parseInt(c.views||0)||0,
     dms:parseInt(c.dms||0)||0,
-    ig_url:c.ig_url||''
+    ig_url:c.ig_url||'',
+    format:c.format||''
   };
 }
 function cntLoading(on,msg){
@@ -7121,26 +7345,159 @@ function toggleWQ(){
 /* ── ADMIN — 7 ХОНОГИЙН QUEUE ── */
 var WQ_DAYS=['Даваа','Мягмар','Лхагва','Пүрэв','Баасан','Бямба','Ням'];
 var WQ_CAT=['Гэр · Home','Гоо сайхан · Beauty','Эрүүл мэнд · Health','Хүүхэд · Kids','Бараа · Goods'];
+var _wqWeekOffset=0; // 0=энэ долоо хоног, 1=дараагийн, -1=өмнөх
 
-function wqNextMonday(){
+function wqBaseMonday(offset){
   var d=new Date(); d.setHours(0,0,0,0);
-  var dow=d.getDay(); // 0=Sun
+  var dow=d.getDay();
   var diff=dow===1?0:(dow===0?1:8-dow);
-  d.setDate(d.getDate()+diff);
+  d.setDate(d.getDate()+diff+(offset||0)*7);
   return d;
 }
+function wqNextMonday(){ return wqBaseMonday(_wqWeekOffset); }
+
+function wqPrevWeek(){ _wqWeekOffset--; wqInit(); }
+function wqNextWeek(){ _wqWeekOffset++; wqInit(); }
 
 function wqFmtDate(d){
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
 
-// Week-based storage key → refresh хийхэд алдагдахгүй, долоо хоног өөрчлөгдөхөд автоматаар шинэ хуудас
 function wqStorageKey(){
-  return 'wq_week_'+wqFmtDate(wqNextMonday());
+  return 'wq_week_'+wqFmtDate(wqBaseMonday(_wqWeekOffset));
 }
 
 function wqAutoSave(){
   try{ localStorage.setItem(wqStorageKey(), JSON.stringify(wqCollect())); } catch(e){}
+  wqUpdateProgress();
+  wqCheckDuplicates();
+}
+
+function wqUpdateProgress(){
+  var badge=document.getElementById('wq-progress-badge');
+  if(!badge) return;
+  var count=0;
+  for(var i=0;i<7;i++){
+    var n=document.getElementById('wq-name-'+i);
+    if(n&&n.value.trim()) count++;
+  }
+  badge.textContent=count+'/7';
+  badge.style.background=count===7?'var(--greenbg)':count>=4?'rgba(255,204,0,.15)':'var(--bg4)';
+  badge.style.color=count===7?'var(--green)':count>=4?'var(--amber)':'var(--text3)';
+}
+
+function wqBuildMsg(idx){
+  var name=(document.getElementById('wq-name-'+idx)||{}).value||'';
+  var cat=(document.getElementById('wq-cat-'+idx)||{}).value||'';
+  var buy=parseFloat((document.getElementById('wq-buy-'+idx)||{}).value)||0;
+  var sell=parseFloat((document.getElementById('wq-sell-'+idx)||{}).value)||0;
+  var supplier=(document.getElementById('wq-supplier-'+idx)||{}).value||'';
+  var reason=(document.getElementById('wq-reason-'+idx)||{}).value||'';
+  var dateVal=(document.getElementById('wq-date-'+idx)||{}).value||'';
+  var profit=sell-buy;
+  var margin=sell>0?Math.round((profit/sell)*100):0;
+  var dateDisp=dateVal?new Date(dateVal).toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric'}):'';
+  return '🏆 Өдрийн Winning Бараа\n'
+    +'📅 '+dateDisp+'\n\n'
+    +'📦 '+name+'\n'
+    +'🏷 Ангилал: '+cat+'\n\n'
+    +'💰 AliExpress: ~'+Math.round(buy).toLocaleString('mn-MN')+'₮\n'
+    +'💵 Зарах үнэ: '+Math.round(sell).toLocaleString('mn-MN')+'₮\n'
+    +'📈 Ашиг: '+Math.round(profit).toLocaleString('mn-MN')+'₮/ш · Margin '+margin+'%\n\n'
+    +'✨ Яагаад winning вэ:\n'+reason+'\n\n'
+    +(supplier?'🔗 Supplier линк: '+supplier+'\n\n':'')
+    +'━━━━━━━━━━━━━━━━━\n'
+    +'📊 200+ бараа · бүтэн тоо баримт → productdrops.netlify.app/landing\n'
+    +'🔒 Pro эрх авснаар бүхий л мэдээлэл нээгдэнэ';
+}
+
+function wqPreviewCard(idx){
+  var box=document.getElementById('wq-preview-'+idx);
+  if(!box) return;
+  if(box.style.display!=='none'){ box.style.display='none'; return; }
+  box.textContent=wqBuildMsg(idx);
+  box.style.display='block';
+}
+
+function wqCopyCard(idx){
+  var msg=wqBuildMsg(idx);
+  navigator.clipboard.writeText(msg).then(function(){
+    toast('📋 Clipboard-д хуулагдлаа','ok');
+  }).catch(function(){
+    var ta=document.createElement('textarea');
+    ta.value=msg; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    toast('📋 Хуулагдлаа','ok');
+  });
+}
+
+async function wqSendCard(idx){
+  var name=(document.getElementById('wq-name-'+idx)||{}).value||'';
+  var sell=parseFloat((document.getElementById('wq-sell-'+idx)||{}).value)||0;
+  if(!name){ toast('Бараа нэр байхгүй байна','warn'); return; }
+  if(!sell){ toast('Зарах үнэ оруулна уу','warn'); return; }
+  var btn=document.getElementById('wq-send-btn-'+idx);
+  if(btn){ btn.disabled=true; btn.textContent='⏳'; }
+  var params=new URLSearchParams({
+    action:'send_daily_product',
+    product_name:name,
+    category:(document.getElementById('wq-cat-'+idx)||{}).value||'',
+    buy_price:(document.getElementById('wq-buy-'+idx)||{}).value||'0',
+    sell_price:(document.getElementById('wq-sell-'+idx)||{}).value||'0',
+    supplier_url:(document.getElementById('wq-supplier-'+idx)||{}).value||'',
+    reason:(document.getElementById('wq-reason-'+idx)||{}).value||'',
+    img_url:(document.getElementById('wq-img-'+idx)||{}).value||''
+  });
+  try{
+    var r=await gasFetch(GAS_URL()+'?'+params.toString());
+    var j=await r.json();
+    if(j.ok){
+      toast('✅ @ProductDropFree-д илгэгдлээ','ok');
+      // Sent тэмдэглэх
+      var saved=[];
+      try{ saved=JSON.parse(localStorage.getItem(wqStorageKey())||'[]'); }catch(e){}
+      if(saved[idx]) saved[idx].sent=true;
+      localStorage.setItem(wqStorageKey(), JSON.stringify(saved));
+      if(btn){ btn.textContent='✅ Явсан'; btn.style.background='var(--greenbg)'; btn.style.color='var(--green)'; btn.disabled=false; }
+      // Sent badge refresh
+      var sentMark=document.querySelector('#wq-card-'+idx+' .wq-sent-mark');
+      if(sentMark) sentMark.style.display='inline-flex';
+    } else {
+      toast('Алдаа: '+(j.error||''),'err');
+      if(btn){ btn.disabled=false; btn.textContent='📤 Илгээх'; }
+    }
+  }catch(e){
+    toast('GAS холбогдсонгүй','err');
+    if(btn){ btn.disabled=false; btn.textContent='📤 Илгээх'; }
+  }
+}
+
+async function wqBulkAI(){
+  var btn=document.getElementById('wq-bulk-ai-btn');
+  if(btn){ btn.disabled=true; btn.textContent='⏳ AI...'; }
+  var count=0;
+  for(var i=0;i<7;i++){
+    var nameEl=document.getElementById('wq-name-'+i);
+    var reasonEl=document.getElementById('wq-reason-'+i);
+    if(nameEl&&nameEl.value.trim()&&reasonEl&&!reasonEl.value.trim()){
+      await wqGenAI(i);
+      count++;
+    }
+  }
+  if(btn){ btn.disabled=false; btn.textContent='🤖 Бүгд AI'; }
+  toast(count>0?'✅ '+count+' бараанд AI winning шалтгаан нэмэгдлээ':'Бүгд хэдийнэ бөглөгдсөн байна','ok');
+}
+
+function wqCheckDuplicates(){
+  var names={};
+  for(var i=0;i<7;i++){
+    var n=(document.getElementById('wq-name-'+i)||{}).value||'';
+    if(!n) continue;
+    if(names[n]!==undefined){
+      toast('⚠️ "'+n+'" бараа '+WQ_DAYS[names[n]]+' болон '+WQ_DAYS[i]+'-д давхарлаж байна','warn');
+    }
+    names[n]=i;
+  }
 }
 
 function wqInit(){
@@ -7149,7 +7506,8 @@ function wqInit(){
 
   var start=wqNextMonday();
   var label=document.getElementById('wq-week-label');
-  if(label) label.textContent='Долоо хоног: '+start.toLocaleDateString('mn-MN',{month:'long',day:'numeric'})+' — '+new Date(start.getTime()+6*86400000).toLocaleDateString('mn-MN',{month:'long',day:'numeric'});
+  var isCurrentWeek=_wqWeekOffset===0;
+  if(label) label.textContent=(isCurrentWeek?'Энэ долоо хоног: ':_wqWeekOffset>0?'+'+ _wqWeekOffset+' долоо хоног: ':_wqWeekOffset+' долоо хоног: ')+start.toLocaleDateString('mn-MN',{month:'short',day:'numeric'})+' — '+new Date(start.getTime()+6*86400000).toLocaleDateString('mn-MN',{month:'short',day:'numeric'});
 
   // Week key-гээр уншина — тухайн долоо хоногийн мэдээлэл хадгалагдсан байвал ачаалах
   var saved=[];
@@ -7162,51 +7520,105 @@ function wqInit(){
     var dateStr=wqFmtDate(date);
     var s=saved[i]||{};
     var isWeekend=i>=5;
-    var sentMark=s.sent?'<span style="color:var(--green);font-size:10px;font-weight:700;margin-left:6px;">✅ Явсан</span>':'';
+    var hasProd=!!(s.product_name);
+    var mg=s.buy_price&&s.sell_price?Math.round(((s.sell_price-s.buy_price)/s.sell_price)*100):0;
+    var profit=s.sell_price&&s.buy_price?Math.round(s.sell_price-s.buy_price):0;
+    var sentMark='<span class="wq-sent-mark" style="background:rgba(52,199,89,.15);color:var(--green);font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;display:'+(s.sent?'inline-flex':'none')+';">✅ Явсан</span>';
 
-    container.innerHTML+='<div style="background:var(--bg3);border:1px solid '+(isWeekend?'rgba(255,149,0,0.2)':'var(--border)')+';border-radius:12px;padding:12px 14px;">'
-      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">'
-      +'<span style="font-size:11px;font-weight:800;color:'+(isWeekend?'var(--amber)':'var(--blue)')+';">'+WQ_DAYS[i]+'</span>'
-      +'<span style="font-size:11px;color:var(--text3);">'+date.toLocaleDateString('mn-MN',{month:'short',day:'numeric'})+'</span>'
-      +sentMark
-      +'<input type="hidden" id="wq-date-'+i+'" value="'+dateStr+'">'
-      +'<button onclick="ppOpen('+i+',\'wq\')" style="margin-left:auto;padding:4px 10px;border-radius:8px;border:1.5px solid var(--blue);background:var(--bluebg,rgba(0,122,255,.08));color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">📦 Бараа сонгох</button>'
-      +'</div>'
-      +'<div style="display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;">'
-      +(s.img_url?'<img id="wq-thumb-'+i+'" src="'+x(s.img_url)+'" style="width:64px;height:64px;border-radius:8px;object-fit:cover;flex-shrink:0;border:1px solid var(--border);" onerror="this.style.display=\'none\'">':'<img id="wq-thumb-'+i+'" src="" style="width:64px;height:64px;border-radius:8px;object-fit:cover;flex-shrink:0;border:1px solid var(--border);display:none;" onerror="this.style.display=\'none\'">')
-      +'<div style="flex:1;min-width:0;">'
-      +'<div style="display:grid;grid-template-columns:2fr 1fr;gap:6px;margin-bottom:6px;">'
-      +'<input class="fi3" id="wq-name-'+i+'" placeholder="Бараа нэр" value="'+x(s.product_name||'')+'" style="margin-bottom:0;font-size:12px;" oninput="wqAutoSave()">'
-      +'<select class="fi3" id="wq-cat-'+i+'" style="margin-bottom:0;font-size:12px;" onchange="wqAutoSave()">'
-      +WQ_CAT.map(function(c){return '<option'+(s.category===c?' selected':'')+'>'+c+'</option>';}).join('')
-      +'</select></div>'
-      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">'
-      +'<input class="fi3" id="wq-buy-'+i+'" type="number" placeholder="Buy ₮" value="'+(s.buy_price||'')+'" style="margin-bottom:0;font-size:12px;" oninput="wqCalc('+i+');wqAutoSave()">'
-      +'<input class="fi3" id="wq-sell-'+i+'" type="number" placeholder="Sell ₮" value="'+(s.sell_price||'')+'" style="margin-bottom:0;font-size:12px;" oninput="wqCalc('+i+');wqAutoSave()">'
-      +'</div>'
-      +'</div>'
-      +'</div>'
-      +'<div id="wq-margin-'+i+'" style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;display:'+(s.buy_price&&s.sell_price?'block':'none')+'">'
-      +(s.buy_price&&s.sell_price?'📈 Margin: '+Math.round(((s.sell_price-s.buy_price)/s.sell_price)*100)+'% · '+Math.round(s.sell_price-s.buy_price).toLocaleString('mn-MN')+'₮/ш':'')
-      +'</div>'
-      +'<input class="fi3" id="wq-supplier-'+i+'" placeholder="Supplier URL (auto-fill)" value="'+x(s.supplier_url||'')+'" style="margin-bottom:6px;font-size:12px;" oninput="wqAutoSave()">'
-      +'<input class="fi3" id="wq-img-'+i+'" placeholder="🖼 Зураг URL (auto-fill)" value="'+x(s.img_url||'')+'" style="margin-bottom:6px;font-size:12px;" oninput="var th=document.getElementById(\'wq-thumb-'+i+'\');if(th){th.src=this.value;th.style.display=this.value?\'block\':\'none\';}wqAutoSave()">'
-      +'<input type="hidden" id="wq-prod-desc-'+i+'" value="">'
-      +'<input type="hidden" id="wq-prod-en-'+i+'" value="">'
-      +'<div style="display:flex;align-items:flex-start;gap:6px;margin-bottom:0;">'+'<textarea class="fi3" id="wq-reason-'+i+'" rows="2" placeholder="✨ Яагаад winning вэ?" style="margin-bottom:0;font-size:12px;resize:none;flex:1;min-width:0;" oninput="wqAutoSave()">'+x(s.reason||'')+'</textarea>'+'<button id="wq-ai-btn-'+i+'" onclick="wqGenAI('+i+')" style="flex-shrink:0;padding:5px 9px;border-radius:8px;border:1.5px solid var(--purple);background:var(--purplebg);color:var(--purple);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s;align-self:flex-start;margin-top:0;">🤖 AI</button>'+'</div>'
-      +'</div>';
+    container.innerHTML+=
+    // ── CARD ──
+    '<div style="background:var(--bg2);border:1.5px solid '+(isWeekend?'rgba(255,149,0,0.25)':hasProd?'rgba(0,122,255,0.2)':'var(--border)')+';border-radius:14px;overflow:hidden;transition:box-shadow .15s;" id="wq-card-'+i+'">'
+
+    // Header bar
+    +'<div style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:'+(isWeekend?'rgba(255,149,0,0.06)':'rgba(0,122,255,0.04)')+';border-bottom:1px solid var(--border);">'
+    +'<span style="font-size:12px;font-weight:800;color:'+(isWeekend?'var(--amber)':'var(--blue)')+';">'+WQ_DAYS[i]+'</span>'
+    +'<span style="font-size:11px;color:var(--text3);font-weight:600;">'+date.toLocaleDateString('mn-MN',{month:'short',day:'numeric'})+'</span>'
+    +sentMark
+    +'<input type="hidden" id="wq-date-'+i+'" value="'+dateStr+'">'
+    +'<button onclick="ppOpen('+i+',\'wq\')" style="margin-left:auto;display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:8px;border:1.5px solid var(--blue);background:var(--bluebg,rgba(0,122,255,.08));color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s;">🗄️ Бараа сонгох</button>'
+    +(hasProd?'<button onclick="wqClear('+i+')" title="Энэ өдрийн бараа арилгах" style="width:28px;height:28px;border-radius:8px;border:1.5px solid var(--border2);background:transparent;color:var(--text4);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;" onmouseover="this.style.background=\'var(--redbg)\';this.style.color=\'var(--red)\';this.style.borderColor=\'var(--red)\'" onmouseout="this.style.background=\'transparent\';this.style.color=\'var(--text4)\';this.style.borderColor=\'var(--border2)\'">✕</button>':'')
+    +'</div>'
+
+    // Body
+    +'<div style="padding:10px 12px;">'
+
+    // Thumbnail + info row
+    +'<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;">'
+    // Thumbnail
+    +(s.img_url
+      ?'<img id="wq-thumb-'+i+'" src="'+x(s.img_url)+'" style="width:72px;height:72px;border-radius:10px;object-fit:cover;flex-shrink:0;border:1px solid var(--border);" onerror="this.style.display=\'none\'">'
+      :'<div id="wq-thumb-'+i+'-empty" style="width:72px;height:72px;border-radius:10px;background:var(--bg4);border:1.5px dashed var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px;color:var(--text4);">📦</div>'
+      +'<img id="wq-thumb-'+i+'" src="" style="width:72px;height:72px;border-radius:10px;object-fit:cover;flex-shrink:0;border:1px solid var(--border);display:none;" onerror="this.style.display=\'none\'">')
+
+    // Right info
+    +'<div style="flex:1;min-width:0;">'
+    // Name + Category
+    +'<div style="display:grid;grid-template-columns:1fr auto;gap:6px;margin-bottom:6px;align-items:center;">'
+    +'<input class="fi3" id="wq-name-'+i+'" placeholder="Бараа нэр" value="'+x(s.product_name||'')+'" style="margin-bottom:0;font-size:12px;font-weight:700;" oninput="wqAutoSave()">'
+    +'<select class="fi3" id="wq-cat-'+i+'" style="margin-bottom:0;font-size:11px;min-width:80px;" onchange="wqAutoSave()">'
+    +WQ_CAT.map(function(c){return '<option'+(s.category===c?' selected':'')+'>'+c+'</option>';}).join('')
+    +'</select></div>'
+    // Price row
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">'
+    +'<div style="position:relative;">'
+    +'<span style="position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--text3);font-weight:600;pointer-events:none;">Buy</span>'
+    +'<input class="fi3" id="wq-buy-'+i+'" type="number" placeholder="0" value="'+(s.buy_price||'')+'" style="margin-bottom:0;font-size:12px;font-weight:700;padding-left:32px;" oninput="wqCalc('+i+');wqAutoSave()">'
+    +'</div>'
+    +'<div style="position:relative;">'
+    +'<span style="position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--text3);font-weight:600;pointer-events:none;">Sell</span>'
+    +'<input class="fi3" id="wq-sell-'+i+'" type="number" placeholder="0" value="'+(s.sell_price||'')+'" style="margin-bottom:0;font-size:12px;font-weight:700;padding-left:32px;" oninput="wqCalc('+i+');wqAutoSave()">'
+    +'</div>'
+    +'</div>'
+    +'</div>'
+    +'</div>'
+
+    // Margin badge
+    +'<div id="wq-margin-'+i+'" style="display:'+(hasProd&&s.buy_price&&s.sell_price?'flex':'none')+';align-items:center;gap:8px;margin-bottom:8px;padding:5px 10px;background:rgba(52,199,89,.08);border-radius:8px;">'
+    +'<span style="font-size:11px;font-weight:800;color:var(--green);">📈 Margin: '+mg+'%</span>'
+    +'<span style="font-size:11px;color:var(--green);font-weight:600;">'+profit.toLocaleString('mn-MN')+'₮/ш</span>'
+    +'</div>'
+
+    // Hidden auto-fill fields
+    +'<input type="hidden" id="wq-supplier-'+i+'" value="'+x(s.supplier_url||'')+'">'
+    +'<input type="hidden" id="wq-img-'+i+'" value="'+x(s.img_url||'')+'">'
+    +'<input type="hidden" id="wq-prod-desc-'+i+'" value="">'
+    +'<input type="hidden" id="wq-prod-en-'+i+'" value="">'
+
+    // Winning reason + AI button
+    +'<div style="display:flex;align-items:flex-start;gap:6px;margin-bottom:8px;">'
+    +'<div style="flex:1;position:relative;">'
+    +'<span style="position:absolute;left:9px;top:8px;font-size:10px;color:var(--purple);font-weight:700;pointer-events:none;">✨</span>'
+    +'<textarea class="fi3" id="wq-reason-'+i+'" rows="2" placeholder="Яагаад winning вэ? (AI автоматаар бөглөнө)" style="margin-bottom:0;font-size:12px;resize:none;width:100%;padding-left:24px;" oninput="wqAutoSave()">'+x(s.reason||'')+'</textarea>'
+    +'</div>'
+    +'<button id="wq-ai-btn-'+i+'" onclick="wqGenAI('+i+')" style="flex-shrink:0;padding:6px 10px;border-radius:8px;border:1.5px solid var(--purple);background:var(--purplebg);color:var(--purple);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s;align-self:flex-start;">🤖 AI</button>'
+    +'</div>'
+    // Action buttons row
+    +'<div style="display:flex;gap:5px;">'
+    +'<button onclick="wqPreviewCard('+i+')" style="flex:1;padding:5px 0;border-radius:8px;border:1.5px solid var(--border2);background:var(--bg3);color:var(--text3);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;" title="Preview">👁 Preview</button>'
+    +'<button onclick="wqCopyCard('+i+')" style="flex:1;padding:5px 0;border-radius:8px;border:1.5px solid var(--border2);background:var(--bg3);color:var(--text3);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;" title="Хуулах">📋 Хуулах</button>'
+    +'<button onclick="wqSendCard('+i+')" id="wq-send-btn-'+i+'" style="flex:2;padding:5px 0;border-radius:8px;border:1.5px solid var(--green);background:var(--greenbg,rgba(52,199,89,.08));color:var(--green);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;" title="Free Channel руу илгээх">📤 Илгээх</button>'
+    +'</div>'
+    // Preview box (hidden by default)
+    +'<div id="wq-preview-'+i+'" style="display:none;margin-top:8px;background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:11px;line-height:1.7;color:var(--text2);white-space:pre-wrap;font-family:monospace;max-height:200px;overflow-y:auto;"></div>'
+
+    +'</div>'
+    +'</div>';
   }
+  // Render дууссаны дараа progress шинэчлэх
+  setTimeout(wqUpdateProgress, 50);
 }
 
 function wqCalc(i){
   var buy=parseFloat(document.getElementById('wq-buy-'+i).value)||0;
   var sell=parseFloat(document.getElementById('wq-sell-'+i).value)||0;
   var el=document.getElementById('wq-margin-'+i);
+  if(!el) return;
   if(buy>0&&sell>buy){
     var profit=sell-buy;
     var m=Math.round((profit/sell)*100);
-    el.textContent='📈 Margin: '+m+'% · '+Math.round(profit).toLocaleString('mn-MN')+'₮/ш';
-    el.style.display='block';
+    el.innerHTML='<span style="font-size:11px;font-weight:800;color:var(--green);">📈 Margin: '+m+'%</span>'
+      +'<span style="font-size:11px;color:var(--green);font-weight:600;">'+Math.round(profit).toLocaleString('mn-MN')+'₮/ш</span>';
+    el.style.display='flex';
   } else { el.style.display='none'; }
 }
 
@@ -9506,9 +9918,23 @@ setTimeout(function(){
 },500);
 
 /* ── FINANCE TRACKER ── */
-var _fin=(function(){var def={salary:3000000,exitTarget:6000000,inc:[{id:1,name:'Pro план',amt:0},{id:2,name:'Нэмэлт',amt:0}],exp:[{id:1,name:'Meta реклам',amt:0},{id:2,name:'Tool зардал',amt:0}]};try{return JSON.parse(localStorage.getItem('pd_finance')||'null')||def;}catch(e){return def;}})();
+var _finCurrentMonth=(function(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); })();
+var _fin=(function(){
+  var def={salary:3000000,exitTarget:6000000,month:null,inc:[{id:1,name:'Pro план',amt:0},{id:2,name:'Нэмэлт',amt:0}],exp:[{id:1,name:'Meta реклам',amt:0},{id:2,name:'Tool зардал',amt:0}]};
+  try{
+    var saved=JSON.parse(localStorage.getItem('pd_finance')||'null');
+    if(!saved) return def;
+    // Шинэ сар эхэлсэн бол орлого/зарлагыг 0 болгон reset
+    if(saved.month && saved.month !== _finCurrentMonth){
+      saved.inc=(saved.inc||[]).map(function(r){return {id:r.id,name:r.name,amt:0};});
+      saved.exp=(saved.exp||[]).map(function(r){return {id:r.id,name:r.name,amt:0};});
+    }
+    saved.month=_finCurrentMonth;
+    return saved;
+  }catch(e){return def;}
+})();
 var _finNid=10;
-function _saveFin(){localStorage.setItem('pd_finance',JSON.stringify(_fin));}
+function _saveFin(){ _fin.month=_finCurrentMonth; localStorage.setItem('pd_finance',JSON.stringify(_fin)); }
 
 function finAddInc(){
   var n=document.getElementById('fin-inc-name').value.trim();
@@ -12082,6 +12508,16 @@ function injectReminderBtns(){
       set('ai-ctx-pending',  (s.pendingCount||0)  + ' хүн', s.pendingCount > 0);
       set('ai-ctx-new',      (s.newThisMonth||0)  + ' шинэ');
 
+      // Finance Tracker: "Pro план" мөрийг GAS орлогоор auto-sync
+      if(s.monthlyRevenue > 0 && typeof _fin !== 'undefined'){
+        var proRow = (_fin.inc||[]).find(function(r){ return r.name === 'Pro план'; });
+        if(proRow && proRow.amt !== s.monthlyRevenue){
+          proRow.amt = s.monthlyRevenue;
+          _saveFin();
+          if(typeof finCalc === 'function') finCalc();
+        }
+      }
+
       // Chart-г бодит өгөгдлөөр шинэчлэх (давхар fetch хийхгүй)
       if(typeof updateDailyRevFromStats === 'function') updateDailyRevFromStats(s);
 
@@ -12178,7 +12614,8 @@ function injectReminderBtns(){
     var todoList = stats.ctxTodo || [];
 
     // ── Dynamic funnel тооцоо ──
-    var ga4Monthly  = parseInt(localStorage.getItem('pd_ga4_monthly') || '0', 10) || 384;
+    var _ga4MK = (function(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); })();
+    var ga4Monthly  = parseInt(localStorage.getItem('pd_ga4_'+_ga4MK) || '0', 10) || 0;
     var liteReg     = stats.liteRegistrations || 0;
     var paidMembers = stats.active || 0;
     var liteCtr     = liteReg > 0 ? ((liteReg / ga4Monthly) * 100).toFixed(1) : '74.7'; // visitor→lite
@@ -13141,12 +13578,9 @@ setTimeout(function(){
       </div>
       <button onclick="ppClose()" style="width:32px;height:32px;border-radius:10px;border:none;background:var(--bg4);cursor:pointer;font-size:14px;color:var(--text3);flex-shrink:0;transition:background .15s;" onmouseover="this.style.background='var(--redbg)';this.style.color='var(--red)'" onmouseout="this.style.background='var(--bg4)';this.style.color='var(--text3)'">✕</button>
     </div>
-    <!-- Pro HTML Upload bar -->
-    <div style="padding:8px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0;background:var(--bg3);">
-      <label id="pp-upload-lbl" style="display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:10px;border:1.5px dashed var(--border2);background:var(--bg2);color:var(--text3);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text3)'">
-        📂 Pro HTML upload
-        <input type="file" accept=".html" id="pp-html-input" style="display:none;" onchange="ppLoadFromFile(this)">
-      </label>
+    <!-- Supabase status bar -->
+    <div style="padding:6px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0;background:var(--bg3);">
+      <span style="font-size:11px;color:var(--green);font-weight:700;background:var(--greenbg,rgba(52,199,89,.1));padding:3px 10px;border-radius:6px;">🗄️ Supabase · live</span>
       <div id="pp-upload-status" style="font-size:11px;color:var(--text3);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
       <button onclick="ppClearCache();ppLoad().then(function(){ppFilter();})" style="padding:5px 10px;border-radius:8px;border:1.5px solid var(--border2);background:transparent;color:var(--text3);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">🔄 Refresh</button>
     </div>
@@ -13206,157 +13640,35 @@ var _ppUploadedProducts=[]; // Pro HTML-с upload хийсэн бараа
 
 var CAT_MAP={'Home':'Гэр · Home','Beauty':'Гоо сайхан · Beauty','Health':'Эрүүл мэнд · Health','Kids':'Хүүхэд · Kids','Goods':'Бараа · Goods'};
 
-// ── Pro HTML файл upload хийх ──
-function ppLoadFromFile(input){
-  var file=input.files&&input.files[0];
-  if(!file) return;
-  var st=document.getElementById('pp-upload-status');
-  if(st) st.textContent='Уншиж байна...';
-  var reader=new FileReader();
-  reader.onload=function(e){
-    try{
-      var src=e.target.result;
-      var parsed=ppParseProductsFromHTML(src);
-      if(parsed && parsed.length>0){
-        _ppUploadedProducts=parsed;
-        _ppProducts=parsed;
-        try{ sessionStorage.setItem('pp_products',JSON.stringify(parsed)); }catch(ex){}
-        if(st) st.textContent='OK '+parsed.length+' бараа — '+file.name;
-        ppFilter();
-        if(typeof toast==='function') toast(parsed.length+' бараа ачааллаа','ok');
-      } else {
-        if(st) st.textContent='PRODUCTS олдсонгүй';
-        if(typeof toast==='function') toast('PRODUCTS олдсонгүй','err');
-      }
-    }catch(ex){
-      if(st) st.textContent='Алдаа: '+ex.message;
-      if(typeof toast==='function') toast('Файл алдаа','err');
-    }
-    input.value='';
-  };
-  reader.readAsText(file,'utf-8');
-}
-
-// ── HTML текстээс PRODUCTS array parse хийх ──
-function ppParseProductsFromHTML(src){
-  var patterns=['const PRODUCTS = [','var PRODUCTS = [','const PRODUCTS=[','var PRODUCTS=[','PRODUCTS = [','PRODUCTS=['];
-  var si=-1;
-  for(var i=0;i<patterns.length;i++){
-    var idx=src.indexOf(patterns[i]);
-    if(idx>-1){si=idx;break;}
-  }
-  if(si===-1) return null;
-  var as=src.indexOf('[',si);
-  var dep=0,ei=-1;
-  for(var ci=as;ci<src.length;ci++){
-    if(src[ci]==='[') dep++;
-    else if(src[ci]===']'){dep--;if(dep===0){ei=ci;break;}}
-  }
-  if(ei===-1) return null;
-  return JSON.parse(src.substring(as,ei+1));
-}
+// ── Pro HTML upload хасагдсан — Supabase шууд татдаг болсон ──
 
 async function ppLoad(){
-  if(_ppUploadedProducts.length>0){ _ppProducts=_ppUploadedProducts; return; }
   if(_ppProducts.length>0) return;
-  var cached=sessionStorage.getItem('pp_products');
-  if(cached){ try{ _ppProducts=JSON.parse(cached); if(_ppProducts.length>0) return; }catch(e){} }
-
   var grid=document.getElementById('pp-grid');
-  grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text3);font-size:13px;">⏳ Бараа татаж байна...</div>';
-
-  // ── 1. GAS-аас татах (action=get_products) — 15s timeout ──
+  grid.innerHTML='<div style="text-align:center;padding:40px;color:var(--text3);font-size:13px;">⏳ Supabase-аас татаж байна...</div>';
   try{
-    var gasUrl=GAS_URL();
-    if(gasUrl){
-      var ctrl1=new AbortController();
-      var t1=setTimeout(function(){ctrl1.abort();},15000);
-      try{
-        var r=await fetch(gasUrl+'?action=get_products',{credentials:'omit',signal:ctrl1.signal});
-        clearTimeout(t1);
-        var j=await r.json();
-        if(j.ok && j.products && j.products.length>0){
-          _ppProducts=j.products;
-          sessionStorage.setItem('pp_products',JSON.stringify(_ppProducts));
-          return;
-        }
-      }catch(e1a){clearTimeout(t1);}
-    }
-  }catch(e1){}
-
-  // ── 2. Pro.html-с татах ──
-  try{
-    var paths=['https://productdrops.netlify.app/pro.html','/Pro.html','/pro.html','./Pro.html','Pro.html'];
-    var src='';
-    for(var pi=0;pi<paths.length;pi++){
-      try{
-        var ctrl2=new AbortController();
-        var t2=setTimeout(function(){ctrl2.abort();},8000);
-        var rp=await fetch(paths[pi],{credentials:'omit',signal:ctrl2.signal});
-        clearTimeout(t2);
-        if(rp.ok){src=await rp.text();break;}
-      }catch(fe){}
-    }
-    if(src){
-      var si=src.indexOf('const PRODUCTS = [');
-      if(si===-1) si=src.indexOf('var PRODUCTS = [');
-      if(si===-1) si=src.indexOf('const PRODUCTS=[');
-      if(si===-1) si=src.indexOf('var PRODUCTS=[');
-      if(si===-1) si=src.indexOf('PRODUCTS = [');
-      if(si===-1) si=src.indexOf('PRODUCTS=[');
-      if(si>-1){
-        var as=src.indexOf('[',si);
-        var dep=0,ei=-1;
-        for(var ci=as;ci<src.length;ci++){
-          if(src[ci]==='[')dep++;
-          else if(src[ci]===']'){dep--;if(dep===0){ei=ci;break;}}
-        }
-        var parsed=JSON.parse(src.substring(as,ei+1));
-        if(parsed.length>0){
-          _ppProducts=parsed;
-          sessionStorage.setItem('pp_products',JSON.stringify(_ppProducts));
-          return;
-        }
-      }
-    }
-  }catch(e2){}
-
-  // ── 3. Supabase products хүснэгтээс татах ──
-  try{
-    var sr=await fetch(SB_URL+'/rest/v1/products?order=id.asc&limit=500',{headers:_SBH});
-    if(sr.ok){
-      var rows=await sr.json();
-      if(rows&&rows.length>0){
-        _ppProducts=rows.map(function(r){
-          return{
-            n:r.name||r.n||'',
-            pN:parseFloat(r.sell_price||r.pN||0),
-            cN:parseFloat(r.buy_price||r.cN||0),
-            tcN:parseFloat(r.total_cost||r.tcN||r.buy_price||r.cN||0),
-            mc:r.category||r.mc||'',
-            imgUrl:r.img_url||r.imgUrl||'',
-            aliUrl:r.supplier_url||r.aliUrl||'',
-            hook:r.hook||'',
-            aiReason:r.ai_reason||r.aiReason||'',
-            mg:r.margin||r.mg||0
-          };
-        });
-        sessionStorage.setItem('pp_products',JSON.stringify(_ppProducts));
-        return;
-      }
-    }
-  }catch(e3){}
-
-  // ── Бүгд амжилтгүй — тайлбар гаргах ──
-  grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 20px;">'
-    +'<div style="font-size:28px;margin-bottom:10px;">📭</div>'
-    +'<div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">Бараа ачааллаж чадсангүй</div>'
-    +'<div style="font-size:12px;color:var(--text3);line-height:1.7;margin-bottom:14px;">'
-    +'GAS дээр <b>get_products</b> action нэмэх,<br>эсвэл Supabase-д <b>products</b> хүснэгт үүсгэх хэрэгтэй.</div>'
-    +'<button onclick="ppClearCache();ppLoad().then(function(){ppFilter();})" '
-    +'style="padding:7px 18px;border-radius:10px;border:1.5px solid var(--blue);background:var(--bluebg);'
-    +'color:var(--blue);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">🔄 Дахин оролдох</button>'
-    +'</div>';
+    var r=await fetch(SB_URL+'/rest/v1/products?select=id,n,_en,mc,sc,cN,pN,tcN,mg,aliUrl,imgUrl,desc,aiReason,hook&order=id.asc&limit=2000',{
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'}
+    });
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    var rows=await r.json();
+    if(!rows||!rows.length) throw new Error('Бараа олдсонгүй');
+    _ppProducts=rows.map(function(r){
+      var buy=Number(r.tcN||r.cN||0);
+      var sell=Number(r.pN||0);
+      var mg=r.mg||Math.round(sell>0?((sell-buy)/sell)*100:0);
+      return{id:r.id,n:r.n||'',_en:r._en||'',mc:r.mc||'Goods',sc:r.sc||'',
+        cN:buy,pN:sell,tcN:buy,mg:mg,aliUrl:r.aliUrl||'',
+        imgUrl:r.imgUrl||'',desc:r.desc||'',aiReason:r.aiReason||'',hook:r.hook||''};
+    });
+  }catch(e){
+    grid.innerHTML='<div style="text-align:center;padding:40px 20px;">'
+      +'<div style="font-size:28px;margin-bottom:10px;">📭</div>'
+      +'<div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">Supabase холбогдсонгүй</div>'
+      +'<div style="font-size:12px;color:var(--text3);margin-bottom:14px;">'+e.message+'</div>'
+      +'<button onclick="ppClearCache();ppLoad().then(function(){ppFilter();})" style="padding:7px 18px;border-radius:10px;border:1.5px solid var(--blue);background:var(--bluebg);color:var(--blue);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">🔄 Дахин оролдох</button>'
+      +'</div>';
+  }
 }
 
 function ppOpen(slotIdx, target){
@@ -13500,7 +13812,9 @@ function ppSelect(globalIdx){
     // Auto-save immediately
     setTimeout(wqAutoSave, 50);
     ppClose();
-    toast('✓ '+p.n+' сонгогдлоо','ok');
+    toast('✓ '+p.n+' сонгогдлоо — AI бэлтгэж байна...','ok');
+    // Auto-trigger AI winning reason generation
+    setTimeout(function(){ wqGenAI(i); }, 200);
   }
 }
 
@@ -13561,22 +13875,19 @@ async function dpGenAI() {
 
 // Clear sessionStorage cache to re-fetch when needed
 function ppClearCache(){
-  sessionStorage.removeItem('pp_products');
   _ppProducts=[];
   _ppUploadedProducts=[];
-  var st=document.getElementById('pp-upload-status');
-  if(st) st.textContent='';
-  toast('Cache цэвэрлэгдлээ — Pro HTML дахин upload хийнэ үү','ok');
+  toast('Supabase-аас дахин татаж байна...','ok');
 }
 
 // ── AI WINNING REASONS — Weekly Queue ──
 async function wqGenAI(idx) {
   var btn = document.getElementById('wq-ai-btn-'+idx);
-  var name = (document.getElementById('wq-name-'+idx)||{}).value||'';
-  var cat  = (document.getElementById('wq-cat-'+idx)||{}).value||'';
-  var buy  = parseFloat((document.getElementById('wq-buy-'+idx)||{}).value)||0;
-  var sell = parseFloat((document.getElementById('wq-sell-'+idx)||{}).value)||0;
-  var desc = (document.getElementById('wq-prod-desc-'+idx)||{}).value||'';
+  var name   = (document.getElementById('wq-name-'+idx)||{}).value||'';
+  var cat    = (document.getElementById('wq-cat-'+idx)||{}).value||'';
+  var buy    = parseFloat((document.getElementById('wq-buy-'+idx)||{}).value)||0;
+  var sell   = parseFloat((document.getElementById('wq-sell-'+idx)||{}).value)||0;
+  var desc   = (document.getElementById('wq-prod-desc-'+idx)||{}).value||'';
   var enName = (document.getElementById('wq-prod-en-'+idx)||{}).value||'';
   name = name.trim();
   if(!name){ if(typeof toast==='function') toast('Эхлээд бараа нэр оруулна уу','err'); return; }
@@ -13603,6 +13914,21 @@ async function wqGenAI(idx) {
     if(typeof toast==='function') toast('AI алдаа: '+e.message,'err');
   }
   if(btn){ btn.textContent='🤖 AI'; btn.disabled=false; }
+}
+
+function wqClear(idx) {
+  var fields = ['wq-name-','wq-buy-','wq-sell-','wq-supplier-','wq-img-','wq-reason-','wq-prod-desc-','wq-prod-en-'];
+  fields.forEach(function(f){ var el=document.getElementById(f+idx); if(el) el.value=''; });
+  var catEl=document.getElementById('wq-cat-'+idx);
+  if(catEl) catEl.selectedIndex=0;
+  var thumb=document.getElementById('wq-thumb-'+idx);
+  if(thumb){ thumb.src=''; thumb.style.display='none'; }
+  var empty=document.getElementById('wq-thumb-'+idx+'-empty');
+  if(empty) empty.style.display='flex';
+  var mg=document.getElementById('wq-margin-'+idx);
+  if(mg) mg.style.display='none';
+  wqAutoSave();
+  toast('✓ Цэвэрлэгдлээ','ok');
 }
 
 // ── Хуудас хаахын өмнө автоматаар хадгалах ──
@@ -14635,30 +14961,94 @@ async function aiGen10Hooks() {
   result.style.display = 'none';
   list.innerHTML = '';
 
-  var sysPrompt = `Чи Alex Hormozi-ийн Hook writing expert. Монголын dropshipping зах зээлд зориулсан 10 ширхэг scroll-stop hook зохиодог.
+  var sysPrompt = `Чи Alex Hormozi-ийн Hook writing expert. Монголын dropshipping зах зээлд зориулсан 10 ширхэг scroll-stop hook зохиодог. Hook нь камерт шууд уншихад амнаас унах, ярианы монгол хэлэнд яг нийцсэн байна.
 
 HORMOZI HOOK ТОМЬЁО:
-[Тоо/Нотолгоо] + [Үр дүн] + [Цаг хугацаа] + [Нөхцөл/Хязгаарлалт]
+[Өвдөлт/Нөхцөл — "байна уу?"] + [Гэтэл/Харин] + [Гайхалтай үр дүн]
 
-Жишээ:
-- "₮2.1 сая 47 хоногт — агуулах байхгүй, код мэдэхгүй байсан"
-- "0-аас 23 захиалга — зар зарлалгүй, зөвхөн TikTok"
-- "Ажлын 8 цагаасаа 2 цагийг энд зарцуулж байснаа — энэ аргаар 40 минутад"
+БАТАЛГААЖСАН ЗАГВАР — ЯАГЧААНЫ ЭНЭ ХЭЛБЭРТ ОЙРТУУЛ:
+1. Дропшиппинг эхлэхийг хүсэж байгаа ч яг хаанаас эхлэхээ мэдэхгүй будилаад байна уу? Гэтэл ердөө 3 алхмыг зөв дарааллаар хийчихвэл 5 хоногийн дотор анхны захиалгаа авах боломжтой гэвэл ямар вэ?
+2. Alibaba нээж үзчихээд юу ч ойлгохгүй хаасаар л байна уу? Гэтэл 19 настай нэгэн охин яг ийм байдлаас эхлээд ердөө 12 хоногийн дотор 340 мянган төгрөгийн борлуулалт хийчихсэн байна гээд бод доо.
+3. Мөнгөгүй, туршлагагүй, хаанаас эхлэхээ мэдэхгүй гацчихсан уу? Гэхдээ ердөө энэ 4 үндсэн алхмыг дагаад 7 хоногийн дотор анхны онлайн дэлгүүрээ ажиллуулж эхэлж чадна гэвэл ямар вэ?
+4. Дропшиппинг хиймээр байгаа ч хэнээс асуухаа мэдэхгүй шантарч байна уу? Тэгвэл яг энэ асуудлыг шийдэх, 0-ээс эхлэх бүх алхмуудыг би чамд зааж өгье.
+5. Өнөөдөр ч эхэлнэ, маргааш ч эхэлнэ гэж хэлсээр өдөр хоногийг алдсаар л байна уу? Гэхдээ ердөө ганцхан өдөр зарцуулаад анхны онлайн дэлгүүрээ нээчихвэл ямар вэ?
+6. Юүтүбээр 8 цаг видео үзсэн мөртлөө одоо хүртэл хаанаас эхлэхээ мэдэхгүй гацчихсан уу? Тэгвэл эхний 24 цагт л хийх ёстой 5 зүйлийг ярьж өгье.
+7. Найзууд чинь шинэ зүйлс аваад байхад чи картнаасаа мөнгө гаргахаас эмээгээд сууна уу? Гэтэл чамтай адилхан нэг оюутан охин ердөө 21 хоногийн дотор бүтэн сарын цалингийн хэмжээний орлого олчихсон байна.
+8. Дропшиппинг гэж яг юу болохыг ч мэдэхгүй байгаа мөртлөө мөнгө олохыг хүсэж байна уу? Энэ нууцыг мэдчихвэл чи 14 хоногийн дотор анхны ашгаа олж чадна.
+9. Alibaba дээр олон мянган бүтээгдэхүүн харчихаад юу сонгохоо мэдэхгүй будилаад байна уу? Тэгвэл үргэлж хамгийн сайн борлуулагддаг 3 төрлийн бүтээгдэхүүнийг хэлж өгье.
+10. Дропшиппинг эхлэхийг бодоод бүтэн 4 сар өнгөрөөсөн ч одоо хүртэл нэг ч алхам хийж зүрхлээгүй л байна уу? Тэгвэл энэ ганцхан нууцыг мэдсэнээр 48 цагийн дотор анхны захиалгаа авч чадна шүү.
 
 HOOK ТӨРЛҮҮД (тус бүрээс 2-3 үүсгэ):
-1. NUMBER HOOK — яг тоо + цаг + нөхцөл
-2. VILLAIN HOOK — хуучин арга, тогтолцоог задла "Чи одоо..."
-3. PAIN MOMENT HOOK — avatar-ийн яг өвдөлтийн секунд
-4. DREAM OUTCOME HOOK — тэдний мөрөөдлийн яг нарийн зураглал
-5. CURIOSITY GAP HOOK — "Энэ нэг зүйлийг..." / "Яагаад..." — хариулт дотор л байна
+1. NUMBER HOOK — яг тоо + цаг + нөхцөл, асуултаар эхлэх эсвэл дуусгах
+2. VILLAIN HOOK — "Чи одоо ч ... байна уу? Гэтэл..." загвар
+3. PAIN MOMENT HOOK — avatar-ийн яг өвдөлтийн секундыг "байна уу?" гэж асуух
+4. DREAM OUTCOME HOOK — "Тэгвэл ... болно" гэж шийдлийн зургийг харуулах
+5. CURIOSITY GAP HOOK — "Гэхдээ энэ ганцхан зүйлийг мэдчихвэл..." загвар
 
-ДҮРМҮҮД:
-- ЧИ гэж хандана — "залуусаа / хүмүүс" огт биш
-- Hyper-specific — "мөнгөгүй" биш, "картаа уншуулахдаа харанхуйлдаг тэр секунд"
-- Ерөнхий ойлголт биш — avatar-ийн яг situation: ${av.situation}
-- Хориотой: ${av.forbidden||''}
+МОНГОЛ ХЭЛНИЙ ЗААВАЛ МӨРДӨХ ДҮРМҮҮД:
+- Насыг "17 настай" гэж бич — "17 насны" буруу
+- "Ямар ч мөнгөгүй, ямар ч туршлагагүй" гэж бич — "₮0 мөнгө, ₮0 туршлага" огт биш
+- Англи үг хольж бичихгүй: "story" → "түүх", "дүкэн" → "дэлгүүр"
+- Өгүүлбэрийг "олсон нь" / "дагаснаар" / "-ээд / -өөд" нөхцөлөөр дуусгахгүй — заавал гүйцээ
+- Мөнгийн дүнг "89k" хэлбэрээр бичих — "₮89к" гэж хэзээ ч бичихгүй
+- Hook бүр "байна уу?", "гацчихсан уу?", "шантарч байна уу?", "ямар вэ?" зэргээр дуусах эсвэл эхлэх
+- "ямар уу?" БУРУУ — "ямар вэ?" ЗӨВ (борлуулалтын контентод "вэ" нь хүчтэй)
 
-Avatar: ${av.emoji} ${av.name} | Нас: ${av.age} | Pains: ${av.pains}
+ЗӨВ БИЧИХ ДҮРЭМ — ТОДОРХОЙ ЗАСВАР:
+- "хүсч" БУРУУ → "хүсэж" ЗӨВ
+- "эхлэж" БУРУУ → "эхэлж" ЗӨВ (үндэс "эхэл", эгшиг гээгдэхгүй)
+- "эхлэнэ" БУРУУ → "эхэлнэ" ЗӨВ (үндэс "эхэл" + "-нэ")
+- "нээхвэл" БУРУУ → "нээвэл" эсвэл "нээчихвэл" ЗӨВ
+- "амжидаг" БУРУУ → "амждаг" ЗӨВ
+- "алхамын" БУРУУ → "алхмын" ЗӨВ (эгшиг гээгдэх дүрэм)
+- "төөрөгдөлийг" БУРУУ → "төөрөгдлийг" ЗӨВ
+- "борлуулалталтаа" БУРУУ → "борлуулалтаа" ЗӨВ
+- "авчихаад / мэдчихээд / олчихоод" БУРУУ → "авчхаад / мэдчхаад / олчхоод" ЗӨВ
+- "амжилтанд" БУРУУ → "амжилтад" ЗӨВ
+- "анхны сараа" БУРУУ → "анхны сардаа" ЗӨВ
+- "өнөөдөр нь" БУРУУ → "өнөөдөр" ЗӨВ
+- "200 мянганы" БУРУУ → "200 мянган төгрөгийн" ЗӨВ
+- "мөнго" БУРУУ → "мөнгө" ЗӨВ (механик шивэлт)
+- "0-оос" БУРУУ → "0-ээс" ЗӨВ ("тэг" гэж уншигдах тул эгшиг зохицох дүрмээр "-ээс")
+- "авах арга байна" (хуурай, идэвхгүй) БУРУУ → "авч чадна шүү" эсвэл "авах боломжтой" ЗӨВ
+
+УТГА ЗҮЙН НОЦТОЙ АЛДАА — ОГТХОН Ч ХЭРЭГЛЭХГҮЙ:
+- "тэнгэр цэнхэрээ харжээ" → "анхны ашгаа олжээ"
+- "Тэнгэр их их мэдээлэл..." → "Дэндүү их мэдээлэл дунд төөрчихөөд..."
+- "мөнгийг гаргах эсэргүүцэх" (resist spending үгчилсэн) → "картнаасаа мөнгө гаргахаас эмээх / татагнах"
+- "30 хоногоор цалингийн хэмжээнд" (by 30 days үгчилсэн) → "ердөө 30-хан хоногийн дотор ... цалингийн хэмжээний орлого"
+- "тэнэгдэх / тэнэгдээд байна уу" (доромжилсон) → "будилаад байна уу" эсвэл "эргэлзээд байна уу"
+- "төрөлжсөн бодолтой байсан" → "яг чамтай адилхан эргэлзэж байсан"
+- "мөнгө дамжуулж байна" → "борлуулалт хийж байна"
+- "доторлоод байна уу" → "эргэлзээд байна уу"
+- "цаг тухайд нь үзчихээд" → "зөндөө олон цаг үзчихээд"
+- "үнэнээр мэдэхгүй" → "үнэндээ юу ч мэдэхгүй"
+
+НАЙРУУЛГЫН БУРУУ ХЭЛЛЭГ — ЗААВАЛ ЗАЙЛСХИЙ:
+- "Яг чиний шиг" / "Яг чиний адил" БУРУУ → "Яг чам шиг" эсвэл "Яг чамтай адилхан" ЗӨВ
+- "хэнд асуувал" БУРУУ → "хэнээс асуухаа" ЗӨВ (монголд хүнээс асуудаг, хэнд биш)
+- "нээж өгье" (unlock үгчилсэн) БУРУУ → "зааж өгье" эсвэл "хуваалцъя" ЗӨВ
+- "тэднийтэйгээ" → "тэдэнтэй адил" эсвэл "тэдний адил"
+- "дагаваас" → "дагачихвал" эсвэл "дагавал"
+- "4 алхамын дагуу дагаад" (давхардал) → "4 алхмыг дагаад" — аль нэгийг л сонго
+- "захиалга хүлээж болно / хүлээж чадна" → "анхны захиалгаа авах боломжтой"
+- "хиймээр санаатай" → "хиймээр байгаа ч"
+
+ЛОГИКИЙН АЛДАА — ЦАГ ХУГАЦААНЫ ЗӨРЧИЛ:
+- "Өнөөдөр ч хэлчихээд, өчигдөр ч хэлчихээд" гэж бичихгүй — логик алдаа (өнөөдрийн өмнөх нь өчигдөр)
+- Зөв загвар: "Өнөөдөр ч эхэлнэ, маргааш ч эхэлнэ гэж хэлсээр өдөр хоногийг алдсаар л байна уу?"
+
+ТӨГСГӨЛИЙН ХЭМНЭЛ — ОЛОН ЯНЗ БАЙ:
+- "...арга нь энэ", "...нээсэн нь энэ" гэж давтахгүй — 10 hook-д ижил хэлбэрийн төгсгөл хориотой
+- Төгсгөлийг үйл үгтэй, амьд хэлбэрт оруул: "...зааж өгье", "...ярьж өгье", "...хэлж өгье", "...хийж чадна"
+
+ХОРИОТОЙ:
+- "залуусаа / хүмүүс" — зөвхөн "чи" гэж хандна
+- Хэвлэлийн буюу блогийн найруулга — энэ нь ярианы видео hook
+- Hook текст дотор давхар хашилт (") огт ашиглахгүй — JSON хугарна
+- ${av.forbidden||''}
+
+Avatar: ${av.emoji} ${av.name} | Нас: ${av.age} | Situation: ${av.situation} | Pains: ${av.pains}
 
 JSON FORMAT ЗӨВХӨН (тайлбар, markdown, backtick огт биш):
 {"hooks":["Hook 1...","Hook 2...","Hook 3...","Hook 4...","Hook 5...","Hook 6...","Hook 7...","Hook 8...","Hook 9...","Hook 10..."]}`;
@@ -14683,7 +15073,24 @@ JSON FORMAT ЗӨВХӨН (тайлбар, markdown, backtick огт биш):
     if(!resp.ok){throw new Error((data.error&&data.error.message)||'HTTP '+resp.status);}
     var raw = (data.content && data.content[0] && data.content[0].text) || '';
     raw = raw.replace(/```json/g,'').replace(/```/g,'').trim();
-    var parsed = JSON.parse(raw);
+    var parsed;
+    try {
+      parsed = JSON.parse(raw);
+    } catch(e) {
+      // Fallback: hook мөр бүрийг regex-ээр татна
+      var matches = [];
+      var re = /"((?:[^"\\]|\\.)*)"/g;
+      var m;
+      while ((m = re.exec(raw)) !== null) {
+        var val = m[1].replace(/\\"/g, '"').trim();
+        if (val.length > 15) matches.push(val);
+      }
+      if (matches.length >= 5) {
+        parsed = { hooks: matches.slice(0, 10) };
+      } else {
+        throw new Error('JSON parse алдаа: ' + e.message);
+      }
+    }
     var hooks = parsed.hooks || [];
 
     var typeLabels = ['🔢 Тоо','⚔️ Villain','💥 Pain','✨ Dream','🎯 Curiosity','🔢 Тоо','⚔️ Villain','💥 Pain','✨ Dream','🎯 Curiosity'];
@@ -15382,7 +15789,7 @@ document.addEventListener('click',function(e){
           +'<button onclick="closeScriptView()" style="width:30px;height:30px;border-radius:9px;border:1px solid var(--border2);background:var(--bg4);color:var(--text3);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;" onmouseenter="this.style.background=\'var(--redbg)\';this.style.color=\'var(--red)\'" onmouseleave="this.style.background=\'var(--bg4)\';this.style.color=\'var(--text3)\'">✕</button>'
         +'</div>'
         +'<div id="sv-title" style="font-size:17px;font-weight:800;color:var(--text);line-height:1.3;letter-spacing:-.2px;"></div>'
-        +'<div id="sv-date" style="font-size:11px;color:var(--text4);font-weight:600;"></div>'
+        +'<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><div id="sv-date" style="font-size:11px;color:var(--text4);font-weight:600;"></div><span id="sv-fmt-badge" style="font-size:10px;font-weight:700;color:var(--amber);background:var(--amberbg);border:1px solid rgba(255,149,0,.2);border-radius:6px;padding:2px 8px;display:none;"></span></div>'
       +'</div>'
       // Body
       +'<div id="sv-body" style="overflow-y:auto;padding:20px 22px;flex:1;display:flex;flex-direction:column;gap:16px;">'
@@ -15422,6 +15829,7 @@ document.addEventListener('click',function(e){
             +'Бүгдийг хуулах</button>'
           +'<button onclick="svRepurpose()" style="padding:10px 14px;border-radius:11px;border:1.5px solid var(--border2);background:transparent;color:var(--amber);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;" onmouseenter="this.style.background=\'var(--amberbg)\'" onmouseleave="this.style.background=\'transparent\'">♻️ Repurpose</button>'
           +'<button onclick="svEdit()" style="padding:10px 14px;border-radius:11px;border:1.5px solid var(--border2);background:transparent;color:var(--blue);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;" onmouseenter="this.style.background=\'var(--bluebg)\'" onmouseleave="this.style.background=\'transparent\'">✏️ Засах</button>'
+          +'<button onclick="svTeleOpen()" style="padding:10px 14px;border-radius:11px;border:1.5px solid var(--border2);background:transparent;color:var(--green);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;" onmouseenter="this.style.background=\'var(--greenbg)\'" onmouseleave="this.style.background=\'transparent\'">▶ Teleprompter</button>'
         +'</div>'
       +'</div>'
     +'</div>';
@@ -15464,6 +15872,10 @@ document.addEventListener('click',function(e){
       +'<span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:6px;background:var(--purplebg);color:var(--purple);">'+x2(c.platform||'')+'</span>';
 
     document.getElementById('sv-title').textContent=c.title||'Гарчиггүй';
+    // Format badge
+    var fmtNames={standard:'① Стандарт+',story:'② Story-first',casestudy:'③ Case study',mistake:'④ Mistake',pov:'⑤ POV',donot:"⑥ Don't start"};
+    var fmtBadgeWrap=document.getElementById('sv-fmt-badge');
+    if(fmtBadgeWrap){fmtBadgeWrap.textContent=c.format?('📋 '+( fmtNames[c.format]||c.format)):'';fmtBadgeWrap.style.display=c.format?'inline-block':'none';}
     document.getElementById('sv-date').textContent=c.date?(new Date(c.date).toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric'})):'Огноогүй';
 
     // Perf
@@ -15580,8 +15992,143 @@ document.addEventListener('click',function(e){
     closeScriptView();
     setTimeout(function(){if(typeof openCntEdit==='function')openCntEdit(_svId);},50);
   };
+
+  // ── Teleprompter for Content Pipeline scripts ──
+  window.svTeleOpen=function(){
+    var c=(typeof contents!=='undefined'?contents:[]).find(function(a){return a.id===_svId;});
+    if(!c)return;
+    var text='';
+    if(c.script&&c.script.trim())text=c.script.trim();
+    else if(c.hooks&&c.hooks.trim())text=c.hooks.trim();
+    if(!text){if(typeof toast==='function')toast('Script байхгүй байна','err');return;}
+    closeScriptView();
+    setTimeout(function(){_openTeleprompter(text);},80);
+  };
 })();
 
+</script>
+<script>
+// ══ SHARED TELEPROMPTER ENGINE ══
+(function(){
+  window._openTeleprompter=function(text){
+    var _t={running:false,speed:50,raf:null,pos:0,fontSize:36};
+    var ov=document.createElement('div');
+    ov.id='_tele_ov';
+    ov.style.cssText='position:fixed;inset:0;z-index:99999;background:#000;display:flex;flex-direction:column;touch-action:none;';
+
+    function getFontPx(){return _t.fontSize+'px';}
+    function rebuildText(){
+      var html='';
+      text.split('\n').forEach(function(ln){
+        var l=ln.trim();
+        if(!l){html+='<div style="height:'+Math.round(_t.fontSize*.6)+'px"></div>';return;}
+        html+='<div style="color:#fff;font-size:'+getFontPx()+';line-height:1.65;font-weight:600;font-family:inherit;margin-bottom:6px;">'+l.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div>';
+      });
+      inner.innerHTML=html;
+    }
+
+    // Controls
+    var bar=document.createElement('div');
+    bar.style.cssText='display:flex;align-items:center;gap:6px;padding:10px 14px;background:rgba(255,255,255,.07);flex-shrink:0;flex-wrap:wrap;';
+    var title=document.createElement('span');
+    title.style.cssText='color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;opacity:.5;';
+    title.textContent='TELEPROMPTER';
+    var spacer=document.createElement('div');spacer.style.flex='1';
+
+    // Speed controls
+    var spdLbl=document.createElement('span');
+    spdLbl.style.cssText='color:#fff;font-size:10px;opacity:.45;';spdLbl.textContent='Хурд:';
+    var btnSpdMinus=document.createElement('button');
+    btnSpdMinus.textContent='−';
+    btnSpdMinus.style.cssText='padding:4px 9px;border-radius:7px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#fff;font-size:13px;cursor:pointer;';
+    var spdEl=document.createElement('span');
+    spdEl.style.cssText='color:#fff;font-size:12px;font-weight:700;min-width:28px;text-align:center;';
+    spdEl.textContent='50';
+    var btnSpdPlus=document.createElement('button');
+    btnSpdPlus.textContent='+';
+    btnSpdPlus.style.cssText='padding:4px 9px;border-radius:7px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#fff;font-size:13px;cursor:pointer;';
+
+    // Font size controls
+    var sep=document.createElement('div');
+    sep.style.cssText='width:1px;height:20px;background:rgba(255,255,255,.15);margin:0 2px;';
+    var fntLbl=document.createElement('span');
+    fntLbl.style.cssText='color:#fff;font-size:10px;opacity:.45;';fntLbl.textContent='Хэмжээ:';
+    var btnFntMinus=document.createElement('button');
+    btnFntMinus.textContent='A−';
+    btnFntMinus.style.cssText='padding:4px 9px;border-radius:7px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#fff;font-size:12px;cursor:pointer;font-weight:700;';
+    var fntEl=document.createElement('span');
+    fntEl.style.cssText='color:#fff;font-size:12px;font-weight:700;min-width:28px;text-align:center;';
+    fntEl.textContent='36';
+    var btnFntPlus=document.createElement('button');
+    btnFntPlus.textContent='A+';
+    btnFntPlus.style.cssText='padding:4px 9px;border-radius:7px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#fff;font-size:12px;cursor:pointer;font-weight:700;';
+
+    var btnPlay=document.createElement('button');
+    btnPlay.textContent='\u25B6 \u042d\u0445\u043b\u044d\u0445';
+    btnPlay.style.cssText='padding:6px 16px;border-radius:9px;border:none;background:#fff;color:#000;font-size:13px;font-weight:700;cursor:pointer;margin-left:2px;';
+    var btnClose=document.createElement('button');
+    btnClose.textContent='\u2715';
+    btnClose.style.cssText='padding:6px 11px;border-radius:9px;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;font-size:13px;font-weight:700;cursor:pointer;';
+    btnClose.onclick=function(){
+      _t.running=false;
+      if(_t.raf)cancelAnimationFrame(_t.raf);
+      ov.remove();
+      if(document.exitFullscreen&&document.fullscreenElement)document.exitFullscreen().catch(function(){});
+    };
+
+    bar.appendChild(title);bar.appendChild(spacer);
+    bar.appendChild(spdLbl);bar.appendChild(btnSpdMinus);bar.appendChild(spdEl);bar.appendChild(btnSpdPlus);
+    bar.appendChild(sep);
+    bar.appendChild(fntLbl);bar.appendChild(btnFntMinus);bar.appendChild(fntEl);bar.appendChild(btnFntPlus);
+    bar.appendChild(btnPlay);bar.appendChild(btnClose);
+
+    // Scroll area
+    var wrap=document.createElement('div');
+    wrap.style.cssText='flex:1;overflow:hidden;position:relative;cursor:pointer;';
+    var inner=document.createElement('div');
+    inner.style.cssText='position:absolute;width:100%;padding:60px 8% 80vh;box-sizing:border-box;';
+    rebuildText();
+    var indLine=document.createElement('div');
+    indLine.style.cssText='position:absolute;left:0;right:0;top:50%;height:3px;background:rgba(255,200,0,.4);pointer-events:none;';
+    wrap.appendChild(inner);wrap.appendChild(indLine);
+    ov.appendChild(bar);ov.appendChild(wrap);
+    document.body.appendChild(ov);
+
+    _t.pos=0;inner.style.transform='translateY(0px)';
+
+    function scroll(){
+      if(!_t.running)return;
+      var max=inner.offsetHeight-wrap.offsetHeight+120;
+      _t.pos+=(_t.speed/1000);
+      if(_t.pos>=max){_t.running=false;btnPlay.textContent='\u21BA \u0414\u0430\u0445\u0438\u043d';_t.pos=max;}
+      inner.style.transform='translateY(-'+_t.pos+'px)';
+      if(_t.running)_t.raf=requestAnimationFrame(scroll);
+    }
+    btnPlay.onclick=function(e){
+      e.stopPropagation();
+      _t.running=!_t.running;
+      btnPlay.textContent=_t.running?'\u23F8 \u0417\u043e\u0433\u0441\u043e\u043e\u0445':'\u25B6 \u042d\u0445\u043b\u044d\u0445';
+      if(_t.running)scroll();
+    };
+    btnSpdMinus.onclick=function(e){e.stopPropagation();_t.speed=Math.max(50,_t.speed-50);spdEl.textContent=_t.speed;};
+    btnSpdPlus.onclick=function(e){e.stopPropagation();_t.speed=Math.min(500,_t.speed+50);spdEl.textContent=_t.speed;};
+    btnFntMinus.onclick=function(e){e.stopPropagation();_t.fontSize=Math.max(18,_t.fontSize-6);fntEl.textContent=_t.fontSize;rebuildText();};
+    btnFntPlus.onclick=function(e){e.stopPropagation();_t.fontSize=Math.min(72,_t.fontSize+6);fntEl.textContent=_t.fontSize;rebuildText();};
+    wrap.addEventListener('click',function(){btnPlay.click();});
+    if(ov.requestFullscreen)ov.requestFullscreen().catch(function(){});
+  };
+
+  // Reel Script tab teleprompter
+  window.rsTeleOpen=function(){
+    if(typeof rs_lastRaw==='undefined'||!rs_lastRaw)return;
+    var p=typeof rsParseScript==='function'?rsParseScript(rs_lastRaw):{hook:'',body:'',cta:''};
+    var parts=[];
+    if(p.hook)parts.push(p.hook);
+    if(p.body)parts.push(p.body);
+    if(p.cta)parts.push(p.cta);
+    _openTeleprompter(parts.join('\n\n')||rs_lastRaw);
+  };
+})();
 </script>
 <script>
 /* ── DEBT TRACKER ── */
