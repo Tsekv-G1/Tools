@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UGC Growth System</title>
+<style>
+:root{
+  --bg:#0b0b0c; --panel:#141416; --panel2:#1a1a1d; --line:#26262a;
+  --tx:#e9e9ec; --mut:#8b8b94; --dim:#5f5f68;
+  --acc:#e8b04b; --acc-d:#3a2e14;
+  --free:#7f8c9b; --k30:#e8b04b; --k50:#e0736b; --ok:#6fbf8b;
+  --r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--tx);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:36px 20px 90px}
+
+/* header */
+.eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);font-weight:600}
+h1{font-size:clamp(28px,5vw,44px);line-height:1.12;letter-spacing:-.02em;font-weight:700;margin:14px 0 12px}
+h1 span{color:var(--dim)}
+.lede{color:var(--mut);max-width:640px;font-size:15px}
+.rule{height:1px;background:var(--line);margin:28px 0}
+
+/* nav */
+nav{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:26px;
+    position:sticky;top:0;background:linear-gradient(var(--bg) 78%,transparent);z-index:20;padding-top:10px}
+nav button{
+  background:transparent;border:1px solid var(--line);color:var(--mut);
+  padding:8px 13px;border-radius:99px;font-size:13px;cursor:pointer;white-space:nowrap;
+  font-family:inherit;transition:.15s}
+nav button:hover{color:var(--tx);border-color:#3a3a40}
+nav button.on{background:var(--acc);border-color:var(--acc);color:#191203;font-weight:600}
+nav button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+
+/* panels */
+section{display:none;animation:f .2s ease}
+section.on{display:block}
+@keyframes f{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+h2{font-size:20px;letter-spacing:-.01em;margin:0 0 6px;font-weight:650}
+h3{font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);margin:0 0 12px;font-weight:600}
+.sub{color:var(--mut);font-size:14px;margin-bottom:22px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:760px){.grid2,.grid3{grid-template-columns:1fr}}
+.mut{color:var(--mut)}
+.small{font-size:13px}
+.big{font-size:30px;font-weight:700;letter-spacing:-.02em}
+ul{padding-left:18px;color:var(--mut);font-size:14px}
+li{margin:3px 0}
+.note{border-left:2px solid var(--acc);padding:2px 0 2px 14px;color:var(--mut);font-size:14px;margin:14px 0}
+
+/* pipeline */
+.pipe{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.pipe span{background:var(--panel2);border:1px solid var(--line);border-radius:99px;padding:6px 12px;font-size:12.5px;color:var(--mut)}
+.pipe span.hi{border-color:var(--acc);color:var(--acc)}
+.pipe i{color:var(--dim);font-style:normal;font-size:12px}
+
+/* table */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);
+   font-weight:600;padding:0 10px 10px;border-bottom:1px solid var(--line)}
+td{padding:11px 10px;border-bottom:1px solid #1e1e21;vertical-align:top;color:var(--mut)}
+td:first-child{color:var(--tx);font-weight:550}
+tr:last-child td{border-bottom:0}
+.tag{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11.5px;font-weight:600}
+.t-free{background:#20262b;color:var(--free)}
+.t-30{background:var(--acc-d);color:var(--k30)}
+.t-50{background:#341f1d;color:var(--k50)}
+
+/* scorer */
+.row{display:grid;grid-template-columns:1fr 130px 42px;gap:12px;align-items:center;margin-bottom:14px}
+.row label{font-size:13.5px}
+.row label b{display:block;font-weight:550;color:var(--tx)}
+.row label em{font-style:normal;color:var(--dim);font-size:12px}
+input[type=range]{width:100%;accent-color:var(--acc);background:transparent}
+.val{text-align:right;font-variant-numeric:tabular-nums;color:var(--acc);font-weight:600}
+.verdict{background:var(--panel2);border:1px solid var(--line);border-radius:var(--r);padding:18px;text-align:center;margin-top:6px}
+.verdict .big{color:var(--acc)}
+#tier{font-size:15px;font-weight:600;margin-top:4px}
+#tierhint{font-size:13px;color:var(--mut);margin-top:2px}
+
+/* funnel calc */
+.inp{background:var(--panel2);border:1px solid var(--line);color:var(--tx);border-radius:8px;
+     padding:9px 11px;font-family:inherit;font-size:14px;width:110px}
+.inp:focus{outline:1px solid var(--acc);border-color:var(--acc)}
+.fun{display:flex;flex-direction:column;gap:5px;margin-top:16px}
+.fun div{display:flex;justify-content:space-between;align-items:center;background:var(--panel2);
+         border-radius:6px;padding:9px 13px;font-size:13.5px;color:var(--mut)}
+.fun div b{color:var(--tx);font-variant-numeric:tabular-nums;font-size:15px}
+.fun div:last-child{background:var(--acc-d);color:var(--k30)}
+.fun div:last-child b{color:var(--acc)}
+
+/* scripts */
+.script{background:var(--panel2);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.script header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.script h4{font-size:13px;font-weight:600;letter-spacing:.04em}
+.script pre{white-space:pre-wrap;font-family:inherit;font-size:13.5px;color:var(--mut);line-height:1.65}
+.copy{background:transparent;border:1px solid var(--line);color:var(--mut);border-radius:6px;
+      padding:5px 11px;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap}
+.copy:hover{color:var(--acc);border-color:var(--acc)}
+
+/* checklist */
+.bar{height:5px;background:var(--panel2);border-radius:99px;overflow:hidden;margin:10px 0 22px}
+.bar i{display:block;height:100%;background:var(--acc);width:0;transition:.3s}
+.chk{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px solid #1e1e21;cursor:pointer}
+.chk:last-child{border-bottom:0}
+.chk input{margin-top:4px;accent-color:var(--acc);width:15px;height:15px;flex:none}
+.chk span{font-size:14px}
+.chk input:checked + span{color:var(--dim);text-decoration:line-through}
+.wk{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);font-weight:600;margin-bottom:2px}
+footer{color:var(--dim);font-size:12.5px;text-align:center;margin-top:40px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">UGC Growth System</div>
+  <h1>Өдөр бүрийн борлуулалтын урсгалаас<br><span>маркетингийн контент үйлдвэрлэх машин</span></h1>
+  <p class="lede">Зорилго нь “хэдэн Reel хийв” биш — <b>хэдэн бодит customer-ийг content asset болгов</b>. Доорх 7 хэсэг нь баг шууд ажиллуулах түвшний систем.</p>
+  <div class="rule"></div>
+
+  <nav id="nav">
+    <button class="on" data-t="s1">01 · Тойм</button>
+    <button data-t="s2">02 · Offer шат</button>
+    <button data-t="s3">03 · Funnel</button>
+    <button data-t="s4">04 · Сонголтын оноо</button>
+    <button data-t="s5">05 · Script</button>
+    <button data-t="s6">06 · Зураг авалт</button>
+    <button data-t="s7">07 · 90 хоног</button>
+  </nav>
+
+  <!-- 01 -->
+  <section id="s1" class="on">
+    <h2>Системийн тойм</h2>
+    <p class="sub">Хамгийн том давуу тал: өдөрт ~250 хүн өөрөө холбогддог. UGC-д зориулж гаднаас creator хайх шаардлагагүй.</p>
+
+    <div class="card">
+      <h3>Flywheel</h3>
+      <div class="pipe">
+        <span class="hi">250 inquiry / өдөр</span><i>→</i>
+        <span>Customer data</span><i>→</i>
+        <span>Cold / Warm / Customer</span><i>→</i>
+        <span>Зөв offer</span><i>→</i>
+        <span class="hi">UGC сонголт</span><i>→</i>
+        <span>Урамшуулал</span><i>→</i>
+        <span>Зураг авалт</span><i>→</i>
+        <span>Editing</span><i>→</i>
+        <span>Organic + Paid</span><i>→</i>
+        <span>Social proof</span><i>→</i>
+        <span class="hi">Илүү борлуулалт</span><i>↺</i>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="card">
+        <h3>Motivation</h3>
+        <p class="small mut">Хэрэглэгч “brand-д зориулж Reel хиймээр байна” гэж боддоггүй. Тэр <b>үнэгүй бүтээгдэхүүн, мөнгө, шагнал</b> гэж боддог.</p>
+        <p class="small" style="margin-top:10px">Reward = motivation<br>UGC = exchange<br>Social proof = brand benefit</p>
+      </div>
+      <div class="card">
+        <h3>North Star Metric</h3>
+        <p class="big" style="color:var(--acc)">Qualified UGC<br>/ 1,000 inquiry</p>
+        <p class="small mut" style="margin-top:8px">Reel-ийн тоо биш, чанартай asset болсон бодит хэрэглэгчийн тоо.</p>
+      </div>
+      <div class="card">
+        <h3>Real &gt; Perfect</h3>
+        <ul>
+          <li>Гэр, энгийн хувцас</li>
+          <li>Өөрийн үг, өөрийн reaction</li>
+          <li>Бага зэрэг imperfect</li>
+        </ul>
+        <p class="small mut" style="margin-top:10px">Studio, scripted, рекламны хэл → ad шиг харагдана.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Нэг өгүүлбэрээр</h3>
+      <p class="mut">Өдөр бүрийн борлуулалтын урсгалаас тохирох customer-ийг илрүүлж → зөв incentive санал болгож → бодит хэрэглэгч дээр зураг авч → олон төрлийн UGC asset үйлдвэрлэж → organic болон paid ads-аар тарааж → шинэ customer авч → түүнээсээ дахин UGC авах <b style="color:var(--tx)">self-reinforcing систем</b>.</p>
+      <div class="note">UGC Growth = Audience × Offer × Selection × Incentive × Production × Distribution × Conversion. Аль нэг нь тасарвал бүхэл chain зогсоно.</div>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section id="s2">
+    <h2>Offer ladder</h2>
+    <p class="sub">Бүх хүнд ижил санал тавихгүй. Бүгдэд 50K өгвөл acquisition cost хэт хурдан өснө.</p>
+
+    <div class="card">
+      <table>
+        <thead><tr><th>Offer</th><th>Хэнд</th><th>Хариуд</th><th>Зорилго</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag t-free">Free product</span></td><td>Cold / шинэ хүн</td><td>1 Reel</td><td>Хамгийн хямд volume</td></tr>
+          <tr><td><span class="tag t-30">+ 30,000₮</span></td><td>Camera-friendly, идэвхтэй account</td><td>1 Reel</td><td>Standard чанар — үндсэн offer</td></tr>
+          <tr><td><span class="tag t-50">+ 50,000₮</span></td><td>Premium look, paid ad potential</td><td>1 Reel</td><td>Commercial-style creative</td></tr>
+          <tr><td><span class="tag t-free">50K voucher</span></td><td>Одоо байгаа customer</td><td>1 Reel</td><td>Retention → дахин purchase</td></tr>
+          <tr><td><span class="tag t-30">300K contest</span></td><td>Mass audience</td><td>10 хоногийн challenge</td><td>Mass activation, creator discovery</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Cold hook</h3>
+        <p class="mut small">“Манай UGC campaign-д оролцоорой” гэж шууд хэлэхгүй. Оронд нь:</p>
+        <p style="font-size:17px;font-weight:600;margin:10px 0">“Бүтээгдэхүүн үнэгүй авах 10 хүн сонгоно”</p>
+        <ul>
+          <li>0–2 сек — үнэгүй авах 10 хүн хайж байна</li>
+          <li>2–5 сек — бүтээгдэхүүн</li>
+          <li>5–10 сек — таны байршилд очиж богино Reel авна</li>
+          <li>10–15 сек — үнэгүй + нэмэлт урамшуулал</li>
+          <li>CTA — DM-д “FREE” гэж бичих</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Warm hook</h3>
+        <p class="mut small">Танайхыг мэддэг хүмүүс — илүү шууд явж болно.</p>
+        <p style="font-size:17px;font-weight:600;margin:10px 0">“Дараагийн UGC project-д 10 хүн авна”</p>
+        <ul>
+          <li>Бүтээгдэхүүн үнэгүй</li>
+          <li>Сонгогдвол + 30,000₮</li>
+          <li>Таны сонгосон байршилд очиж авна</li>
+          <li>CTA — DM-д “30K”</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>300K contest — 10 DAYS REAL CUSTOMER CHALLENGE</h3>
+      <p class="small mut">Winner = хамгийн олон like <b>биш</b>. Дүгнэх жин:</p>
+      <table style="margin-top:12px">
+        <tbody>
+          <tr><td>Content quality</td><td style="text-align:right;color:var(--acc)">40%</td></tr>
+          <tr><td>Creativity</td><td style="text-align:right;color:var(--acc)">25%</td></tr>
+          <tr><td>Product integration</td><td style="text-align:right;color:var(--acc)">20%</td></tr>
+          <tr><td>Engagement</td><td style="text-align:right;color:var(--acc)">15%</td></tr>
+        </tbody>
+      </table>
+      <p class="small mut" style="margin-top:12px">Шагнал: 🥇 300K · 🥈 3 бүтээгдэхүүн · 🥉 50K voucher. ROI-г мөнгөөр биш — UGC volume, reach, шинэ follower, creator discovery-гоор хэмжинэ.</p>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section id="s3">
+    <h2>Funnel &amp; өдөр тутмын pipeline</h2>
+    <p class="sub">250 inquiry бүгд UGC candidate биш. Доорх харьцаа бол <b>таамаг жишээ</b> — эхний 30 хоногт өөрийн бодит датагаар солино.</p>
+
+    <div class="card">
+      <h3>Funnel тооцоолуур</h3>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <label class="small mut">Өдрийн inquiry</label>
+        <input class="inp" type="number" id="inq" value="250" min="1">
+        <label class="small mut">Хоног</label>
+        <input class="inp" type="number" id="days" value="30" min="1">
+      </div>
+      <div class="fun" id="fun"></div>
+      <p class="small mut" style="margin-top:12px">Хөрвөлт: qualified 40% → UGC potential 20% → invite 50% → accept 50% → completed 60% → high-quality 50%.</p>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Өдөр тутмын дараалал</h3>
+        <ul>
+          <li><b style="color:var(--tx)">Өглөө</b> — Operator: UGC candidate → CRM</li>
+          <li><b style="color:var(--tx)">Өдөр</b> — SMM: candidate → DM</li>
+          <li><b style="color:var(--tx)">Орой</b> — UGC manager: accepted → хуваарь</li>
+          <li><b style="color:var(--tx)">Shooting day</b> — зураг авалт</li>
+          <li><b style="color:var(--tx)">Дараа нь</b> — edit → organic → шилдгийг paid ads</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>CRM tag-ууд</h3>
+        <p class="small mut">Operator = sales + <b style="color:var(--tx)">customer tagger</b>. Захиалга баталгаажсаны дараа тэмдэглэнэ.</p>
+        <div class="pipe" style="margin-top:12px">
+          <span>New</span><span>Repeat</span><span>High-value</span>
+          <span>Beauty</span><span>Home</span><span>Goods</span>
+          <span class="hi">UGC potential</span><span class="hi">UGC invited</span>
+          <span class="hi">UGC accepted</span><span class="hi">UGC completed</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Customer-ийг шууд UGC болгохгүй</h3>
+      <div class="pipe">
+        <span>Purchase</span><i>→</i>
+        <span>D+1/D+3 — “хүрсэн үү?”</span><i>→</i>
+        <span>D+5/D+7 — “хэрэглэж үзсэн үү?”</span><i>→</i>
+        <span class="hi">Positive хариу → offer</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section id="s4">
+    <h2>Candidate scoring</h2>
+    <p class="sub">DM-ээр орж ирсэн хүнийг шууд сонгохгүй. 100 оноогоор дүгнэж, аль offer өгөхийг шийднэ.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="row"><label><b>Persona fit</b><em>Танай customer шиг харагдах уу?</em></label><input type="range" data-max="25" max="25" value="15"><span class="val">15</span></div>
+        <div class="row"><label><b>Product fit</b><em>Хэрэглэх нь natural уу?</em></label><input type="range" data-max="20" max="20" value="12"><span class="val">12</span></div>
+        <div class="row"><label><b>Camera presence</b><em>Камерын өмнө тухтай юу?</em></label><input type="range" data-max="15" max="15" value="9"><span class="val">9</span></div>
+        <div class="row"><label><b>Content potential</b><em>Сайн story гарах уу?</em></label><input type="range" data-max="20" max="20" value="12"><span class="val">12</span></div>
+        <div class="row"><label><b>Authenticity</b><em>Реклам шиг харагдахгүй юу?</em></label><input type="range" data-max="10" max="10" value="6"><span class="val">6</span></div>
+        <div class="row" style="margin-bottom:0"><label><b>Location / availability</b><em>Зураг авахад амар уу?</em></label><input type="range" data-max="10" max="10" value="6"><span class="val">6</span></div>
+      </div>
+      <div>
+        <div class="verdict">
+          <p class="small mut">Нийт оноо</p>
+          <p class="big" id="total">60</p>
+          <p id="tier">30,000₮ + бүтээгдэхүүн</p>
+          <p id="tierhint">Standard чанарын UGC.</p>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <h3>Шийдвэрийн хүснэгт</h3>
+          <table>
+            <tbody>
+              <tr><td>80–100</td><td><span class="tag t-50">50K + product</span></td></tr>
+              <tr><td>65–79</td><td><span class="tag t-30">30K + product</span></td></tr>
+              <tr><td>50–64</td><td><span class="tag t-free">Free product</span></td></tr>
+              <tr><td>0–49</td><td class="mut">Татгалзах / дараа дахин</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section id="s5">
+    <h2>Copy-paste script</h2>
+    <p class="sub">DM-д “Reel үнэгүй хийж өгнө” гэдгийг онцлохгүй — хэрэглэгчид энэ нь гол үнэ цэнэ биш.</p>
+
+    <div class="script">
+      <header><h4>01 · COLD — FREE гэж бичсэн хүнд</h4><button class="copy">Хуулах</button></header>
+      <pre>Сайн байна уу ❤️ Манай энэ удаагийн UGC project-д оролцох хүсэлтэй байгаад баярлалаа.
+
+Танд тохирох бүтээгдэхүүн болон урамшууллыг сонгохын тулд хэдхэн зүйл асууя:
+
+1. Нас
+2. Хот / дүүрэг
+3. Аль бүтээгдэхүүнийг сонирхож байна?
+4. Social account (IG / FB)
+5. Камерт гарах боломжтой юу?
+6. Зураг авалт хийх боломжтой өдөр, цаг?</pre>
+    </div>
+
+    <div class="script">
+      <header><h4>02 · WARM — Reel caption / пост</h4><button class="copy">Хуулах</button></header>
+      <pre>Манай бүтээгдэхүүнийг хэрэглэж үзэх хүсэлтэй 10 хүн хайж байна 👀
+
+Бүтээгдэхүүнийг үнэгүй өгнө.
+Сонгогдсон хүмүүст нэмэлтээр 30,000₮ урамшуулал өгнө.
+
+Хариуд нь бид таны сонгосон байршилд очоод бүтээгдэхүүнтэй тань холбоотой богино Reel зураг авна.
+
+Сонирхож байвал “30K” гэж DM бичээрэй.</pre>
+    </div>
+
+    <div class="script">
+      <header><h4>03 · CUSTOMER — D+5 / D+7 санал</h4><button class="copy">Хуулах</button></header>
+      <pre>Танд нэг санал байна 👀
+
+Манай бүтээгдэхүүнийг хэрэглэж байгаа бодит хэрэглэгчдээсээ сонгож, UGC content project хийж байгаа юм.
+
+Хэрэв сонгогдвол бид таны хүссэн байршилд очиж зураг авна.
+
+Харин танд: бүтээгдэхүүн үнэгүй + 30,000₮ урамшуулал.
+
+Хариуд нь манай бүтээгдэхүүнтэй холбоотой 1 богино Reel зураг авна.
+
+Сонирхож байвал “Тийм” гэж бичээрэй.</pre>
+    </div>
+
+    <div class="script">
+      <header><h4>04 · OPERATOR — захиалга дууссаны дараах тэмдэглэл</h4><button class="copy">Хуулах</button></header>
+      <pre>Захиалга баталгаажсаны дараа CRM дээр:
+
+• Ангилал: Beauty / Hair / Home / Goods
+• Customer төрөл: New / Repeat / High-value
+• UGC Potential: YES / NO
+   YES тавих шалгуур: ярианд эерэг, бүтээгдэхүүнээ сонирхсон,
+   хот дотор, дахин холбогдоход бэлэн.
+
+UGC-ийн саналыг operator тавихгүй — зөвхөн тэмдэглэнэ.
+Саналыг SMM D+5 / D+7-д тавина.</pre>
+    </div>
+
+    <div class="script">
+      <header><h4>05 · Контент ашиглах зөвшөөрөл</h4><button class="copy">Хуулах</button></header>
+      <pre>Баярлалаа! Зураг авалтын өмнө нэг зүйлийг баталгаажуулъя.
+
+Таны оролцсон бичлэгийг бид:
+• өөрсдийн IG / FB / TikTok хуудсанд
+• төлбөрт сурталчилгаанд (Meta ads)
+• вэб хуудас, бүтээгдэхүүний хуудсанд
+
+ашиглах болно. Хугацаа: хязгааргүй, Монгол улсын хэмжээнд.
+
+Зөвшөөрч байвал “Зөвшөөрч байна” гэж бичээд өгнө үү.</pre>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section id="s6">
+    <h2>Зураг авалт &amp; контент</h2>
+    <p class="sub">Хамгийн том эрсдэл: 1 UGC-д хэт их цаг зарцуулах. Нэг customer = 30–45 минут. Нэг байршилд боломжтой бол 2–3 хүн.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Shot list (SOP)</h3>
+        <table>
+          <tbody>
+            <tr><td>1</td><td>Natural introduction</td></tr>
+            <tr><td>2</td><td>Product close-up</td></tr>
+            <tr><td>3</td><td>Product use</td></tr>
+            <tr><td>4</td><td>Reaction</td></tr>
+            <tr><td>5</td><td>Testimonial</td></tr>
+            <tr><td>6</td><td>Lifestyle / B-roll</td></tr>
+            <tr><td>7</td><td>CTA</td></tr>
+          </tbody>
+        </table>
+        <div class="note">1 customer ≠ 1 content. Энэ 7 shot-оос editor 3–5 Reel variation + paid ad cut гаргана.</div>
+      </div>
+      <div class="card">
+        <h3>Content matrix</h3>
+        <table>
+          <thead><tr><th>Ангилал</th><th>Persona</th><th>Hook</th><th>Proof</th></tr></thead>
+          <tbody>
+            <tr><td>Beauty</td><td>30+ эмэгтэй</td><td>Асуудал</td><td>Үр дүн</td></tr>
+            <tr><td>Hair</td><td>30+ эмэгтэй</td><td>Before</td><td>After</td></tr>
+            <tr><td>Home</td><td>Гэр бүл</td><td>Асуудал</td><td>Хэрэглээ</td></tr>
+            <tr><td>Gadget</td><td>Насанд хүрсэн</td><td>Сонирхол</td><td>Demo</td></tr>
+            <tr><td>Goods</td><td>Customer</td><td>Яагаад авсан</td><td>Туршлага</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Paid ads дээр яаж ашиглах вэ</h3>
+      <p class="small mut">“Манай бүтээгдэхүүнийг олон хүн хэрэглэдэг” гэж <b>хэлэхгүй</b> — харуулна. Ad бүрт өөр хүн, өөр нас, өөр гэр, өөр бүтээгдэхүүн.</p>
+      <div class="pipe" style="margin-top:12px">
+        <span>35 настай эмэгтэй · гэртээ</span><i>→</i>
+        <span>28 настай · unboxing</span><i>→</i>
+        <span>45 настай · before/after</span><i>→</i>
+        <span class="hi">“Энэ shop-оос хүмүүс үнэхээр авдаг юм байна”</span>
+      </div>
+      <p class="small mut" style="margin-top:14px">30+ audience-ийг зөвхөн “creator” гэж бүү хар — тэд <b>real-life testimonial</b>. “Надтай адил хүн хэрэглэж байна” гэсэн perception нь залуу influencer-ийн commercial Reel-ээс илүү итгэл төрүүлдэг.</p>
+    </div>
+  </section>
+
+  <!-- 07 -->
+  <section id="s7">
+    <h2>90 хоногийн execution</h2>
+    <p class="sub">Дарж тэмдэглэнэ. Сарын cadence: Week 1 free product → Week 2 30K → Week 3 customer → Week 4 contest.</p>
+    <div class="bar"><i id="barfill"></i></div>
+    <p class="small mut" id="prog" style="margin-top:-14px;margin-bottom:20px">0 / 0 гүйцэтгэсэн</p>
+
+    <div class="card">
+      <p class="wk">Сар 1 — Validate</p>
+      <h3 style="margin-bottom:8px">“Ямар offer хамгийн сайн UGC авч байна?”</h3>
+      <div id="m1"></div>
+    </div>
+    <div class="card">
+      <p class="wk">Сар 2 — Systemize</p>
+      <h3 style="margin-bottom:8px">Бүх зүйлийг стандарт болгох</h3>
+      <div id="m2"></div>
+    </div>
+    <div class="card">
+      <p class="wk">Сар 3 — Scale</p>
+      <h3 style="margin-bottom:8px">Суваг бүрээр өргөжүүлэх</h3>
+      <div id="m3"></div>
+    </div>
+    <div class="card">
+      <h3>Шатлал — 6 сарын дараа</h3>
+      <div class="pipe">
+        <span>Customers</span><i>→</i><span>UGC candidates</span><i>→</i><span>UGC creators</span><i>→</i>
+        <span>Good creators</span><i>→</i><span>Top creators</span><i>→</i><span class="hi">Ambassadors</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>Хэмжигдэхүүн: Cost / completed UGC · Cost / good UGC · Qualified UGC per 1,000 inquiries</footer>
+</div>
+
+<script>
+// nav
+const nav=document.getElementById('nav');
+nav.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  nav.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===b.dataset.t));
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+// funnel
+const steps=[
+  ['Inquiry',1],['Qualified customer',.4],['UGC potential',.08],['Invite',.04],
+  ['Accept',.02],['Completed UGC',.012],['High-quality UGC',.006]
+];
+function funnel(){
+  const n=+document.getElementById('inq').value||0, d=+document.getElementById('days').value||0;
+  const tot=n*d;
+  document.getElementById('fun').innerHTML=steps.map(([l,r])=>
+    `<div><span>${l}</span><b>${Math.round(tot*r).toLocaleString('en-US')}</b></div>`).join('');
+}
+document.getElementById('inq').addEventListener('input',funnel);
+document.getElementById('days').addEventListener('input',funnel);
+funnel();
+
+// scorer
+const ranges=[...document.querySelectorAll('input[type=range]')];
+function score(){
+  let t=0;
+  ranges.forEach(r=>{t+=+r.value; r.nextElementSibling.textContent=r.value});
+  document.getElementById('total').textContent=t;
+  let tier,hint;
+  if(t>=80){tier='50,000₮ + бүтээгдэхүүн';hint='Premium candidate — paid ad creative-д ашиглана.';}
+  else if(t>=65){tier='30,000₮ + бүтээгдэхүүн';hint='Standard чанарын UGC.';}
+  else if(t>=50){tier='Бүтээгдэхүүн үнэгүй';hint='Volume-д зориулсан хамгийн хямд acquisition.';}
+  else{tier='Татгалзах / дараа дахин';hint='Одоогоор тохирохгүй — жагсаалтад үлдээнэ.';}
+  document.getElementById('tier').textContent=tier;
+  document.getElementById('tierhint').textContent=hint;
+}
+ranges.forEach(r=>r.addEventListener('input',score));
+score();
+
+// copy
+document.querySelectorAll('.copy').forEach(btn=>{
+  btn.addEventListener('click',async()=>{
+    const txt=btn.closest('.script').querySelector('pre').innerText;
+    try{await navigator.clipboard.writeText(txt);}catch(e){
+      const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);
+      ta.select();document.execCommand('copy');ta.remove();
+    }
+    const o=btn.textContent;btn.textContent='Хууллаа ✓';setTimeout(()=>btn.textContent=o,1500);
+  });
+});
+
+// checklist
+const plans={
+  m1:['Free product offer тест — 10–15 хүн','Product + 30K тест — 5–10 хүн','Product + 50K тест — 3–5 хүн',
+      'Customer activation (D+5 DM) эхлүүлэх','Cold Reel 3 хувилбар тест','Warm пост 3 хувилбар тест',
+      'Cost / completed UGC бодох','Cost / good UGC бодох'],
+  m2:['DM script стандартчилах','Operator-ийн tagging script нэвтрүүлэх','Scoring sheet баг ашиглаж эхлэх',
+      'CRM tag-ууд бүрэн ажиллаж байна','Shooting SOP бичих','Editing SOP бичих',
+      'Зөвшөөрлийн процесс баталгаажуулах','Content library бүтэц гаргах','Ad testing framework'],
+  m3:['Cold: paid recruitment ажиллуулах','Warm: retargeting кампанит ажил','Customer: post-purchase автоматжуулах',
+      'Top UGC creator-уудыг тусад нь бүртгэх','10 хоногийн contest эхлүүлэх','Ambassador шатлал эхлүүлэх']
+};
+let boxes=[];
+Object.entries(plans).forEach(([id,items])=>{
+  document.getElementById(id).innerHTML=items.map(t=>
+    `<label class="chk"><input type="checkbox"><span>${t}</span></label>`).join('');
+});
+boxes=[...document.querySelectorAll('.chk input')];
+function prog(){
+  const d=boxes.filter(b=>b.checked).length;
+  document.getElementById('barfill').style.width=(d/boxes.length*100)+'%';
+  document.getElementById('prog').textContent=`${d} / ${boxes.length} гүйцэтгэсэн`;
+}
+boxes.forEach(b=>b.addEventListener('change',prog));
+prog();
+</script>
+</body>
+</html>
