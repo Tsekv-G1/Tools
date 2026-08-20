@@ -991,7 +991,7 @@ html.theme-tr .pipe-table tbody tr{
   /* Grids */
   .stats{grid-template-columns:repeat(2,1fr);gap:8px;}
   .kanban{grid-template-columns:1fr;}
-  .fp-2col,.fin-2col{grid-template-columns:1fr;}
+  .fp-2col,.fin-2col{grid-template-columns:minmax(0,1fr);}
   .fp-stats{grid-template-columns:repeat(2,1fr);}
   .fin-stats{grid-template-columns:repeat(2,1fr);}
   .prod-stats{grid-template-columns:repeat(2,1fr);}
@@ -1050,7 +1050,7 @@ html.theme-tr .pipe-table tbody tr{
 
   /* Finance */
   .fin-inp{width:90px;}
-  .fin-2col{grid-template-columns:1fr;}
+  .fin-2col{grid-template-columns:minmax(0,1fr);}
 
   /* Drop profit grid */
   .drop-profit-grid{grid-template-columns:1fr;}
@@ -1609,7 +1609,7 @@ button:focus-visible,
 .ci-hist-row strong{color:var(--text3);font-weight:800;}
 /* ══ FP-2COL ══ */
 .fp-2col{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-bottom:14px;}
-@media(max-width:768px){.fp-2col,.fin-2col{grid-template-columns:1fr;}}
+@media(max-width:768px){.fp-2col,.fin-2col{grid-template-columns:minmax(0,1fr);}}
 .fp-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);}
 .fp-title{font-size:11px;font-weight:800;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:5px;}
 .fp-title svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;}
@@ -2235,6 +2235,52 @@ body{overflow-x:hidden;}
     transition:transform 0.08s,opacity 0.08s;
   }
 }
+
+/* ══════════════════════════════════════════════════════════
+   MOBILE FINAL PASS — authoritative, placed last on purpose.
+   Earlier mobile blocks above (and base rules near the top of
+   the file) get overridden by source order + !important here.
+   If adding new mobile overrides, put them in THIS block.
+══════════════════════════════════════════════════════════ */
+
+/* ── Today-at-a-glance hero card — was using fixed desktop-size
+     inline styles (32px stat numbers, 68px ring) with zero mobile
+     handling at all ── */
+@media(max-width:768px){
+  #today-glance{padding:14px!important;}
+  #tg-greeting{font-size:15px!important;}
+  #tg-momentum-ring,#tg-momentum-ring svg{width:52px!important;height:52px!important;}
+  #tg-score-num{font-size:15px!important;}
+  #tg-stat-todo,#tg-stat-todo+div,#tg-stat-todo+div+div{padding:10px 6px!important;}
+  #tg-n-todo,#tg-n-overdue,#tg-n-done{font-size:22px!important;}
+}
+@media(max-width:480px){
+  #today-glance{padding:12px!important;margin-bottom:10px!important;}
+  #tg-momentum-ring,#tg-momentum-ring svg{width:46px!important;height:46px!important;}
+  #tg-n-todo,#tg-n-overdue,#tg-n-done{font-size:19px!important;}
+}
+@media(max-width:375px){
+  #tg-n-todo,#tg-n-overdue,#tg-n-done{font-size:17px!important;}
+}
+
+/* ── .sc-val had 5 conflicting declarations scattered across this
+     file fighting each other via !important + source order, ending
+     up larger on mobile than any of them intended. One authoritative
+     chain, here, last. ── */
+@media(max-width:768px){.sc-val{font-size:20px!important;}}
+@media(max-width:480px){.sc-val{font-size:17px!important;}}
+@media(max-width:375px){.sc-val{font-size:15px!important;}}
+
+/* ── Focus Zone stat cards (.fps-val) — had no mobile override at
+     all, so a single-digit "0" rendered at a fixed 26px inside a
+     mostly-empty padded box on a 2-col mobile grid ── */
+@media(max-width:768px){
+  .fps-val{font-size:20px!important;}
+  .fps-card{padding:10px!important;}
+}
+@media(max-width:480px){
+  .fps-val{font-size:18px!important;}
+}
 </style>
 </head>
 <body>
@@ -2256,13 +2302,13 @@ body{overflow-x:hidden;}
     <div style="width:28px;height:28px;background:linear-gradient(145deg,#FF9500,#FF6000);border-radius:8px;display:flex;align-items:center;justify-content:center;">
       <svg viewBox="0 0 24 24" width="13" height="13" stroke="#fff" fill="none" stroke-width="2.3"><path d="M12 2 3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5"/></svg>
     </div>
-    <span style="font-size:14px;font-weight:800;color:var(--text);">ProductDrop.MN</span>
+    <span style="font-size:14px;font-weight:800;color:var(--text);">Tsekv Dashboard</span>
   </div>
   <div class="mob-nav-item active" onclick="mobNav('kanban')"><svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>Ерөнхий</div>
 
   <div class="mob-nav-item" onclick="mobNav('content')"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>Контент</div>
   <div class="mob-nav-item" onclick="mobNav('analytics')"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Script</div>
-  <div class="mob-nav-item" onclick="mobNav('admin')"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin</div>
+  <div class="mob-nav-item" onclick="mobNav('admin')"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>ProductDrop</div>
   <div class="mob-nav-item" onclick="mobNav('focus')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Focus</div>
   <div class="mob-nav-item" onclick="mobNav('finance')"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Finance</div>
   <div class="mob-nav-item" onclick="mobNav('roadmap')"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Төлөвлөгөө</div>
@@ -2367,14 +2413,14 @@ body{overflow-x:hidden;}
         <div style="width:26px;height:26px;background:linear-gradient(145deg,#FF9500,#FF6000);border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(255,149,0,0.3);flex-shrink:0;">
           <svg viewBox="0 0 24 24" width="13" height="13" stroke="#fff" fill="none" stroke-width="2.3"><path d="M12 2 3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <span class="brand-name">ProductDrop.MN</span>
+        <span class="brand-name">Tsekv Dashboard</span>
         <div class="live-dot" title="Онлайн"></div>
       </div>
       <button class="ttab active" onclick="setTabBtn(this,'kanban')">Ерөнхий</button>
 
       <button class="ttab" onclick="setTabBtn(this,'content')">Контент</button>
       <button class="ttab" onclick="setTabBtn(this,'analytics')">Script</button>
-      <button class="ttab" onclick="setTabBtn(this,'admin')">Admin</button>
+      <button class="ttab" onclick="setTabBtn(this,'admin')">ProductDrop</button>
       <button class="ttab" onclick="setTabBtn(this,'focus')">Focus</button>
       <button class="ttab" onclick="setTabBtn(this,'finance')">Finance</button>
       <button class="ttab" onclick="setTabBtn(this,'roadmap')" id="roadmap-tab-btn">Төлөвлөгөө</button>
@@ -2414,7 +2460,7 @@ body{overflow-x:hidden;}
 
     <!-- ── KANBAN PAGE ── -->
     <div class="page active" id="page-kanban">
-      <div class="greet"><h1 id="greet-h" style="background:linear-gradient(90deg,var(--text) 60%,var(--text3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Сайн уу, Цэвэгмид!</h1><p id="greet-sub">ProductDrop.MN</p></div>
+      <div class="greet"><h1 id="greet-h" style="background:linear-gradient(90deg,var(--text) 60%,var(--text3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Сайн уу, Цэвэгмид!</h1><p id="greet-sub">Tsekv Dashboard</p></div>
 
       <!-- ── STOIC QUOTE ── -->
       <style>
@@ -2759,7 +2805,7 @@ body{overflow-x:hidden;}
           <button class="cnt-fb" data-f="MOFU" onclick="setCntFilter(this,'MOFU')">MOFU</button>
           <button class="cnt-fb" data-f="BOFU" onclick="setCntFilter(this,'BOFU')">BOFU</button>
         </div>
-        <button class="btn-add" style="background:var(--purple);color:#fff;border:none;" onclick="openHookBank()">Hook Bank</button>
+        <button class="btn-add" id="hook-bank-main-btn" style="background:var(--purple);color:#fff;border:none;" onclick="openHookBank()">Hook Bank <span id="hook-bank-main-count" style="font-size:10px;opacity:0.85;"></span></button>
         <button class="btn-add" id="idea-bank-main-btn" style="background:linear-gradient(135deg,#AF52DE,#7B2FBE);color:#fff;border:none;" onclick="openIdeaBank()">Idea Bank <span id="idea-bank-main-count" style="font-size:10px;opacity:0.85;"></span></button>
         <button class="btn-add" style="background:var(--blue);color:#fff;border:none;" onclick="openBatchPlanner()">7 Хоногийн Контент</button>
         <button class="btn-add" style="background:var(--text3);" onclick="resetContents()">↺ Reset</button>
@@ -3001,6 +3047,36 @@ body{overflow-x:hidden;}
       .rs-edit-cancel{padding:7px 14px;background:transparent;border:1.5px solid var(--border2);border-radius:8px;font-size:12px;color:var(--text3);font-family:inherit;cursor:pointer;}
       .rs-edit-cancel:hover{background:var(--bg4);color:var(--text);}
       .rs-edit-hint{font-size:10px;color:var(--text3);flex:1;}
+      /* ─── Feedback bar ─── */
+      .rs-fb-bar{display:none;flex-direction:column;gap:8px;padding:10px 16px;border-top:1px solid var(--border);background:var(--bg3);}
+      .rs-fb-bar.show{display:flex;}
+      .rs-fb-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+      .rs-fb-lbl{font-size:10.5px;color:var(--text3);margin-right:2px;}
+      .rs-fb-thumb{width:28px;height:28px;border-radius:8px;border:1.5px solid var(--border2);background:var(--bg4);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .14s;}
+      .rs-fb-thumb:hover{background:var(--bg2);}
+      .rs-fb-thumb.up.active{background:var(--greenbg);border-color:rgba(52,199,89,.4);}
+      .rs-fb-thumb.down.active{background:var(--redbg);border-color:rgba(255,59,48,.4);}
+      .rs-fb-wordbtn{padding:5px 11px;border-radius:8px;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;border:1.5px solid var(--border2);background:var(--bg4);color:var(--text2);transition:all .14s;}
+      .rs-fb-wordbtn:hover{background:var(--bg2);color:var(--text);}
+      .rs-fb-wordbtn.on{background:var(--bluebg);border-color:rgba(0,122,255,.3);color:var(--blue);}
+      .rs-fb-count{margin-left:auto;font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);cursor:pointer;padding:4px 8px;border-radius:99px;background:var(--bg4);}
+      .rs-fb-count:hover{color:var(--text);background:var(--bg2);}
+      .rs-fb-word-form,.rs-fb-note-form{display:none;gap:6px;align-items:center;}
+      .rs-fb-word-form.show,.rs-fb-note-form.show{display:flex;}
+      .rs-fb-inp{flex:1;padding:7px 10px;font-size:12px;}
+      .rs-fb-arrow{color:var(--text4);font-size:12px;flex-shrink:0;}
+      .rs-fb-ta{flex:1;padding:7px 10px;font-size:12px;resize:none;font-family:inherit;}
+      .rs-fb-addbtn{padding:7px 14px;background:var(--text);color:var(--bg);border:none;border-radius:8px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;flex-shrink:0;transition:opacity .15s;}
+      .rs-fb-addbtn:hover{opacity:.85;}
+      [data-theme="dark"] .rs-fb-addbtn{background:var(--green);color:#fff;}
+      .rs-fb-sent{font-size:10.5px;color:var(--green);font-weight:600;}
+      .rs-fb-bank-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;font-size:12px;}
+      .rs-fb-bank-word{flex:1;display:flex;align-items:center;gap:6px;min-width:0;}
+      .rs-fb-bank-wrong{color:var(--red);text-decoration:line-through;text-decoration-color:rgba(255,59,48,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+      .rs-fb-bank-right{color:var(--green);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+      .rs-fb-bank-del{width:22px;height:22px;border-radius:6px;border:none;background:var(--redbg);color:var(--red);cursor:pointer;font-size:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+      .rs-fb-bank-del:hover{background:var(--red);color:#fff;}
+      .rs-fb-bank-empty{text-align:center;padding:24px;color:var(--text4);font-size:12px;}
       /* iOS font-size fix */
       @media(max-width:768px){
         .rs-inp,.rs-sel,.rs-ta{font-size:16px!important;}
@@ -3036,8 +3112,8 @@ body{overflow-x:hidden;}
         </div>
         <div class="rs-row" style="margin-bottom:10px">
           <div class="rs-fld" style="width:110px">
-            <div class="rs-lbl">Series Part</div>
-            <input type="number" class="rs-inp" id="rs-part" placeholder="хоосон=дараалалгүй" min="1" max="99">
+            <div class="rs-lbl">Series Part <span title="Хоосон орхивол дараалалгүй">ⓘ</span></div>
+            <input type="number" class="rs-inp" id="rs-part" placeholder="жиш: 1" min="1" max="99">
           </div>
         </div>
         <button class="rs-run-btn" id="rs-run-btn" onclick="rsAddRipple(this,event);this.classList.add('pressing');setTimeout(()=>this.classList.remove('pressing'),380);rsRun();" title="⌘+Enter">
@@ -3168,6 +3244,27 @@ body{overflow-x:hidden;}
               <div class="rs-empty-sub">HOOK · BODY · CTA хэсэг болгон гарна</div>
             </div>
           </div>
+          <div class="rs-fb-bar" id="rs-fb-bar">
+            <div class="rs-fb-row">
+              <span class="rs-fb-lbl">Энэ script:</span>
+              <button class="rs-fb-thumb up" id="rs-fb-up" onclick="rsFbRate('up')" title="Сайн байна">👍</button>
+              <button class="rs-fb-thumb down" id="rs-fb-down" onclick="rsFbRate('down')" title="Муу байна">👎</button>
+              <button class="rs-fb-wordbtn" id="rs-fb-wordtoggle" onclick="rsFbToggleWordForm()">✎ Үг засах</button>
+              <button class="rs-fb-wordbtn" id="rs-fb-notetoggle" onclick="rsFbToggleNoteForm()">💬 Тэмдэглэл</button>
+              <span class="rs-fb-count" id="rs-fb-wc-count" onclick="rsFbOpenBank()">Үгийн сан: 0</span>
+            </div>
+            <div class="rs-fb-word-form" id="rs-fb-word-form">
+              <input type="text" class="rs-inp rs-fb-inp" id="rs-fb-wrong" placeholder="Буруу үг/хэллэг (жишээ: сонслоо юу)">
+              <span class="rs-fb-arrow">→</span>
+              <input type="text" class="rs-inp rs-fb-inp" id="rs-fb-right" placeholder="Зөв үг/хэллэг (жишээ: сонссон уу)">
+              <button class="rs-fb-addbtn" onclick="rsFbAddWord()">Нэмэх</button>
+            </div>
+            <div class="rs-fb-note-form" id="rs-fb-note-form">
+              <textarea class="rs-inp rs-fb-ta" id="rs-fb-note-txt" placeholder="Юу сайжруулах хэрэгтэй вэ? (жишээ: hook сул, body хэт урт...)" rows="1"></textarea>
+              <button class="rs-fb-addbtn" onclick="rsFbAddNote()">Илгээх</button>
+            </div>
+            <div class="rs-fb-sent" id="rs-fb-sent" style="display:none;"></div>
+          </div>
           <div class="rs-edit-bar" id="rs-edit-bar">
             <span class="rs-edit-hint">Текст дээр шууд засах боломжтой</span>
             <button class="rs-edit-cancel" onclick="rsEditCancel()">Болих</button>
@@ -3182,6 +3279,17 @@ body{overflow-x:hidden;}
         <div class="rs-title">Format Performance <span style="font-size:9px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text4);">Хадгалсан script-үүдээс</span></div>
         <div id="rs-fmt-perf-body" style="display:flex;flex-direction:column;gap:6px;">
           <div style="text-align:center;padding:12px;color:var(--text4);font-size:11px;">Script хадгалах үед статистик энд харагдана</div>
+        </div>
+      </div>
+
+      <!-- ── AI Санал (Layer 2 — 7 хоногийн pattern-шинжилгээ) ── -->
+      <div class="rs-card" id="rs-sugg-card" style="margin-top:14px;">
+        <div class="rs-title" style="display:flex;align-items:center;justify-content:space-between;">
+          <span>AI Санал <span style="font-size:9px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text4);">7 хоногийн feedback шинжилгээ</span></span>
+          <span class="rs-badge" id="rs-sugg-badge" style="display:none;background:var(--redbg);color:var(--red);border:1px solid rgba(255,59,48,.25);"></span>
+        </div>
+        <div id="rs-sugg-body" style="display:flex;flex-direction:column;gap:8px;">
+          <div style="text-align:center;padding:12px;color:var(--text4);font-size:11px;">Одоогоор шинэ санал алга — GPT-4o 7 хоног тутам шинжилж, энд санал тавина</div>
         </div>
       </div>
 
@@ -3250,12 +3358,34 @@ body{overflow-x:hidden;}
       </div>
     </div>
 
+    <div class="rs-modal-ov" id="rs-fb-bank-modal" style="display:none" onclick="if(event.target===this)rsFbCloseBank()">
+      <div class="rs-modal">
+        <div class="rs-mhd">
+          <div class="rs-mhd-title">Үг засварын сан</div>
+          <button class="rs-mclose" onclick="rsFbCloseBank()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        </div>
+        <div class="rs-mbody">
+          <div style="font-size:10px;color:var(--text3);padding:6px 8px;background:var(--bluebg);border:1px solid rgba(0,122,255,.15);border-radius:8px;">
+            Энэ жагсаалт дахь бүх үг/хэллэг дараагийн script бүрд автоматаар "бүү хэрэглэ" гэж дамжина.
+          </div>
+          <div id="rs-fb-bank-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+        </div>
+        <div class="rs-mfoot">
+          <button class="rs-mcancel" onclick="rsFbClearAll()" style="color:var(--red);">Бүгдийг устгах</button>
+          <button class="rs-msave-btn" onclick="rsFbCloseBank()">Хаах</button>
+        </div>
+      </div>
+    </div>
+
     <script>
     (function(){
     /* ─── RS constants ─── */
     var RS_SB_URL='https://xpxotgpqxrupkgcppzmn.supabase.co';
     var RS_SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhweG90Z3BxeHJ1cGtnY3Bwem1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyOTk4NTUsImV4cCI6MjA4ODg3NTg1NX0.7wtm3YXDj2lWL61y4pfZFud4LL2BkchAjGkTJMvhLqo';
     var rs_running=false, rs_lastRaw='', rs_lastFmt='', rs_lastType='';
+    var RS_FB_WORDKEY='rs_wordfix', RS_FB_NOTEKEY='rs_fbnotes', RS_FB_RATEKEY='rs_ratings';
+    var rs_fbRating='';
+    var rs_approvedRulesCache='', rs_pendingSuggestions=[];
     var RS_FL={standard:'① Стандарт+',story:'② Story-first',casestudy:'③ Case study',mistake:'④ Mistake breakdown',pov:'⑤ POV',donot:"⑥ Don't start unless"};
 
     /* ─── DOM helpers ─── */
@@ -3338,6 +3468,7 @@ body{overflow-x:hidden;}
       rq('rs-edit-btn').textContent='Засах';rq('rs-edit-btn').classList.remove('edit-on');
       rq('rs-edit-bar').className='rs-edit-bar';
       rq('rs-meta-row').className='rs-meta-row';
+      var _rfb=rq('rs-fb-bar');if(_rfb)_rfb.className='rs-fb-bar';
       rq('rs-cw').textContent='—';rq('rs-cg').textContent='—';
       rs_running=false;rs_lastRaw='';rs_editMode=false;window._rsLastTranscript='';
       var _tcb=rq('rs-transcript-copy');if(_tcb){_tcb.disabled=true;_tcb.style.color='var(--text4)';_tcb.style.borderColor='';}
@@ -3607,6 +3738,8 @@ TRANSITION ДҮРЭМ:
 [VALUE] Асуудал чинь мэдлэггүйд биш, ердөө л дарааллаагүй байсанд байгаа юм. Эхлэх зөв дараалал ердөө л энэ: 1-рт Shopify дэлгүүрээ нээгээд үнэгүй туршилтын хугацааг нь идэвхжүүл. 2-рт нэг л төрлийн бараа сонго, 10 биш шүү ердөө ганцхан бараа. 3-рт анхны сурталчилгаагаа ердөө 30,000 төгрөгийн төсвөөр тавьж үз. 4-рт 48 цагийн дараа үр дүнг нь дүгнэ. Ердөө л энэ 4 алхам.
 [PROOF] Яг энэ дарааллыг дагаад Сарантуяа эхний 5 хоногтоо л 3 захиалга авчихсан. Маш их мөнгө олсондоо гол нь биш, хамгийн чухал нь хөөх, би үнэхээр хийж чаддаг юм байна гэдэг итгэлийг өөртөө авсан нь.
 [CTA] Чи одоо яг аль алхам дээр нь гацаад байна? Сэтгэгдэл хэсэгт бичээрэй, дараагийн видеогоороо яг тэр алхмыг чинь гүнзгийрүүлэн шийдэж өгье.
+
+⚠️ АНХААРУУЛГА — дээрх жишээ зөвхөн ӨНГӨ АЯС, ӨГҮҮЛБЭРИЙН УРТ, CAMERA-READY хэмжигдэхүүнийг харуулах зорилготой. Энэ бол Story-first-ийн бүтэц (Villain→Bridge→Value→Proof) — доор сонгосон SCRIPT ФОРМАТ өөр бол энэ өгүүллэгийн логикийг ХУУЛБАРЛАХГҮЙ, харин доор өгөгдсөн тухайн ФОРМАТ-ын өөрийн БҮТЭЦ, ЗААВАЛ БАЙХ ЭЛЕМЕНТ-ийг чанд дага.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 АЛХАМ 1: TRANSCRIPT-АС CONTENT TYPE ТОДОРХОЙЛ
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -3691,12 +3824,95 @@ CTA: "Монголд энэ тренд хэзээ ирэх бол гэж бод�
 → CTA жишээг тухайн контентод тааруулж өөрчил`;
 
       var OVERLAYS={
-        standard: 'BODY БҮТЭЦ: [1]Нөхцөл+контекст [2]Twist "гэхдээ яг энд нэг зүйл байна…" [3]Механизм [4]Тоон баталгаа [5]Bigger picture [6]Signature line (5-8 үг, clip-able)',
-        story:    'BODY БҮТЭЦ: Конкрет хүний тохиолдолоор эхэл → [1]Тохиолдол [2]Шилжилт [3]Механизм [4]Тоон баталгаа [5]Bigger picture [6]Signature line',
-        casestudy:'BODY БҮТЭЦ: "[Хүн/компани] [X хоногт] [Y үр дүн]—яаж вэ?" → [1]Хэн [2]Юу болсон [3]Механизм [4]Тоонууд [5]Bigger picture [6]Signature line',
-        mistake:  'BODY БҮТЭЦ: Алдааг controversy болго → [1]ЯАГ ямар алдааг гаргадагыг НЭРЛЭЖбич (ерөнхий биш) [2]Тэр алдааны тодорхой үр дагавар (ANXIETY) [3]Зөв арга+механизм [4]Тоонууд [5]Bigger picture [6]Signature line — АНХААРУУЛГА: story дахин тайлбарлах биш, тодорхой алдааг нэрлэн задал',
-        pov:      'BODY БҮТЭЦ: "Хэрэв [нөхцөл] байсан бол чи юу хийх байсан?" → [1]Нөхцөл [2]Controversy angle [3]Механизм [4]Тоонууд [5]Bigger picture [6]Signature line',
-        donot:    'BODY БҮТЭЦ: ANXIETY MAX → [1]X БАЙХГҮЙ бол яагаад тохиромжгүйг тайлбарла [2]X БАЙВАЛ яагаад хийх ёстойг хэл [3]Механизм [4]Тоонууд [5]Bigger picture [6]Signature line — ЛОГИКИЙН АЛДАА ХОРИГЛОНО: "X байхгүй бол хий, байвал бол..." урвуу логик огт хийхгүй'
+        standard: `━━━ NATIVE ENGINE · ① Стандарт+ ━━━
+HOOK FORMULA (3-с сонгож, ШИНЭЭР зохио — хуулбарлахгүй):
+  ① Contrarian: "[Нийтлэг ойлголт] гэж боддог уу? Буруу байж магадгүй."
+  ② Hidden Opportunity: "[Зүйл]-г хүмүүс ихэвчлэн анзаардаггүй."
+  ③ Number Curiosity: тодорхой тоо/хувь + тайлбарлаагүй "яагаад" үлдээх
+BODY БҮТЭЦ (төвийг сахисан, зөвлөгөө өгөх өнгө аяс):
+  [1] Нөхцөл + контекст танилцуулах
+  [2] Twist — "гэхдээ яг энд нэг зүйл байна…"
+  [3] Механизм — яаж ажилладаг
+  [4] Тоон баталгаа
+  [5] Bigger picture — яагаад чухал
+  [6] Signature line (5-8 үг, clip-able)
+ЯЛГАА бусад формат-аас: тодорхой нэг хүн/компанийн адал явдал ГАРГАХГҮЙ (энэ Story-first, Case study-д зориулагдсан) — хамгийн ерөнхий, хэнд ч хамаатай зөвлөгөөний өнгө аястай байх.`,
+
+        story: `━━━ NATIVE ENGINE · ② Story-first ━━━
+HOOK FORMULA (3-с сонгож, ШИНЭЭР зохио — хуулбарлахгүй):
+  ① Confession Opener: "Би ч бас яг [нөхцөл байдал] байсан."
+  ② Time-marker: "[Тодорхой хугацаа]-н өмнө би [нөхцөл]."
+  ③ Relatable Struggle: "Чи ч гэсэн яг [асуудал] дундаа гацаад байна уу?"
+BODY БҮТЭЦ (ЗААВАЛ нэг тодорхой хүний адал явдлаар өгүүл):
+  [1] Тодорхой ХҮН (жинхэнэ нэр эсвэл "нэг найз", "манай хамт олны нэг залуу") + эхний нөхцөл байдал
+  [2] Шилжилт — юу өөрчлөгдсөн, ямар шийдвэр гаргасан
+  [3] Механизм — тэр яг юу хийсэн
+  [4] Тоон баталгаа — үр дүн
+  [5] Bigger picture
+  [6] Signature line
+ЗААВАЛ БАЙХ ЭЛЕМЕНТ: тодорхой нэг ХҮНИЙ нэр/дүр + цаг хугацааны тэмдэглэгээ ("3 сарын өмнө", "нэг өдөр") — эдгээргүй бол Story-first биш.
+ЯЛГАА бусад формат-аас: Стандарт+ шиг ерөнхий зөвлөгөө биш, амьдралын жинхэнэ адал явдал шиг сонсогдох ёстой.`,
+
+        casestudy: `━━━ NATIVE ENGINE · ③ Case study ━━━
+HOOK FORMULA (3-с сонгож, ШИНЭЭР зохио — хуулбарлахгүй):
+  ① Named Result: "[Нэр/дүр] [X хоног/сар]-д [Y тоон үр дүн] авсан."
+  ② Challenge Question: "[Нэр/дүр] яаж [X хоногт] [Y] хийсэн бэ?"
+  ③ Before/After: "[Нэр/дүр]-ийн [өмнөх байдал] → [Y тоон үр дүн]."
+BODY БҮТЭЦ (ЗААВАЛ тодорхой хугацаа + тоон үр дүнтэй тохиолдол):
+  [1] Хэн — тодорхой хүн/жижиг бизнес нэрлэ (нэр зохиож болно)
+  [2] Юу болсон — тодорхой хугацааны хүрээнд (жишээ: "14 хоногийн дотор")
+  [3] Механизм — яг ямар алхам хийсэн
+  [4] Тоонууд — тодорхой тоо/хувь/мөнгөн дүн
+  [5] Bigger picture
+  [6] Signature line
+ЗААВАЛ БАЙХ ЭЛЕМЕНТ: тодорхой ХУГАЦАА (X хоног/сар) + тодорхой ТООН ҮР ДҮН (₮ эсвэл хувь) — эдгээргүй бол case study биш, стандарт зөвлөгөө болчихно.
+ЯЛГАА бусад формат-аас: Story-first сэтгэл хөдлөлийн аялал биш — Case study бол ТОО, БАРИМТ-д төвлөрсөн, business-report маягтай.`,
+
+        mistake: `━━━ NATIVE ENGINE · ④ Mistake breakdown ━━━
+HOOK FORMULA (3-с сонгож, ШИНЭЭР зохио — хуулбарлахгүй):
+  ① Named Mistake: "Ихэнх хүмүүс [тодорхой алдаа] хийгээд бүтэлгүйтдэг."
+  ② Confession Mistake: "Би [тодорхой алдаа] хийгээд [үр дагавар] авсан."
+  ③ Warning: "Хэрэв чи [тодорхой алдаа] хийж байгаа бол одоо болих хэрэгтэй."
+BODY БҮТЭЦ (ЗААВАЛ ЕРӨНХИЙ БИШ, ТОДОРХОЙ АЛДАА НЭРЛЭ):
+  [1] ЯГ ямар алдааг хүмүүс гаргадаг вэ — тодорхой нэрлэ (жишээ: "хямд, чанаргүй бараа сонгодог")
+  [2] Тэр алдааны тодорхой үр дагавар (ANXIETY — мөнгө/цаг алдах)
+  [3] Зөв арга — механизм
+  [4] Тоонууд
+  [5] Bigger picture
+  [6] Signature line
+ЗААВАЛ БАЙХ ЭЛЕМЕНТ: 1-2 өгүүлбэрт ЯГ ТОДОРХОЙ нэг алдааг нэрлэсэн байх ёстой.
+ЯЛГАА бусад формат-аас: criticism/warning өнгө аястай — эерэг зөвлөгөө биш, юу БУРУУ хийж байгааг шүүмжилдэг.`,
+
+        pov: `━━━ NATIVE ENGINE · ⑤ POV ━━━
+HOOK FORMULA (3-с сонгож, ШИНЭЭР зохио — хуулбарлахгүй):
+  ① Hypothetical Challenge: "Хэрэв чи [нөхцөл] байсан бол юу хийх байсан бэ?"
+  ② Side-pick: "Чи [A тал] уу эсвэл [B тал] уу?"
+  ③ Role Reversal: "Чи [хэн нэгний оронд] байсан бол..."
+BODY БҮТЭЦ (ЗААВАЛ hypothetical frame-ээр эхэл):
+  [1] "Хэрэв [нөхцөл] байсан бол чи юу хийх байсан бэ?" — асуулт/дүрслэлээр нөхцөл байдал зур
+  [2] Controversy angle — хоёр эсрэг талыг харуул
+  [3] Механизм — бодит амьдрал дээр яаж шийддэг
+  [4] Тоонууд
+  [5] Bigger picture
+  [6] Signature line
+ЗААВАЛ БАЙХ ЭЛЕМЕНТ: hook эсвэл body-ийн эхэнд "Хэрэв...бол" hypothetical бүтэц заавал байх.
+ЯЛГАА бусад формат-аас: маргаантай, хоёр өнцгөөс харуулсан frame — нэг талын зөвлөгөө биш.`,
+
+        donot: `━━━ NATIVE ENGINE · ⑥ Don't start unless ━━━
+HOOK FORMULA (3-с сонгож, ШИНЭЭР зохио — хуулбарлахгүй):
+  ① Gatekeeper: "[X] байхгүй бол энэ бизнесийг битгий эхэл."
+  ② Reverse Warning: "Ихэнх хүмүүс [X]-гүйгээр эхэлдэг — тэгээд бүтэлгүйтдэг."
+  ③ Qualifier Challenge: "Чи [X] бэлэн үү? Байхгүй бол уншаад ч хэрэггүй."
+BODY БҮТЭЦ (ANXIETY MAX, X байхгүй/байгаа хоёр талыг тодорхой ялга):
+  [1] X БАЙХГҮЙ бол яагаад энэ бизнес/санаа тохиромжгүй болохыг тодорхой шалтгаанаар тайлбарла
+  [2] X БАЙВАЛ яагаад амжилттай болохыг тодорхой шалтгаанаар тайлбарла
+  [3] Механизм
+  [4] Тоонууд
+  [5] Bigger picture
+  [6] Signature line
+ЗААВАЛ БАЙХ ЭЛЕМЕНТ: "X" гэдгийг тодорхой нэрлэ (жишээ: "цаг зав", "эхний хөрөнгө", "тэвчээр") — хийсвэр байж болохгүй.
+ЛОГИКИЙН АЛДАА ХОРИГЛОНО: зөвхөн "X байхгүй бол БҮҮ ХИЙ, байвал ХИЙ" — урвуу логик хориотой.
+ЯЛГАА бусад формат-аас: gatekeeping/qualification өнгө аястай — "энэ чамд тохирох уу эсвэл үгүй юу" гэдгийг шүүх маягтай.`
       };
 
       var ENFORCE=`
@@ -3754,6 +3970,12 @@ CTA: "Монголд энэ тренд хэзээ ирэх бол гэж бод�
  Recap hook: "[Улс/Хүн] [зүйл] болгожээ" загвар → ДАХИН БИЧ
  Mistake breakdown-д ерөнхий биш тодорхой алдааг нэрлээгүй → ДАХИН БИЧ
  Don't start unless-д логик урвуу (X байхгүй бол хий, байвал...) → ДАХИН БИЧ
+ Case study-д тодорхой хугацаа (X хоног/сар) ЭСВЭЛ тодорхой тоон үр дүн байхгүй бол → ДАХИН БИЧ
+ Case study-д нэрлэсэн хүн/дүр байхгүй, зөвхөн ерөнхий тайлбар бол → ДАХИН БИЧ
+ POV-д "Хэрэв ... бол" hypothetical эхлэл hook эсвэл body-ийн эхэнд байхгүй бол → ДАХИН БИЧ
+ Story-first-д тодорхой нэг хүний нэр/дүр, цаг хугацааны тэмдэглэгээ байхгүй бол → ДАХИН БИЧ
+ Сонгосон SCRIPT ФОРМАТ-ын "ЗААВАЛ БАЙХ ЭЛЕМЕНТ" body-д тусгагдаагүй бол → ДАХИН БИЧ
+ 2+ өөр SCRIPT ФОРМАТ-аар ижил transcript-ыг боловсруулахад BODY-ийн үндсэн логик, жишээ, тайлбар бараг ижилхэн болвол → тухайн ФОРМАТ-ын ЯЛГАА заалтыг дахин уншиж ДАХИН БИЧ
  Нэг өгүүлбэрт 15+ үг → ДАХИН БИЧ
  Механизм нэг урт өгүүлбэрт багтаасан → ДАХИН БИЧ
  AWE→ANXIETY шилжилтэнд "Гэхдээ"/"Харин"/"Гэтэл" байхгүй → ДАХИН БИЧ
@@ -3775,7 +3997,7 @@ CTA: "Монголд энэ тренд хэзээ ирэх бол гэж бод�
 
 Маркеруудаас өмнө, дараа ямар нэг тайлбар ОГТХОН Ч бичихгүй.`;
 
-      return UNIVERSAL+'\n'+TAXONOMY+'\n'+(OVERLAYS[cf]||OVERLAYS.standard)+ENFORCE+OUTPUT;
+      return UNIVERSAL+'\n'+TAXONOMY+'\n'+(OVERLAYS[cf]||OVERLAYS.standard)+'\n'+rsFbBuildInjection()+ENFORCE+OUTPUT;
     }
 
     /* ─── Parse script ─── */
@@ -3835,6 +4057,236 @@ CTA: "Монголд энэ тренд хэзээ ирэх бол гэж бод�
         b.disabled=false;
         setTimeout(function(){b.classList.add('rs-popped');setTimeout(function(){b.classList.remove('rs-popped');},340);},i*60+300);
       });
+      rsFbReset();
+    }
+
+    /* ─── Feedback: word corrections + notes + ratings ─── */
+    function rsFbGet(key){try{return JSON.parse(localStorage.getItem(key)||'[]');}catch(e){return [];}}
+    function rsFbSet(key,arr){localStorage.setItem(key,JSON.stringify(arr));}
+
+    function rsFbReset(){
+      var bar=rq('rs-fb-bar');if(!bar)return;
+      bar.className='rs-fb-bar show';
+      rs_fbRating='';
+      rq('rs-fb-up').classList.remove('active');
+      rq('rs-fb-down').classList.remove('active');
+      rq('rs-fb-word-form').className='rs-fb-word-form';
+      rq('rs-fb-note-form').className='rs-fb-note-form';
+      rq('rs-fb-wordtoggle').classList.remove('on');
+      rq('rs-fb-notetoggle').classList.remove('on');
+      rq('rs-fb-wrong').value='';rq('rs-fb-right').value='';rq('rs-fb-note-txt').value='';
+      rq('rs-fb-sent').style.display='none';
+      rsFbUpdateCount();
+    }
+
+    function rsFbUpdateCount(){
+      var el=rq('rs-fb-wc-count');if(!el)return;
+      el.textContent='Үгийн сан: '+rsFbGet(RS_FB_WORDKEY).length;
+    }
+
+    function rsFbShowSent(msg){
+      var s=rq('rs-fb-sent');if(!s)return;
+      s.textContent='✓ '+msg;
+      s.style.display='block';
+      setTimeout(function(){s.style.display='none';},2600);
+    }
+
+    window.rsFbToggleWordForm=function(){
+      var f=rq('rs-fb-word-form'),b=rq('rs-fb-wordtoggle');
+      var show=f.className.indexOf('show')===-1;
+      f.className='rs-fb-word-form'+(show?' show':'');
+      b.classList.toggle('on',show);
+      rq('rs-fb-note-form').className='rs-fb-note-form';
+      rq('rs-fb-notetoggle').classList.remove('on');
+      if(show)setTimeout(function(){rq('rs-fb-wrong').focus();},50);
+    }
+    window.rsFbToggleNoteForm=function(){
+      var f=rq('rs-fb-note-form'),b=rq('rs-fb-notetoggle');
+      var show=f.className.indexOf('show')===-1;
+      f.className='rs-fb-note-form'+(show?' show':'');
+      b.classList.toggle('on',show);
+      rq('rs-fb-word-form').className='rs-fb-word-form';
+      rq('rs-fb-wordtoggle').classList.remove('on');
+      if(show)setTimeout(function(){rq('rs-fb-note-txt').focus();},50);
+    }
+
+    window.rsFbAddWord=function(){
+      var wrong=rq('rs-fb-wrong').value.trim(),right=rq('rs-fb-right').value.trim();
+      if(!wrong||!right){toast('Хоёр талбарыг бөглөнө үү','warn');return;}
+      var list=rsFbGet(RS_FB_WORDKEY);
+      var dup=list.find(function(w){return w.wrong.toLowerCase()===wrong.toLowerCase();});
+      if(dup){dup.right=right;dup.count=(dup.count||1)+1;dup.ts=Date.now();}
+      else{list.push({wrong:wrong,right:right,count:1,ts:Date.now(),fmt:rs_lastFmt,type:rs_lastType});}
+      rsFbSet(RS_FB_WORDKEY,list);
+      rsFbSyncToSupabase({kind:'word',wrong_text:wrong,correct_text:right,format:rs_lastFmt,content_type:rs_lastType});
+      rq('rs-fb-wrong').value='';rq('rs-fb-right').value='';
+      rq('rs-fb-word-form').className='rs-fb-word-form';
+      rq('rs-fb-wordtoggle').classList.remove('on');
+      rsFbUpdateCount();
+      rsFbShowSent('Үгийн санд нэмэгдлээ — дараагийн script-д тусгагдана');
+      toast('Үгийн засвар хадгалагдлаа','ok');
+    }
+
+    window.rsFbAddNote=function(){
+      var txt=rq('rs-fb-note-txt').value.trim();
+      if(!txt){toast('Тэмдэглэл хоосон байна','warn');return;}
+      var list=rsFbGet(RS_FB_NOTEKEY);
+      list.push({text:txt,fmt:rs_lastFmt,type:rs_lastType,ts:Date.now()});
+      if(list.length>12)list=list.slice(-12);
+      rsFbSet(RS_FB_NOTEKEY,list);
+      rsFbSyncToSupabase({kind:'note',note_text:txt,format:rs_lastFmt,content_type:rs_lastType});
+      rq('rs-fb-note-txt').value='';
+      rq('rs-fb-note-form').className='rs-fb-note-form';
+      rq('rs-fb-notetoggle').classList.remove('on');
+      rsFbShowSent('Тэмдэглэл хадгалагдлаа — дараагийн script-д тусгагдана');
+      toast('Feedback хадгалагдлаа','ok');
+    }
+
+    window.rsFbRate=function(dir){
+      var up=rq('rs-fb-up'),down=rq('rs-fb-down');
+      if(rs_fbRating===dir){ // toggle off
+        rs_fbRating='';up.classList.remove('active');down.classList.remove('active');return;
+      }
+      rs_fbRating=dir;
+      up.classList.toggle('active',dir==='up');
+      down.classList.toggle('active',dir==='down');
+      var list=rsFbGet(RS_FB_RATEKEY);
+      list.push({rating:dir,fmt:rs_lastFmt,type:rs_lastType,ts:Date.now()});
+      if(list.length>200)list=list.slice(-200);
+      rsFbSet(RS_FB_RATEKEY,list);
+      rsFbSyncToSupabase({kind:'rating',rating:dir,format:rs_lastFmt,content_type:rs_lastType});
+      if(dir==='down'){
+        toast('Юу муу байсныг тэмдэглэвэл дараагийн удаа тусгана','info');
+        rq('rs-fb-note-form').className='rs-fb-note-form show';
+        rq('rs-fb-notetoggle').classList.add('on');
+        setTimeout(function(){rq('rs-fb-note-txt').focus();},50);
+      }else{
+        toast('Санал бүртгэгдлээ','ok');
+      }
+    }
+
+    /* ─── Word bank modal ─── */
+    window.rsFbOpenBank=function(){
+      rsFbRenderBank();
+      rq('rs-fb-bank-modal').style.display='flex';
+    }
+    window.rsFbCloseBank=function(){rq('rs-fb-bank-modal').style.display='none';}
+    function rsFbRenderBank(){
+      var list=rsFbGet(RS_FB_WORDKEY);
+      var el=rq('rs-fb-bank-list');
+      if(!list.length){el.innerHTML='<div class="rs-fb-bank-empty">Одоогоор үг засвар алга. Script гарсны дараа "✎ Үг засах" дарж нэмнэ үү.</div>';return;}
+      list=list.slice().sort(function(a,b){return b.ts-a.ts;});
+      el.innerHTML=list.map(function(w,i){
+        var realIdx=rsFbGet(RS_FB_WORDKEY).findIndex(function(x){return x.wrong===w.wrong&&x.ts===w.ts;});
+        return '<div class="rs-fb-bank-item"><div class="rs-fb-bank-word"><span class="rs-fb-bank-wrong">'+
+          w.wrong.replace(/</g,'&lt;')+'</span><span class="rs-fb-arrow">→</span><span class="rs-fb-bank-right">'+
+          w.right.replace(/</g,'&lt;')+'</span></div><button class="rs-fb-bank-del" onclick="rsFbDeleteWord('+realIdx+')">✕</button></div>';
+      }).join('');
+    }
+    window.rsFbDeleteWord=function(idx){
+      var list=rsFbGet(RS_FB_WORDKEY);
+      list.splice(idx,1);
+      rsFbSet(RS_FB_WORDKEY,list);
+      rsFbRenderBank();
+      rsFbUpdateCount();
+    }
+    window.rsFbClearAll=function(){
+      if(!confirm('Үг засварын бүх жагсаалтыг устгах уу? Энэ үйлдлийг буцаах боломжгүй.'))return;
+      rsFbSet(RS_FB_WORDKEY,[]);
+      rsFbRenderBank();
+      rsFbUpdateCount();
+      toast('Үгийн сан хоослогдлоо','ok');
+    }
+
+    /* ─── Build dynamic prompt injection from accumulated feedback ─── */
+    function rsFbBuildInjection(){
+      var out='';
+      var wf=rsFbGet(RS_FB_WORDKEY);
+      if(wf.length){
+        out+='\n━━━ ХЭРЭГЛЭГЧИЙН ТЭМДЭГЛЭСЭН ҮГИЙН ЗАСВАР (өмнөх script-үүдээс олдсон бодит алдаа — ЗААВАЛ дага) ━━━\n';
+        wf.forEach(function(w){
+          out+='   "'+w.wrong+'" — БУРУУ. Үүний оронд: "'+w.right+'"\n';
+        });
+        out+='Дээрх буруу хэлбэрүүдийг script-д ХЭЗЭЭ Ч бүү ашигла — эдгээр нь өмнө нь хэрэглэгчийн тэмдэглэсэн бодит алдаа.\n';
+      }
+      var fn=rsFbGet(RS_FB_NOTEKEY);
+      if(fn.length){
+        out+='\n━━━ СҮҮЛИЙН ХЭРЭГЛЭГЧИЙН FEEDBACK (заавал анхаар) ━━━\n';
+        fn.slice(-5).forEach(function(f){
+          out+='   - ['+(f.fmt||'?')+'] '+f.text+'\n';
+        });
+      }
+      out+=rs_approvedRulesCache;
+      return out;
+    }
+
+    /* ─── Layer 2: sync feedback → Supabase, fetch approved rules + pending AI suggestions ─── */
+    function rsFbSyncToSupabase(row){
+      try{
+        fetch(RS_SB_URL+'/rest/v1/rs_feedback',{method:'POST',headers:{'apikey':RS_SB_KEY,'Authorization':'Bearer '+RS_SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(row)}).catch(function(){});
+      }catch(e){}
+    }
+
+    function rsFbLoadApprovedRules(){
+      fetch(RS_SB_URL+'/rest/v1/rs_approved_rules?select=rule_text,category&order=created_at.asc',{headers:{'apikey':RS_SB_KEY,'Authorization':'Bearer '+RS_SB_KEY}})
+        .then(function(r){return r.ok?r.json():[];})
+        .then(function(rows){
+          if(!rows||!rows.length){rs_approvedRulesCache='';return;}
+          var out='\n━━━ ЗӨВШӨӨРӨГДСӨН ШИНЭ ДҮРЭМ (7 хоногийн feedback шинжилгээнээс гарсан, батлагдсан — ЗААВАЛ дага) ━━━\n';
+          rows.forEach(function(r){out+='   '+r.rule_text+'\n';});
+          rs_approvedRulesCache=out;
+        })
+        .catch(function(){});
+    }
+
+    function rsFbLoadPendingSuggestions(){
+      fetch(RS_SB_URL+'/rest/v1/rs_pending_updates?status=eq.pending&select=*&order=created_at.desc',{headers:{'apikey':RS_SB_KEY,'Authorization':'Bearer '+RS_SB_KEY}})
+        .then(function(r){return r.ok?r.json():[];})
+        .then(function(rows){rs_pendingSuggestions=rows||[];rsFbRenderSuggestions();})
+        .catch(function(){});
+    }
+
+    function rsFbRenderSuggestions(){
+      var badge=rq('rs-sugg-badge'),body=rq('rs-sugg-body');
+      if(!badge||!body)return;
+      var n=rs_pendingSuggestions.length;
+      if(n>0){badge.style.display='inline-block';badge.textContent=n;}
+      else{badge.style.display='none';}
+      if(!n){body.innerHTML='<div style="text-align:center;padding:12px;color:var(--text4);font-size:11px;">Одоогоор шинэ санал алга — GPT-4o 7 хоног тутам шинжилж, энд санал тавина</div>';return;}
+      function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+      body.innerHTML=rs_pendingSuggestions.map(function(s){
+        var cat=(s.category||'enforce').toUpperCase();
+        var ev=s.evidence_count?(s.evidence_count+' feedback дээр үндэслэсэн'):'';
+        return '<div class="rs-sugg-item" style="border:1px solid var(--border);border-radius:8px;padding:10px;">'
+          +'<div style="font-size:9px;color:var(--text4);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">'+esc(cat)+(ev?' · '+esc(ev):'')+'</div>'
+          +'<div style="font-size:12px;color:var(--text);margin-bottom:6px;line-height:1.5;">'+esc(s.rule_text)+'</div>'
+          +(s.rationale?'<div style="font-size:11px;color:var(--text3);margin-bottom:8px;line-height:1.5;">'+esc(s.rationale)+'</div>':'')
+          +'<div style="display:flex;gap:6px;">'
+            +'<button class="rs-out-btn save" onclick="rsApproveSuggestion('+s.id+')">✓ Зөвшөөрөх</button>'
+            +'<button class="rs-out-btn" onclick="rsRejectSuggestion('+s.id+')">✕ Татгалзах</button>'
+          +'</div>'
+        +'</div>';
+      }).join('');
+    }
+
+    window.rsApproveSuggestion=async function(id){
+      var s=rs_pendingSuggestions.find(function(x){return x.id===id;});
+      if(!s)return;
+      try{
+        await fetch(RS_SB_URL+'/rest/v1/rs_approved_rules',{method:'POST',headers:{'apikey':RS_SB_KEY,'Authorization':'Bearer '+RS_SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({rule_text:s.rule_text,category:s.category||'enforce',pending_update_id:s.id})});
+        await fetch(RS_SB_URL+'/rest/v1/rs_pending_updates?id=eq.'+id,{method:'PATCH',headers:{'apikey':RS_SB_KEY,'Authorization':'Bearer '+RS_SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({status:'approved'})});
+        toast('Дүрэм нэмэгдлээ — дараагийн script-с эхлэн ажиллана','ok');
+        rsFbLoadApprovedRules();
+        rsFbLoadPendingSuggestions();
+      }catch(e){toast('Алдаа: '+e.message,'err');}
+    }
+
+    window.rsRejectSuggestion=async function(id){
+      try{
+        await fetch(RS_SB_URL+'/rest/v1/rs_pending_updates?id=eq.'+id,{method:'PATCH',headers:{'apikey':RS_SB_KEY,'Authorization':'Bearer '+RS_SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({status:'rejected'})});
+        toast('Санал татгалзагдлаа','info');
+        rsFbLoadPendingSuggestions();
+      }catch(e){toast('Алдаа: '+e.message,'err');}
     }
 
     /* ─── Copy helpers ─── */
@@ -4158,6 +4610,8 @@ CTA: "Монголд энэ тренд хэзээ ирэх бол гэж бод�
     rsLoadKeys();
     rsCostRender();
     rsFmtPerf();
+    rsFbLoadApprovedRules();
+    rsFbLoadPendingSuggestions();
 
     /* ─── ⌘+Enter → Run Pipeline (only when reel-script page is active) ─── */
     document.addEventListener('keydown',function(e){
@@ -4435,6 +4889,24 @@ CTA: "Монголд энэ тренд хэзээ ирэх бол гэж бод�
       </div>
       <div id="regs-grid-body" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:16px;">
         <div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:30px;font-size:13px;">Уншиж байна...</div>
+      </div>
+
+      <!-- MongolSUB захиалгууд (Supabase-с) — жижиг тусдаа хэсэг, ProductDrop бүртгэлтэй адилхан загвар -->
+      <div class="sh" style="margin-bottom:10px;margin-top:22px;">
+        <span class="sh-t">🎬 MongolSUB захиалгууд <span id="mongolsub-count-badge" style="display:none;background:var(--redbg);color:var(--red);font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-left:6px;"></span></span>
+        <button class="btn-add" onclick="loadMongolSUBOrders()" style="font-size:11px;padding:6px 14px;">↻ Шинэчлэх</button>
+      </div>
+      <div id="mongolsub-orders-body" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:16px;">
+        <div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;font-size:13px;">Уншиж байна...</div>
+      </div>
+
+      <!-- MongolSUB бүх client (device) — plan/usage/expiry харах, гараар цуцлах -->
+      <div class="sh" style="margin-bottom:10px;margin-top:22px;">
+        <span class="sh-t">👥 MongolSUB clients <span id="mongolsub-clients-count-badge" style="display:none;background:var(--greenbg);color:var(--green);font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-left:6px;"></span></span>
+        <button class="btn-add" onclick="loadMongolSUBClients()" style="font-size:11px;padding:6px 14px;">↻ Шинэчлэх</button>
+      </div>
+      <div id="mongolsub-clients-body" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:16px;">
+        <div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;font-size:13px;">Уншиж байна...</div>
       </div>
 
       <!-- ── MASS MESSAGE PANEL ── -->
@@ -5079,6 +5551,15 @@ CTA: "Монголд энэ тренд хэзээ ирэх бол гэж бод�
         .rm-stat-card:nth-child(4)::before{background:var(--green)}
         .rm-stat-val{font-size:24px;font-weight:800;color:var(--text);letter-spacing:-1px;line-height:1}
         .rm-stat-lbl{font-size:11px;color:var(--text3);margin-top:4px;font-weight:600}
+        @media(max-width:768px){
+          .rm-header h1{font-size:20px}
+          .rm-exit-bar{padding:16px;gap:14px;flex-direction:column;align-items:stretch}
+          .rm-exit-countdown{justify-content:center}
+          .rm-cd-num{font-size:24px}
+          .rm-cd-sep{font-size:20px}
+          .rm-stat-card{padding:11px 12px}
+          .rm-stat-val{font-size:18px}
+        }
         .rm-stat-tag{display:inline-block;font-size:9px;padding:2px 7px;border-radius:4px;font-weight:700;letter-spacing:.5px;margin-top:6px}
         .rm-stat-tag.red{background:var(--redbg);color:var(--red)}
         .rm-stat-tag.grn{background:var(--greenbg);color:var(--green)}
@@ -6027,7 +6508,7 @@ CTA: "Монголд энэ тренд хэзээ ирэх бол гэж бод�
         </select>
       </div>
       <div id="hb-list" style="display:flex;flex-direction:column;gap:6px;"></div>
-      <div style="text-align:center;padding:20px;color:var(--text4);font-size:12px;" id="hb-empty" style="display:none;">Хадгалсан hook байхгүй байна. Script үүсгэх үед " Save" дарж хадгалаарай.</div>
+      <div style="text-align:center;padding:20px;color:var(--text4);font-size:12px;display:none;" id="hb-empty">Хадгалсан hook байхгүй байна. 10 Hook үүсгээд, таалагдсан hook дээрх хадгалах товч дээр дараарай.</div>
     </div>
   </div>
 </div>
@@ -6311,11 +6792,13 @@ function cntLoading(on,msg){
 async function loadContents(){
   cntLoading(true);
   try{
-    var data=await sbCntGet();
+    var data;
+    try{ data=await sbCntGet(); }
+    catch(e1){ await new Promise(function(r){setTimeout(r,800);}); data=await sbCntGet(); }
     contents=data.map(rowToCnt);
     ncid=contents.reduce(function(m,t){return Math.max(m,t.id||0);},0)+1;
   }catch(e){
-    // Холбогдохгүй бол localStorage fallback
+    // 2 оролдлого хоёулаа бүтэлгүйтвэл localStorage fallback
     var sc=localStorage.getItem('pd4_content');
     if(sc){contents=JSON.parse(sc);}
     else{contents=[];}
@@ -6886,7 +7369,7 @@ async function sbAnalyticsSave(a){
     var k=keys[i];
     await fetch(_SB+'/rest/v1/analytics_data?on_conflict=key',{
       method:'POST',
-      headers:Object.assign({'Prefer':'resolution=merge-duplicates'},_SBH),
+      headers:Object.assign({},_SBH,{'Prefer':'resolution=merge-duplicates,return=representation'}),
       body:JSON.stringify({key:k,value:a[k],updated_at:new Date().toISOString()})
     });
   }
@@ -7048,7 +7531,7 @@ function showPage(name,sidebarEl){
   }
   if(name==='content')renderContent();
   
-  if(name==='admin'){loadRegistrations();promoLoad();}
+  if(name==='admin'){loadRegistrations();promoLoad();loadMongolSUBOrders();loadMongolSUBClients();}
   if(name==='focus'){fpRefresh();}
   if(name==='finance'){finRender();setTimeout(loadRevForecast,200);}
   if(name==='checkin'){ciRenderHistory();}
@@ -7525,7 +8008,7 @@ function relDate(s){
   if(diff>2&&diff<=7)return diff+' хоног';
   if(diff>7)return fmtCntDate(s);
   if(diff===-1)return'Өчигдөр';
-  return Math.abs(diff)+'өдрийн өмнө';
+  return Math.abs(diff)+' өдрийн өмнө';
 }
 
 function setCntFilterFromStat(type){
@@ -7932,6 +8415,217 @@ async function rejectReg(phone,idx){
   try{await gasFetch(_gu+'?action=deleteReg&phone='+encodeURIComponent(phone));}catch(e){}
   toast('Бүртгэл устгагдлаа');
   setTimeout(loadRegistrations,800);
+}
+
+/* ── MongolSUB захиалгууд (Supabase, Code.gs-ээр дамжина) ──────────
+   ProductDrop-ийн "Шинэ бүртгэлүүд" яг адилхан загвар — ижил GAS_URL,
+   ижил gasFetch, ижил toast/card хэв маяг — өөр зөвхөн өгөгдлийн эх нь
+   (Sheets биш, Supabase). Code.gs талд listMongolSUBOrders /
+   approveMongolSUBOrder / rejectMongolSUBOrder гэсэн action-ууд байна. */
+// [ADMIN-AUTH] Code.gs gates money-moving MongolSUB actions on this key (Script Property
+// ADMIN_KEY) — without it matching, approve/reject/revoke/list all fail closed. Set via
+// Settings → Admin Key, must match Code.gs's Script Property exactly.
+function _msAdminKeyParam(){
+  var k=localStorage.getItem('pd_admin_key')||'';
+  return '&key='+encodeURIComponent(k);
+}
+function loadMongolSUBOrders(){
+  var container=document.getElementById('mongolsub-orders-body');
+  if(!container)return;
+  container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;">Уншиж байна...</div>';
+  var _gu=GAS_URL();
+  if(!_gu){container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--amber);padding:24px;">GAS URL тохируулна уу</div>';return;}
+  gasFetch(_gu+'?action=listMongolSUBOrders'+_msAdminKeyParam()).then(function(r){return r.json();}).then(function(orders){
+    // [ADMIN-AUTH] Wrong/missing Admin Key → Code.gs returns {ok:false,...} instead of an
+    // array. Without this guard, .filter/.forEach below would throw a confusing TypeError.
+    if(!Array.isArray(orders)){
+      container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--red);padding:24px;">⚠ Нэвтрэх эрхгүй — Settings-с Admin Key шалгана уу</div>';
+      return;
+    }
+    var badge=document.getElementById('mongolsub-count-badge');
+    if(badge){
+      if(orders.length){badge.style.display='inline';badge.textContent=orders.length+' pending';}
+      else{badge.style.display='none';}
+    }
+    if(!orders.length){
+      container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;">Хүлээгдэж буй захиалга байхгүй</div>';
+      return;
+    }
+    container.innerHTML='';
+    orders.forEach(function(o){
+      var planCls=o.plan_tier==='pro'?'tag-business':o.plan_tier==='standard'?'tag-pro':'tag-lite';
+      var card=document.createElement('div');
+      card.style.cssText='background:rgba(255,149,0,0.06);border:1.5px solid rgba(255,149,0,0.35);border-radius:12px;padding:12px 13px;display:flex;flex-direction:column;gap:7px;';
+      // [PHONE-IDENTITY] Show the real phone number the customer entered at checkout, not
+      // the meaningless device_id UUID — that's what you actually need to confirm/contact them.
+      card.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">'
+        +'<span style="font-weight:700;font-size:14px;flex:1;min-width:0;font-family:var(--mono);">'+(o.phone?'📱 '+x(o.phone):'<span style=\"color:var(--text4);\">Утас алга</span>')+'</span>'
+        +'<span class="tag-pill '+planCls+'">'+x((o.plan_tier||'').toUpperCase())+'</span>'
+        +'<span class="tag-pill tag-pending">ХҮЛЭЭГДЭЖ</span>'
+        +'</div>'
+        +'<div style="font-size:13px;font-weight:700;color:var(--green);">'+(Number(o.amount)||0).toLocaleString('mn-MN')+'₮</div>'
+        +'<div style="font-size:10px;color:var(--text4);">'+x(o.created_at?new Date(o.created_at).toLocaleString('mn-MN'):'—')+' · '+x(String(o.device_id||'').slice(0,8))+'…</div>';
+      var actDiv=document.createElement('div');actDiv.style.cssText='display:flex;gap:6px;margin-top:2px;';
+      var bA=document.createElement('button');bA.className='btn-approve';bA.textContent='Зөвшөөрөх';
+      bA.style.cssText='flex:1;padding:8px;font-size:12px;border-radius:8px;text-align:center;background:var(--greenbg);color:var(--green);border:1px solid rgba(52,199,89,.3);cursor:pointer;font-weight:700;font-family:inherit;';
+      bA.addEventListener('click',function(){approveMongolSUBOrder(o.id,o.device_id,o.plan_tier);});
+      actDiv.appendChild(bA);
+      var bR=document.createElement('button');bR.textContent='';
+      bR.style.cssText='padding:8px 12px;font-size:12px;background:var(--redbg);color:var(--red);border:1px solid rgba(255,59,48,0.25);border-radius:8px;cursor:pointer;font-family:inherit;font-weight:700;';
+      bR.addEventListener('click',function(){rejectMongolSUBOrder(o.id);});
+      actDiv.appendChild(bR);
+      card.appendChild(actDiv);
+      container.appendChild(card);
+    });
+  }).catch(function(){
+    container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--red);padding:24px;">GAS холбогдсонгүй</div>';
+  });
+}
+
+async function approveMongolSUBOrder(orderId,deviceId,planTier){
+  var _gu=GAS_URL();
+  if(!_gu){toast('GAS URL тохируулна уу','err');return;}
+  // [ADMIN-AUTH] Read the real response now (no more no-cors) — a wrong/missing Admin Key
+  // makes Code.gs return {ok:false}, and that must NOT be reported as success.
+  try{
+    var r=await gasFetch(_gu+'?action=approveMongolSUBOrder&order_id='+encodeURIComponent(orderId)+'&device_id='+encodeURIComponent(deviceId)+'&plan_tier='+encodeURIComponent(planTier)+_msAdminKeyParam());
+    var j=await r.json();
+    if(!j||j.ok!==true){toast('❌ Батлахад алдаа: '+(j&&j.msg?j.msg:'unauthorized — Settings-с Admin Key шалгана уу'),'err',6000);return;}
+  }catch(e){toast('❌ Батлахад алдаа гарлаа','err');return;}
+  toast('✅ MongolSUB багц идэвхжлээ!');
+  setTimeout(loadMongolSUBOrders,1000);
+}
+
+async function rejectMongolSUBOrder(orderId){
+  if(!confirm('Энэ захиалгыг цуцлахдаа итгэлтэй байна уу?'))return;
+  var _gu=GAS_URL();
+  if(!_gu){toast('GAS URL тохируулна уу','err');return;}
+  try{
+    var r=await gasFetch(_gu+'?action=rejectMongolSUBOrder&order_id='+encodeURIComponent(orderId)+_msAdminKeyParam());
+    var j=await r.json();
+    if(!j||j.ok!==true){toast('❌ Цуцлахад алдаа: '+(j&&j.msg?j.msg:'unauthorized — Settings-с Admin Key шалгана уу'),'err',6000);return;}
+  }catch(e){toast('❌ Цуцлахад алдаа гарлаа','err');return;}
+  toast('Захиалга цуцлагдлаа');
+  setTimeout(loadMongolSUBOrders,800);
+}
+
+/* ── MongolSUB бүх client (device) — plan/usage/expiry харах, гараар цуцлах ──
+   Code.gs талд listMongolSUBClients / revokeMongolSUBPlan action-ууд байна.
+   usage мөр бүр: device_id, plan_tier, usage_ym, recordings_used, plan_expiry, updated_at. */
+function loadMongolSUBClients(){
+  var container=document.getElementById('mongolsub-clients-body');
+  if(!container)return;
+  container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;">Уншиж байна...</div>';
+  var _gu=GAS_URL();
+  if(!_gu){container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--amber);padding:24px;">GAS URL тохируулна уу</div>';return;}
+  gasFetch(_gu+'?action=listMongolSUBClients'+_msAdminKeyParam()).then(function(r){return r.json();}).then(function(clients){
+    // [ADMIN-AUTH] Wrong/missing Admin Key → Code.gs returns {ok:false,...} instead of an
+    // array. Without this guard, .filter/.forEach below would throw a confusing TypeError.
+    if(!Array.isArray(clients)){
+      container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--red);padding:24px;">⚠ Нэвтрэх эрхгүй — Settings-с Admin Key шалгана уу</div>';
+      return;
+    }
+    // [ACCOUNT-VIEW] MongolSUB usage rows are now PER-DEVICE + one `acc:<phone>` accumulator
+    // per registered account (see MongolSUB _supabase.js resolveUsage) — rendering raw rows
+    // showed the same person 2-3 times with different counts. Group rows by phone: one card
+    // per PAID account (usage read from the acc row = the live shared counter), and free is
+    // just a count line — the admin never needed to scroll hundreds of 0/3 free cards.
+    var caps={free:3,basic:9,standard:25,pro:80};
+    var rank={free:0,basic:1,standard:2,pro:3};
+    function paidActive(r){return r&&r.plan_tier&&r.plan_tier!=='free'&&(!r.plan_expiry||new Date(r.plan_expiry)>new Date());}
+    var groups={},anonCount=0;
+    clients.forEach(function(c){
+      var digits=String(c.phone||'').replace(/\D/g,'');
+      if(digits.length>=8){var k=digits.slice(-8);(groups[k]=groups[k]||[]).push(c);}
+      else anonCount++;
+    });
+    var accounts=Object.keys(groups).map(function(k){
+      var rows=groups[k];
+      var acc=null,devices=[];
+      rows.forEach(function(r){if(String(r.device_id).indexOf('acc:')===0)acc=r;else devices.push(r);});
+      var best=devices.filter(paidActive).sort(function(a,b){return (rank[b.plan_tier]||0)-(rank[a.plan_tier]||0);})[0]||null;
+      if(!best&&acc&&paidActive(acc))best=acc; // pre-migration paid account whose device rows already expired
+      var used=acc?(Number(acc.recordings_used)||0):Math.max.apply(null,[0].concat(devices.map(function(r){return Number(r.recordings_used)||0;})));
+      var code=(acc&&acc.login_code)||((rows.filter(function(r){return r.login_code;})[0]||{}).login_code)||'';
+      var lastSeen=Math.max.apply(null,[0].concat(rows.map(function(r){return r.updated_at?new Date(r.updated_at).getTime():0;})));
+      return {phone:k,paid:!!best,plan:best?best.plan_tier:'free',expiry:best?best.plan_expiry:null,
+              used:used,code:code,lastSeen:lastSeen,deviceCount:devices.length,
+              allIds:rows.map(function(r){return r.device_id;})};
+    });
+    var paidAccounts=accounts.filter(function(a){return a.paid;})
+      .sort(function(a,b){
+        var ea=a.expiry?new Date(a.expiry).getTime():Infinity, eb=b.expiry?new Date(b.expiry).getTime():Infinity;
+        return ea-eb; // expiring soonest on top — those need admin attention first
+      });
+    var freeRegCount=accounts.length-paidAccounts.length;
+    var badge=document.getElementById('mongolsub-clients-count-badge');
+    if(badge){
+      if(paidAccounts.length){badge.style.display='inline';badge.textContent=paidAccounts.length+' paid';}
+      else{badge.style.display='none';}
+    }
+    container.innerHTML='';
+    paidAccounts.forEach(function(a){
+      var planCls=a.plan==='pro'?'tag-business':a.plan==='standard'?'tag-pro':a.plan==='basic'?'tag-lite':'';
+      var cap=caps[a.plan]||3;
+      var expiryHtml='<span style="color:var(--text4);">Хугацаагүй (хуучин захиалга)</span>';
+      if(a.expiry){
+        var daysLeft=Math.ceil((new Date(a.expiry)-new Date())/86400000);
+        if(daysLeft<0)expiryHtml='<span style="color:var(--red);font-weight:700;">Дууссан</span>';
+        else if(daysLeft<=3)expiryHtml='<span style="color:var(--amber);font-weight:700;">'+daysLeft+' өдөр үлдсэн</span>';
+        else expiryHtml='<span style="color:var(--text4);">'+daysLeft+' өдөр үлдсэн</span>';
+      }
+      var card=document.createElement('div');
+      card.style.cssText='background:var(--card-bg,rgba(255,255,255,0.03));border:1.5px solid var(--border,rgba(255,255,255,0.08));border-radius:12px;padding:12px 13px;display:flex;flex-direction:column;gap:7px;';
+      card.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">'
+        +'<span style="font-weight:700;font-size:12px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--mono);">📱 '+x(a.phone)+'</span>'
+        +'<span class="tag-pill '+planCls+'">'+x(a.plan.toUpperCase())+'</span>'
+        +'</div>'
+        +'<div style="font-size:13px;font-weight:700;">'+a.used+' / '+cap+' <span style="font-size:10px;font-weight:400;color:var(--text4);">ашигласан · нийт данс</span></div>'
+        +'<div style="font-size:11px;">'+expiryHtml
+        +(a.deviceCount>1?' <span style="color:var(--text4);">· '+a.deviceCount+' төхөөрөмж</span>':'')+'</div>'
+        // [PHONE-LOGIN] login_code = the password the customer chose (register-device.js);
+        // shown so the admin can text it back to someone who used "Нууц үг мартсан?".
+        +(a.code?'<div style="font-size:11px;font-family:var(--mono);color:var(--text4);">🔑 Нууц үг: <b style="color:var(--text);letter-spacing:1px;">'+x(a.code)+'</b></div>':'')
+        +'<div style="font-size:10px;color:var(--text4);">'+x(a.lastSeen?new Date(a.lastSeen).toLocaleString('mn-MN'):'—')+'</div>';
+      var bRev=document.createElement('button');bRev.textContent='Free рүү буцаах';
+      bRev.style.cssText='margin-top:2px;padding:8px;font-size:11px;border-radius:8px;text-align:center;background:var(--redbg);color:var(--red);border:1px solid rgba(255,59,48,.25);cursor:pointer;font-weight:700;font-family:inherit;';
+      (function(ids){bRev.addEventListener('click',function(){revokeMongolSUBPlan(ids);});})(a.allIds);
+      card.appendChild(bRev);
+      container.appendChild(card);
+    });
+    // Free = a single stat line, not a wall of 0/3 cards.
+    var freeCard=document.createElement('div');
+    freeCard.style.cssText='background:var(--card-bg,rgba(255,255,255,0.03));border:1.5px dashed var(--border,rgba(255,255,255,0.10));border-radius:12px;padding:14px 13px;display:flex;flex-direction:column;gap:6px;justify-content:center;';
+    freeCard.innerHTML='<div style="font-size:11px;color:var(--text4);font-weight:700;">FREE ХЭРЭГЛЭГЧИД</div>'
+      +'<div style="font-size:14px;font-weight:700;">'+freeRegCount+' <span style="font-size:11px;font-weight:400;color:var(--text4);">бүртгэлтэй (утастай)</span></div>'
+      +'<div style="font-size:14px;font-weight:700;">'+anonCount+' <span style="font-size:11px;font-weight:400;color:var(--text4);">бүртгэлгүй төхөөрөмж</span></div>';
+    container.appendChild(freeCard);
+    if(!paidAccounts.length&&!accounts.length&&!anonCount){
+      container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;">Client байхгүй</div>';
+    }
+  }).catch(function(){
+    container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--red);padding:24px;">GAS холбогдсонгүй</div>';
+  });
+}
+
+// [ACCOUNT-VIEW] One human account = several usage rows (each logged-in device + the acc:
+// accumulator). Revoking only one row used to leave the others still paid — the account
+// resolver would immediately re-promote from a leftover paid row. Revoke every row in the
+// group (Code.gs revokeMongolSUBPlan is per-device, so just loop it).
+async function revokeMongolSUBPlan(deviceIds){
+  var ids=Array.isArray(deviceIds)?deviceIds:[deviceIds];
+  if(!confirm('Энэ client-ийг ('+ids.length+' мөр) Free багц руу шууд буцаахдаа итгэлтэй байна уу?'))return;
+  var _gu=GAS_URL();
+  if(!_gu){toast('GAS URL тохируулна уу','err');return;}
+  try{
+    for(var i=0;i<ids.length;i++){
+      var r=await gasFetch(_gu+'?action=revokeMongolSUBPlan&device_id='+encodeURIComponent(ids[i])+_msAdminKeyParam());
+      var j=await r.json();
+      if(!j||j.ok!==true){toast('❌ Цуцлахад алдаа: '+(j&&j.msg?j.msg:'unauthorized — Settings-с Admin Key шалгана уу'),'err',6000);return;}
+    }
+  }catch(e){toast('❌ Цуцлахад алдаа гарлаа','err');return;}
+  toast('Client Free багц руу шилжлээ ('+ids.length+' мөр)');
+  setTimeout(loadMongolSUBClients,1000);
 }
 
 /* ── 7 ХОНОГИЙН QUEUE TOGGLE ── */
@@ -8540,6 +9234,7 @@ function openGlobalSettings(){
   document.getElementById('gs-server').value=localStorage.getItem('rp_serverUrl')||'http://localhost:3000';
   document.getElementById('gs-claude').value=localStorage.getItem('pd_ak')||'';
   document.getElementById('gs-gas-url').value=localStorage.getItem('pd_gas_url')||'';
+  document.getElementById('gs-admin-key').value=localStorage.getItem('pd_admin_key')||'';
   modal.style.display='flex';
 }
 function closeGlobalSettings(){document.getElementById('global-settings-modal').style.display='none';}
@@ -8550,6 +9245,7 @@ function saveGlobalSettings(){
   var server=document.getElementById('gs-server').value.trim()||'http://localhost:3000';
   var claude=document.getElementById('gs-claude').value.trim();
   var gasUrl=document.getElementById('gs-gas-url').value.trim();
+  var adminKey=document.getElementById('gs-admin-key').value.trim();
   if(name){localStorage.setItem('pd4_nm',name);if(typeof setUser==='function')setUser(name);if(typeof setGreet==='function')setGreet(name);}
   if(rapid){localStorage.setItem('rp_rapidKey',rapid);}
   if(oai){localStorage.setItem('rp_oaiKey',oai);}
@@ -8562,6 +9258,8 @@ function saveGlobalSettings(){
   } else if(!gasUrl){
     localStorage.removeItem('pd_gas_url');
   }
+  // Always save (even empty string) so user can clear a wrong key, same as Claude key above
+  localStorage.setItem('pd_admin_key', adminKey);
   /* sync hidden pipeline inputs */
   var rr=document.getElementById('rs-rapid-key');if(rr)rr.value=rapid;
   var ro=document.getElementById('rs-oai-key');if(ro)ro.value=oai;
@@ -8575,7 +9273,7 @@ function setUser(name){var av=document.getElementById('u-av');if(av)av.textConte
 function setGreet(name){
   var h=new Date().getHours();var g=h<5?'Шөнийн мэнд':h<12?'Өглөөний мэнд':h<18?'Өдрийн мэнд':'Оройн мэнд';
   var gh=document.getElementById('greet-h');if(gh)gh.textContent=g+(name?', '+name:'')+'!';
-  var gs=document.getElementById('greet-sub');if(gs){var today=new Date().toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric'});gs.textContent='ProductDrop.MN · '+today;}
+  var gs=document.getElementById('greet-sub');if(gs){var today=new Date().toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric'});gs.textContent='Tsekv Dashboard · '+today;}
 }
 
 /* ── THEME TOGGLE ── */
@@ -8763,7 +9461,6 @@ function showReqToast(n){
     +'<button class="req-toast-approve" onclick="this.closest(\'.req-toast\').remove();setTabBtn(document.querySelector(\'.ttab[onclick*=admin]\'),\'admin\')">Admin харах →</button>'
     +'<button class="req-toast-dismiss" onclick="this.closest(\'.req-toast\').remove()">Хаах</button>'
     +'</div></div>';
-  el.style.cssText='position:fixed;top:70px;right:20px;background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:14px 16px;width:300px;box-shadow:var(--shadow-lg);z-index:99998;animation:slideInRight .3s cubic-bezier(.25,.46,.45,.94);display:flex;gap:10px;align-items:flex-start;';
   document.body.appendChild(el);
   setTimeout(function(){if(el.parentNode)el.remove();},8000);
 }
@@ -8783,7 +9480,7 @@ updatePendingBadge=function(count){
 };
 
 /* Auto-poll every 45s for new registrations — pause when tab is hidden */
-setInterval(function(){if(!document.hidden&&document.getElementById('page-admin')&&document.getElementById('page-admin').classList.contains('active'))loadRegistrations();},45000);
+setInterval(function(){if(!document.hidden&&document.getElementById('page-admin')&&document.getElementById('page-admin').classList.contains('active')){loadRegistrations();loadMongolSUBOrders();loadMongolSUBClients();}},45000);
 
 /* Init notifications */
 renderNotifBadge();
@@ -9010,7 +9707,7 @@ function showSmartSummaryToast(items){
   if(!parts.length)return;
 
   var el=document.createElement('div');
-  el.style.cssText='position:fixed;top:70px;right:20px;background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:14px 16px;width:310px;box-shadow:var(--shadow-lg);z-index:99997;animation:slideInRight .3s cubic-bezier(.25,.46,.45,.94);';
+  el.className='req-toast';
   el.innerHTML='<div style="display:flex;gap:10px;align-items:flex-start;">'
     +'<div style="width:36px;height:36px;border-radius:10px;background:var(--redbg);display:flex;align-items:center;justify-content:center;color:var(--red);flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M12 14v4M10 16h4"/></svg></div>'
     +'<div style="flex:1;min-width:0;">'
@@ -9285,7 +9982,7 @@ setUser(nm||'Ганбаар Цэвэгмид');setGreet(nm||'Цэвэгмид');
 load();
 loadContents();
 renderFgrid();
-setTimeout(function(){loadUsers();loadRegistrations();},600);
+setTimeout(function(){loadUsers();loadRegistrations();loadMongolSUBOrders();loadMongolSUBClients();},600);
 // Pull settings from Supabase — applies remote changes (phone sync)
 setTimeout(sbPullAll, 1000);
 // Check deadlines after tasks/drops loaded
@@ -11308,7 +12005,7 @@ function finDrawChart(){
   });
 
   var lbl=document.getElementById('fin-trend-month-lbl');
-  if(lbl) lbl.textContent=n+'сарын өгөгдөл';
+  if(lbl) lbl.textContent=n+' сарын өгөгдөл';
 }
 
 /* Hook finCalc to also snapshot + redraw chart */
@@ -15093,6 +15790,48 @@ var _AVATAR_DATA = {
   }
 };
 
+// ── Resilient JSON parser for AI responses ──
+// Claude/GPT output occasionally contains raw (unescaped) newlines inside JSON
+// string values, or gets cut off mid-string when max_tokens runs out. Both
+// cases make JSON.parse throw "Unterminated string in JSON at position X".
+// This helper repairs stray control characters first, and if the JSON is
+// still truncated/broken, falls back to pulling the "hooks"/"script" fields
+// out with a tolerant regex so the user still gets whatever was generated.
+function _repairJsonString(raw){
+  var out = '', inStr = false, esc = false;
+  for (var i = 0; i < raw.length; i++){
+    var ch = raw[i];
+    if (inStr){
+      if (esc){ out += ch; esc = false; continue; }
+      if (ch === '\\'){ out += ch; esc = true; continue; }
+      if (ch === '"'){ inStr = false; out += ch; continue; }
+      if (ch === '\n'){ out += '\\n'; continue; }
+      if (ch === '\r'){ out += '\\r'; continue; }
+      if (ch === '\t'){ out += '\\t'; continue; }
+      out += ch;
+    } else {
+      if (ch === '"'){ inStr = true; out += ch; continue; }
+      out += ch;
+    }
+  }
+  return out;
+}
+function _extractJsonField(raw, field){
+  var re = new RegExp('"' + field + '"\\s*:\\s*"([\\s\\S]*?)(?:"\\s*[,}]|$)');
+  var m = raw.match(re);
+  if (!m) return '';
+  return m[1].replace(/\\n/g,'\n').replace(/\\t/g,'\t').replace(/\\"/g,'"').replace(/\\\\/g,'\\');
+}
+function _parseAiJson(raw){
+  try { return JSON.parse(raw); } catch(e){}
+  try { return JSON.parse(_repairJsonString(raw)); } catch(e){}
+  // Last resort: pull fields directly, even from a truncated response
+  var hooks = _extractJsonField(raw, 'hooks');
+  var script = _extractJsonField(raw, 'script');
+  if (hooks || script) return { hooks: hooks, script: script };
+  throw new Error('JSON parse алдаа — AI хариу дутуу/буруу форматтай ирлээ');
+}
+
 async function aiGenScript() {
   var btn = document.getElementById('ai-gen-btn');
   var status = document.getElementById('ai-gen-status');
@@ -15297,7 +16036,7 @@ JSON FORMAT ЗӨВХӨН (тайлбар, markdown, backtick хэрэггүй):
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-5',
-        max_tokens: 1500,
+        max_tokens: 4000,
         system: systemPrompt,
         messages: [{ role: 'user', content: userMsg }]
       })
@@ -15307,7 +16046,7 @@ JSON FORMAT ЗӨВХӨН (тайлбар, markdown, backtick хэрэггүй):
     var raw = (data.content && data.content[0] && data.content[0].text) || '';
     // JSON цэвэрлэх
     raw = raw.replace(/```json/g,'').replace(/```/g,'').trim();
-    var parsed = JSON.parse(raw);
+    var parsed = _parseAiJson(raw);
 
     // Талбаруудад бөглөх
     var set = function(id, v) { var el = document.getElementById(id); if (el && v) el.value = v; };
@@ -15341,7 +16080,7 @@ JSON FORMAT ЗӨВХӨН (тайлбар, markdown, backtick хэрэггүй):
 
 // ── PERFORMANCE CALC — live update захиалга/орлого оруулахад ──
 (function(){
-  function perfCalc(){
+  window.perfCalc = function perfCalc(){
     var o=parseInt((document.getElementById('cp-orders')||{}).value||0)||0;
     var r=parseFloat((document.getElementById('cp-revenue')||{}).value||0)||0;
     var v=parseInt((document.getElementById('cp-views')||{}).value||0)||0;
@@ -16100,6 +16839,9 @@ JSON FORMAT ЗӨВХӨН (тайлбар, markdown, backtick огт биш):
     var parsed;
     try {
       parsed = JSON.parse(raw);
+    } catch(e0) {
+    try {
+      parsed = JSON.parse(_repairJsonString(raw));
     } catch(e) {
       // Fallback: hook мөр бүрийг regex-ээр татна
       var matches = [];
@@ -16115,22 +16857,53 @@ JSON FORMAT ЗӨВХӨН (тайлбар, markdown, backtick огт биш):
         throw new Error('JSON parse алдаа: ' + e.message);
       }
     }
+    }
     var hooks = parsed.hooks || [];
 
-    var typeLabels = [' Тоо','Villain','Pain','Dream','Curiosity','Тоо','Villain','Pain','Dream','Curiosity'];
+    var typeLabels = ['Тоо','Villain','Pain','Dream','Curiosity','Тоо','Villain','Pain','Dream','Curiosity'];
+    var typeColors = {'Тоо':'var(--blue)','Villain':'var(--red)','Pain':'var(--amber)','Dream':'var(--green)','Curiosity':'var(--purple)'};
     hooks.forEach(function(h, i) {
-      var div = document.createElement('div');
-      div.style.cssText = 'background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;display:flex;gap:8px;align-items:flex-start;cursor:pointer;transition:border-color .15s;';
-      div.onmouseenter = function(){ this.style.borderColor = 'var(--gold)'; };
-      div.onmouseleave = function(){ this.style.borderColor = 'var(--border)'; };
-      div.onclick = function(){
+      var label = typeLabels[i] || ('#'+(i+1));
+      var color = typeColors[label] || 'var(--gold)';
+
+      var card = document.createElement('div');
+      card.className = 'ig-card'; /* same card family as the "8 гол санаа" idea cards for a consistent theme */
+      card.style.cssText = 'background:var(--bg2);border:1.5px solid var(--border);border-radius:12px;padding:11px 13px;transition:border-color .18s;';
+      card.innerHTML =
+          '<div style="font-size:10px;font-weight:800;color:'+color+';text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">'+label+'</div>'
+        + '<div style="font-size:12px;color:var(--text);line-height:1.6;margin-bottom:10px;">'+x(h)+'</div>'
+        + '<div style="display:flex;gap:6px;">'
+        + '<button class="hk-use-btn" style="flex:1;padding:7px 10px;border-radius:8px;border:none;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">Шууд ашиглах</button>'
+        + '<button class="hk-save-btn" style="padding:7px 10px;border-radius:8px;border:1.5px solid rgba(175,82,222,0.35);background:transparent;color:var(--purple);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">Хадгалах</button>'
+        + '<button class="hk-del-btn" style="padding:7px 10px;border-radius:8px;border:1.5px solid var(--border2);background:transparent;color:var(--text4);font-size:11px;cursor:pointer;font-family:inherit;" title="Хаах"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>'
+        + '</div>';
+
+      /* Шууд ашиглах — script-ийн Hook талбарт нэмнэ, өмнөх шиг */
+      card.querySelector('.hk-use-btn').onclick = function(){
         addHookNumbered(h);
         if(typeof toast==='function') toast('Hook нэмэгдлээ — Script үүсгэ!', 'ok');
       };
-      div.innerHTML = '<span style="font-size:10px;font-weight:800;color:var(--gold);white-space:nowrap;padding-top:1px;">' + (typeLabels[i]||'#'+(i+1)) + '</span>'
-        + '<span style="font-size:12px;color:var(--text);line-height:1.55;flex:1;">' + h + '</span>'
-        + '<span style="font-size:10px;color:var(--text4);white-space:nowrap;padding-top:2px;">+ нэмэх</span>';
-      list.appendChild(div);
+
+      /* Хадгалах — Hook Bank-д хадгалаад товчийг "Хадгалагдсан" төлөвт шилжүүлнэ */
+      var saveBtn = card.querySelector('.hk-save-btn');
+      saveBtn.onclick = function(){
+        if(saveBtn.dataset.saved==='1')return;
+        var avKey = (document.getElementById('ai-avatar-type')||{value:'morodogch'}).value;
+        var cntType = (document.getElementById('ai-content-type')||{value:'TOFU'}).value;
+        saveHookToBank(h, avKey, cntType);
+        saveBtn.textContent = 'Хадгалагдсан';
+        saveBtn.style.color = 'var(--green)';
+        saveBtn.style.borderColor = 'rgba(52,199,89,.35)';
+        saveBtn.dataset.saved = '1';
+      };
+
+      /* Хаах — зөвхөн үр дүнгийн жагсаалтаас арилгана, аль хэдийн хадгалсан бол хадгалсан хэвээр үлдэнэ */
+      card.querySelector('.hk-del-btn').onclick = function(){
+        card.style.opacity = '0'; card.style.transition = 'opacity .18s';
+        setTimeout(function(){ card.remove(); }, 180);
+      };
+
+      list.appendChild(card);
     });
 
     result.style.display = 'block';
@@ -16264,7 +17037,7 @@ async function igSaveIdea(ev,idx,btn){
   var localId='local_'+Date.now();
   var row={id:localId,idea_type:idea.type||'',emotion:idea.emotion||'',title:idea.title||'',premise:idea.premise||'',why_it_works:idea.why_it_works||'',format:idea.format||'',value_gap:idea.value_gap||'',novelty_score:idea.novelty_score||0,audience:(document.getElementById('ig-audience')||{}).value||'',funnel_stage:(document.getElementById('ai-content-type')||{value:'TOFU'}).value||'TOFU',product:'ProductDrop.MN',created_at:new Date().toISOString()};
   var saved=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]'); saved.unshift(row); localStorage.setItem('pd4_saved_ideas',JSON.stringify(saved.slice(0,100)));
-  btn.textContent=''; btn.style.color='var(--green)'; btn.dataset.saved='1';
+  btn.textContent='Хадгалагдсан'; btn.style.color='var(--green)'; btn.style.borderColor='rgba(52,199,89,.35)'; btn.dataset.saved='1';
   if(typeof toast==='function')toast('Санаа хадгалагдлаа!','ok');
   if(typeof renderIdeaBank==='function') renderIdeaBank();
   /* refresh modal count */
@@ -16529,6 +17302,10 @@ function siDeleteFromModal(id,createdAt){
 var SB_HOOKS=SB_URL+'/rest/v1/hook_bank';
 function getHookBank(){try{return JSON.parse(localStorage.getItem('pd_hookbank')||'[]');}catch(e){return[];}}
 function _saveHookBankLocal(arr){localStorage.setItem('pd_hookbank',JSON.stringify(arr.slice(0,200)));}
+function _hbUpdateCount(){
+  var mc=document.getElementById('hook-bank-main-count');
+  if(mc){var n=getHookBank().length;mc.textContent=n?'('+n+')':'';}
+}
 
 async function sbHookInsert(row){var r=await fetch(SB_HOOKS,{method:'POST',headers:SB_H,body:JSON.stringify(row)});if(!r.ok)throw new Error(await r.text());var res=await r.json();return Array.isArray(res)?res[0]:res;}
 async function sbHookFetch(){var r=await fetch(SB_HOOKS+'?order=created_at.desc&limit=200',{headers:SB_H});if(!r.ok)throw new Error(r.status);return r.json();}
@@ -16545,6 +17322,7 @@ async function saveHookToBank(hookText,avatarKey,cntType){
   var row={hook_text:hookText.trim(),avatar:avatarKey||'',funnel_type:cntType||'',created_at:new Date().toISOString()};
   var localEntry=Object.assign({id:Date.now()},row,{text:row.hook_text,type:row.funnel_type,date:row.created_at.split('T')[0]});
   var bank=getHookBank();bank.unshift(localEntry);_saveHookBankLocal(bank);
+  _hbUpdateCount();
   if(typeof toast==='function')toast('Hook Bank-д хадгалагдлаа','ok');
   try{var saved=await sbHookInsert(row);if(saved&&saved.id){var b2=getHookBank();var idx=b2.findIndex(function(x){return x.id===localEntry.id;});if(idx>-1){b2[idx].id=saved.id;_saveHookBankLocal(b2);}}}catch(e){}
 }
@@ -16556,43 +17334,61 @@ async function openHookBank(){
 }
 function closeHookBank(){var o=document.getElementById('hook-bank-overlay');if(o)o.style.display='none';}
 
+/* Global cache — mirrors the Idea Bank pattern: onclick reads by array index
+   instead of splicing raw IDs into inline HTML, so hook text or IDs can never
+   break the markup. */
+var _hbCache=[];
+
 function renderHookBank(){
   var list=document.getElementById('hb-list');var empty=document.getElementById('hb-empty');if(!list)return;
   var bank=getHookBank();
+  _hbUpdateCount();
   var q=(document.getElementById('hb-search')||{value:''}).value.toLowerCase();
   var avf=(document.getElementById('hb-filter-avatar')||{value:'all'}).value;
   var filtered=bank.filter(function(h){return(!q||h.text.toLowerCase().includes(q))&&(avf==='all'||h.avatar===avf);});
+  _hbCache=filtered;
   if(empty)empty.style.display=filtered.length?'none':'block';
-  var avatarEmoji={morodogch:'',turshij:'',hiij:''};
-  list.innerHTML=filtered.map(function(h){
-    var ae=h.avatar?((avatarEmoji[h.avatar]||'')+'<span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;background:var(--bg4);color:var(--text3);margin-left:4px;">'+(h.avatar==='morodogch'?'Мөрөөдөгч':h.avatar==='turshij'?'Туршиж':h.avatar==='hiij'?'Хийж':'')+'</span>'):'';
-    return '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;margin-bottom:6px;">'
-      +'<div style="display:flex;align-items:flex-start;gap:8px;">'
-      +'<div style="flex:1;">'
-      +(ae?'<div style="display:flex;align-items:center;gap:4px;margin-bottom:5px;font-size:11px;">'+ae+(h.type?'<span style="font-size:9px;padding:1px 5px;border-radius:4px;background:var(--goldbg);color:var(--gold);font-weight:700;">'+h.type+'</span>':'')+'<span style="margin-left:auto;font-size:9px;color:var(--text4);">'+h.date+'</span></div>':'')
+  var avatarLabel={morodogch:'Мөрөөдөгч',turshij:'Туршиж',hiij:'Хийж'};
+  list.innerHTML=filtered.map(function(h,i){
+    var badges='';
+    if(h.avatar||h.type){
+      badges='<div style="display:flex;align-items:center;gap:4px;margin-bottom:5px;font-size:11px;">'
+        +(h.avatar?'<span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;background:var(--bg4);color:var(--text3);">'+(avatarLabel[h.avatar]||h.avatar)+'</span>':'')
+        +(h.type?'<span style="font-size:9px;padding:1px 5px;border-radius:4px;background:var(--goldbg);color:var(--gold);font-weight:700;">'+x(h.type)+'</span>':'')
+        +'<span style="margin-left:auto;font-size:9px;color:var(--text4);">'+(h.date||'')+'</span>'
+        +'</div>';
+    }
+    return '<div class="hb-card" data-hb-idx="'+i+'" style="background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;margin-bottom:6px;">'
+      +badges
       +'<div style="font-size:12px;color:var(--text);line-height:1.55;margin-bottom:8px;">'+x(h.text)+'</div>'
-      +'<div style="display:flex;gap:5px;">'
-      +'<button onclick="hbInstantUse(\''+h.id+'\')" style="flex:1;padding:6px 8px;border-radius:7px;border:none;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;min-height:34px;">Шууд ашиглах</button>'
-      +'<button onclick="hbUseHook(\''+h.id+'\')" style="padding:6px 8px;border-radius:7px;border:none;background:var(--goldbg);color:var(--gold);font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;min-height:34px;">+ Нэмэх</button>'
-      +'<button class="hb-del-btn" onclick="hbDeleteHook(\''+h.id+'\')" style="padding:6px 8px;border-radius:7px;border:none;background:var(--redbg);color:var(--red);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;min-height:34px;min-width:34px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>'
+      +'<div style="display:flex;gap:6px;">'
+      +'<button class="hb-use-btn" data-hb-idx="'+i+'" style="flex:1;padding:8px 10px;border-radius:8px;border:none;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;min-height:34px;">Ашиглах</button>'
+      +'<button class="hb-del-btn" data-hb-idx="'+i+'" style="padding:6px 8px;border-radius:7px;border:none;background:var(--redbg);color:var(--red);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;min-height:34px;min-width:34px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>'
       +'</div>'
-      +'</div>'
-      +'</div></div>';
+      +'</div>';
   }).join('');
+
+  /* Event delegation — нэг listener бүх card-д, Idea Bank-тай ижил хэв маяг */
+  list.onclick=function(e){
+    var useBtn=e.target.closest('.hb-use-btn');
+    var delBtn=e.target.closest('.hb-del-btn');
+    if(useBtn){
+      var h=_hbCache[parseInt(useBtn.getAttribute('data-hb-idx'),10)];if(!h)return;
+      hbUseHook(h.id);
+      return;
+    }
+    if(delBtn){
+      var h2=_hbCache[parseInt(delBtn.getAttribute('data-hb-idx'),10)];if(!h2)return;
+      hbDeleteHook(h2.id);
+      return;
+    }
+  };
 }
 
 function hbUseHook(id){
   var bank=getHookBank();var h=bank.find(function(b){return String(b.id)===String(id);});if(!h)return;
   closeHookBank();
   /* Modal хаагдсаны дараа + Нэмэх panel нээж Hook хэсэгт scroll хийх */
-  var txt=h.text;
-  setTimeout(function(){ addHookNumbered(txt); },120);
-  if(typeof toast==='function')toast('Hook нэмэгдлээ — Script үүсгэ!','ok');
-}
-
-function hbInstantUse(id){
-  var bank=getHookBank();var h=bank.find(function(b){return String(b.id)===String(id);});if(!h)return;
-  closeHookBank();
   var txt=h.text;
   setTimeout(function(){ addHookNumbered(txt); },120);
   if(typeof toast==='function')toast('Hook нэмэгдлээ — Script үүсгэ!','ok');
@@ -16605,34 +17401,9 @@ async function hbDeleteHook(id){
   if(typeof toast==='function')toast('Hook устгагдлаа','ok');
 }
 
-// Hook into aiGen10Hooks to offer saving each hook to bank
-var _orig10HookClick=null;
-document.addEventListener('DOMContentLoaded',function(){
-  var oldList=document.getElementById('ai-hooks10-list');
-  if(oldList){
-    // Monitor for new children (hook items) and add save button
-    var obs=new MutationObserver(function(){
-      oldList.querySelectorAll('[data-hb-wired]').forEach(function(){});
-      oldList.querySelectorAll('div:not([data-hb-wired])').forEach(function(div){
-        div.setAttribute('data-hb-wired','1');
-        var textSpan=div.querySelector('span:nth-child(2)');
-        if(textSpan){
-          var saveBtn=document.createElement('button');
-          saveBtn.textContent='';saveBtn.title='Hook Bank-д хадгалах';
-          saveBtn.style.cssText='padding:3px 6px;border-radius:5px;border:none;background:var(--purplebg);color:var(--purple);font-size:10px;cursor:pointer;flex-shrink:0;margin-top:1px;';
-          saveBtn.onclick=function(e){
-            e.stopPropagation();
-            var avKey=(document.getElementById('ai-avatar-type')||{value:'morodogch'}).value;
-            var cntType=(document.getElementById('ai-content-type')||{value:'TOFU'}).value;
-            saveHookToBank(textSpan.textContent,avKey,cntType);
-          };
-          div.appendChild(saveBtn);
-        }
-      });
-    });
-    obs.observe(oldList,{childList:true});
-  }
-});
+// NOTE: the save-to-bank button for each generated hook is now wired directly
+// inside aiGen10Hooks() at creation time (visible bookmark icon), so no
+// MutationObserver patch is needed here anymore.
 
 /* ══════════════════════════════════════════
    FEATURE 5 — CONTENT BATCH PLANNER
@@ -17060,14 +17831,16 @@ document.addEventListener('click',function(e){
 
   window.svRepurpose=function(){
     if(_svId===null)return;
+    var _idToRepurpose=_svId;
     closeScriptView();
-    setTimeout(function(){if(typeof openRepurpose==='function')openRepurpose(_svId);},50);
+    setTimeout(function(){if(typeof openRepurpose==='function')openRepurpose(_idToRepurpose);},50);
   };
 
   window.svEdit=function(){
     if(_svId===null)return;
+    var _idToEdit=_svId;
     closeScriptView();
-    setTimeout(function(){if(typeof openCntEdit==='function')openCntEdit(_svId);},50);
+    setTimeout(function(){if(typeof openCntEdit==='function')openCntEdit(_idToEdit);},50);
   };
 
   // ── Teleprompter for Content Pipeline scripts ──
@@ -17187,8 +17960,8 @@ document.addEventListener('click',function(e){
     };
     btnSpdMinus.onclick=function(e){e.stopPropagation();_t.speed=Math.max(50,_t.speed-50);spdEl.textContent=_t.speed;};
     btnSpdPlus.onclick=function(e){e.stopPropagation();_t.speed=Math.min(500,_t.speed+50);spdEl.textContent=_t.speed;};
-    btnFntMinus.onclick=function(e){e.stopPropagation();_t.fontSize=Math.max(18,_t.fontSize-6);fntEl.textContent=_t.fontSize;rebuildText();};
-    btnFntPlus.onclick=function(e){e.stopPropagation();_t.fontSize=Math.min(100,_t.fontSize+6);fntEl.textContent=_t.fontSize;rebuildText();};
+    btnFntMinus.onclick=function(e){e.stopPropagation();_t.fontSize=Math.max(18,_t.fontSize-8);fntEl.textContent=_t.fontSize;rebuildText();};
+    btnFntPlus.onclick=function(e){e.stopPropagation();_t.fontSize=Math.min(240,_t.fontSize+8);fntEl.textContent=_t.fontSize;rebuildText();};
     wrap.addEventListener('click',function(){btnPlay.click();});
     if(ov.requestFullscreen)ov.requestFullscreen().catch(function(){});
   };
@@ -17475,7 +18248,7 @@ document.addEventListener('click',function(e){
     if(gs){
       var d=new Date();
       var days=['Ням','Даваа','Мягмар','Лхагва','Пүрэв','Баасан','Бямба'];
-      gs.textContent='ProductDrop.MN · '+days[d.getDay()]+', '+d.toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric'});
+      gs.textContent='Tsekv Dashboard · '+days[d.getDay()]+', '+d.toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric'});
     }
   }
   refreshGreet();
@@ -17488,6 +18261,8 @@ document.addEventListener('click',function(e){
     var ideas=[];try{ideas=JSON.parse(localStorage.getItem('pd4_saved_ideas')||'[]');}catch(e){}
     var mc=document.getElementById('idea-bank-main-count');
     if(mc)mc.textContent=ideas.length?'('+ideas.length+')':'';
+    /* Init hook bank count on load — same pattern as idea bank above */
+    if(typeof _hbUpdateCount==='function')_hbUpdateCount();
   },500);
 
   /* 2. Topbar dynamic page title — removed */
@@ -17562,6 +18337,12 @@ document.addEventListener('click',function(e){
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:10px;">Google Apps Script URL</div>
         <div style="font-size:11px;color:var(--text3);margin-bottom:10px;">AI Зөвлөгч · Гишүүн статистик · Context Sheet — GAS Deployment URL оруулна уу</div>
         <input id="gs-gas-url" type="text" class="cnt-fi" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off" style="margin-bottom:0;font-family:'DM Mono',monospace;font-size:11px;">
+      </div>
+      <!-- Admin Key (MongolSUB money-moving actions) -->
+      <div style="border-top:1px solid var(--border);padding-top:14px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--red);margin-bottom:10px;">Admin Key (MongolSUB захиалга батлах/цуцлах)</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;">Code.gs Script Properties дээрх ADMIN_KEY-тэй яг адилхан байх ёстой — эс бол багц батлах/цуцлах бүтэлгүйтнэ</div>
+        <input id="gs-admin-key" type="password" class="cnt-fi" placeholder="admin key" autocomplete="off" style="margin-bottom:0;font-family:'DM Mono',monospace;font-size:12px;">
       </div>
       <!-- Claude API -->
       <div style="border-top:1px solid var(--border);padding-top:14px;">
