@@ -4891,9 +4891,18 @@ BODY БҮТЭЦ (ANXIETY MAX, X байхгүй/байгаа хоёр талыг 
         <div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:30px;font-size:13px;">Уншиж байна...</div>
       </div>
 
-      <!-- MongolSUB захиалгууд (Supabase-с) — жижиг тусдаа хэсэг, ProductDrop бүртгэлтэй адилхан загвар -->
+      <!-- MongolSUB шинэ бүртгэлүүд — Netlify Admin API / Supabase ms_accounts -->
       <div class="sh" style="margin-bottom:10px;margin-top:22px;">
-        <span class="sh-t">🎬 MongolSUB захиалгууд <span id="mongolsub-count-badge" style="display:none;background:var(--redbg);color:var(--red);font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-left:6px;"></span></span>
+        <span class="sh-t">🆕 MongolSUB шинэ бүртгэлүүд <span id="mongolsub-regs-count-badge" style="display:none;background:var(--bluebg);color:var(--blue);font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-left:6px;"></span></span>
+        <button class="btn-add" onclick="loadMongolSUBRegistrations()" style="font-size:11px;padding:6px 14px;">↻ Шинэчлэх</button>
+      </div>
+      <div id="mongolsub-regs-body" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:16px;">
+        <div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;font-size:13px;">Уншиж байна...</div>
+      </div>
+
+      <!-- MongolSUB төлбөрийн захиалгууд -->
+      <div class="sh" style="margin-bottom:10px;margin-top:22px;">
+        <span class="sh-t">💳 MongolSUB төлбөрийн захиалгууд <span id="mongolsub-count-badge" style="display:none;background:var(--redbg);color:var(--red);font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-left:6px;"></span></span>
         <button class="btn-add" onclick="loadMongolSUBOrders()" style="font-size:11px;padding:6px 14px;">↻ Шинэчлэх</button>
       </div>
       <div id="mongolsub-orders-body" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:16px;">
@@ -8417,215 +8426,148 @@ async function rejectReg(phone,idx){
   setTimeout(loadRegistrations,800);
 }
 
-/* ── MongolSUB захиалгууд (Supabase, Code.gs-ээр дамжина) ──────────
-   ProductDrop-ийн "Шинэ бүртгэлүүд" яг адилхан загвар — ижил GAS_URL,
-   ижил gasFetch, ижил toast/card хэв маяг — өөр зөвхөн өгөгдлийн эх нь
-   (Sheets биш, Supabase). Code.gs талд listMongolSUBOrders /
-   approveMongolSUBOrder / rejectMongolSUBOrder гэсэн action-ууд байна. */
-// [ADMIN-AUTH] Code.gs gates money-moving MongolSUB actions on this key (Script Property
-// ADMIN_KEY) — without it matching, approve/reject/revoke/list all fail closed. Set via
-// Settings → Admin Key, must match Code.gs's Script Property exactly.
-function _msAdminKeyParam(){
-  var k=localStorage.getItem('pd_admin_key')||'';
-  return '&key='+encodeURIComponent(k);
+/* ── MongolSUB admin integration — Netlify Admin API ─────────────
+   Шинэ бүртгэл, төлбөрийн захиалга, client эрхийг MongolSUB-ийн
+   /api/admin endpoint-оор шууд удирдана. Google Apps Script хэрэггүй. */
+function _msApiUrl(){
+  var saved=(localStorage.getItem('pd_mongolsub_api_url')||'').trim();
+  return (saved||'https://mongolsub.com/api/admin').replace(/\/+$/,'');
 }
+function _msAdminKey(){return (localStorage.getItem('pd_admin_key')||'').trim();}
+async function _msAdminFetch(payload){
+  var key=_msAdminKey();
+  if(!key)throw new Error('admin_key_missing');
+  var ctrl=new AbortController(), tid=setTimeout(function(){ctrl.abort();},15000);
+  try{
+    var r=await fetch(_msApiUrl(),{
+      method:'POST',credentials:'omit',cache:'no-store',signal:ctrl.signal,
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+      body:JSON.stringify(payload||{})
+    });
+    var text=await r.text(), j={};
+    try{j=text?JSON.parse(text):{};}catch(e){throw new Error('invalid_server_response');}
+    if(!r.ok||!j||j.ok===false)throw new Error((j&&j.error)||('http_'+r.status));
+    return j;
+  }finally{clearTimeout(tid);}
+}
+function _msErr(e){
+  var code=(e&&e.message)||'service_unavailable';
+  var map={admin_key_missing:'Settings → Admin Key оруулна уу',unauthorized:'Admin Key буруу байна',service_not_configured:'MongolSUB Netlify environment variable дутуу байна',database_unavailable:'Supabase холболт ажиллахгүй байна',registration_not_pending:'Энэ бүртгэл аль хэдийн шийдэгдсэн',job_busy:'Дуусаагүй job байгаа тул одоогоор өөрчлөх боломжгүй'};
+  return map[code]||code;
+}
+
+function loadMongolSUBRegistrations(){
+  var container=document.getElementById('mongolsub-regs-body');
+  if(!container)return Promise.resolve();
+  container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;">Уншиж байна...</div>';
+  return _msAdminFetch({action:'registrations'}).then(function(data){
+    var regs=Array.isArray(data.registrations)?data.registrations:[];
+    var badge=document.getElementById('mongolsub-regs-count-badge');
+    if(badge){if(regs.length){badge.style.display='inline';badge.textContent=regs.length+' pending';}else badge.style.display='none';}
+    if(!regs.length){container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;">Шинэ бүртгэл хүлээгдээгүй байна</div>';return;}
+    container.innerHTML='';
+    regs.forEach(function(a){
+      var card=document.createElement('div');
+      card.style.cssText='background:rgba(0,122,255,0.06);border:1.5px solid rgba(0,122,255,0.28);border-radius:12px;padding:12px 13px;display:flex;flex-direction:column;gap:8px;';
+      card.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">'
+        +'<span style="font-weight:800;font-size:15px;flex:1;font-family:var(--mono);">📱 '+x(a.phone||'—')+'</span>'
+        +'<span class="tag-pill tag-pending">БАТЛАХ ХҮЛЭЭЛТ</span></div>'
+        +'<div style="font-size:10px;color:var(--text4);">'+x(a.created_at?new Date(a.created_at).toLocaleString('mn-MN'):'—')+'</div>';
+      var actions=document.createElement('div');actions.style.cssText='display:flex;gap:6px;';
+      var ok=document.createElement('button');ok.className='btn-approve';ok.textContent='✓ Батлах';ok.style.cssText='flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;';
+      ok.addEventListener('click',function(){approveMongolSUBRegistration(a.id,a.phone);});
+      var no=document.createElement('button');no.className='btn-reject';no.textContent='Татгалзах';no.style.cssText='padding:9px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;';
+      no.addEventListener('click',function(){rejectMongolSUBRegistration(a.id,a.phone);});
+      actions.appendChild(ok);actions.appendChild(no);card.appendChild(actions);container.appendChild(card);
+    });
+  }).catch(function(e){container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--red);padding:24px;">⚠ '+x(_msErr(e))+'</div>';});
+}
+async function approveMongolSUBRegistration(id,phone){
+  if(!confirm((phone||'Энэ дугаар')+' бүртгэлийг батлах уу?'))return;
+  try{await _msAdminFetch({action:'approve-registration',id:id,note:'Approved in DropDashboard after admin review'});toast('✅ '+phone+' бүртгэл батлагдлаа');await loadMongolSUBRegistrations();await loadMongolSUBClients();}
+  catch(e){toast('❌ Батлахад алдаа: '+_msErr(e),'err',7000);}
+}
+async function rejectMongolSUBRegistration(id,phone){
+  if(!confirm((phone||'Энэ дугаар')+' бүртгэлийг татгалзах уу?'))return;
+  var why=prompt('Татгалзсан шалтгаан (дор хаяж 5 тэмдэгт):','Бүртгэлийн мэдээлэл баталгаажаагүй');
+  if(why===null)return;why=why.trim();if(why.length<5){toast('Шалтгаан дор хаяж 5 тэмдэгт байна','err');return;}
+  try{await _msAdminFetch({action:'reject-registration',id:id,note:why});toast('Бүртгэл татгалзлаа');await loadMongolSUBRegistrations();await loadMongolSUBClients();}
+  catch(e){toast('❌ Татгалзахад алдаа: '+_msErr(e),'err',7000);}
+}
+
 function loadMongolSUBOrders(){
   var container=document.getElementById('mongolsub-orders-body');
-  if(!container)return;
+  if(!container)return Promise.resolve();
   container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;">Уншиж байна...</div>';
-  var _gu=GAS_URL();
-  if(!_gu){container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--amber);padding:24px;">GAS URL тохируулна уу</div>';return;}
-  gasFetch(_gu+'?action=listMongolSUBOrders'+_msAdminKeyParam()).then(function(r){return r.json();}).then(function(orders){
-    // [ADMIN-AUTH] Wrong/missing Admin Key → Code.gs returns {ok:false,...} instead of an
-    // array. Without this guard, .filter/.forEach below would throw a confusing TypeError.
-    if(!Array.isArray(orders)){
-      container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--red);padding:24px;">⚠ Нэвтрэх эрхгүй — Settings-с Admin Key шалгана уу</div>';
-      return;
-    }
+  return _msAdminFetch({action:'queue'}).then(function(data){
+    var orders=Array.isArray(data.orders)?data.orders:[];
     var badge=document.getElementById('mongolsub-count-badge');
-    if(badge){
-      if(orders.length){badge.style.display='inline';badge.textContent=orders.length+' pending';}
-      else{badge.style.display='none';}
-    }
-    if(!orders.length){
-      container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;">Хүлээгдэж буй захиалга байхгүй</div>';
-      return;
-    }
+    if(badge){if(orders.length){badge.style.display='inline';badge.textContent=orders.length+' pending';}else badge.style.display='none';}
+    if(!orders.length){container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;">Хүлээгдэж буй захиалга байхгүй</div>';return;}
     container.innerHTML='';
     orders.forEach(function(o){
+      var phone=(o.ms_accounts&&o.ms_accounts.phone)||o.phone||'';
       var planCls=o.plan_tier==='pro'?'tag-business':o.plan_tier==='standard'?'tag-pro':'tag-lite';
       var card=document.createElement('div');
       card.style.cssText='background:rgba(255,149,0,0.06);border:1.5px solid rgba(255,149,0,0.35);border-radius:12px;padding:12px 13px;display:flex;flex-direction:column;gap:7px;';
-      // [PHONE-IDENTITY] Show the real phone number the customer entered at checkout, not
-      // the meaningless device_id UUID — that's what you actually need to confirm/contact them.
       card.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">'
-        +'<span style="font-weight:700;font-size:14px;flex:1;min-width:0;font-family:var(--mono);">'+(o.phone?'📱 '+x(o.phone):'<span style=\"color:var(--text4);\">Утас алга</span>')+'</span>'
-        +'<span class="tag-pill '+planCls+'">'+x((o.plan_tier||'').toUpperCase())+'</span>'
-        +'<span class="tag-pill tag-pending">ХҮЛЭЭГДЭЖ</span>'
-        +'</div>'
+        +'<span style="font-weight:700;font-size:14px;flex:1;min-width:0;font-family:var(--mono);">'+(phone?'📱 '+x(phone):'<span style="color:var(--text4);">Утас алга</span>')+'</span>'
+        +'<span class="tag-pill '+planCls+'">'+x((o.plan_tier||'').toUpperCase())+'</span><span class="tag-pill tag-pending">ХҮЛЭЭГДЭЖ</span></div>'
         +'<div style="font-size:13px;font-weight:700;color:var(--green);">'+(Number(o.amount)||0).toLocaleString('mn-MN')+'₮</div>'
-        +'<div style="font-size:10px;color:var(--text4);">'+x(o.created_at?new Date(o.created_at).toLocaleString('mn-MN'):'—')+' · '+x(String(o.device_id||'').slice(0,8))+'…</div>';
-      var actDiv=document.createElement('div');actDiv.style.cssText='display:flex;gap:6px;margin-top:2px;';
-      var bA=document.createElement('button');bA.className='btn-approve';bA.textContent='Зөвшөөрөх';
-      bA.style.cssText='flex:1;padding:8px;font-size:12px;border-radius:8px;text-align:center;background:var(--greenbg);color:var(--green);border:1px solid rgba(52,199,89,.3);cursor:pointer;font-weight:700;font-family:inherit;';
-      bA.addEventListener('click',function(){approveMongolSUBOrder(o.id,o.device_id,o.plan_tier);});
-      actDiv.appendChild(bA);
-      var bR=document.createElement('button');bR.textContent='';
-      bR.style.cssText='padding:8px 12px;font-size:12px;background:var(--redbg);color:var(--red);border:1px solid rgba(255,59,48,0.25);border-radius:8px;cursor:pointer;font-family:inherit;font-weight:700;';
-      bR.addEventListener('click',function(){rejectMongolSUBOrder(o.id);});
-      actDiv.appendChild(bR);
-      card.appendChild(actDiv);
-      container.appendChild(card);
+        +'<div style="font-size:10px;color:var(--text4);">'+x(o.created_at?new Date(o.created_at).toLocaleString('mn-MN'):'—')+(o.payment_reported_at?' · төлбөр мэдээлсэн':' · төлбөр мэдээлээгүй')+'</div>';
+      var act=document.createElement('div');act.style.cssText='display:flex;gap:6px;';
+      var a=document.createElement('button');a.className='btn-approve';a.textContent='Төлбөр батлах';a.style.cssText='flex:1;padding:8px;font-size:12px;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;';a.addEventListener('click',function(){approveMongolSUBOrder(o.id,phone,o.plan_tier);});
+      var r=document.createElement('button');r.className='btn-reject';r.textContent='Цуцлах';r.style.cssText='padding:8px 12px;font-size:12px;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;';r.addEventListener('click',function(){rejectMongolSUBOrder(o.id);});
+      act.appendChild(a);act.appendChild(r);card.appendChild(act);container.appendChild(card);
     });
-  }).catch(function(){
-    container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--red);padding:24px;">GAS холбогдсонгүй</div>';
-  });
+  }).catch(function(e){container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--red);padding:24px;">⚠ '+x(_msErr(e))+'</div>';});
 }
-
-async function approveMongolSUBOrder(orderId,deviceId,planTier){
-  var _gu=GAS_URL();
-  if(!_gu){toast('GAS URL тохируулна уу','err');return;}
-  // [ADMIN-AUTH] Read the real response now (no more no-cors) — a wrong/missing Admin Key
-  // makes Code.gs return {ok:false}, and that must NOT be reported as success.
-  try{
-    var r=await gasFetch(_gu+'?action=approveMongolSUBOrder&order_id='+encodeURIComponent(orderId)+'&device_id='+encodeURIComponent(deviceId)+'&plan_tier='+encodeURIComponent(planTier)+_msAdminKeyParam());
-    var j=await r.json();
-    if(!j||j.ok!==true){toast('❌ Батлахад алдаа: '+(j&&j.msg?j.msg:'unauthorized — Settings-с Admin Key шалгана уу'),'err',6000);return;}
-  }catch(e){toast('❌ Батлахад алдаа гарлаа','err');return;}
-  toast('✅ MongolSUB багц идэвхжлээ!');
-  setTimeout(loadMongolSUBOrders,1000);
+async function approveMongolSUBOrder(orderId,phone,planTier){
+  var receipt=prompt('Банкны гүйлгээний reference / утгыг оруулна уу:','MANUAL-'+String(orderId).slice(0,8));
+  if(receipt===null)return;receipt=receipt.trim();if(receipt.length<4){toast('Reference дор хаяж 4 тэмдэгт байна','err');return;}
+  try{await _msAdminFetch({action:'approve',id:orderId,receipt:receipt,note:'Bank payment verified in DropDashboard for '+(phone||'customer')+' '+(planTier||'')});toast('✅ MongolSUB багц идэвхжлээ!');await loadMongolSUBOrders();await loadMongolSUBClients();}
+  catch(e){toast('❌ Батлахад алдаа: '+_msErr(e),'err',7000);}
 }
-
 async function rejectMongolSUBOrder(orderId){
   if(!confirm('Энэ захиалгыг цуцлахдаа итгэлтэй байна уу?'))return;
-  var _gu=GAS_URL();
-  if(!_gu){toast('GAS URL тохируулна уу','err');return;}
-  try{
-    var r=await gasFetch(_gu+'?action=rejectMongolSUBOrder&order_id='+encodeURIComponent(orderId)+_msAdminKeyParam());
-    var j=await r.json();
-    if(!j||j.ok!==true){toast('❌ Цуцлахад алдаа: '+(j&&j.msg?j.msg:'unauthorized — Settings-с Admin Key шалгана уу'),'err',6000);return;}
-  }catch(e){toast('❌ Цуцлахад алдаа гарлаа','err');return;}
-  toast('Захиалга цуцлагдлаа');
-  setTimeout(loadMongolSUBOrders,800);
+  var why=prompt('Цуцалсан шалтгаан:','Төлбөр баталгаажаагүй');if(why===null)return;why=why.trim();if(why.length<5){toast('Шалтгаан дор хаяж 5 тэмдэгт байна','err');return;}
+  try{await _msAdminFetch({action:'reject',id:orderId,note:why});toast('Захиалга цуцлагдлаа');await loadMongolSUBOrders();}
+  catch(e){toast('❌ Цуцлахад алдаа: '+_msErr(e),'err',7000);}
 }
 
-/* ── MongolSUB бүх client (device) — plan/usage/expiry харах, гараар цуцлах ──
-   Code.gs талд listMongolSUBClients / revokeMongolSUBPlan action-ууд байна.
-   usage мөр бүр: device_id, plan_tier, usage_ym, recordings_used, plan_expiry, updated_at. */
 function loadMongolSUBClients(){
   var container=document.getElementById('mongolsub-clients-body');
-  if(!container)return;
+  if(!container)return Promise.resolve();
   container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;">Уншиж байна...</div>';
-  var _gu=GAS_URL();
-  if(!_gu){container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--amber);padding:24px;">GAS URL тохируулна уу</div>';return;}
-  gasFetch(_gu+'?action=listMongolSUBClients'+_msAdminKeyParam()).then(function(r){return r.json();}).then(function(clients){
-    // [ADMIN-AUTH] Wrong/missing Admin Key → Code.gs returns {ok:false,...} instead of an
-    // array. Without this guard, .filter/.forEach below would throw a confusing TypeError.
-    if(!Array.isArray(clients)){
-      container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--red);padding:24px;">⚠ Нэвтрэх эрхгүй — Settings-с Admin Key шалгана уу</div>';
-      return;
-    }
-    // [ACCOUNT-VIEW] MongolSUB usage rows are now PER-DEVICE + one `acc:<phone>` accumulator
-    // per registered account (see MongolSUB _supabase.js resolveUsage) — rendering raw rows
-    // showed the same person 2-3 times with different counts. Group rows by phone: one card
-    // per PAID account (usage read from the acc row = the live shared counter), and free is
-    // just a count line — the admin never needed to scroll hundreds of 0/3 free cards.
-    var caps={free:3,basic:9,standard:25,pro:80};
-    var rank={free:0,basic:1,standard:2,pro:3};
-    function paidActive(r){return r&&r.plan_tier&&r.plan_tier!=='free'&&(!r.plan_expiry||new Date(r.plan_expiry)>new Date());}
-    var groups={},anonCount=0;
-    clients.forEach(function(c){
-      var digits=String(c.phone||'').replace(/\D/g,'');
-      if(digits.length>=8){var k=digits.slice(-8);(groups[k]=groups[k]||[]).push(c);}
-      else anonCount++;
-    });
-    var accounts=Object.keys(groups).map(function(k){
-      var rows=groups[k];
-      var acc=null,devices=[];
-      rows.forEach(function(r){if(String(r.device_id).indexOf('acc:')===0)acc=r;else devices.push(r);});
-      var best=devices.filter(paidActive).sort(function(a,b){return (rank[b.plan_tier]||0)-(rank[a.plan_tier]||0);})[0]||null;
-      if(!best&&acc&&paidActive(acc))best=acc; // pre-migration paid account whose device rows already expired
-      var used=acc?(Number(acc.recordings_used)||0):Math.max.apply(null,[0].concat(devices.map(function(r){return Number(r.recordings_used)||0;})));
-      var code=(acc&&acc.login_code)||((rows.filter(function(r){return r.login_code;})[0]||{}).login_code)||'';
-      var lastSeen=Math.max.apply(null,[0].concat(rows.map(function(r){return r.updated_at?new Date(r.updated_at).getTime():0;})));
-      return {phone:k,paid:!!best,plan:best?best.plan_tier:'free',expiry:best?best.plan_expiry:null,
-              used:used,code:code,lastSeen:lastSeen,deviceCount:devices.length,
-              allIds:rows.map(function(r){return r.device_id;})};
-    });
-    var paidAccounts=accounts.filter(function(a){return a.paid;})
-      .sort(function(a,b){
-        var ea=a.expiry?new Date(a.expiry).getTime():Infinity, eb=b.expiry?new Date(b.expiry).getTime():Infinity;
-        return ea-eb; // expiring soonest on top — those need admin attention first
-      });
-    var freeRegCount=accounts.length-paidAccounts.length;
-    var badge=document.getElementById('mongolsub-clients-count-badge');
-    if(badge){
-      if(paidAccounts.length){badge.style.display='inline';badge.textContent=paidAccounts.length+' paid';}
-      else{badge.style.display='none';}
-    }
+  return _msAdminFetch({action:'clients'}).then(function(data){
+    var clients=Array.isArray(data.clients)?data.clients:[];
+    var active=clients.filter(function(c){return c.registration_status==='active';});
+    var paid=active.filter(function(c){return c.plan_tier&&c.plan_tier!=='free'&&(!c.plan_expiry||new Date(c.plan_expiry)>new Date());});
+    var badge=document.getElementById('mongolsub-clients-count-badge');if(badge){if(paid.length){badge.style.display='inline';badge.textContent=paid.length+' paid';}else badge.style.display='none';}
     container.innerHTML='';
-    paidAccounts.forEach(function(a){
-      var planCls=a.plan==='pro'?'tag-business':a.plan==='standard'?'tag-pro':a.plan==='basic'?'tag-lite':'';
-      var cap=caps[a.plan]||3;
-      var expiryHtml='<span style="color:var(--text4);">Хугацаагүй (хуучин захиалга)</span>';
-      if(a.expiry){
-        var daysLeft=Math.ceil((new Date(a.expiry)-new Date())/86400000);
-        if(daysLeft<0)expiryHtml='<span style="color:var(--red);font-weight:700;">Дууссан</span>';
-        else if(daysLeft<=3)expiryHtml='<span style="color:var(--amber);font-weight:700;">'+daysLeft+' өдөр үлдсэн</span>';
-        else expiryHtml='<span style="color:var(--text4);">'+daysLeft+' өдөр үлдсэн</span>';
+    var caps={free:3,basic:9,standard:25,pro:80};
+    active.sort(function(a,b){return new Date(b.created_at||0)-new Date(a.created_at||0);}).forEach(function(c){
+      var plan=c.plan_tier||'free', cap=caps[plan]||3, planCls=plan==='pro'?'tag-business':plan==='standard'?'tag-pro':plan==='basic'?'tag-lite':'';
+      var expiry='Free';if(c.plan_expiry){var d=Math.ceil((new Date(c.plan_expiry)-new Date())/86400000);expiry=d<0?'Дууссан':d+' өдөр үлдсэн';}
+      var card=document.createElement('div');card.style.cssText='background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px 13px;display:flex;flex-direction:column;gap:7px;';
+      card.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-weight:800;font-size:13px;flex:1;font-family:var(--mono);">📱 '+x(c.phone||'—')+'</span><span class="tag-pill '+planCls+'">'+x(plan.toUpperCase())+'</span></div>'
+        +'<div style="font-size:13px;font-weight:700;">'+(Number(c.recordings_used)||0)+' / '+cap+' <span style="font-size:10px;font-weight:400;color:var(--text4);">ашигласан</span></div>'
+        +'<div style="font-size:10px;color:var(--text4);">'+x(expiry)+' · '+x(c.created_at?new Date(c.created_at).toLocaleString('mn-MN'):'—')+'</div>';
+      if(plan!=='free'){
+        var b=document.createElement('button');b.textContent='Free рүү буцаах';b.className='btn-reject';b.style.cssText='margin-top:2px;padding:8px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;';b.addEventListener('click',function(){revokeMongolSUBPlan(c.id,c.phone);});card.appendChild(b);
       }
-      var card=document.createElement('div');
-      card.style.cssText='background:var(--card-bg,rgba(255,255,255,0.03));border:1.5px solid var(--border,rgba(255,255,255,0.08));border-radius:12px;padding:12px 13px;display:flex;flex-direction:column;gap:7px;';
-      card.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">'
-        +'<span style="font-weight:700;font-size:12px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--mono);">📱 '+x(a.phone)+'</span>'
-        +'<span class="tag-pill '+planCls+'">'+x(a.plan.toUpperCase())+'</span>'
-        +'</div>'
-        +'<div style="font-size:13px;font-weight:700;">'+a.used+' / '+cap+' <span style="font-size:10px;font-weight:400;color:var(--text4);">ашигласан · нийт данс</span></div>'
-        +'<div style="font-size:11px;">'+expiryHtml
-        +(a.deviceCount>1?' <span style="color:var(--text4);">· '+a.deviceCount+' төхөөрөмж</span>':'')+'</div>'
-        // [PHONE-LOGIN] login_code = the password the customer chose (register-device.js);
-        // shown so the admin can text it back to someone who used "Нууц үг мартсан?".
-        +(a.code?'<div style="font-size:11px;font-family:var(--mono);color:var(--text4);">🔑 Нууц үг: <b style="color:var(--text);letter-spacing:1px;">'+x(a.code)+'</b></div>':'')
-        +'<div style="font-size:10px;color:var(--text4);">'+x(a.lastSeen?new Date(a.lastSeen).toLocaleString('mn-MN'):'—')+'</div>';
-      var bRev=document.createElement('button');bRev.textContent='Free рүү буцаах';
-      bRev.style.cssText='margin-top:2px;padding:8px;font-size:11px;border-radius:8px;text-align:center;background:var(--redbg);color:var(--red);border:1px solid rgba(255,59,48,.25);cursor:pointer;font-weight:700;font-family:inherit;';
-      (function(ids){bRev.addEventListener('click',function(){revokeMongolSUBPlan(ids);});})(a.allIds);
-      card.appendChild(bRev);
       container.appendChild(card);
     });
-    // Free = a single stat line, not a wall of 0/3 cards.
-    var freeCard=document.createElement('div');
-    freeCard.style.cssText='background:var(--card-bg,rgba(255,255,255,0.03));border:1.5px dashed var(--border,rgba(255,255,255,0.10));border-radius:12px;padding:14px 13px;display:flex;flex-direction:column;gap:6px;justify-content:center;';
-    freeCard.innerHTML='<div style="font-size:11px;color:var(--text4);font-weight:700;">FREE ХЭРЭГЛЭГЧИД</div>'
-      +'<div style="font-size:14px;font-weight:700;">'+freeRegCount+' <span style="font-size:11px;font-weight:400;color:var(--text4);">бүртгэлтэй (утастай)</span></div>'
-      +'<div style="font-size:14px;font-weight:700;">'+anonCount+' <span style="font-size:11px;font-weight:400;color:var(--text4);">бүртгэлгүй төхөөрөмж</span></div>';
-    container.appendChild(freeCard);
-    if(!paidAccounts.length&&!accounts.length&&!anonCount){
-      container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;">Client байхгүй</div>';
-    }
-  }).catch(function(){
-    container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--red);padding:24px;">GAS холбогдсонгүй</div>';
-  });
+    var stat=document.createElement('div');stat.style.cssText='background:var(--bg2);border:1.5px dashed var(--border2);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:5px;justify-content:center;';
+    stat.innerHTML='<div style="font-size:11px;font-weight:800;color:var(--text3);">НИЙТ</div><div style="font-size:14px;font-weight:800;">'+active.length+' active</div><div style="font-size:12px;color:var(--text3);">'+paid.length+' paid · '+active.filter(function(c){return c.plan_tier==='free';}).length+' free</div>';
+    container.appendChild(stat);
+    if(!clients.length)container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;">Client байхгүй</div>';
+  }).catch(function(e){container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--red);padding:24px;">⚠ '+x(_msErr(e))+'</div>';});
 }
-
-// [ACCOUNT-VIEW] One human account = several usage rows (each logged-in device + the acc:
-// accumulator). Revoking only one row used to leave the others still paid — the account
-// resolver would immediately re-promote from a leftover paid row. Revoke every row in the
-// group (Code.gs revokeMongolSUBPlan is per-device, so just loop it).
-async function revokeMongolSUBPlan(deviceIds){
-  var ids=Array.isArray(deviceIds)?deviceIds:[deviceIds];
-  if(!confirm('Энэ client-ийг ('+ids.length+' мөр) Free багц руу шууд буцаахдаа итгэлтэй байна уу?'))return;
-  var _gu=GAS_URL();
-  if(!_gu){toast('GAS URL тохируулна уу','err');return;}
-  try{
-    for(var i=0;i<ids.length;i++){
-      var r=await gasFetch(_gu+'?action=revokeMongolSUBPlan&device_id='+encodeURIComponent(ids[i])+_msAdminKeyParam());
-      var j=await r.json();
-      if(!j||j.ok!==true){toast('❌ Цуцлахад алдаа: '+(j&&j.msg?j.msg:'unauthorized — Settings-с Admin Key шалгана уу'),'err',6000);return;}
-    }
-  }catch(e){toast('❌ Цуцлахад алдаа гарлаа','err');return;}
-  toast('Client Free багц руу шилжлээ ('+ids.length+' мөр)');
-  setTimeout(loadMongolSUBClients,1000);
+async function revokeMongolSUBPlan(accountId,phone){
+  if(!confirm((phone||'Энэ client')+'-ийг Free багц руу буцаах уу?'))return;
+  try{await _msAdminFetch({action:'revoke-plan',id:accountId,note:'Plan revoked to Free in DropDashboard'});toast('Client Free багц руу шилжлээ');await loadMongolSUBClients();}
+  catch(e){toast('❌ Цуцлахад алдаа: '+_msErr(e),'err',7000);}
 }
 
 /* ── 7 ХОНОГИЙН QUEUE TOGGLE ── */
@@ -9235,6 +9177,7 @@ function openGlobalSettings(){
   document.getElementById('gs-claude').value=localStorage.getItem('pd_ak')||'';
   document.getElementById('gs-gas-url').value=localStorage.getItem('pd_gas_url')||'';
   document.getElementById('gs-admin-key').value=localStorage.getItem('pd_admin_key')||'';
+  var msu=document.getElementById('gs-mongolsub-api-url');if(msu)msu.value=localStorage.getItem('pd_mongolsub_api_url')||'https://mongolsub.com/api/admin';
   modal.style.display='flex';
 }
 function closeGlobalSettings(){document.getElementById('global-settings-modal').style.display='none';}
@@ -9246,6 +9189,7 @@ function saveGlobalSettings(){
   var claude=document.getElementById('gs-claude').value.trim();
   var gasUrl=document.getElementById('gs-gas-url').value.trim();
   var adminKey=document.getElementById('gs-admin-key').value.trim();
+  var msApiEl=document.getElementById('gs-mongolsub-api-url');var msApi=msApiEl?msApiEl.value.trim():'';
   if(name){localStorage.setItem('pd4_nm',name);if(typeof setUser==='function')setUser(name);if(typeof setGreet==='function')setGreet(name);}
   if(rapid){localStorage.setItem('rp_rapidKey',rapid);}
   if(oai){localStorage.setItem('rp_oaiKey',oai);}
@@ -9260,6 +9204,7 @@ function saveGlobalSettings(){
   }
   // Always save (even empty string) so user can clear a wrong key, same as Claude key above
   localStorage.setItem('pd_admin_key', adminKey);
+  if(msApi)localStorage.setItem('pd_mongolsub_api_url',msApi.replace(/\/+$/,''));else localStorage.removeItem('pd_mongolsub_api_url');
   /* sync hidden pipeline inputs */
   var rr=document.getElementById('rs-rapid-key');if(rr)rr.value=rapid;
   var ro=document.getElementById('rs-oai-key');if(ro)ro.value=oai;
@@ -9982,7 +9927,7 @@ setUser(nm||'Ганбаар Цэвэгмид');setGreet(nm||'Цэвэгмид');
 load();
 loadContents();
 renderFgrid();
-setTimeout(function(){loadUsers();loadRegistrations();loadMongolSUBOrders();loadMongolSUBClients();},600);
+setTimeout(function(){loadUsers();loadRegistrations();loadMongolSUBRegistrations();loadMongolSUBOrders();loadMongolSUBClients();},600);
 // Pull settings from Supabase — applies remote changes (phone sync)
 setTimeout(sbPullAll, 1000);
 // Check deadlines after tasks/drops loaded
@@ -18338,11 +18283,14 @@ document.addEventListener('click',function(e){
         <div style="font-size:11px;color:var(--text3);margin-bottom:10px;">AI Зөвлөгч · Гишүүн статистик · Context Sheet — GAS Deployment URL оруулна уу</div>
         <input id="gs-gas-url" type="text" class="cnt-fi" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off" style="margin-bottom:0;font-family:'DM Mono',monospace;font-size:11px;">
       </div>
-      <!-- Admin Key (MongolSUB money-moving actions) -->
+      <!-- MongolSUB Admin API -->
       <div style="border-top:1px solid var(--border);padding-top:14px;">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--red);margin-bottom:10px;">Admin Key (MongolSUB захиалга батлах/цуцлах)</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;">Code.gs Script Properties дээрх ADMIN_KEY-тэй яг адилхан байх ёстой — эс бол багц батлах/цуцлах бүтэлгүйтнэ</div>
-        <input id="gs-admin-key" type="password" class="cnt-fi" placeholder="admin key" autocomplete="off" style="margin-bottom:0;font-family:'DM Mono',monospace;font-size:12px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:10px;">MongolSUB Admin API URL</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;">Шинэ бүртгэл · төлбөр · client эрхийг MongolSUB Netlify API-аар удирдана.</div>
+        <input id="gs-mongolsub-api-url" type="text" class="cnt-fi" value="https://mongolsub.com/api/admin" placeholder="https://mongolsub.com/api/admin" autocomplete="off" style="margin-bottom:10px;font-family:'DM Mono',monospace;font-size:11px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--red);margin-bottom:8px;">Admin Key</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;">Netlify Environment variables дахь <b>ADMIN_API_KEY</b>-тэй яг адилхан байна.</div>
+        <input id="gs-admin-key" type="password" class="cnt-fi" placeholder="ADMIN_API_KEY" autocomplete="off" style="margin-bottom:0;font-family:'DM Mono',monospace;font-size:12px;">
       </div>
       <!-- Claude API -->
       <div style="border-top:1px solid var(--border);padding-top:14px;">
