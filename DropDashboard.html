@@ -4891,15 +4891,6 @@ BODY БҮТЭЦ (ANXIETY MAX, X байхгүй/байгаа хоёр талыг 
         <div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:30px;font-size:13px;">Уншиж байна...</div>
       </div>
 
-      <!-- MongolSUB шинэ бүртгэлүүд — Netlify Admin API / Supabase ms_accounts -->
-      <div class="sh" style="margin-bottom:10px;margin-top:22px;">
-        <span class="sh-t">🆕 MongolSUB шинэ бүртгэлүүд <span id="mongolsub-regs-count-badge" style="display:none;background:var(--bluebg);color:var(--blue);font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-left:6px;"></span></span>
-        <button class="btn-add" onclick="loadMongolSUBRegistrations()" style="font-size:11px;padding:6px 14px;">↻ Шинэчлэх</button>
-      </div>
-      <div id="mongolsub-regs-body" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:16px;">
-        <div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;font-size:13px;">Уншиж байна...</div>
-      </div>
-
       <!-- MongolSUB төлбөрийн захиалгууд -->
       <div class="sh" style="margin-bottom:10px;margin-top:22px;">
         <span class="sh-t">💳 MongolSUB төлбөрийн захиалгууд <span id="mongolsub-count-badge" style="display:none;background:var(--redbg);color:var(--red);font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-left:6px;"></span></span>
@@ -8456,45 +8447,6 @@ function _msErr(e){
   return map[code]||code;
 }
 
-function loadMongolSUBRegistrations(){
-  var container=document.getElementById('mongolsub-regs-body');
-  if(!container)return Promise.resolve();
-  container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;">Уншиж байна...</div>';
-  return _msAdminFetch({action:'registrations'}).then(function(data){
-    var regs=Array.isArray(data.registrations)?data.registrations:[];
-    var badge=document.getElementById('mongolsub-regs-count-badge');
-    if(badge){if(regs.length){badge.style.display='inline';badge.textContent=regs.length+' pending';}else badge.style.display='none';}
-    if(!regs.length){container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;">Шинэ бүртгэл хүлээгдээгүй байна</div>';return;}
-    container.innerHTML='';
-    regs.forEach(function(a){
-      var card=document.createElement('div');
-      card.style.cssText='background:rgba(0,122,255,0.06);border:1.5px solid rgba(0,122,255,0.28);border-radius:12px;padding:12px 13px;display:flex;flex-direction:column;gap:8px;';
-      card.innerHTML='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">'
-        +'<span style="font-weight:800;font-size:15px;flex:1;font-family:var(--mono);">📱 '+x(a.phone||'—')+'</span>'
-        +'<span class="tag-pill tag-pending">БАТЛАХ ХҮЛЭЭЛТ</span></div>'
-        +'<div style="font-size:10px;color:var(--text4);">'+x(a.created_at?new Date(a.created_at).toLocaleString('mn-MN'):'—')+'</div>';
-      var actions=document.createElement('div');actions.style.cssText='display:flex;gap:6px;';
-      var ok=document.createElement('button');ok.className='btn-approve';ok.textContent='✓ Батлах';ok.style.cssText='flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;';
-      ok.addEventListener('click',function(){approveMongolSUBRegistration(a.id,a.phone);});
-      var no=document.createElement('button');no.className='btn-reject';no.textContent='Татгалзах';no.style.cssText='padding:9px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;';
-      no.addEventListener('click',function(){rejectMongolSUBRegistration(a.id,a.phone);});
-      actions.appendChild(ok);actions.appendChild(no);card.appendChild(actions);container.appendChild(card);
-    });
-  }).catch(function(e){container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--red);padding:24px;">⚠ '+x(_msErr(e))+'</div>';});
-}
-async function approveMongolSUBRegistration(id,phone){
-  if(!confirm((phone||'Энэ дугаар')+' бүртгэлийг батлах уу?'))return;
-  try{await _msAdminFetch({action:'approve-registration',id:id,note:'Approved in DropDashboard after admin review'});toast('✅ '+phone+' бүртгэл батлагдлаа');await loadMongolSUBRegistrations();await loadMongolSUBClients();}
-  catch(e){toast('❌ Батлахад алдаа: '+_msErr(e),'err',7000);}
-}
-async function rejectMongolSUBRegistration(id,phone){
-  if(!confirm((phone||'Энэ дугаар')+' бүртгэлийг татгалзах уу?'))return;
-  var why=prompt('Татгалзсан шалтгаан (дор хаяж 5 тэмдэгт):','Бүртгэлийн мэдээлэл баталгаажаагүй');
-  if(why===null)return;why=why.trim();if(why.length<5){toast('Шалтгаан дор хаяж 5 тэмдэгт байна','err');return;}
-  try{await _msAdminFetch({action:'reject-registration',id:id,note:why});toast('Бүртгэл татгалзлаа');await loadMongolSUBRegistrations();await loadMongolSUBClients();}
-  catch(e){toast('❌ Татгалзахад алдаа: '+_msErr(e),'err',7000);}
-}
-
 function loadMongolSUBOrders(){
   var container=document.getElementById('mongolsub-orders-body');
   if(!container)return Promise.resolve();
@@ -9927,7 +9879,7 @@ setUser(nm||'Ганбаар Цэвэгмид');setGreet(nm||'Цэвэгмид');
 load();
 loadContents();
 renderFgrid();
-setTimeout(function(){loadUsers();loadRegistrations();loadMongolSUBRegistrations();loadMongolSUBOrders();loadMongolSUBClients();},600);
+setTimeout(function(){loadUsers();loadRegistrations();loadMongolSUBOrders();loadMongolSUBClients();},600);
 // Pull settings from Supabase — applies remote changes (phone sync)
 setTimeout(sbPullAll, 1000);
 // Check deadlines after tasks/drops loaded
