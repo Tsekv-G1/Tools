@@ -34,7 +34,7 @@
  };
  document.addEventListener('DOMContentLoaded',()=>{
   const $=id=>document.getElementById(id),status=message=>{if($('dd-integration-status'))$('dd-integration-status').textContent=message;};
-  const bar=document.createElement('section');bar.className='dd-integration';bar.innerHTML='<strong>DropDashboard · ProductDrop</strong><span id="dd-integration-status" role="status">Холболтыг шалгаж байна…</span><button id="dd-check" type="button">Google холболт шалгах</button><button id="dd-legacy" type="button">Хуучин Sheets бүртгэл</button><button id="dd-logout" type="button">Гарах</button><div id="dd-legacy-list" hidden></div>';
+  const bar=document.createElement('section');bar.className='dd-integration';bar.innerHTML='<strong>DropDashboard · Admin</strong><span id="dd-integration-status" role="status">Холболтыг шалгаж байна…</span><button id="dd-check" type="button">Google холболт шалгах</button><button id="dd-legacy" type="button">Хуучин Sheets бүртгэл</button><button id="dd-logout" type="button">Гарах</button><div id="dd-legacy-list" hidden></div>';
   document.body.prepend(bar);
   const style=document.createElement('style');style.textContent='.dd-integration{position:relative;z-index:10;margin:12px 18px 12px max(18px,280px);padding:12px 16px;border:1px solid var(--border,#ccd);border-radius:12px;background:var(--bg2,#fff);color:var(--text,#222);font:13px/1.6 system-ui;display:flex;flex-wrap:wrap;gap:10px;align-items:center}.dd-integration button{font:inherit;padding:7px 10px;border:1px solid var(--border,#ccd);border-radius:7px;background:var(--bg3,#eee);color:inherit;cursor:pointer}#dd-integration-status{flex:1;min-width:180px}#dd-legacy-list{width:100%;max-height:60vh;overflow:auto}.dd-legacy-row{padding:10px 0;border-top:1px solid var(--border,#ccd);overflow-wrap:anywhere}.dd-legacy-row p{margin:4px 0}@media(max-width:900px){.dd-integration{margin:12px;padding:12px}input,textarea,select{font-size:16px!important}}';document.head.append(style);
   nativeFetch(endpoint+'?action=session',{credentials:'same-origin'}).then(async r=>{if(!r.ok)throw new Error('Админы эрхээ шалгаад дахин нэвтэрнэ үү.');const d=await r.json();status('ProductDrop холбогдсон · '+(d.googleConfigured?'Google тохиргоо байна':'Google тохиргоо дутуу'));}).catch(e=>status(e.message));
@@ -2404,8 +2404,8 @@ root.DropCore={escape,clone,dateKey,validDate,progress,setStatus,toggleStage,fil
 </div>
 <div class="app-wrap">
 
-<div class="mob-sidebar-overlay" id="mob-overlay" onclick="closeMobSidebar()"></div><div class="mob-sidebar" id="mob-sidebar" inert aria-hidden="true" aria-label="Бүх цэс"><div class="mob-sidebar-inner"><div class="ux-brand"><span class="ux-brand-mark"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 9-5 9 5-9 5zM3 7v10l9 5 9-5V7M12 12v10M8 4l9 5"/></svg></span><span>drop<span style="color:var(--gold)">.</span><small>PERSONAL WORKSPACE</small></span></div><div class="ux-nav-label">МИНИЙ АЖИЛ</div><button type="button" class="ux-nav" data-route="today" onclick="showPage('today')" title="Өнөөдөр"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span>Өнөөдөр</span></button><button type="button" class="ux-nav" data-route="kanban" onclick="showPage('kanban')" title="Ажлууд"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="16" rx="2"/><rect x="14" y="4" width="7" height="10" rx="2"/></svg><span>Ажлууд</span><span class="ux-nav-count" data-task-count>0</span></button><button type="button" class="ux-nav" data-route="content" onclick="showPage('content')" title="Контент"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="14" height="14" rx="3"/><path d="m17 9 4-3v12l-4-3"/></svg><span>Контент</span></button><button type="button" class="ux-nav" data-route="focus" onclick="showPage('focus')" title="Төвлөрөх"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg><span>Төвлөрөх</span></button><button type="button" class="ux-nav" data-route="finance" onclick="showPage('finance')" title="Санхүү"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="15" rx="3"/><path d="M3 7V4a2 2 0 0 1 2-2h12v3M21 10h-6v5h6"/></svg><span>Санхүү</span></button><div class="ux-nav-label">БИЗНЕС</div><button type="button" class="ux-nav" data-route="analytics" onclick="showPage('analytics')" title="Скрипт бичих"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l4-1L21 6a2 2 0 0 0-5-3L3 16z"/></svg><span>Скрипт бичих</span></button><button type="button" class="ux-nav" data-route="ai" onclick="showPage('ai')" title="AI зөвлөх"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg><span>AI зөвлөх</span></button><button type="button" class="ux-nav" data-route="admin" onclick="showPage('admin')" title="ProductDrop"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 9-5 9 5-9 5zM3 7v10l9 5 9-5V7M12 12v10M8 4l9 5"/></svg><span>ProductDrop</span></button><button type="button" class="ux-nav" data-route="roadmap" onclick="showPage('roadmap')" title="Төлөвлөгөө"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M7 5h9a4 4 0 0 1 0 8H8a3 3 0 0 0 0 6h9"/></svg><span>Төлөвлөгөө</span></button><div class="ux-nav-label">ХУВИЙН ОРОН ЗАЙ</div><button type="button" class="ux-nav" data-route="checkin" onclick="showPage('checkin')" title="Өдрийн дүгнэлт"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg><span>Өдрийн дүгнэлт</span></button><button type="button" class="ux-nav" data-route="tools" onclick="showPage('tools')" title="Хэрэгслүүд"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m10 13 4-4M8 16l-2 2a3 3 0 0 1-4-4l5-5a3 3 0 0 1 4 0M13 15a3 3 0 0 0 4 0l5-5a3 3 0 0 0-4-4l-2 2"/></svg><span>Хэрэгслүүд</span></button><button class="ux-nav" data-route="settings" onclick="showPage('settings')"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="m9 3-1 3-3 1-2 3 2 2-1 3 2 3 3-1 3 2 3-2 3 1 2-3-1-3 2-2-2-3-3-1-1-3z"/></svg>Тохиргоо</button></div></div>
-<aside class="sidebar-strip" id="sidebar-strip" aria-label="Үндсэн цэс"><div class="ux-brand"><span class="ux-brand-mark"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 9-5 9 5-9 5zM3 7v10l9 5 9-5V7M12 12v10M8 4l9 5"/></svg></span><span>drop<span style="color:var(--gold)">.</span><small>PERSONAL WORKSPACE</small></span></div><nav><div class="ux-nav-label">МИНИЙ АЖИЛ</div><button type="button" class="ux-nav" data-route="today" onclick="showPage('today')" title="Өнөөдөр"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span>Өнөөдөр</span></button><button type="button" class="ux-nav" data-route="kanban" onclick="showPage('kanban')" title="Ажлууд"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="16" rx="2"/><rect x="14" y="4" width="7" height="10" rx="2"/></svg><span>Ажлууд</span><span class="ux-nav-count" data-task-count>0</span></button><button type="button" class="ux-nav" data-route="content" onclick="showPage('content')" title="Контент"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="14" height="14" rx="3"/><path d="m17 9 4-3v12l-4-3"/></svg><span>Контент</span></button><button type="button" class="ux-nav" data-route="focus" onclick="showPage('focus')" title="Төвлөрөх"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg><span>Төвлөрөх</span></button><button type="button" class="ux-nav" data-route="finance" onclick="showPage('finance')" title="Санхүү"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="15" rx="3"/><path d="M3 7V4a2 2 0 0 1 2-2h12v3M21 10h-6v5h6"/></svg><span>Санхүү</span></button><div class="ux-nav-label">БИЗНЕС</div><button type="button" class="ux-nav" data-route="analytics" onclick="showPage('analytics')" title="Скрипт бичих"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l4-1L21 6a2 2 0 0 0-5-3L3 16z"/></svg><span>Скрипт бичих</span></button><button type="button" class="ux-nav" data-route="ai" onclick="showPage('ai')" title="AI зөвлөх"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg><span>AI зөвлөх</span></button><button type="button" class="ux-nav" data-route="admin" onclick="showPage('admin')" title="ProductDrop"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 9-5 9 5-9 5zM3 7v10l9 5 9-5V7M12 12v10M8 4l9 5"/></svg><span>ProductDrop</span></button><button type="button" class="ux-nav" data-route="roadmap" onclick="showPage('roadmap')" title="Төлөвлөгөө"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M7 5h9a4 4 0 0 1 0 8H8a3 3 0 0 0 0 6h9"/></svg><span>Төлөвлөгөө</span></button><div class="ux-nav-label">ХУВИЙН ОРОН ЗАЙ</div><button type="button" class="ux-nav" data-route="checkin" onclick="showPage('checkin')" title="Өдрийн дүгнэлт"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg><span>Өдрийн дүгнэлт</span></button><button type="button" class="ux-nav" data-route="tools" onclick="showPage('tools')" title="Хэрэгслүүд"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m10 13 4-4M8 16l-2 2a3 3 0 0 1-4-4l5-5a3 3 0 0 1 4 0M13 15a3 3 0 0 0 4 0l5-5a3 3 0 0 0-4-4l-2 2"/></svg><span>Хэрэгслүүд</span></button></nav><div class="ux-side-footer"><button class="ux-nav" data-route="settings" onclick="showPage('settings')"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="m9 3-1 3-3 1-2 3 2 2-1 3 2 3 3-1 3 2 3-2 3 1 2-3-1-3 2-2-2-3-3-1-1-3z"/></svg>Тохиргоо</button><div class="ux-theme" aria-label="Өнгөний горим"><button type="button" id="btn-sun" onclick="setSidebarTheme('light')">Цайвар</button><button type="button" id="btn-moon" onclick="setSidebarTheme('dark')">Бараан</button></div><div class="ux-side-note">Таны ажил. Нэг дор.</div></div></aside><button id="sb-toggle-btn" hidden></button>
+<div class="mob-sidebar-overlay" id="mob-overlay" onclick="closeMobSidebar()"></div><div class="mob-sidebar" id="mob-sidebar" inert aria-hidden="true" aria-label="Бүх цэс"><div class="mob-sidebar-inner"><div class="ux-brand"><span class="ux-brand-mark"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 9-5 9 5-9 5zM3 7v10l9 5 9-5V7M12 12v10M8 4l9 5"/></svg></span><span>drop<span style="color:var(--gold)">.</span><small>PERSONAL WORKSPACE</small></span></div><div class="ux-nav-label">МИНИЙ АЖИЛ</div><button type="button" class="ux-nav" data-route="today" onclick="showPage('today')" title="Өнөөдөр"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span>Өнөөдөр</span></button><button type="button" class="ux-nav" data-route="kanban" onclick="showPage('kanban')" title="Ажлууд"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="16" rx="2"/><rect x="14" y="4" width="7" height="10" rx="2"/></svg><span>Ажлууд</span><span class="ux-nav-count" data-task-count>0</span></button><button type="button" class="ux-nav" data-route="content" onclick="showPage('content')" title="Контент"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="14" height="14" rx="3"/><path d="m17 9 4-3v12l-4-3"/></svg><span>Контент</span></button><button type="button" class="ux-nav" data-route="focus" onclick="showPage('focus')" title="Төвлөрөх"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg><span>Төвлөрөх</span></button><button type="button" class="ux-nav" data-route="finance" onclick="showPage('finance')" title="Санхүү"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="15" rx="3"/><path d="M3 7V4a2 2 0 0 1 2-2h12v3M21 10h-6v5h6"/></svg><span>Санхүү</span></button><div class="ux-nav-label">БИЗНЕС</div><button type="button" class="ux-nav" data-route="analytics" onclick="showPage('analytics')" title="Скрипт бичих"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l4-1L21 6a2 2 0 0 0-5-3L3 16z"/></svg><span>Скрипт бичих</span></button><button type="button" class="ux-nav" data-route="ai" onclick="showPage('ai')" title="AI зөвлөх"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg><span>AI зөвлөх</span></button><button type="button" class="ux-nav" data-route="admin" onclick="showPage('admin')" title="Admin"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 9-5 9 5-9 5zM3 7v10l9 5 9-5V7M12 12v10M8 4l9 5"/></svg><span>Admin</span></button><button type="button" class="ux-nav" data-route="roadmap" onclick="showPage('roadmap')" title="Төлөвлөгөө"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M7 5h9a4 4 0 0 1 0 8H8a3 3 0 0 0 0 6h9"/></svg><span>Төлөвлөгөө</span></button><div class="ux-nav-label">ХУВИЙН ОРОН ЗАЙ</div><button type="button" class="ux-nav" data-route="checkin" onclick="showPage('checkin')" title="Өдрийн дүгнэлт"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg><span>Өдрийн дүгнэлт</span></button><button type="button" class="ux-nav" data-route="tools" onclick="showPage('tools')" title="Хэрэгслүүд"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m10 13 4-4M8 16l-2 2a3 3 0 0 1-4-4l5-5a3 3 0 0 1 4 0M13 15a3 3 0 0 0 4 0l5-5a3 3 0 0 0-4-4l-2 2"/></svg><span>Хэрэгслүүд</span></button><button class="ux-nav" data-route="settings" onclick="showPage('settings')"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="m9 3-1 3-3 1-2 3 2 2-1 3 2 3 3-1 3 2 3-2 3 1 2-3-1-3 2-2-2-3-3-1-1-3z"/></svg>Тохиргоо</button></div></div>
+<aside class="sidebar-strip" id="sidebar-strip" aria-label="Үндсэн цэс"><div class="ux-brand"><span class="ux-brand-mark"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 9-5 9 5-9 5zM3 7v10l9 5 9-5V7M12 12v10M8 4l9 5"/></svg></span><span>drop<span style="color:var(--gold)">.</span><small>PERSONAL WORKSPACE</small></span></div><nav><div class="ux-nav-label">МИНИЙ АЖИЛ</div><button type="button" class="ux-nav" data-route="today" onclick="showPage('today')" title="Өнөөдөр"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span>Өнөөдөр</span></button><button type="button" class="ux-nav" data-route="kanban" onclick="showPage('kanban')" title="Ажлууд"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="16" rx="2"/><rect x="14" y="4" width="7" height="10" rx="2"/></svg><span>Ажлууд</span><span class="ux-nav-count" data-task-count>0</span></button><button type="button" class="ux-nav" data-route="content" onclick="showPage('content')" title="Контент"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="14" height="14" rx="3"/><path d="m17 9 4-3v12l-4-3"/></svg><span>Контент</span></button><button type="button" class="ux-nav" data-route="focus" onclick="showPage('focus')" title="Төвлөрөх"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg><span>Төвлөрөх</span></button><button type="button" class="ux-nav" data-route="finance" onclick="showPage('finance')" title="Санхүү"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="15" rx="3"/><path d="M3 7V4a2 2 0 0 1 2-2h12v3M21 10h-6v5h6"/></svg><span>Санхүү</span></button><div class="ux-nav-label">БИЗНЕС</div><button type="button" class="ux-nav" data-route="analytics" onclick="showPage('analytics')" title="Скрипт бичих"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5M4 20l4-1L21 6a2 2 0 0 0-5-3L3 16z"/></svg><span>Скрипт бичих</span></button><button type="button" class="ux-nav" data-route="ai" onclick="showPage('ai')" title="AI зөвлөх"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg><span>AI зөвлөх</span></button><button type="button" class="ux-nav" data-route="admin" onclick="showPage('admin')" title="Admin"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 9-5 9 5-9 5zM3 7v10l9 5 9-5V7M12 12v10M8 4l9 5"/></svg><span>Admin</span></button><button type="button" class="ux-nav" data-route="roadmap" onclick="showPage('roadmap')" title="Төлөвлөгөө"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M7 5h9a4 4 0 0 1 0 8H8a3 3 0 0 0 0 6h9"/></svg><span>Төлөвлөгөө</span></button><div class="ux-nav-label">ХУВИЙН ОРОН ЗАЙ</div><button type="button" class="ux-nav" data-route="checkin" onclick="showPage('checkin')" title="Өдрийн дүгнэлт"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg><span>Өдрийн дүгнэлт</span></button><button type="button" class="ux-nav" data-route="tools" onclick="showPage('tools')" title="Хэрэгслүүд"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m10 13 4-4M8 16l-2 2a3 3 0 0 1-4-4l5-5a3 3 0 0 1 4 0M13 15a3 3 0 0 0 4 0l5-5a3 3 0 0 0-4-4l-2 2"/></svg><span>Хэрэгслүүд</span></button></nav><div class="ux-side-footer"><button class="ux-nav" data-route="settings" onclick="showPage('settings')"><svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="m9 3-1 3-3 1-2 3 2 2-1 3 2 3 3-1 3 2 3-2 3 1 2-3-1-3 2-2-2-3-3-1-1-3z"/></svg>Тохиргоо</button><div class="ux-theme" aria-label="Өнгөний горим"><button type="button" id="btn-sun" onclick="setSidebarTheme('light')">Цайвар</button><button type="button" id="btn-moon" onclick="setSidebarTheme('dark')">Бараан</button></div><div class="ux-side-note">Таны ажил. Нэг дор.</div></div></aside><button id="sb-toggle-btn" hidden></button>
 <!-- ══ MAIN ══ -->
 <div class="main">
   <div class="topbar">
@@ -2427,7 +2427,7 @@ root.DropCore={escape,clone,dateKey,validDate,progress,setStatus,toggleStage,fil
 
       <button class="ttab" onclick="setTabBtn(this,'content')">Контент</button>
       <button class="ttab" onclick="setTabBtn(this,'analytics')">Script</button>
-      <button class="ttab" onclick="setTabBtn(this,'admin')">ProductDrop</button>
+      <button class="ttab" onclick="setTabBtn(this,'admin')">Admin</button>
       <button class="ttab" onclick="setTabBtn(this,'focus')">Focus</button>
       <button class="ttab" onclick="setTabBtn(this,'finance')">Finance</button>
       <button class="ttab" onclick="setTabBtn(this,'roadmap')" id="roadmap-tab-btn">Төлөвлөгөө</button>
@@ -10158,7 +10158,7 @@ var _hnid=Math.max(7,_habits.reduce(function(m,h){return Math.max(m,h.id);},0)+1
 function _hSave(){ fpSbSet('fp_habits',_habits); }
 function _hStreak(h){
   var s=0,d=new Date();
-  while(s<999){var k=d.toISOString().slice(0,10);if(h.logs.indexOf(k)<0)break;s++;d.setDate(d.getDate()-1);}
+  while(s<999){var k=DropCore.dateKey(d);if(h.logs.indexOf(k)<0)break;s++;d.setDate(d.getDate()-1);}
   return s;
 }
 function _hRender(){
@@ -10332,7 +10332,7 @@ function _fpSub(){
   var el=document.getElementById('fp-sub'); if(!el) return;
   var d=new Date();
   var days=['Ням','Даваа','Мягмар','Лхагва','Пүрэв','Баасан','Бямба'];
-  el.textContent=days[d.getDay()]+', '+d.toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric'});
+  el.textContent=days[d.getDay()]+' · '+d.getFullYear()+' оны '+(d.getMonth()+1)+' сарын '+d.getDate();
 }
 
 /* ── STAT CARDS ── */
@@ -12107,7 +12107,7 @@ function exportCSV(type){
         '<span>Habit Heatmap — 12 долоо хоног</span>'+
         '<span id="hm-streak-lbl" style="font-size:11px;color:var(--gold);font-weight:800;"></span>'+
       '</div>'+
-      '<div id="hm-grid" style="display:grid;grid-template-columns:repeat(84,1fr);gap:2px;margin-top:10px;overflow-x:auto;min-height:18px;"></div>'+
+      '<div id="hm-grid" role="img" aria-label="Сүүлийн 84 өдрийн дадлын идэвх"></div>'+
       '<div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;" id="hm-legend"></div>';
     var fpsStats=focusPage.querySelector('.fp-stats');
     var firstFp=focusPage.querySelector('.fp-2col,.fp-card');
@@ -12120,7 +12120,8 @@ function exportCSV(type){
   window.renderHeatmap=function(){
     var grid=document.getElementById('hm-grid'); if(!grid) return;
     // Use fp_habits (the key used by the focus page habit tracker)
-    var habits=JSON.parse(localStorage.getItem('fp_habits')||'[]');
+    var habits=[];
+    try{var saved=JSON.parse(localStorage.getItem('fp_habits')||'[]');if(Array.isArray(saved))habits=saved.filter(function(h){return h&&typeof h==='object';});}catch(e){}
     // Build habitLog from each habit's .logs array
     var habitLog={};
     habits.forEach(function(h){if(h.id&&Array.isArray(h.logs)){habitLog[h.id]=h.logs;}});
@@ -12132,7 +12133,7 @@ function exportCSV(type){
 
     for(var i=days-1;i>=0;i--){
       var d=new Date(today); d.setDate(d.getDate()-i);
-      var key=d.toISOString().slice(0,10);
+      var key=DropCore.dateKey(d);
       var count=0;
       habits.forEach(function(h){
         var log=habitLog[h.id]||[];
@@ -12140,7 +12141,8 @@ function exportCSV(type){
       });
       var pct=maxCount>0?count/maxCount:0;
       var alpha=pct===0?0.07:0.15+pct*0.85;
-      var color=pct===0?'rgba(128,128,128,0.07)':'rgba(52,199,89,'+alpha+')';
+      var level=pct===0?0:pct<=0.25?1:pct<=0.5?2:pct<=0.75?3:4;
+      var color='var(--hm-'+level+')';
       var isToday=i===0;
       cells+='<div style="width:100%;aspect-ratio:1;border-radius:2px;background:'+color+
         (isToday?';box-shadow:0 0 0 1.5px var(--gold)':'')+
@@ -12151,13 +12153,14 @@ function exportCSV(type){
     }
     grid.innerHTML=cells;
     var sl=document.getElementById('hm-streak-lbl');
-    if(sl) sl.textContent=' '+streak+' өдрийн streak';
+    if(sl) sl.textContent='Хамгийн урт: '+streak+' өдөр';
+    grid.setAttribute('aria-label','Сүүлийн 84 өдрийн дадлын идэвх. Хамгийн урт дараалал '+streak+' өдөр.');
     // Legend
     var leg=document.getElementById('hm-legend');
     if(leg) leg.innerHTML=
       '<span style="font-size:10px;color:var(--text4);">Бага</span>'+
-      [0.07,0.35,0.55,0.75,1].map(function(a){
-        return '<div style="width:12px;height:12px;border-radius:2px;background:rgba(52,199,89,'+a+');"></div>';
+      [0,1,2,3,4].map(function(a){
+        return '<div style="width:12px;height:12px;border-radius:2px;background:var(--hm-'+a+');"></div>';
       }).join('')+
       '<span style="font-size:10px;color:var(--text4);">Их</span>';
   };
@@ -18645,7 +18648,7 @@ body.drop-v4{--bg:#f6f6f6;--bg2:#fff;--bg3:#f6f6f6;--bg4:#efefef;--text:#292929;
 const C=DropCore,$=id=>document.getElementById(id),esc=C.escape;
 const statusName={todo:'Эхлээгүй',inprogress:'Хийж байгаа',review:'Хянах',done:'Дууссан'};
 const contentStatus={idea:'Санаа',scr:'Скрипт',rec:'Бичлэг',pub:'Нийтлэгдсэн'};
-const routeNames={today:'Өнөөдөр',kanban:'Ажлууд',content:'Контент',focus:'Төвлөрөх',finance:'Санхүү',analytics:'Скрипт бичих',ai:'AI зөвлөх',admin:'ProductDrop',roadmap:'Төлөвлөгөө',checkin:'Өдрийн дүгнэлт',tools:'Хэрэгслүүд',settings:'Тохиргоо'};
+const routeNames={today:'Өнөөдөр',kanban:'Ажлууд',content:'Контент',focus:'Төвлөрөх',finance:'Санхүү',analytics:'Скрипт бичих',ai:'AI зөвлөх',admin:'Admin',roadmap:'Төлөвлөгөө',checkin:'Өдрийн дүгнэлт',tools:'Хэрэгслүүд',settings:'Тохиргоо'};
 const iconPaths={check:'<path d="m5 12 4 4L19 6"/>',pen:'<path d="m15 4 5 5M4 20l4-1L21 6a2 2 0 0 0-5-3L3 16z"/>',trash:'<path d="M3 6h18M8 6V3h8v3M5 6l1 15h12l1-15M10 10v7M14 10v7"/>',calendar:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 11h18"/>',arrow:'<path d="M4 12h16m-6-6 6 6-6 6"/>',plus:'<path d="M12 5v14M5 12h14"/>'};
 const svg=k=>'<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+iconPaths[k]+'</svg>';
 const read=(k,f)=>{try{const v=localStorage.getItem(k);return v===null?f:JSON.parse(v);}catch(e){return f;}};
@@ -18800,7 +18803,7 @@ function nav(route){
  current=route;document.querySelectorAll('.content>.page').forEach(e=>e.classList.toggle('active',e.id==='page-'+route));
  document.querySelectorAll('[data-route]').forEach(e=>{const active=e.dataset.route===route||(e.dataset.route==='more'&&!['today','kanban','content','focus'].includes(route));e.classList.toggle('active',active);if(active)e.setAttribute('aria-current','page');else e.removeAttribute('aria-current');});
  $('ux-current-page').textContent=routeNames[route];document.title=routeNames[route]+' · Drop';closeMobSidebar();$('ux-main-content').scrollTop=0;
- const hash='#'+route;if(location.hash!==hash){try{history.replaceState(null,'',hash);}catch(e){}}
+ const hash='#'+route;if(location.hash!==hash){try{const method=routeNames[location.hash.slice(1)]?'pushState':'replaceState';history[method](null,'',hash);}catch(e){}}
  if(route==='today')renderHome();if(route==='kanban')renderTasks();if(route==='content')renderContent();
  if(route==='analytics'&&typeof rsLoadKeys==='function')rsLoadKeys();
  if(route==='focus'&&typeof fpRefresh==='function')fpRefresh();
@@ -18854,7 +18857,7 @@ function bind(){
  $('ux-preferences').addEventListener('submit',e=>{e.preventDefault();const name=$('ux-name').value.trim();if(!name)return;try{C.writeAtomic(localStorage,{pd4_nm:name,pd5_start:$('ux-start').value,pd_theme:$('ux-theme-select').value});setSidebarTheme($('ux-theme-select').value);localStorage.setItem('pd6_density',$('ux-density').value);document.body.dataset.density=$('ux-density').value;setUser(name);greeting();message('Тохиргоо хадгалагдлаа.');}catch(e){message('Тохиргоог хадгалж чадсангүй.');}});
  // Capture shortcuts before legacy handlers so one key opens one interface.
  document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();e.stopImmediatePropagation();if(!$('ux-search-dialog').open)openSearch();return;}if(e.key==='Escape'&&document.querySelector('dialog[open]'))e.stopImmediatePropagation();if(e.target.matches('.tb-rp-avatar')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();nav('settings');}},true);
- $('ux-search').addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='Enter'){e.preventDefault();$('ux-search-results').querySelector('button')?.focus();}});
+ $('ux-search').addEventListener('keydown',e=>{if(e.isComposing)return;const first=$('ux-search-results').querySelector('button');if(e.key==='ArrowDown'){e.preventDefault();first?.focus();}else if(e.key==='Enter'){e.preventDefault();first?.click();}});
  $('ux-search-results').addEventListener('keydown',e=>{const buttons=[...$('ux-search-results').querySelectorAll('button')],index=buttons.indexOf(document.activeElement);if(e.key==='ArrowDown'){e.preventDefault();buttons[(index+1)%buttons.length]?.focus();}if(e.key==='ArrowUp'){e.preventDefault();if(index===0)$('ux-search').focus();else buttons[index-1]?.focus();}});
  for(const id of ['ux-task-dialog','ux-search-dialog'])$(id).addEventListener('click',e=>{if(e.target===$(id)){const r=$(id).getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)$(id).close();}});
  $('ux-confirm-dialog').addEventListener('cancel',()=>{const r=confirmResolve;confirmResolve=null;if(r)r(false);});
@@ -20187,5 +20190,168 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 })();
 </script>
+
+<style id="drop-responsive-v6">
+/* Responsive shell and accessible controls; legacy data and business logic retained. */
+html{height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+body.drop-v4{height:100vh;height:100dvh;min-height:0;font-size:16px;line-height:1.5;}
+.drop-v4 .desktop-window{height:100%;min-height:0;}
+.drop-v4 :is(.app-wrap,.main,.content){min-width:0;min-height:0;}
+.drop-v4 .content{overscroll-behavior-y:contain;scroll-padding-block:20px 100px;}
+.drop-v4 :is(.page,.ux-panel,.ux-stack,.ux-settings-grid,.ux-main-grid,.ux-form-grid)>*{min-width:0;}
+.drop-v4 :is(input,select,textarea){max-width:100%;}
+.drop-v4 textarea{resize:vertical;}
+.drop-v4 :is(img,video,iframe){max-width:100%;filter:none!important;}
+.drop-v4 img{height:auto;}
+.drop-v4 :is(.ux-nav,.ux-btn,.ux-filter,.ux-field,.ux-task-title,.ux-shortcut,.ux-content-row strong,.ux-input,.ux-help){font-size:14px;}
+.drop-v4 :is(.ux-metric-label,.ux-metric-note,.ux-task-meta,.ux-tag,.ux-panel-head p,.ux-content-row p,.ux-home-controls button,.ux-storage-info,.ux-nav-label,.ux-side-note){font-size:12px;line-height:1.5;}
+.drop-v4 :is(.ux-page-head p,.ux-focus-card p){font-size:14px!important;}
+.drop-v4 :is(.ux-btn,.ux-filter,.ux-nav,.ux-theme button,.ux-home-controls button,.ux-link,.ux-search-result){min-height:44px;}
+.drop-v4 :is(.ux-icon-btn,.ux-task-actions button,.tb-rp-btn,.mob-menu-btn){width:44px;height:44px;min-width:44px;min-height:44px;flex-shrink:0;}
+.drop-v4 .ux-check{width:44px;height:44px;min-width:44px;flex-shrink:0;}
+.drop-v4 .ux-check svg{width:18px;height:18px;}
+.drop-v4 button{touch-action:manipulation;}
+.drop-v4 button:disabled{cursor:not-allowed;}
+.drop-v4 :is(.ux-page-head,.ux-panel-head,.ux-dialog-head,.ux-dialog-footer,.ux-home-list-footer,.ux-quick){flex-wrap:wrap;}
+.drop-v4 :is(.ux-panel-head h2,.ux-dialog-head h2){flex:1;min-width:0;overflow-wrap:anywhere;}
+.drop-v4 :is(.ux-task-title,.ux-content-row strong,.ux-help,.ux-toast,.ux-metric-value){overflow-wrap:anywhere;}
+.drop-v4 .ux-metric-value{font-size:clamp(24px,2.5vw,32px);}
+.drop-v4 :is(.ux-filters,.ux-task-toolbar,.ux-backup-actions){gap:8px;}
+.drop-v4 .ux-dialog{width:min(560px,calc(100% - 24px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overscroll-behavior:contain;}
+.drop-v4 .ux-dialog-head{position:sticky;top:0;z-index:2;background:var(--bg2);}
+.drop-v4 .ux-dialog-footer{z-index:2;}
+.drop-v4 :is(.mbox,.mcard){max-width:calc(100vw - 24px);overscroll-behavior:contain;}
+.drop-v4 :is(.list-wrap,.pipe-wrap,.table-wrap,.tbl-wrap,.ux-table-scroll){max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;}
+.drop-v4 .ux-table-scroll:focus-visible{outline-offset:-3px!important;}
+.drop-v4 .mob-sidebar{width:min(320px,calc(100vw - 32px));max-width:100%;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(20px + env(safe-area-inset-bottom,0px));overscroll-behavior:contain;}
+.drop-v4 .mob-sidebar .ux-nav{min-height:44px;flex-shrink:0;}
+.drop-v4 .ux-top-title{min-width:0;overflow:hidden;text-overflow:ellipsis;}
+.drop-v4 .tb-right-pill{flex-shrink:0;}
+.drop-v4 .ux-theme button[aria-pressed=true]{background:var(--text)!important;color:var(--bg2)!important;}
+.drop-v4 .ux-search-result{white-space:normal;}
+.drop-v4 .ux-search-result small{white-space:normal;text-align:right;}
+@media(min-width:769px) and (max-width:1100px){
+ .drop-v4 .ux-metrics{grid-template-columns:repeat(2,minmax(0,1fr));}
+ .drop-v4 .ux-main-grid,.drop-v4 .ux-settings-grid{grid-template-columns:minmax(0,1fr);}
+ .drop-v4 .content{padding:24px 20px!important;}
+ .drop-v4 .topbar{padding-inline:20px;gap:10px;}
+}
+@media(max-width:768px){
+ .drop-v4 .topbar{height:auto;min-height:calc(64px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) max(12px,env(safe-area-inset-right,0px)) 0 max(12px,env(safe-area-inset-left,0px));}
+ .drop-v4 .content{padding:20px max(12px,env(safe-area-inset-right,0px)) calc(100px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))!important;}
+ .drop-v4 .ux-bottom-nav{gap:3px;padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px));}
+ .drop-v4 .ux-bottom-nav button{flex:1;min-width:0;width:auto;min-height:56px;font-size:11px;gap:4px;line-height:1.4;padding:5px 2px;}
+ .drop-v4 .ux-bottom-nav button span{overflow-wrap:anywhere;}
+ .drop-v4 :is(input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea){font-size:16px!important;min-height:44px;}
+ .drop-v4 .ux-stack.aside{grid-template-columns:minmax(0,1fr);}
+ .drop-v4 .ux-task-row{gap:8px;padding:12px;align-items:flex-start;}
+ .drop-v4 .ux-task-actions{flex-direction:column;gap:2px;}
+ .drop-v4 .ux-task-main{padding-top:5px;}
+ .drop-v4 .ux-panel-head{padding:14px;gap:8px;}
+ .drop-v4 .ux-page-head h1{font-size:clamp(22px,6vw,28px)!important;letter-spacing:-.5px;}
+ .drop-v4 .ux-page-head{align-items:center;}
+ .drop-v4 .ux-page-head>.ux-btn{flex-shrink:0;}
+ .drop-v4 .ux-quick{padding:12px;gap:8px;}
+ .drop-v4 .ux-quick input{flex:1 1 160px;}
+ .drop-v4 .ux-metric{padding:14px 12px;}
+ .drop-v4 .ux-metric-label{font-size:12px;align-items:flex-start;}
+ .drop-v4 .ux-metric-label svg{flex-shrink:0;}
+ .drop-v4 .ux-task-meta,.drop-v4 .ux-tag{font-size:12px;}
+ .drop-v4 .ux-dialog{max-height:calc(100dvh - 16px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));}
+ .drop-v4 .ux-toast{bottom:calc(86px + env(safe-area-inset-bottom,0px));font-size:14px;gap:10px;}
+ .drop-v4 :is(.notif-dropdown,.tb-rp-menu){max-width:calc(100vw - 24px);max-height:calc(100dvh - 160px);overflow:auto;}
+ .drop-v4 #global-settings-modal>div{max-width:calc(100vw - 24px)!important;max-height:calc(100dvh - 24px)!important;overflow:auto;}
+ .drop-v4 .ux-mobile-grid{grid-template-columns:minmax(0,1fr)!important;}
+ .drop-v4 .ux-mobile-row{flex-wrap:wrap!important;}
+ .drop-v4 .ux-mobile-row>*{min-width:0;max-width:100%;}
+ .drop-v4.keyboard-open .ux-bottom-nav{display:none;}
+ .drop-v4.keyboard-open .content{padding-bottom:24px!important;}
+}
+@media(max-width:480px){
+ .drop-v4 .ux-form-grid{grid-template-columns:minmax(0,1fr);}
+ .drop-v4 #cnt-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+ .drop-v4 .ux-dialog-footer .ux-btn{flex:1;}
+ .drop-v4 .ux-top-sub{display:none!important;}
+ .drop-v4 .ux-home-list-footer{gap:8px;}
+}
+@media(max-width:360px){
+ .drop-v4 .ux-top-title{font-size:12px;}
+ .drop-v4 .topbar{gap:4px;}
+ .drop-v4 .ux-shortcuts{grid-template-columns:minmax(0,1fr);}
+ .drop-v4 .ux-metric-value{font-size:24px;}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;} .drop-v4 *{scroll-behavior:auto!important;}}
+
+/* Heatmap is a visualization, not a one-column mobile layout. */
+.drop-v4 #habit-heatmap-card{min-width:0;max-width:100%;padding:16px;}
+.drop-v4 #habit-heatmap-card .an-title{gap:6px 12px;flex-wrap:wrap;line-height:1.5;}
+.drop-v4 #hm-grid{display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;grid-template-rows:repeat(7,auto)!important;grid-auto-flow:column;gap:4px;margin-top:12px;width:100%;max-width:480px;min-width:0;overflow:visible;}
+.drop-v4 #hm-grid>div{width:100%;height:auto;min-width:0;aspect-ratio:1;border-radius:3px!important;}
+.drop-v4 #hm-legend{align-items:center;gap:8px!important;}
+.drop-v4 #hm-legend>span{font-size:12px!important;}
+@media(max-width:360px){.drop-v4 #hm-grid{gap:3px;}}
+
+/* Keep all five activity levels distinguishable in both monochrome themes. */
+body.drop-v4{--hm-0:#e8e8e8;--hm-1:#bcbcbc;--hm-2:#8a8a8a;--hm-3:#555555;--hm-4:#111111;}
+[data-theme=dark] body.drop-v4{--hm-0:#262626;--hm-1:#555555;--hm-2:#888888;--hm-3:#bbbbbb;--hm-4:#ffffff;}
+.drop-v4 #hm-grid>div{border:1px solid var(--border);}
+.drop-v4 .ux-stage{min-height:44px;gap:10px;font-size:14px;}
+.drop-v4 .ux-stage input{width:20px;height:20px;flex-shrink:0;}
+.drop-v4 .ux-dialog-footer{padding-bottom:max(16px,env(safe-area-inset-bottom,0px));}
+@media(hover:none){.drop-v4 .ux-task-row:hover{background:var(--bg2);}}
+</style>
+
+<script id="drop-responsive-runtime">
+/* UI-only adaptation: no network, record or storage mutations. */
+(function(){
+ 'use strict';
+ function init(){
+  const body=document.body, root=document.documentElement;
+  function enhance(node,deep=true){
+   if(!(node instanceof Element))return;
+   const all=(selector)=>[...(node.matches(selector)?[node]:[]),...(deep?node.querySelectorAll(selector):[])];
+   all('.page [style]').forEach(el=>{
+    // Only adapt layout containers; never flatten calendar or chart cell grids.
+    if(el.matches('.admin-grid,.fin-grid,.rs-work,.fp-2col,.ux-settings-grid,.ux-main-grid'))el.classList.add('ux-mobile-grid');
+    if(el.style.display==='flex' && !el.closest('.ux-table-scroll'))el.classList.add('ux-mobile-row');
+   });
+   all('.page table').forEach(table=>{
+    if(table.closest('.ux-table-scroll,.list-wrap,.pipe-wrap,.table-wrap,.tbl-wrap'))return;
+    const wrap=document.createElement('div');wrap.className='ux-table-scroll';wrap.tabIndex=0;wrap.setAttribute('role','region');wrap.setAttribute('aria-label','Хүснэгт — хажуу тийш гүйлгэж үзэх');table.before(wrap);wrap.append(table);
+   });
+   all('button').forEach(btn=>{
+    if(!btn.hasAttribute('aria-label') && !btn.textContent.trim() && btn.title)btn.setAttribute('aria-label',btn.title);
+   });
+  }
+  enhance(body);
+  new MutationObserver(entries=>{
+   for(const m of entries){
+    if(m.type==='childList')m.addedNodes.forEach(node=>enhance(node));
+    else if(m.target.style.display==='grid'||m.target.style.display==='flex')enhance(m.target,false);
+   }
+  }).observe(body,{subtree:true,childList:true,attributes:true,attributeFilter:['style']});
+  const menu=document.getElementById('mob-sidebar');
+  menu?.setAttribute('aria-label','Үндсэн цэс');
+  document.querySelectorAll('.mob-menu-btn,[data-route="more"]').forEach(btn=>{btn.setAttribute('aria-controls','mob-sidebar');btn.setAttribute('aria-haspopup','dialog');});
+  function menuState(){const open=menu?.classList.contains('show');document.querySelectorAll('.mob-menu-btn,[data-route="more"]').forEach(btn=>btn.setAttribute('aria-expanded',String(!!open)));}
+  if(menu)new MutationObserver(menuState).observe(menu,{attributes:true,attributeFilter:['class']});menuState();
+  const desktop=matchMedia('(min-width:769px)');
+  desktop.addEventListener('change',e=>{if(e.matches&&menu?.classList.contains('show')){window.closeMobSidebar?.();document.querySelector('.ux-nav.active')?.focus();}});
+  function themeState(){
+   const dark=root.getAttribute('data-theme')==='dark';
+   document.getElementById('meta-theme-color')?.setAttribute('content',dark?'#000000':'#fafafa');
+   document.querySelectorAll('.ux-theme button').forEach(btn=>{const action=btn.getAttribute('onclick')||'';const mode=action.includes("'dark'")?'dark':action.includes("'light'")?'light':null;if(mode){const active=(mode==='dark')===dark;btn.classList.toggle('active',active);btn.setAttribute('aria-pressed',String(active));}});
+  }
+  new MutationObserver(themeState).observe(root,{attributes:true,attributeFilter:['data-theme']});themeState();
+  if(window.visualViewport){
+   const vp=window.visualViewport;
+   function keyboard(){const editing=document.activeElement?.matches('input,textarea,[contenteditable=true]');body.classList.toggle('keyboard-open',!!editing&&vp.scale===1&&window.innerHeight-vp.height>150);}
+   vp.addEventListener('resize',keyboard);document.addEventListener('focusin',keyboard);document.addEventListener('focusout',()=>requestAnimationFrame(keyboard));
+  }
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
 </body>
 </html>
