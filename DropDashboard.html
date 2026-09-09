@@ -3,17 +3,21 @@
 <html data-theme="dark" lang="mn" translate="no">
 <head>
 <meta charset="utf-8"/>
+<style id="dd-boot-style">html.dd-boot body{visibility:hidden!important}html{background:#0a0a0a}</style>
+<script>document.documentElement.classList.add('dd-boot');document.addEventListener('DOMContentLoaded',()=>requestAnimationFrame(()=>document.documentElement.classList.remove('dd-boot')));setTimeout(()=>document.documentElement.classList.remove('dd-boot'),8000);</script>
 <!-- PD_ADMIN_RUNTIME -->
 <script>
 /* ProductDrop Sheets / Netlify bridge — 2026.09.09 */
 (()=>{
  const nativeFetch=window.fetch.bind(window);
+ const apiBase=()=>new URL(location.href).hostname==='tsekv-g1.github.io'?'https://productdrops.netlify.app':'';
  const messages={unauthorized:'Admin Key буруу байна. Dashboard, Netlify болон Apps Script дахь түлхүүрээ тулгана уу.',gas_not_configured:'Netlify → GAS_URL тохируулаад дахин deploy хийнэ үү.',gas_url_invalid:'GAS_URL нь Apps Script Web App-ийн /exec хаяг байх ёстой.',gas_response_invalid:'Apps Script JSON хариу өгсөнгүй. Web App access болон deployment хувилбараа шалгана уу.',gas_unavailable:'Apps Script хүрэхгүй байна. Deployment болон Google зөвшөөрлөө шалгана уу.',gas_timeout:'Apps Script удаж байна. Хадгалагдсан эсэхийг жагсаалтаас дахин шалгана уу.',payment_reference_required:'Банкны гүйлгээний лавлагаа 3–200 тэмдэгт байна.',sheet_not_configured:'Apps Script → SHEET_ID тохируулаагүй байна.',server_error:'Apps Script алдаа гаргалаа. SHEET_ID, хүснэгтийн эрх болон Executions хэсгийг шалгана уу.',busy_retry:'Өөр хүсэлт боловсруулж байна. Түр хүлээгээд дахин оролдоно уу.'};
  async function request(path,data,signal){
   if(location.protocol==='file:')throw Error('Энэ HTML-ийг Netlify дээрх /dashboard хаягаар нээнэ үү. Компьютероос шууд нээхэд сервер ажиллахгүй.');
   const key=localStorage.getItem('pd_admin_key')||'';
   if(!key)throw Error('Тохиргоо → Admin Key оруулаад хадгална уу.');
-  let res;try{res=await nativeFetch('/.netlify/functions/'+path,{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify(data),signal:signal||AbortSignal.timeout(65000)});}catch(e){throw Error(e.name==='AbortError'||e.name==='TimeoutError'?messages.gas_timeout:'Серверт холбогдсонгүй. Интернет болон Netlify deploy-оо шалгана уу.');}
+  if(path==='gas'){const saved=localStorage.getItem('pd_gas_url');if(saved?.startsWith('https://script.google.com/')&&!saved.includes('SERVER_MANAGED'))data={...data,expectedGasUrl:saved};}
+  let res;try{res=await nativeFetch(apiBase()+'/.netlify/functions/'+path,{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify(data),signal:signal||AbortSignal.timeout(65000)});}catch(e){throw Error(e.name==='AbortError'||e.name==='TimeoutError'?messages.gas_timeout:'Netlify backend-д холбогдсонгүй. Backend шинэчлэгдсэн эсэхийг шалгах эсвэл https://productdrops.netlify.app/dashboard хаягаар нээнэ үү.');}
   let value;try{value=await res.clone().json();}catch{throw Error('Netlify API JSON хариу өгсөнгүй (HTTP '+res.status+'). ZIP-ийн netlify, server хавтас болон build тохиргоог хамтад нь deploy хийнэ үү.');}
   if(!res.ok||value?.ok===false||value?.error){const code=value?.error;throw Error(messages[code]||(typeof code==='string'?code:'Хүсэлт амжилтгүй (HTTP '+res.status+').'));}
   return res;
@@ -49,7 +53,7 @@
   $('dd-settings').onclick=()=>openGlobalSettings();
   $('dd-check').onclick=async()=>{const b=$('dd-check');b.disabled=true;status('Google Sheets холболтыг шалгаж байна…');try{const h=await gas('health');if(h.ok!==true||!h.sheets)throw Error('Apps Script health хариу зөрсөн байна.');status('Google Sheets холбогдлоо · '+h.version);await Promise.all([loadUsers(),loadRegistrations()]);}catch(e){announce(e);}finally{b.disabled=false;}};
   $('dd-logout').onclick=()=>{localStorage.removeItem('pd_admin_key');location.reload();};
-  for(const id of ['gs-claude','ai-api-key','batch-api-key','gs-gas-url'])if($(id)){$(id).value='Серверийн тохиргооноос';$(id).readOnly=true;}
+  for(const id of ['gs-claude','ai-api-key','batch-api-key'])if($(id)){$(id).value='Серверийн тохиргооноос';$(id).readOnly=true;}
   $('dd-check').click();
  });
 })();
@@ -19335,7 +19339,7 @@ document.addEventListener('click',function(e){
 <!-- GAS URL -->
 <div style="border-top:1px solid var(--border);padding-top:14px;">
 <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:10px;">Google Apps Script URL</div>
-<div style="font-size:11px;color:var(--text3);margin-bottom:10px;">AI Зөвлөгч · Гишүүн статистик · Context Sheet — GAS Deployment URL оруулна уу</div>
+<div style="font-size:11px;color:var(--text3);margin-bottom:10px;">Netlify GAS_URL-тэй ижил /exec хаяг оруулна уу. Хоосон бол серверийн тохиргоог ашиглана. Энд хадгалах нь Netlify тохиргоог өөрчлөхгүй.</div>
 <input autocomplete="off" class="cnt-fi" id="gs-gas-url" placeholder="https://script.google.com/macros/s/.../exec" style="margin-bottom:0;font-family:'DM Mono',monospace;font-size:11px;" type="text"/>
 </div>
 <!-- MongolSUB Admin API -->
@@ -20208,7 +20212,7 @@ window.ddLegacy_rejectReg=window.rejectReg;
 window.ddLegacy_delUser=window.delUser;
 window.ddLegacy_genPW=window.genPW;
 window.ddLegacy_updateUserStats=window.updateUserStats;
-window.GAS_URL=function GAS_URL(){return 'https://script.google.com/macros/s/SERVER_MANAGED/exec';};
+window.GAS_URL=function GAS_URL(){return localStorage.getItem('pd_gas_url')||'https://script.google.com/macros/s/SERVER_MANAGED/exec';};
 window.openGlobalSettings=function openGlobalSettings(){
   var modal=document.getElementById('global-settings-modal');
   if(!modal)return;
@@ -20217,7 +20221,7 @@ window.openGlobalSettings=function openGlobalSettings(){
   document.getElementById('gs-oai').value=localStorage.getItem('rp_oaiKey')||'';
   document.getElementById('gs-server').value=localStorage.getItem('rp_serverUrl')||'http://localhost:3000';
   document.getElementById('gs-claude').value='SERVER_MANAGED'||'';
-  document.getElementById('gs-gas-url').value=GAS_URL()||'';
+  document.getElementById('gs-gas-url').value=localStorage.getItem('pd_gas_url')||'';
   document.getElementById('gs-admin-key').value=localStorage.getItem('pd_admin_key')||'';
   var msu=document.getElementById('gs-mongolsub-api-url');if(msu)msu.value=localStorage.getItem('pd_mongolsub_api_url')||'https://mongolsub.com/api/admin';
   modal.style.display='flex';
@@ -21340,14 +21344,17 @@ window.runRepurpose=async function runRepurpose(){
 const originalGet=Storage.prototype.getItem;
 Storage.prototype.getItem=function(key){
  if(this===localStorage&&key==='pd_ak')return 'SERVER_MANAGED';
- if(this===localStorage&&key==='pd_gas_url')return GAS_URL();
+ if(this===localStorage&&key==='pd_gas_url'){const value=originalGet.call(this,key);return value&&value.includes('SERVER_MANAGED')?null:value;}
  return originalGet.call(this,key);
 };
 const originalSave=window.saveGlobalSettings;
 window.saveGlobalSettings=function(){
+ const gasInput=document.getElementById('gs-gas-url').value.trim();
+ if(gasInput&&!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(gasInput)){toast('Apps Script Web App-ийн /exec URL оруулна уу.','err');return;}
  const saved={};for(const k of ['rp_rapidKey','rp_oaiKey'])saved[k]=originalGet.call(localStorage,k);
  originalSave();
  for(const k of Object.keys(saved))if(!originalGet.call(localStorage,k)&&saved[k])localStorage.setItem(k,saved[k]);
+ document.getElementById('dd-check')?.click();
 };
 document.addEventListener('DOMContentLoaded',()=>{
  const bar=document.querySelector('.dd-integration'),admin=document.getElementById('page-admin');
