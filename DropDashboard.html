@@ -3,58 +3,177 @@
 <html data-theme="dark" lang="mn" translate="no">
 <head>
 <meta charset="utf-8"/>
+<meta content="noindex,nofollow,noarchive,nosnippet" name="robots"/>
+<meta content="no-referrer" name="referrer"/>
 <style id="dd-boot-style">html.dd-boot body{visibility:hidden!important}html{background:#0a0a0a}</style>
 <script>document.documentElement.classList.add('dd-boot');document.addEventListener('DOMContentLoaded',()=>requestAnimationFrame(()=>document.documentElement.classList.remove('dd-boot')));setTimeout(()=>document.documentElement.classList.remove('dd-boot'),8000);</script>
+<style id="dd-access-style">
+html.dd-locked body>:not(#dd-access-gate){display:none!important}
+#dd-access-gate{position:fixed!important;inset:0!important;z-index:2147483647!important;display:grid!important;place-items:center!important;padding:24px!important;background:#000!important;color:#fff!important;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important}
+#dd-access-gate .dd-access-card{width:min(100%,390px)!important;padding:32px!important;border:1px solid #333!important;border-radius:20px!important;background:#080808!important;box-shadow:0 28px 90px #000!important}
+#dd-access-gate .dd-access-mark{display:grid!important;place-items:center!important;width:46px!important;height:46px!important;margin-bottom:24px!important;border-radius:13px!important;background:#fff!important;color:#000!important;font-size:22px!important;font-weight:900!important}
+#dd-access-gate h1{margin:0 0 8px!important;color:#fff!important;font-size:25px!important;line-height:1.2!important;letter-spacing:-.03em!important}
+#dd-access-gate p{margin:0 0 24px!important;color:#aaa!important;font-size:14px!important;line-height:1.55!important}
+#dd-access-gate label{display:block!important;margin-bottom:8px!important;color:#ddd!important;font-size:12px!important;font-weight:700!important;text-transform:uppercase!important;letter-spacing:.08em!important}
+#dd-access-gate input{box-sizing:border-box!important;width:100%!important;height:50px!important;padding:0 14px!important;border:1px solid #555!important;border-radius:11px!important;outline:none!important;background:#111!important;color:#fff!important;font:700 20px/1 ui-monospace,SFMono-Regular,Menlo,monospace!important;letter-spacing:.28em!important;text-align:center!important}
+#dd-access-gate input:focus{border-color:#fff!important;box-shadow:0 0 0 3px #ffffff1f!important}
+#dd-access-gate button{width:100%!important;height:48px!important;margin-top:12px!important;border:1px solid #fff!important;border-radius:11px!important;background:#fff!important;color:#000!important;font:700 14px/1 inherit!important;cursor:pointer!important}
+#dd-access-gate button:disabled{opacity:.6!important;cursor:wait!important}
+#dd-access-error{min-height:20px!important;margin:10px 0 0!important;color:#ff8b8b!important;font-size:12px!important;text-align:center!important}
+</style>
+<script>
+(()=>{
+ const sessionKey='pd_dashboard_unlocked_v1';
+ const failureKey='pd_dashboard_failures_v1',idleLimit=30*60*1000,maxAttempts=5,blockDuration=30*1000;
+ const readJSON=(key,fallback)=>{try{return JSON.parse(sessionStorage.getItem(key)||'null')||fallback;}catch(e){return fallback;}};
+ const writeJSON=(key,value)=>{try{sessionStorage.setItem(key,JSON.stringify(value));}catch(e){}};
+ const clearKey=key=>{try{sessionStorage.removeItem(key);}catch(e){}};
+ const lock=()=>{clearKey(sessionKey);location.reload();};
+ window.DDLock=lock;
+ let unlockedSession=readJSON(sessionKey,null),lastTouch=0;
+ const sessionIsValid=()=>unlockedSession&&Number(unlockedSession.lastActive)>0&&Date.now()-Number(unlockedSession.lastActive)<idleLimit;
+ const touch=()=>{const now=Date.now();if(!sessionIsValid()){lock();return;}if(now-lastTouch>60000){lastTouch=now;unlockedSession.lastActive=now;writeJSON(sessionKey,unlockedSession);}};
+ const monitor=()=>{['pointerdown','keydown','touchstart'].forEach(type=>document.addEventListener(type,touch,{passive:true}));document.addEventListener('visibilitychange',()=>{if(!document.hidden)touch();});setInterval(()=>{if(!sessionIsValid())lock();},30000);};
+ if(sessionIsValid()){monitor();return;}
+ clearKey(sessionKey);
+ document.documentElement.classList.add('dd-locked');
+ document.addEventListener('DOMContentLoaded',()=>{
+  const gate=document.createElement('section');
+  gate.id='dd-access-gate';
+  gate.setAttribute('aria-label','Dashboard нэвтрэх хамгаалалт');
+  gate.innerHTML='<form class="dd-access-card" id="dd-access-form"><div class="dd-access-mark" aria-hidden="true">D</div><h1>DropDashboard</h1><p>Удирдлагын самбар руу нэвтрэхийн тулд нууц кодоо оруулна уу. 30 минут ашиглаагүй үед автоматаар түгжинэ.</p><label for="dd-access-password">Нууц код</label><input id="dd-access-password" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off" required><button type="submit">Нэвтрэх</button><div id="dd-access-error" role="alert" aria-live="polite"></div></form>';
+  document.body.prepend(gate);
+  const form=gate.querySelector('#dd-access-form'),input=gate.querySelector('#dd-access-password'),button=form.querySelector('button'),error=gate.querySelector('#dd-access-error');
+  const digest=async value=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode('productdrop-dashboard-v1:'+value)))).map(v=>v.toString(16).padStart(2,'0')).join('');
+  let blockTimer=null;
+  const renderBlock=()=>{const failures=readJSON(failureKey,{count:0,blockedUntil:0}),seconds=Math.ceil((Number(failures.blockedUntil||0)-Date.now())/1000);if(seconds>0){button.disabled=true;error.textContent='Олон удаа буруу оруулсан. '+seconds+' секундын дараа дахин оролдоно уу.';if(!blockTimer)blockTimer=setInterval(renderBlock,1000);return true;}if(blockTimer){clearInterval(blockTimer);blockTimer=null;}if(failures.blockedUntil)clearKey(failureKey);button.disabled=false;return false;};
+  form.addEventListener('submit',async event=>{
+   event.preventDefault();if(renderBlock())return;button.disabled=true;error.textContent='';
+   try{
+    const valid=await digest(input.value)==='021edc4f535239744ddd145a3f46e966b402a38e5c3c40447285a3b9b874195e';
+    if(!valid){const failures=readJSON(failureKey,{count:0,blockedUntil:0});failures.count=Number(failures.count||0)+1;if(failures.count>=maxAttempts){failures.count=0;failures.blockedUntil=Date.now()+blockDuration;}writeJSON(failureKey,failures);error.textContent=failures.blockedUntil?'Олон удаа буруу оруулсан. 30 секунд түр хаалаа.':'Нууц код буруу байна. '+(maxAttempts-failures.count)+' оролдлого үлдлээ.';input.value='';input.focus();if(failures.blockedUntil)renderBlock();return;}
+    clearKey(failureKey);unlockedSession={unlockedAt:Date.now(),lastActive:Date.now()};writeJSON(sessionKey,unlockedSession);monitor();
+    document.documentElement.classList.remove('dd-locked');gate.remove();
+   }catch(e){error.textContent='Нэвтрэх хамгаалалтыг ажиллуулж чадсангүй. HTTPS хаягаар нээнэ үү.';}
+   finally{if(!renderBlock())button.disabled=false;}
+  });
+  renderBlock();
+  requestAnimationFrame(()=>input.focus());
+ });
+})();
+</script>
 <!-- PD_ADMIN_RUNTIME -->
 <script>
-/* ProductDrop Sheets / Netlify bridge — 2026.09.09 */
+/* ProductDrop Sheets / Netlify bridge — 2026.09.10 polished */
 (()=>{
  const nativeFetch=window.fetch.bind(window);
  const apiBase=()=>new URL(location.href).hostname==='tsekv-g1.github.io'?'https://productdrops.netlify.app':'';
- const messages={unauthorized:'Admin Key буруу байна. Dashboard, Netlify болон Apps Script дахь түлхүүрээ тулгана уу.',gas_not_configured:'Netlify → GAS_URL тохируулаад дахин deploy хийнэ үү.',gas_url_invalid:'GAS_URL нь Apps Script Web App-ийн /exec хаяг байх ёстой.',gas_response_invalid:'Apps Script JSON хариу өгсөнгүй. Web App access болон deployment хувилбараа шалгана уу.',gas_unavailable:'Apps Script хүрэхгүй байна. Deployment болон Google зөвшөөрлөө шалгана уу.',gas_timeout:'Apps Script удаж байна. Хадгалагдсан эсэхийг жагсаалтаас дахин шалгана уу.',payment_reference_required:'Банкны гүйлгээний лавлагаа 3–200 тэмдэгт байна.',sheet_not_configured:'Apps Script → SHEET_ID тохируулаагүй байна.',server_error:'Apps Script алдаа гаргалаа. SHEET_ID, хүснэгтийн эрх болон Executions хэсгийг шалгана уу.',busy_retry:'Өөр хүсэлт боловсруулж байна. Түр хүлээгээд дахин оролдоно уу.'};
+ const messages={unauthorized:'Admin Key буруу байна. Dashboard, Netlify болон Apps Script дахь түлхүүрээ тулгана уу.',gas_not_configured:'Netlify → GAS_URL тохируулаад дахин deploy хийнэ үү.',gas_url_invalid:'GAS_URL нь Apps Script Web App-ийн /exec хаяг байх ёстой.',gas_response_invalid:'Apps Script JSON хариу өгсөнгүй. Web App access болон deployment хувилбараа шалгана уу.',gas_unavailable:'Apps Script хүрэхгүй байна. Deployment болон Google зөвшөөрлөө шалгана уу.',gas_timeout:'Apps Script удаж байна. Хадгалагдсан эсэхийг жагсаалтаас дахин шалгана уу.',payment_reference_required:'Банкны гүйлгээний лавлагаа 3–200 тэмдэгт байна.',sheet_not_configured:'Apps Script → SHEET_ID тохируулаагүй байна.',server_error:'Apps Script алдаа гаргалаа. SHEET_ID, хүснэгтийн эрх болон Executions хэсгийг шалгана уу.',busy_retry:'Өөр хүсэлт боловсруулж байна. Түр хүлээгээд дахин оролдоно уу.',provider_not_configured:'AI provider сервер дээр тохируулаагүй байна. Тохиргоонд өөрийн OpenAI/Claude API key оруулсан бол шууд API холболт ашиглана.'};
+ const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+ const timeoutSignal=ms=>{if(typeof AbortSignal!=='undefined'&&typeof AbortSignal.timeout==='function')return AbortSignal.timeout(ms);const ctrl=new AbortController();setTimeout(()=>ctrl.abort(),ms);return ctrl.signal;};
  async function request(path,data,signal){
   if(location.protocol==='file:')throw Error('Энэ HTML-ийг Netlify дээрх /dashboard хаягаар нээнэ үү. Компьютероос шууд нээхэд сервер ажиллахгүй.');
   const key=localStorage.getItem('pd_admin_key')||'';
   if(!key)throw Error('Тохиргоо → Admin Key оруулаад хадгална уу.');
   if(path==='gas'){const saved=localStorage.getItem('pd_gas_url');if(saved?.startsWith('https://script.google.com/')&&!saved.includes('SERVER_MANAGED'))data={...data,expectedGasUrl:saved};}
-  let res;try{res=await nativeFetch(apiBase()+'/.netlify/functions/'+path,{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify(data),signal:signal||AbortSignal.timeout(65000)});}catch(e){throw Error(e.name==='AbortError'||e.name==='TimeoutError'?messages.gas_timeout:'Netlify backend-д холбогдсонгүй. Backend шинэчлэгдсэн эсэхийг шалгах эсвэл https://productdrops.netlify.app/dashboard хаягаар нээнэ үү.');}
-  let value;try{value=await res.clone().json();}catch{throw Error('Netlify API JSON хариу өгсөнгүй (HTTP '+res.status+'). ZIP-ийн netlify, server хавтас болон build тохиргоог хамтад нь deploy хийнэ үү.');}
+  let res;try{res=await nativeFetch(apiBase()+'/.netlify/functions/'+path,{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json',Authorization:'Bearer '+key},body:JSON.stringify(data),signal:signal||timeoutSignal(65000)});}catch(e){throw Error(e.name==='AbortError'||e.name==='TimeoutError'?messages.gas_timeout:'Netlify backend-д холбогдсонгүй. Backend шинэчлэгдсэн эсэхийг шалгах эсвэл https://productdrops.netlify.app/dashboard хаягаар нээнэ үү.');}
+  let value;try{value=await res.clone().json();}catch{if(res.status===504)throw Error('Netlify серверийн хүсэлт хугацаа хэтэрлээ (504). GAS deployment болон Netlify Functions-ийн GAS_URL тохиргоог шалгаад дахин deploy хийнэ үү.');throw Error('Netlify API JSON хариу өгсөнгүй (HTTP '+res.status+'). Netlify Functions болон build тохиргоог хамтад нь deploy хийнэ үү.');}
   if(!res.ok||value?.ok===false||value?.error){const code=value?.error;throw Error(messages[code]||(typeof code==='string'?code:'Хүсэлт амжилтгүй (HTTP '+res.status+').'));}
   return res;
  }
- async function gas(action,params={}){return (await request('gas',{params:{...params,action}})).json();}
+ const gasReads=new Set(['health','list','listRegistrations','get_products','listPromos']);
+ const gasInflight=new Map();
+ async function gasOnce(action,params={}){
+  if(location.protocol==='file:'){
+   const saved=(localStorage.getItem('pd_gas_url')||'').trim();
+   if(!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:\?|$)/.test(saved)||saved.includes('SERVER_MANAGED'))throw Error('Локал файлаас мэдээлэл уншихын тулд Тохиргоо хэсэгт Google Apps Script-ийн /exec URL оруулна уу. Netlify дээр байршуулбал энэ тохиргоо серверээс ажиллана.');
+   const url=new URL(saved);url.searchParams.set('action',action);Object.entries(params||{}).forEach(([k,v])=>{if(v!==undefined&&v!==null)url.searchParams.set(k,typeof v==='object'?JSON.stringify(v):String(v));});
+   const adminKey=(localStorage.getItem('pd_admin_key')||'').trim();if(adminKey)url.searchParams.set('key',adminKey);
+   let res;try{res=await nativeFetch(url.href,{method:'GET',credentials:'omit',cache:'no-store',signal:timeoutSignal(65000)});}catch(e){throw Error(e.name==='AbortError'||e.name==='TimeoutError'?'Google Sheets хүсэлт хугацаа хэтэрлээ. Дахин оролдоно уу.':'Google Apps Script-д холбогдсонгүй. /exec URL болон deployment access-ийг шалгана уу.');}
+   if(!res.ok)throw Error('Google Apps Script HTTP '+res.status+' алдаа буцаалаа.');
+   let value;try{value=await res.json();}catch(e){throw Error('Google Apps Script JSON хариу өгсөнгүй. Web App deployment-оо шинэчилнэ үү.');}
+   if(value&&value.error)throw Error(typeof value.error==='string'?value.error:'Google Apps Script хүсэлт амжилтгүй.');
+   return value;
+  }
+  return (await request('gas',{params:{...params,action}})).json();
+ }
+ async function gas(action,params={}){
+  const readOnly=gasReads.has(action),key=action+':'+JSON.stringify(params||{});
+  if(readOnly&&gasInflight.has(key))return gasInflight.get(key);
+  if(!readOnly)gasInflight.clear();
+  const run=(async()=>{try{return await gasOnce(action,params);}catch(error){const transient=/\b50[234]\b|хугацаа хэтэр|түр |timeout|busy/i.test(String(error?.message||error));if(!readOnly||!transient)throw error;await wait(650);return gasOnce(action,params);}})();
+  if(readOnly){gasInflight.set(key,run);run.finally(()=>setTimeout(()=>{if(gasInflight.get(key)===run)gasInflight.delete(key);},1200)).catch(()=>{});}
+  return run;
+ }
  window.DD={gas};
+ const parsePayload=body=>{if(body===undefined||body===null||body==='')return undefined;if(typeof body==='string'){try{return JSON.parse(body);}catch(e){try{return Object.fromEntries(new URLSearchParams(body));}catch(_){return body;}}}if(typeof URLSearchParams!=='undefined'&&body instanceof URLSearchParams)return Object.fromEntries(body);if(typeof FormData!=='undefined'&&body instanceof FormData)return Object.fromEntries(body.entries());return body;};
  window.fetch=async function(input,opts={}){
   const url=new URL(typeof input==='string'?input:input instanceof URL?input.href:input.url,location.href);
   if(url.hostname==='script.google.com'){
    const params=Object.fromEntries(url.searchParams);let payload;
-   if(opts.body){if(typeof opts.body==='string'&&opts.body.trim().startsWith('{'))payload=JSON.parse(opts.body);else Object.assign(params,Object.fromEntries(new URLSearchParams(opts.body)));}
+   if(opts.body){payload=parsePayload(opts.body);if(payload&&typeof payload==='object'&&!(typeof opts.body==='string'&&opts.body.trim().startsWith('{')))Object.assign(params,payload);}
    delete params.key;return request('gas',{params,payload},opts.signal);
   }
-  if(url.hostname==='xpxotgpqxrupkgcppzmn.supabase.co'&&(url.pathname.startsWith('/rest/v1/')||url.pathname==='/functions/v1/rapid-responder'))return request('database',{path:url.pathname+url.search,method:opts.method||'GET',data:opts.body?JSON.parse(opts.body):undefined,prefer:new Headers(opts.headers||{}).get('Prefer')||''},opts.signal);
-  if((url.hostname==='api.openai.com'&&url.pathname==='/v1/chat/completions')||(url.hostname==='api.anthropic.com'&&url.pathname==='/v1/messages')||url.hostname==='api.telegram.org')return request('dashboard',{provider:url.hostname,path:url.pathname,payload:opts.body?JSON.parse(opts.body):{}},opts.signal);
+  if(url.hostname==='xpxotgpqxrupkgcppzmn.supabase.co'&&(url.pathname.startsWith('/rest/v1/')||url.pathname==='/functions/v1/rapid-responder'))return request('database',{path:url.pathname+url.search,method:opts.method||'GET',data:parsePayload(opts.body),prefer:new Headers(opts.headers||{}).get('Prefer')||''},opts.signal);
+  // User-key AI calls stay direct; only server-managed calls go through Netlify.
+  const outHeaders=new Headers(opts.headers||{});
+  const hasClientProviderKey=(url.hostname==='api.openai.com'&&/^Bearer\s+\S+/i.test(outHeaders.get('Authorization')||''))||(url.hostname==='api.anthropic.com'&&!!outHeaders.get('x-api-key'));
+  const isAIProviderCall=(url.hostname==='api.openai.com'&&url.pathname==='/v1/chat/completions')||(url.hostname==='api.anthropic.com'&&url.pathname==='/v1/messages');
+  if((isAIProviderCall&&!hasClientProviderKey)||url.hostname==='api.telegram.org')return request('dashboard',{provider:url.hostname,path:url.pathname,payload:parsePayload(opts.body)||{}},opts.signal);
   return nativeFetch(input,opts);
  };
  document.addEventListener('DOMContentLoaded',()=>{
   const $=id=>document.getElementById(id);
-  const bar=document.createElement('section');bar.className='dd-integration';bar.innerHTML='<strong>DropDashboard · Sheets</strong><span id="dd-integration-status" role="status">Холболтыг шалгаж байна…</span><button type="button" id="dd-settings">Тохиргоо</button><button type="button" id="dd-check">Холболт шалгах / шинэчлэх</button><button type="button" id="dd-logout">Гарах</button>';
+  const bar=document.createElement('section');bar.className='dd-integration';bar.innerHTML='<strong>DropDashboard · Sheets</strong><span id="dd-integration-status" role="status">Холболтыг шалгаж байна…</span><button type="button" id="dd-settings">Тохиргоо</button><button type="button" id="dd-check">Холболт шалгах / шинэчлэх</button><button type="button" id="dd-logout" aria-label="Dashboard түгжих" title="Dashboard-ийг шууд түгжих">Түгжих</button>';
   document.body.prepend(bar);
-  const style=document.createElement('style');style.textContent='.dd-integration{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:16px;margin:12px;border:1px solid var(--border);border-radius:12px;background:var(--bg2);color:var(--text)}#dd-integration-status{flex:1;min-width:180px}.dd-integration button{font:inherit;padding:8px;cursor:pointer}.dd-legacy-row{padding:16px;border:1px solid var(--border);border-radius:12px;overflow-wrap:anywhere}.dd-legacy-row button{margin:8px}';document.head.append(style);
-  const status=msg=>$('dd-integration-status').textContent=msg;
-  const announce=e=>{status(e.message);if(typeof toast==='function')toast(e.message,'err');};
-  const array=value=>{if(!Array.isArray(value))throw Error('Apps Script-ийн хувилбар зөрсөн байна: жагсаалт хүлээж байсан. Code.gs болон deployment-оо тулгана уу.');return value;};
+  const style=document.createElement('style');style.textContent='.dd-integration{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:16px;margin:12px;border:1px solid var(--border);border-radius:12px;background:var(--bg2);color:var(--text)}#dd-integration-status{flex:1;min-width:180px}.dd-integration button{font:inherit;padding:8px;cursor:pointer}.dd-legacy-row{padding:16px;border:1px solid var(--border);border-radius:12px;overflow-wrap:anywhere}.dd-legacy-row button{margin:8px}.dd-password-cell{display:flex;align-items:center;gap:8px;white-space:nowrap}.dd-password-cell code{font:700 12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--text)}.dd-copy-password{padding:4px 7px!important;border:1px solid var(--border2)!important;border-radius:6px!important;background:var(--bg4)!important;color:var(--text2)!important;font-size:10px!important;cursor:pointer!important}';document.head.append(style);
+  const status=msg=>{const el=$('dd-integration-status');if(el)el.textContent=msg;};
+  let lastNotice='',lastNoticeAt=0;
+  const announce=e=>{const message=String(e?.message||e||'Тодорхойгүй алдаа');status(message);const now=Date.now();if(message===lastNotice&&now-lastNoticeAt<4000)return;lastNotice=message;lastNoticeAt=now;if(typeof toast==='function')toast(message,'err');};
+  const array=(value,keys=[])=>{if(Array.isArray(value))return value;for(const key of keys)if(Array.isArray(value?.[key]))return value[key];throw Error('Apps Script-ийн хувилбар зөрсөн байна: жагсаалт хүлээж байсан. Code.gs болон deployment-оо тулгана уу.');};
   const line=(parent,text)=>{const p=document.createElement('p');p.textContent=text;parent.append(p);};
-  window.updateUserStats=function(users){const now=Date.now(),active=users.filter(u=>u.expiry>now).length;for(const [id,v]of Object.entries({'u-stat-total':users.length,'u-stat-active':active,'u-stat-active2':active,'u-stat-expired':users.length-active,'u-stat-expired2':users.length-active}))if($(id))$(id).textContent=v;};
-  window.loadUsers=async function(){const box=$('users-table-body');if(!box)return;try{const users=array(await gas('list'));updateUserStats(users);box.replaceChildren();const head=box.closest('table')?.querySelector('thead');if(head)head.innerHTML='<tr><th>Бүртгүүлсэн</th><th>Хэрэглэгч</th><th>Багц</th><th>Дуусах хугацаа</th><th>Төлөв</th><th>Үйлдэл</th></tr>';for(const u of users){const tr=document.createElement('tr');for(const v of [String(u.registered||'').slice(0,10),(u.name||'')+' · '+(u.uid||''),u.plan,u.expiry?new Date(u.expiry).toLocaleDateString('mn-MN'):'—',u.expiry>Date.now()?'Идэвхтэй':'Дууссан']){const td=document.createElement('td');td.textContent=v;tr.append(td);}const td=document.createElement('td'),b=document.createElement('button');b.textContent='Устгах';b.className='btn-del';b.onclick=()=>delUser(u.pw);td.append(b);tr.append(td);box.append(tr);}if(!users.length)box.innerHTML='<tr><td colspan="6">Гишүүн байхгүй. Хүлээгдэж буй хүсэлтүүдийг «Шинэ бүртгэлүүд»-ээс харна уу.</td></tr>';return true;}catch(e){box.replaceChildren();const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=6;td.textContent=e.message;tr.append(td);box.append(tr);announce(e);return false;}};
-  window.loadRegistrations=async function(){const box=$('regs-grid-body')||$('regs-table-body');if(!box)return;try{const regs=array(await gas('listRegistrations'));const pending=regs.filter(p=>p.status==='PENDING');updatePendingBadge(pending.length);box.replaceChildren();for(const p of [...pending,...regs.filter(p=>p.status!=='PENDING').reverse()]){const card=document.createElement('article');card.className='dd-legacy-row';line(card,p.phone+' · '+String(p.plan).toUpperCase());line(card,p.status==='PENDING'?'Төлбөр баталгаажуулахыг хүлээж байна':p.status==='APPROVED'?'Батлагдсан':p.status);line(card,p.date?new Date(p.date).toLocaleString('mn-MN'):'—');if(p.promo)line(card,'Хөнгөлөлтийн код: '+p.promo);if(p.status==='PENDING'){for(const [label,fn]of [['Төлбөр батлах',()=>approveReg(p.phone)],['Хүсэлт устгах',()=>rejectReg(p.phone)]]){const b=document.createElement('button');b.type='button';b.textContent=label;b.className='btn-approve';b.onclick=async()=>{card.querySelectorAll('button').forEach(x=>x.disabled=true);try{await fn();}finally{card.querySelectorAll('button').forEach(x=>x.disabled=false);}};card.append(b);}}box.append(card);}if(!regs.length)box.textContent='Бүртгэл байхгүй.';return true;}catch(e){box.textContent=e.message;announce(e);return false;}};
-  window.approveReg=async function(phone){const reference=prompt(phone+' — банкны хуулгатай төлбөрөө тулгаад гүйлгээний лавлагааг оруулна уу.');if(reference===null)return;if(reference.trim().length<3||reference.trim().length>200||/^[=+@-]/.test(reference.trim())){announce(Error(messages.payment_reference_required));return;}try{const r=await gas('approveAndAdd',{phone,reference:reference.trim()});if(r.ok!==true)throw Error('Баталгаажуулалт амжилтгүй.');status(phone+' · Төлбөр батлагдаж эрх нээгдлээ.');await Promise.all([loadRegistrations(),loadUsers()]);}catch(e){announce(e);}};
+  const passwordOf=value=>String(value?.pw??value?.password??value?.pass??'').trim();
+  const phoneKey=value=>{const digits=String(value??'').replace(/\D/g,'');const match=digits.match(/(?:976)?(\d{8})$/);return match?match[1]:digits;};
+  const timeOf=value=>{if(value===null||value===undefined||value===''||value==='—')return NaN;const numeric=typeof value==='number'?value:(/^\d{10,13}$/.test(String(value).trim())?Number(value):NaN);return Number.isFinite(numeric)?(numeric<1e12?numeric*1000:numeric):Date.parse(value);};
+  const formatDate=(value,withTime=false)=>{const time=timeOf(value);if(!Number.isFinite(time))return value&&value!=='—'?String(value):'—';const date=new Date(time);return withTime?date.toLocaleString('mn-MN'):date.toLocaleDateString('mn-MN');};
+  const copyText=async value=>{if(navigator.clipboard&&window.isSecureContext)return navigator.clipboard.writeText(value);const area=document.createElement('textarea');area.value=value;area.style.cssText='position:fixed;left:-9999px;top:0';document.body.append(area);area.select();const ok=document.execCommand('copy');area.remove();if(!ok)throw Error('copy_failed');};
+  const addPassword=(card,value)=>{const pw=passwordOf(value);const row=document.createElement('div');row.className='dd-registration-password';row.style.cssText='display:flex;align-items:center;gap:8px;min-height:34px;padding:7px 9px;border:1px solid var(--border);border-radius:8px;background:var(--bg3);';const label=document.createElement('span');label.textContent='Нууц үг';label.style.cssText='font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;';const code=document.createElement('code');code.textContent=pw||'Өгөгдөл ирсэнгүй';code.style.cssText='flex:1;min-width:0;font:800 13px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:'+(pw?'var(--text)':'var(--amber)')+';overflow-wrap:anywhere;';row.append(label,code);if(pw){const copy=document.createElement('button');copy.type='button';copy.className='dd-copy-password';copy.textContent='Хуулах';copy.setAttribute('aria-label','Нууц үгийг хуулах');copy.onclick=async()=>{try{await copyText(pw);copy.textContent='Хуулсан';status('Нууц үг хуулагдлаа.');setTimeout(()=>copy.textContent='Хуулах',1500);}catch(e){announce(new Error('Нууц үгийг хуулж чадсангүй.'));}};row.append(copy);}card.append(row);};
+  window.updateUserStats=function(users){const now=Date.now(),active=users.filter(u=>timeOf(u.expiry)>now).length;for(const [id,v]of Object.entries({'u-stat-total':users.length,'u-stat-active':active,'u-stat-active2':active,'u-stat-expired':users.length-active,'u-stat-expired2':users.length-active}))if($(id))$(id).textContent=v;};
+  window.loadUsers=async function(){const box=$('users-table-body');if(!box)return;try{const users=array(await gas('list'),['users','data','items','rows']);updateUserStats(users);box.replaceChildren();const head=box.closest('table')?.querySelector('thead');if(head)head.innerHTML='<tr><th>Бүртгүүлсэн</th><th>Хэрэглэгч</th><th>Багц</th><th>Нууц үг</th><th>Дуусах хугацаа</th><th>Төлөв</th><th>Үйлдэл</th></tr>';for(const u of users){const userPassword=passwordOf(u),expiry=timeOf(u.expiry);const tr=document.createElement('tr');const values=[formatDate(u.registered),(u.name||'')+' · '+(u.uid||u.phone||''),u.plan||'—',userPassword||'Өгөгдөл ирсэнгүй',formatDate(u.expiry),Number.isFinite(expiry)&&expiry>Date.now()?'Идэвхтэй':'Дууссан'];values.forEach((v,index)=>{const td=document.createElement('td');if(index===3){td.className='dd-password-cell';const code=document.createElement('code');code.textContent=v;td.append(code);if(userPassword){const copy=document.createElement('button');copy.type='button';copy.className='dd-copy-password';copy.textContent='Хуулах';copy.setAttribute('aria-label','Нууц үгийг хуулах');copy.onclick=async()=>{try{await copyText(userPassword);copy.textContent='Хуулсан';status((u.name||u.uid||u.phone||'Хэрэглэгч')+' · нууц үг хуулагдлаа.');setTimeout(()=>copy.textContent='Хуулах',1500);}catch(e){announce(new Error('Нууц үгийг хуулж чадсангүй.'));}};td.append(copy);}}else td.textContent=v;tr.append(td);});const td=document.createElement('td'),b=document.createElement('button');b.textContent='Устгах';b.className='btn-del';b.disabled=!userPassword;b.onclick=()=>delUser(userPassword);td.append(b);tr.append(td);box.append(tr);}if(!users.length)box.innerHTML='<tr><td colspan="7">Гишүүн байхгүй. Хүлээгдэж буй хүсэлтүүдийг «Шинэ бүртгэлүүд»-ээс харна уу.</td></tr>';return true;}catch(e){box.replaceChildren();const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=7;td.textContent=String(e?.message||e);tr.append(td);box.append(tr);announce(e);return false;}};
+  window.loadRegistrations=async function(){
+   const box=$('regs-grid-body')||$('regs-table-body');if(!box)return;
+   try{
+    const [regsResult,usersResult]=await Promise.allSettled([gas('listRegistrations'),gas('list')]);
+    if(regsResult.status==='rejected'&&usersResult.status==='rejected')throw regsResult.reason||usersResult.reason;
+    const regs=regsResult.status==='fulfilled'?array(regsResult.value,['registrations','data','items','rows']):[];
+    const users=usersResult.status==='fulfilled'?array(usersResult.value,['users','data','items','rows']):[];
+    const usersByPhone=new Map(),mergedByPhone=new Map();
+    users.forEach(u=>{const key=phoneKey(u.uid||u.phone||u.name);if(key)usersByPhone.set(key,u);});
+    regs.forEach((reg,index)=>{const key=phoneKey(reg.phone||reg.uid)||'registration-'+index,user=usersByPhone.get(key),previous=mergedByPhone.get(key)||{};mergedByPhone.set(key,{...previous,...reg,phone:reg.phone||user?.uid||user?.phone||previous.phone||'',plan:user?.plan||reg.plan||previous.plan,pw:passwordOf(user)||passwordOf(reg)||passwordOf(previous),date:reg.date||user?.registered||previous.date,status:user?(reg.status==='FREE'?'FREE':'APPROVED'):(reg.status||previous.status||'PENDING')});});
+    users.forEach((user,index)=>{const key=phoneKey(user.uid||user.phone||user.name)||'user-'+index;if(!mergedByPhone.has(key))mergedByPhone.set(key,{phone:user.uid||user.phone||user.name,plan:user.plan,pw:passwordOf(user),date:user.registered,status:'APPROVED'});});
+    const merged=[...mergedByPhone.values()];
+    if(regsResult.status==='rejected'||usersResult.status==='rejected')status('Зарим мэдээлэл түр ирсэнгүй · боломжтой хэсгийг харуулж байна.');
+    const pending=merged.filter(p=>p.status==='PENDING');updatePendingBadge(pending.length);box.replaceChildren();
+    for(const p of [...pending,...merged.filter(p=>p.status!=='PENDING').reverse()]){
+     const card=document.createElement('article');card.className='dd-legacy-row';
+     line(card,(p.phone||'—')+' · '+(p.status==='FREE'?'FREE':String(p.plan||'—').toUpperCase()));
+     line(card,p.status==='PENDING'?'Төлбөр баталгаажуулахыг хүлээж байна':p.status==='APPROVED'?'Батлагдсан':p.status);
+     line(card,formatDate(p.date,true));if(p.promo)line(card,'Хөнгөлөлтийн код: '+p.promo);addPassword(card,p);
+     if(p.status==='PENDING'){for(const [label,fn]of [['Төлбөр батлах',()=>approveReg(p.phone)],['Хүсэлт устгах',()=>rejectReg(p.phone)]]){const b=document.createElement('button');b.type='button';b.textContent=label;b.className='btn-approve';b.onclick=async()=>{card.querySelectorAll('button').forEach(x=>x.disabled=true);try{await fn();}finally{card.querySelectorAll('button').forEach(x=>x.disabled=false);}};card.append(b);}}
+     if(p.status==='APPROVED'){const free=document.createElement('button');free.type='button';free.textContent='Free рүү буцаах';free.onclick=async()=>{card.querySelectorAll('button').forEach(x=>x.disabled=true);try{const r=await gas('downgradeRegistration',{phone:p.phone});if(r.ok!==true)throw Error('Free рүү шилжүүлж чадсангүй.');status(p.phone+' · Free боллоо.');await Promise.all([loadRegistrations(),loadUsers()]);}catch(e){announce(e);}finally{card.querySelectorAll('button').forEach(x=>x.disabled=false);}};card.append(free);}
+     box.append(card);
+    }
+    if(!merged.length)box.textContent='Бүртгэл байхгүй.';return true;
+   }catch(e){box.textContent=e.message;announce(e);return false;}
+  };
+  window.approveReg=async function(phone){try{const r=await gas('approveAndAdd',{phone});if(r.ok!==true)throw Error('Баталгаажуулалт амжилтгүй.');status(phone+' · Батлагдаж эрх нээгдлээ.');await Promise.all([loadRegistrations(),loadUsers()]);}catch(e){announce(e);}};
   window.rejectReg=async function(phone){if(!confirm(phone+' хүсэлтийг устгах уу?'))return;try{const r=await gas('deleteReg',{phone});if(r.ok!==true)throw Error('Устгаж чадсангүй.');await loadRegistrations();status('Хүсэлт устгагдлаа.');}catch(e){announce(e);}};
   window.delUser=async function(pw){if(!confirm('Энэ гишүүнийг Sheets-ээс устгах уу?'))return;try{const r=await gas('delete',{pw});if(r.ok!==true)throw Error('Устгаж чадсангүй.');await loadUsers();}catch(e){announce(e);}};
   $('dd-settings').onclick=()=>openGlobalSettings();
   $('dd-check').onclick=async()=>{const b=$('dd-check');b.disabled=true;status('Google Sheets холболтыг шалгаж байна…');try{const h=await gas('health');if(h.ok!==true||!h.sheets)throw Error('Apps Script health хариу зөрсөн байна.');status('Google Sheets холбогдлоо · '+h.version);await Promise.all([loadUsers(),loadRegistrations()]);}catch(e){announce(e);}finally{b.disabled=false;}};
-  $('dd-logout').onclick=()=>{localStorage.removeItem('pd_admin_key');location.reload();};
+  $('dd-logout').onclick=()=>{if(typeof window.DDLock==='function')window.DDLock();else{try{sessionStorage.removeItem('pd_dashboard_unlocked_v1');}catch(e){}location.reload();}};
   for(const id of ['gs-claude','ai-api-key','batch-api-key'])if($(id)){$(id).value='Серверийн тохиргооноос';$(id).readOnly=true;}
-  $('dd-check').click();
+  if(location.protocol==='file:')status('Локал preview · Google Sheets уншихын тулд Тохиргоо хэсэгт Apps Script /exec URL оруулна уу.');else $('dd-check').click();
  });
 })();
 
@@ -2702,6 +2821,9 @@ root.DropCore={escape,clone,dateKey,validDate,progress,setStatus,toggleStage,fil
 <button class="tb-rp-btn" id="kbd-hint-btn" onclick="var ko=document.getElementById('kbd-overlay');if(ko)ko.style.display=ko.style.display==='none'?'flex':'none';" style="display:none;" title="Гарын товч — ⌘/">
 <svg fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><rect height="12" rx="3" width="20" x="2" y="6"></rect><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M8 14h8"></path></svg>
 </button>
+<button aria-label="Dashboard түгжих" class="tb-rp-btn" id="dd-quick-lock" onclick="if(typeof window.DDLock==='function')window.DDLock()" title="Dashboard түгжих">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="11" rx="2" width="16" x="4" y="10"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"></path></svg>
+</button>
 <div class="tb-rp-avatar" id="u-av" onclick="doSettings()" title="Профайл">Ц</div>
 <button class="tb-rp-chevron" onclick="doSettings()">
 <svg viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -3059,7 +3181,7 @@ root.DropCore={escape,clone,dateKey,validDate,progress,setStatus,toggleStage,fil
 <button class="btn-add" onclick="openBatchPlanner()" style="background:var(--blue);color:#fff;border:none;">7 Хоногийн Контент</button>
 <button class="btn-add" onclick="resetContents()" style="background:var(--text3);">↺ Reset</button>
 <button class="btn-add" onclick="openContentM()">+ Нэмэх</button>
-</input></div>
+</div>
 <!-- Card list -->
 <div class="cnt-view-btns">
 <button class="cnt-vb on" onclick="setCntView('list',this)">Жагсаалт</button>
@@ -3353,8 +3475,10 @@ root.DropCore={escape,clone,dateKey,validDate,progress,setStatus,toggleStage,fil
 <div class="rs-title">Pipeline тохиргоо</div>
 <div class="rs-fld" style="margin-bottom:10px">
 <div class="rs-lbl">Reel URL <span style="color:var(--text4);font-weight:400">IG · FB — нийтийн (public) reel</span></div>
-<textarea class="rs-ta rs-inp" id="rs-url" placeholder="https://www.instagram.com/reel/XXXX/
+<textarea class="rs-ta rs-inp" id="rs-url" inputmode="url" spellcheck="false" autocomplete="off" onblur="rsNormalizeUrlInput()" onpaste="setTimeout(rsNormalizeUrlInput,0)" placeholder="https://www.instagram.com/reel/XXXX/
+https://www.instagram.com/reels/XXXX/
 https://www.facebook.com/reel/XXXX" rows="2"></textarea>
+<div id="rs-url-status" style="font-size:10px;color:var(--text4);margin-top:5px;line-height:1.5">Instagram-ийн <b>/reel/</b> болон <b>/reels/</b> URL аль аль нь ажиллана. utm_source, stkn, igsh зэрэг tracking параметрийг автоматаар цэвэрлэнэ.</div>
 </div>
 <div class="rs-row" style="margin-bottom:10px">
 <div class="rs-fld" style="width:110px">
@@ -3711,13 +3835,45 @@ https://www.facebook.com/reel/XXXX" rows="2"></textarea>
     }
 
     /* ─── Video info fetch (RapidAPI) ─── */
+    function rsNormalizeSocialUrl(raw){
+      var value=(raw||'').trim();
+      if(!value)return '';
+      // Copied text/Markdown дундаас эхний social URL-г салгана.
+      var match=value.match(/https?:\/\/(?:www\.|m\.)?(?:instagram\.com|facebook\.com|fb\.watch)\/[^\s)\]}>]+/i);
+      if(match)value=match[0];
+      value=value.replace(/^[\[<(]+|[\]),.;>]+$/g,'');
+      // "instagram.com/reels/..." гэж scheme-гүй paste хийсэн ч ажиллана.
+      if(!/^https?:\/\//i.test(value)&&/^(?:www\.|m\.)?(?:instagram\.com|facebook\.com|fb\.watch)\//i.test(value)) value='https://'+value;
+      try{
+        var u=new URL(value);
+        var host=u.hostname.toLowerCase().replace(/^www\./,'').replace(/^m\./,'');
+        if(host==='instagram.com'||host.endsWith('.instagram.com')){
+          var m=u.pathname.match(/^\/(?:reel|reels|p)\/([A-Za-z0-9_-]+)/i);
+          if(m)return 'https://www.instagram.com/reel/'+m[1]+'/';
+        }
+        if(host==='facebook.com'||host.endsWith('.facebook.com')||host==='fb.watch'){
+          // Facebook-ийн query параметр зарим link дээр хэрэгтэй тул хэвээр үлдээнэ.
+          return u.href;
+        }
+      }catch(e){}
+      return value;
+    }
+    window.rsNormalizeUrlInput=function(){
+      var el=rq('rs-url'),st=rq('rs-url-status');if(!el)return;
+      var raw=el.value.trim();if(!raw){if(st){st.style.color='var(--text4)';st.innerHTML='Instagram-ийн <b>/reel/</b> болон <b>/reels/</b> URL аль аль нь ажиллана. Tracking параметр автоматаар цэвэрлэгдэнэ.';}return;}
+      var normalized=rsNormalizeSocialUrl(raw);
+      if(normalized)el.value=normalized;
+      var ok=/instagram\.com\/(?:reel|reels|p)\/[A-Za-z0-9_-]+/i.test(normalized)||/facebook\.com\/(?:reel|watch|video)|fb\.watch/i.test(normalized);
+      if(st){st.style.color=ok?'var(--green)':'var(--red)';st.textContent=ok?'✓ URL танигдлаа — pipeline ажиллуулахад бэлэн':'URL танигдсангүй. Instagram Reel/Post эсвэл Facebook Reel URL оруулна уу.';}
+    };
     async function rsFetchVideoInfo(url,rKey){
+      url=rsNormalizeSocialUrl(url);
       var isFB=/facebook\.com|fb\.watch/i.test(url),isIG=/instagram\.com/i.test(url);
       if(isIG){
-        var m=url.match(/instagram\.com\/(?:reel|p)\/([A-Za-z0-9_\-]+)/);
+        var m=url.match(/instagram\.com\/(?:reel|reels|p)\/([A-Za-z0-9_\-]+)/i);
         if(!m)throw new Error('Instagram URL-с shortcode олдсонгүй.');
         var sc=m[1];
-        var r=await fetch('https://social-media-video-downloader.p.rapidapi.com/instagram/v3/media/post/details?renderableFormats=720p%2Chighres&shortcode='+sc,{headers:{'X-RapidAPI-Key':rKey,'X-RapidAPI-Host':'social-media-video-downloader.p.rapidapi.com','Content-Type':'application/json'}});
+        var r=await fetch('https://social-media-video-downloader.p.rapidapi.com/instagram/v3/media/post/details?renderableFormats=720p%2Chighres&shortcode='+sc,{headers:{'X-RapidAPI-Key':rKey,'X-RapidAPI-Host':'social-media-video-downloader.p.rapidapi.com','Content-Type':'application/json'},signal:AbortSignal.timeout(30000)});
         if(r.status===401||r.status===403)throw new Error('RapidAPI key буруу.');
         if(!r.ok){var t=await r.text();throw new Error('RapidAPI алдаа ('+r.status+'): '+t.slice(0,200));}
         var d=await r.json();var videoUrl=null,audioUrl=null;
@@ -3731,8 +3887,8 @@ https://www.facebook.com/reel/XXXX" rows="2"></textarea>
       }
       if(isFB){
         var apiUrl='https://social-media-video-downloader.p.rapidapi.com/social/auto-link?url='+encodeURIComponent(url);
-        var r2=await fetch(apiUrl,{headers:{'X-RapidAPI-Key':rKey,'X-RapidAPI-Host':'social-media-video-downloader.p.rapidapi.com','Content-Type':'application/json'}});
-        if(!r2.ok){var fb='https://social-media-video-downloader.p.rapidapi.com/facebook/post?url='+encodeURIComponent(url);var r3=await fetch(fb,{headers:{'X-RapidAPI-Key':rKey,'X-RapidAPI-Host':'social-media-video-downloader.p.rapidapi.com'}});if(!r3.ok)throw new Error('Facebook API алдаа');return rsParseFB(await r3.json());}
+        var r2=await fetch(apiUrl,{headers:{'X-RapidAPI-Key':rKey,'X-RapidAPI-Host':'social-media-video-downloader.p.rapidapi.com','Content-Type':'application/json'},signal:AbortSignal.timeout(30000)});
+        if(!r2.ok){var fb='https://social-media-video-downloader.p.rapidapi.com/facebook/post?url='+encodeURIComponent(url);var r3=await fetch(fb,{headers:{'X-RapidAPI-Key':rKey,'X-RapidAPI-Host':'social-media-video-downloader.p.rapidapi.com'},signal:AbortSignal.timeout(30000)});if(!r3.ok)throw new Error('Facebook API алдаа');return rsParseFB(await r3.json());}
         return rsParseFB(await r2.json());
       }
       throw new Error('IG эсвэл FB Reels URL байх ёстой.');
@@ -3795,8 +3951,8 @@ AAA VIRAL ENGINE — 3-г ЗААВАЛ тараа:
   ③ ANXIETY → FOMO, urgency, "хоцрогдож байна уу?"
 CTA БҮТЭЦ — 2 хэсэг:
   1. Debate асуулт: хоёр тал маргаж болохуйц, specific, comment bait — АЛГОРИТМЫН ГОЛ ХӨДӨЛГҮҮР
-     → Comment авсан бичлэгийг алгоритм Follow-оос 3-5x илүү түгээдэг
-     → Асуулт 2 тодорхой эсрэг үр дүнтэй байх: "Ашигтай болох уу, алдагдал хүлээх үү?"
+     → Хиймэл engagement bait бүү хий — контенттой шууд холбоотой, хүн үнэхээр хариулах хүсэлтэй асуулт тавь
+     → Асуулт 2 тодорхой эсрэг үр дүнтэй байж болно: "Ашигтай болох уу, алдагдал хүлээх үү?"
   2. Дагалтын уриалга: байгалийн хэллэг — шахалтгүй, органик
       "Намайг дагаарай" — шууд, borлуулалтын шахалт, хориглоно
       "Иймэрхүү санаануудаар дагаарай " — хиймэл, хориглоно
@@ -4690,7 +4846,8 @@ BODY БҮТЭЦ (ANXIETY MAX, X байхгүй/байгаа хоёр талыг 
     /* ─── MAIN PIPELINE ─── */
     window.rsRun=async function(){
       if(rs_running)return;
-      var url=rq('rs-url').value.trim();
+      var url=rsNormalizeSocialUrl(rq('rs-url').value.trim());
+      if(url&&rq('rs-url').value.trim()!==url)rq('rs-url').value=url;
       var rKey=rq('rs-rapid-key').value.trim();
       var oKey=rq('rs-oai-key').value.trim();
       var sUrl=(localStorage.getItem('rp_serverUrl')||rq('rs-server-url').value.trim()||'http://localhost:3000').replace(/\/$/,'');
@@ -4701,7 +4858,7 @@ BODY БҮТЭЦ (ANXIETY MAX, X байхгүй/байгаа хоёр талыг 
       if(!url){toast('Reel URL оруулна уу','err');return;}
       if(!rKey){toast('RapidAPI key оруулна уу','err');return;}
       if(!oKey){toast('OpenAI key оруулна уу','err');return;}
-      if(!/instagram\.com\/(reel|p)\/|facebook\.com\/(reel|watch|video)|fb\.watch/i.test(url)){toast('IG эсвэл FB Reels URL байх ёстой','err');return;}
+      if(!/instagram\.com\/(reel|reels|p)\/|facebook\.com\/(reel|watch|video)|fb\.watch/i.test(url)){toast('IG эсвэл FB Reel URL оруулна уу — Instagram /reel/ болон /reels/ аль аль нь дэмжигдэнэ','err');return;}
 
       rs_running=true;rsHideErr();
       var btn=rq('rs-run-btn');
@@ -4742,7 +4899,7 @@ BODY БҮТЭЦ (ANXIETY MAX, X байхгүй/байгаа хоёр талыг 
         var form=new FormData();
         form.append('file',new File([mediaBuf],'media.'+ext,{type:mime}));
         form.append('model','whisper-1');form.append('language',lang);
-        var wr=await fetch('https://api.openai.com/v1/audio/transcriptions',{method:'POST',headers:{'Authorization':'Bearer '+oKey},body:form});
+        var wr=await fetch('https://api.openai.com/v1/audio/transcriptions',{method:'POST',headers:{'Authorization':'Bearer '+oKey},body:form,signal:AbortSignal.timeout(90000)});
         if(!wr.ok){var we=await wr.json().catch(function(){return{};});throw new Error(we.error?.message||'Whisper алдаа '+wr.status);}
         var wd=await wr.json();
         rawText=wd.text;
@@ -4761,7 +4918,7 @@ BODY БҮТЭЦ (ANXIETY MAX, X байхгүй/байгаа хоёр талыг 
         rsSetOrb(3,'run');rsSetStatus(3,'run','GPT-4o — Монгол script үүсгэж байна...');
         rq('rs-out-body').innerHTML='<div style="padding:20px 16px;display:flex;flex-direction:column;gap:10px"><div class="rs-shim" style="width:65%;height:18px"></div><div class="rs-shim" style="width:50%;height:14px"></div><div class="rs-shim" style="width:90%;margin-top:8px"></div><div class="rs-shim" style="width:85%"></div><div class="rs-shim" style="width:88%"></div><div class="rs-shim" style="width:75%"></div><div class="rs-shim" style="width:60%;margin-top:6px"></div></div>';
         var sysPrompt=rsBuildPrompt(format,seriesLine);
-        var gr=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+oKey,'Content-Type':'application/json'},body:JSON.stringify({model:'gpt-4o',max_tokens:3500,messages:[{role:'system',content:sysPrompt},{role:'user',content:'Доорх transcript-ийн гол санааг аваад монгол reel script бич:\n\n'+rawText}]})});
+        var gr=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Authorization':'Bearer '+oKey,'Content-Type':'application/json'},body:JSON.stringify({model:'gpt-4o',max_tokens:3500,messages:[{role:'system',content:sysPrompt},{role:'user',content:'Доорх transcript-ийн гол санааг аваад монгол reel script бич:\n\n'+rawText}]}),signal:AbortSignal.timeout(60000)});
         if(!gr.ok){var ge=await gr.json().catch(function(){return{};});throw new Error(ge.error?.message||'GPT-4o алдаа '+gr.status);}
         var gd=await gr.json();
         var finalScript=gd.choices[0].message.content;
@@ -4876,16 +5033,16 @@ BODY БҮТЭЦ (ANXIETY MAX, X байхгүй/байгаа хоёр талыг 
 <div class="admin-grid" style="grid-template-columns:1fr;">
 <!-- ── БҮХ ХЭРЭГЛЭГЧИД mini section ── -->
 <div class="a-card" style="padding:0;overflow:hidden;">
-<div onclick="toggleAdminUsers()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:13px 15px;user-select:none;border-bottom:1px solid var(--border);">
+<div style="display:flex;align-items:center;gap:8px;padding:8px 10px 8px 15px;user-select:none;border-bottom:1px solid var(--border);">
+<button aria-controls="admin-users-body" aria-expanded="false" onclick="toggleAdminUsers();this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true')" style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex:1;min-width:0;padding:5px 0;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer;font:inherit;">
 <span style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--text);">
 <svg fill="none" height="14" stroke="var(--blue)" stroke-width="2" viewbox="0 0 24 24" width="14"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
               Бүх хэрэглэгчид
               <span id="admin-user-total-badge" style="background:var(--bluebg);color:var(--blue);font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;"></span>
 </span>
-<div style="display:flex;align-items:center;gap:8px;">
-<button onclick="event.stopPropagation();loadUsers()" style="padding:4px 10px;border-radius:7px;border:1px solid var(--border2);background:var(--bg4);color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;">↻</button>
 <svg fill="none" height="14" id="admin-users-toggle-icon" stroke="currentColor" stroke-width="2.2" style="transition:transform .22s;transform:rotate(-90deg);" viewbox="0 0 24 24" width="14"><polyline points="6 9 12 15 18 9"></polyline></svg>
-</div>
+</button>
+<button aria-label="Хэрэглэгчдийн жагсаалтыг шинэчлэх" onclick="loadUsers()" style="padding:4px 10px;border-radius:7px;border:1px solid var(--border2);background:var(--bg4);color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;">↻</button>
 </div>
 <div id="admin-users-body" style="display:none;padding:12px 14px;">
 <!-- Expiry reminders -->
@@ -4945,7 +5102,7 @@ BODY БҮТЭЦ (ANXIETY MAX, X байхгүй/байгаа хоёр талыг 
 <button class="copy-btn" onclick="copyPW()" style="margin-top:10px;">Хуулах</button>
 </div>
 <div class="sync-st" id="sync-status"></div>
-</input></input></div>
+</div>
 </div>
 <!-- ── PROMO CODE ХЯНАХ ── -->
 <div class="a-card-full" style="margin-bottom:16px;">
@@ -5012,7 +5169,7 @@ BODY БҮТЭЦ (ANXIETY MAX, X байхгүй/байгаа хоёр талыг 
 <div>
 <label class="lbl">Бараа нэр</label>
 <input class="fi3" id="dp-name" placeholder="LED Strip Light 5м">
-</input></div>
+</div>
 <div>
 <label class="lbl">Ангилал</label>
 <select class="fi3" id="dp-cat">
@@ -5028,11 +5185,11 @@ BODY БҮТЭЦ (ANXIETY MAX, X байхгүй/байгаа хоёр талыг 
 <div>
 <label class="lbl">AliExpress үнэ (₮)</label>
 <input class="fi3" id="dp-buy" oninput="dpCalc()" placeholder="12000" type="number">
-</input></div>
+</div>
 <div>
 <label class="lbl">Зарах үнэ (₮)</label>
 <input class="fi3" id="dp-sell" oninput="dpCalc()" placeholder="35000" type="number">
-</input></div>
+</div>
 </div>
 <!-- Margin preview -->
 <div id="dp-margin-preview" style="display:none;background:var(--greenbg);border:1px solid rgba(160,160,160,0.2);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--green);font-weight:700;margin-bottom:10px;margin-top:-4px;">
@@ -5065,7 +5222,7 @@ BODY БҮТЭЦ (ANXIETY MAX, X байхгүй/байгаа хоёр талыг 
 <button class="btn-green" id="dp-send-btn" onclick="dpSend()" style="flex:2;justify-content:center;">Free Channel руу илгээх</button>
 </div>
 <div id="dp-status" style="font-size:11px;margin-top:8px;text-align:right;color:var(--text3);"></div>
-</input></input></div>
+</div>
 <!-- ── 7 ХОНОГИЙН QUEUE ── -->
 <div class="a-card-full" style="margin-bottom:16px;">
 <div class="a-label" onclick="toggleWQ()" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;">
@@ -5295,7 +5452,7 @@ ProductDrop Pro-д шинэ 100 бараа нэмэгдлээ
 <div class="h-add">
 <input class="h-add-inp" id="h-inp" maxlength="28" onkeydown="if(event.key==='Enter')hAdd()" placeholder="Шинэ дадал нэмэх...">
 <button class="h-add-btn" onclick="hAdd()">+ Нэмэх</button>
-</input></div>
+</div>
 </div>
 <!-- Deep work -->
 <div class="fp-card">
@@ -5312,7 +5469,7 @@ ProductDrop Pro-д шинэ 100 бараа нэмэгдлээ
 <option value="90">1.5ц</option><option value="120">2ц</option>
 </select>
 <button class="dw-btn" onclick="dwAdd()">+ Нэм</button>
-</input></div>
+</div>
 </div>
 </div>
 <div class="fp-2col">
@@ -5356,7 +5513,7 @@ ProductDrop Pro-д шинэ 100 бараа нэмэгдлээ
 <option value="other">Бусад</option>
 </select>
 <button class="fi-add-btn" onclick="fiAdd()">+ Нэм</button>
-</input></div>
+</div>
 <button class="fi-notes-toggle" id="fi-ntgl" onclick="fiToggleNotes()">▾ Дэлгэрэнгүй тайлбар нэмэх</button>
 <textarea class="fi-notes-inp" id="fi-notes-inp" maxlength="1000" placeholder="Контекст, яагаад чухал вэ, холбоо бүхий санаа..."></textarea>
 <!-- Status filters -->
@@ -5616,7 +5773,7 @@ ProductDrop Pro-д шинэ 100 бараа нэмэгдлээ
 <div>
 <div style="font-size:10px;color:var(--text4);font-weight:700;margin-bottom:3px;">GogoShop цалин (сар)</div>
 <input class="fin-inp" id="fin-salary" oninput="finCalc()" placeholder="3000000" style="width:140px;" type="number">
-</input></div>
+</div>
 <div style="font-size:22px;color:var(--text4);">×2</div>
 <div>
 <div style="font-size:10px;color:var(--text4);font-weight:700;margin-bottom:3px;">Exit зорилго (₮6M)</div>
@@ -5645,7 +5802,7 @@ ProductDrop Pro-д шинэ 100 бараа нэмэгдлээ
 <input class="fin-add-inp" id="fin-inc-name" placeholder="Орлогын нэр...">
 <input class="fin-add-amt" id="fin-inc-amt" placeholder="₮0" type="number">
 <button class="fin-add-btn" onclick="finAddInc()">+ Нэм</button>
-</input></input></div>
+</div>
 </div>
 <!-- Expense -->
 <div class="fin-card">
@@ -5659,7 +5816,7 @@ ProductDrop Pro-д шинэ 100 бараа нэмэгдлээ
 <input class="fin-add-inp" id="fin-exp-name" placeholder="Зарлагын нэр...">
 <input class="fin-add-amt" id="fin-exp-amt" placeholder="₮0" type="number">
 <button class="fin-add-btn" onclick="finAddExp()">+ Нэм</button>
-</input></input></div>
+</div>
 </div>
 </div>
 </div><!-- /page-finance -->
@@ -5690,396 +5847,134 @@ ProductDrop Pro-д шинэ 100 бараа нэмэгдлээ
 <!-- ── SCALE ТӨЛӨВЛӨГӨӨ PAGE ── -->
 <div class="page" id="page-roadmap">
 <style>
-        .rm-header{margin-bottom:22px}
-        .rm-header h1{font-size:26px;font-weight:800;letter-spacing:-.5px;color:var(--text)}
-        .rm-header p{font-size:13px;color:var(--text3);margin-top:3px}
-        /* Exit countdown — richer gradient */
-        .rm-exit-bar{
-          background:linear-gradient(135deg,#262626 0%,#2f2f2f 60%,#212121 100%);
-          border:1px solid rgba(161,161,161,0.22);
-          border-radius:var(--r);padding:20px 24px;margin-bottom:18px;
-          display:flex;align-items:center;gap:20px;
-          box-shadow:0 4px 24px rgba(0,0,0,0.18);
-          position:relative;overflow:hidden;color:#fff
-        }
-        .rm-exit-bar::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),#7b7b7b)}
-        .rm-exit-bar::after{content:'';position:absolute;right:20px;bottom:-8px;font-size:64px;opacity:0.07;pointer-events:none}
-        .rm-exit-countdown{display:flex;gap:14px;flex-shrink:0}
-        .rm-cd-unit{text-align:center}
-        .rm-cd-num{font-size:32px;font-weight:800;color:#fff;letter-spacing:-1.5px;line-height:1;text-shadow:0 0 20px rgba(161,161,161,.4)}
-        .rm-cd-lbl{font-size:9px;color:rgba(255,255,255,0.5);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-top:4px}
-        .rm-cd-sep{font-size:28px;font-weight:800;color:rgba(161,161,161,0.5);align-self:flex-start;margin-top:2px}
-        .rm-exit-info{flex:1;min-width:0}
-        .rm-exit-title{font-size:14px;font-weight:800;color:#fff;margin-bottom:5px;letter-spacing:-.2px}
-        .rm-exit-sub{font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:10px;line-height:1.65}
-        .rm-exit-sub strong{color:rgba(255,255,255,0.9)}
-        .rm-exit-prog-wrap{background:rgba(255,255,255,0.12);border-radius:99px;height:7px;overflow:hidden}
-        .rm-exit-prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),#7b7b7b);transition:width 1.2s cubic-bezier(.25,.46,.45,.94);box-shadow:0 0 8px rgba(161,161,161,.5)}
-        .rm-exit-prog-lbl{font-size:10px;color:rgba(255,255,255,0.5);margin-top:5px;font-weight:600}
-        /* Stats */
-        .rm-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
-        @media(max-width:700px){.rm-stat-row{grid-template-columns:repeat(2,1fr)}}
-        .rm-stat-card{
-          background:var(--bg2);border:1px solid var(--border);
-          border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);
-          position:relative;overflow:hidden;transition:box-shadow .2s
-        }
-        .rm-stat-card:hover{box-shadow:var(--shadow-md)}
-        .rm-stat-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;border-radius:2px 0 0 2px}
-        .rm-stat-card:nth-child(1)::before{background:var(--gold)}
-        .rm-stat-card:nth-child(2)::before{background:var(--blue)}
-        .rm-stat-card:nth-child(3)::before{background:var(--red)}
-        .rm-stat-card:nth-child(4)::before{background:var(--green)}
-        .rm-stat-val{font-size:24px;font-weight:800;color:var(--text);letter-spacing:-1px;line-height:1}
-        .rm-stat-lbl{font-size:11px;color:var(--text3);margin-top:4px;font-weight:600}
-        @media(max-width:768px){
-          .rm-header h1{font-size:20px}
-          .rm-exit-bar{padding:16px;gap:14px;flex-direction:column;align-items:stretch}
-          .rm-exit-countdown{justify-content:center}
-          .rm-cd-num{font-size:24px}
-          .rm-cd-sep{font-size:20px}
-          .rm-stat-card{padding:11px 12px}
-          .rm-stat-val{font-size:18px}
-        }
-        .rm-stat-tag{display:inline-block;font-size:9px;padding:2px 7px;border-radius:4px;font-weight:700;letter-spacing:.5px;margin-top:6px}
-        .rm-stat-tag.red{background:var(--redbg);color:var(--red)}
-        .rm-stat-tag.grn{background:var(--greenbg);color:var(--green)}
-        .rm-stat-tag.ylw{background:var(--amberbg);color:var(--gold)}
-        .rm-stat-tag.pur{background:var(--purplebg);color:var(--purple)}
-        /* Phase block */
-        .rm-phase{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px;box-shadow:var(--shadow)}
-        .rm-phase-hdr{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
-        .rm-phase-hdr:hover{background:var(--bg3)}
-        .rm-phase-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;text-transform:uppercase;letter-spacing:1.5px;flex-shrink:0}
-        .rm-phase-title{font-size:14px;font-weight:800;color:var(--text);letter-spacing:-.3px}
-        .rm-phase-date{font-size:11px;color:var(--text4);margin-left:auto;font-weight:600;white-space:nowrap}
-        .rm-phase-prog{font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px;margin-left:8px;flex-shrink:0}
-        .rm-phase-body{padding:4px 0 8px}
-        /* Items */
-        .rm-item{display:flex;align-items:flex-start;gap:12px;padding:11px 16px;cursor:pointer;transition:background .12s;border-bottom:1px solid var(--border)}
-        .rm-item:last-child{border-bottom:none}
-        .rm-item:hover{background:var(--bg3)}
-        .rm-item.rm-done{opacity:.5}
-        .rm-item.rm-done .rm-item-title{text-decoration:line-through;color:var(--text3)}
-        .rm-cb{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s;margin-top:2px}
-        .rm-cb.checked{background:var(--green);border-color:var(--green);box-shadow:0 0 6px rgba(160,160,160,.35)}
-        .rm-cb.checked::after{content:'';font-size:10px;color:#fff;font-weight:800}
-        .rm-item-body{flex:1;min-width:0}
-        .rm-item-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
-        .rm-item-sub{font-size:11px;color:var(--text3);line-height:1.55}
-        .rm-item-meta{display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap}
-        .rm-tag{font-size:9px;padding:2px 7px;border-radius:3px;font-weight:700;text-transform:uppercase;letter-spacing:.8px}
-        .rm-tag-red{background:var(--redbg);color:var(--red)}
-        .rm-tag-ylw{background:var(--amberbg);color:var(--gold)}
-        .rm-tag-grn{background:var(--greenbg);color:var(--green)}
-        .rm-tag-pur{background:var(--purplebg);color:var(--purple)}
-        .rm-tag-blu{background:var(--bluebg);color:var(--blue)}
-        .rm-tag-muted{background:var(--bg4);color:var(--text3)}
-        /* Target summary */
-        .rm-target-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin:8px 16px 12px;border-radius:8px;overflow:hidden}
-        .rm-target-cell{background:var(--bg3);padding:10px 14px}
-        .rm-target-lbl{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text4);font-weight:700;margin-bottom:3px}
-        .rm-target-val{font-size:16px;font-weight:800;color:var(--text);letter-spacing:-.5px}
-        .rm-target-sub{font-size:10px;color:var(--text3);margin-top:1px}
-        /* Bottleneck */
-        .rm-bn-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
-        @media(max-width:600px){.rm-bn-grid{grid-template-columns:1fr}}
-        .rm-bn-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow)}
-        .rm-bn-num{font-size:22px;font-weight:800;letter-spacing:-1px;line-height:1;margin-bottom:6px}
-        .rm-bn-title{font-size:12px;font-weight:800;color:var(--text);margin-bottom:5px}
-        .rm-bn-desc{font-size:11px;color:var(--text3);line-height:1.6;margin-bottom:8px}
-        .rm-bn-sol{font-size:11px;color:var(--text2);font-weight:600;padding:6px 10px;background:var(--bg3);border-radius:6px;border-left:2px solid var(--border2);line-height:1.5}
-        /* KPI */
-        .rm-kpi-table{width:100%;border-collapse:collapse;font-size:12px}
-        .rm-kpi-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);padding:0 12px 10px;text-align:left;border-bottom:1px solid var(--border)}
-        .rm-kpi-table td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text2);font-weight:500;vertical-align:top}
-        .rm-kpi-table tr:last-child td{border-bottom:none}
-        .rm-kpi-table tr:hover td{background:var(--bg3)}
-        .rm-kpi-name{font-weight:700;color:var(--text)}
-        .rm-kpi-freq{font-size:10px;padding:2px 8px;border-radius:3px;background:var(--bg4);color:var(--text3);font-weight:600}
-        /* Chevron */
-        .rm-chevron{width:16px;height:16px;flex-shrink:0;color:var(--text4);transition:transform .2s;margin-left:4px}
-        .rm-chevron.open{transform:rotate(180deg)}
-        /* Supabase sync indicator */
-        .rm-sync-dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;margin-left:6px;vertical-align:middle;opacity:0;transition:opacity .4s}
-        .rm-sync-dot.show{opacity:1}
-        /* Dark mode overrides */
-        [data-theme="dark"] .rm-exit-bar{background:linear-gradient(135deg,#1a1a1a 0%,#212121 60%,#171717 100%);border-color:rgba(161,161,161,0.18)}
-        [data-theme="dark"] .rm-stat-card{background:var(--bg2);border-color:var(--border)}
-      </style>
+.rm-header{margin-bottom:22px}
+.rm-header h1{font-size:26px;font-weight:800;letter-spacing:-.5px;color:var(--text)}
+.rm-header p{font-size:13px;color:var(--text3);margin-top:3px}
+.rm-exit-bar{background:linear-gradient(135deg,#262626 0%,#2f2f2f 60%,#212121 100%);border:1px solid rgba(161,161,161,0.22);border-radius:var(--r);padding:20px 24px;margin-bottom:18px;display:flex;align-items:center;gap:20px;box-shadow:0 4px 24px rgba(0,0,0,0.18);position:relative;overflow:hidden;color:#fff}
+.rm-exit-bar::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),#7b7b7b)}
+.rm-exit-countdown{display:flex;gap:14px;flex-shrink:0}.rm-cd-unit{text-align:center}.rm-cd-num{font-size:32px;font-weight:800;color:#fff;letter-spacing:-1.5px;line-height:1;text-shadow:0 0 20px rgba(161,161,161,.4)}.rm-cd-lbl{font-size:9px;color:rgba(255,255,255,.5);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-top:4px}.rm-cd-sep{font-size:28px;font-weight:800;color:rgba(161,161,161,.5);align-self:flex-start;margin-top:2px}
+.rm-exit-info{flex:1;min-width:0}.rm-exit-title{font-size:14px;font-weight:800;color:#fff;margin-bottom:5px;letter-spacing:-.2px}.rm-exit-sub{font-size:12px;color:rgba(255,255,255,.62);margin-bottom:10px;line-height:1.65}.rm-exit-sub strong{color:#fff}.rm-exit-prog-wrap{background:rgba(255,255,255,.12);border-radius:99px;height:7px;overflow:hidden}.rm-exit-prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),#7b7b7b);transition:width 1.2s cubic-bezier(.25,.46,.45,.94);box-shadow:0 0 8px rgba(161,161,161,.5)}.rm-exit-prog-lbl{font-size:10px;color:rgba(255,255,255,.5);margin-top:5px;font-weight:600}
+.rm-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}.rm-stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:box-shadow .2s}.rm-stat-card:hover{box-shadow:var(--shadow-md)}.rm-stat-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;border-radius:2px 0 0 2px}.rm-stat-card:nth-child(1)::before{background:var(--gold)}.rm-stat-card:nth-child(2)::before{background:var(--blue)}.rm-stat-card:nth-child(3)::before{background:var(--green)}.rm-stat-card:nth-child(4)::before{background:var(--purple)}.rm-stat-val{font-size:24px;font-weight:800;color:var(--text);letter-spacing:-1px;line-height:1}.rm-stat-lbl{font-size:11px;color:var(--text3);margin-top:4px;font-weight:600}.rm-stat-tag{display:inline-block;font-size:9px;padding:2px 7px;border-radius:4px;font-weight:700;letter-spacing:.5px;margin-top:6px}.rm-stat-tag.red{background:var(--redbg);color:var(--red)}.rm-stat-tag.grn{background:var(--greenbg);color:var(--green)}.rm-stat-tag.ylw{background:var(--amberbg);color:var(--gold)}.rm-stat-tag.pur{background:var(--purplebg);color:var(--purple)}
+.rm-phase{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px;box-shadow:var(--shadow)}.rm-phase-hdr{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}.rm-phase-hdr:hover{background:var(--bg3)}.rm-phase-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;text-transform:uppercase;letter-spacing:1.2px;flex-shrink:0}.rm-phase-title{font-size:14px;font-weight:800;color:var(--text);letter-spacing:-.3px}.rm-phase-date{font-size:11px;color:var(--text4);margin-left:auto;font-weight:600;white-space:nowrap}.rm-phase-prog{font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px;margin-left:8px;flex-shrink:0}.rm-phase-body{padding:4px 0 8px}
+.rm-item{display:flex;align-items:flex-start;gap:12px;padding:11px 16px;cursor:pointer;transition:background .12s;border-bottom:1px solid var(--border)}.rm-item:last-child{border-bottom:none}.rm-item:hover{background:var(--bg3)}.rm-item.rm-done{opacity:.5}.rm-item.rm-done .rm-item-title{text-decoration:line-through;color:var(--text3)}.rm-cb{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s;margin-top:2px}.rm-cb.checked{background:var(--green);border-color:var(--green);box-shadow:0 0 6px rgba(160,160,160,.35)}.rm-cb.checked::after{content:'✓';font-size:10px;color:#fff;font-weight:800}.rm-item-body{flex:1;min-width:0}.rm-item-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}.rm-item-sub{font-size:11px;color:var(--text3);line-height:1.55}.rm-item-meta{display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap}.rm-tag{font-size:9px;padding:2px 7px;border-radius:3px;font-weight:700;text-transform:uppercase;letter-spacing:.8px}.rm-tag-red{background:var(--redbg);color:var(--red)}.rm-tag-ylw{background:var(--amberbg);color:var(--gold)}.rm-tag-grn{background:var(--greenbg);color:var(--green)}.rm-tag-pur{background:var(--purplebg);color:var(--purple)}.rm-tag-blu{background:var(--bluebg);color:var(--blue)}.rm-tag-muted{background:var(--bg4);color:var(--text3)}
+.rm-target-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin:8px 16px 12px;border-radius:8px;overflow:hidden}.rm-target-cell{background:var(--bg3);padding:10px 14px}.rm-target-lbl{font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:var(--text4);font-weight:700;margin-bottom:3px}.rm-target-val{font-size:16px;font-weight:800;color:var(--text);letter-spacing:-.5px}.rm-target-sub{font-size:10px;color:var(--text3);margin-top:1px}
+.rm-bn-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}.rm-bn-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow)}.rm-bn-num{font-size:22px;font-weight:800;letter-spacing:-1px;line-height:1;margin-bottom:6px}.rm-bn-title{font-size:12px;font-weight:800;color:var(--text);margin-bottom:5px}.rm-bn-desc{font-size:11px;color:var(--text3);line-height:1.6;margin-bottom:8px}.rm-bn-sol{font-size:11px;color:var(--text2);font-weight:600;padding:6px 10px;background:var(--bg3);border-radius:6px;border-left:2px solid var(--border2);line-height:1.5}
+.rm-kpi-table{width:100%;border-collapse:collapse;font-size:12px}.rm-kpi-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);padding:0 12px 10px;text-align:left;border-bottom:1px solid var(--border)}.rm-kpi-table td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text2);font-weight:500;vertical-align:top}.rm-kpi-table tr:last-child td{border-bottom:none}.rm-kpi-table tr:hover td{background:var(--bg3)}.rm-kpi-name{font-weight:700;color:var(--text)}.rm-kpi-freq{font-size:10px;padding:2px 8px;border-radius:3px;background:var(--bg4);color:var(--text3);font-weight:600}.rm-chevron{width:16px;height:16px;flex-shrink:0;color:var(--text4);transition:transform .2s;margin-left:4px}.rm-chevron.open{transform:rotate(180deg)}.rm-sync-dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;margin-left:6px;vertical-align:middle;opacity:0;transition:opacity .4s}.rm-sync-dot.show{opacity:1}
+[data-theme="dark"] .rm-exit-bar{background:linear-gradient(135deg,#1a1a1a 0%,#212121 60%,#171717 100%);border-color:rgba(161,161,161,.18)}
+.rm-next-gate{margin-top:7px;font-size:10px;color:rgba(255,255,255,.78);font-weight:700;letter-spacing:.01em}
+.rm-phase{transition:border-color .2s,box-shadow .2s}.rm-phase.rm-current{border-color:rgba(161,161,161,.55);box-shadow:0 0 0 1px rgba(161,161,161,.12),var(--shadow-md)}.rm-phase.rm-current .rm-phase-title::after{content:' · ОДОО';font-size:9px;letter-spacing:.08em;color:var(--gold);font-weight:800}.rm-phase.rm-overdue{border-color:rgba(100,100,100,.25)}.rm-phase.rm-overdue .rm-phase-title::after{content:' · ХОЦОРСОН';font-size:9px;letter-spacing:.08em;color:var(--red);font-weight:800}
+.rm-loop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}.rm-loop-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:13px 14px;box-shadow:var(--shadow)}.rm-loop-day{font-size:9px;font-weight:800;color:var(--text4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}.rm-loop-title{font-size:12px;font-weight:800;color:var(--text);margin-bottom:4px}.rm-loop-sub{font-size:10.5px;color:var(--text3);line-height:1.55}.rm-loop-rule{margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-size:10px;font-weight:700;color:var(--text2)}
+@media(max-width:900px){.rm-loop-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.rm-stat-row{grid-template-columns:repeat(2,1fr)}.rm-bn-grid{grid-template-columns:1fr}.rm-target-row{grid-template-columns:1fr}.rm-phase-hdr{flex-wrap:wrap}.rm-phase-date{margin-left:0}.rm-phase-prog{margin-left:auto}.rm-kpi-table{min-width:620px}.rm-loop-grid{grid-template-columns:1fr}}
+@media(max-width:768px){.rm-header h1{font-size:20px}.rm-exit-bar{padding:16px;gap:14px;flex-direction:column;align-items:stretch}.rm-exit-countdown{justify-content:center}.rm-cd-num{font-size:24px}.rm-cd-sep{font-size:20px}.rm-stat-card{padding:11px 12px}.rm-stat-val{font-size:18px}}
+</style>
 <div class="rm-header">
-<h1>Scale Төлөвлөгөө <span class="rm-sync-dot" id="rm-sync-dot" title="Supabase-д хадгалагдлаа"></span></h1>
-<p>ProductDrop.MN · Бизнесийн гүнзгий төлөвлөгөө · 2026</p>
+<h1>Scale Business Plan <span class="rm-sync-dot" id="rm-sync-dot" title="Supabase-д хадгалагдлаа"></span></h1>
+<p>ProductDrop.MN · Q4 Scale System · 2026.09.10 → 2027.01.01</p>
 </div>
-<!-- EXIT COUNTDOWN — Sept 1 target -->
 <div class="rm-exit-bar">
 <div class="rm-exit-countdown">
-<div class="rm-cd-unit"><div class="rm-cd-num" id="rm-days">--</div><div class="rm-cd-lbl">Өдөр</div></div>
-<div class="rm-cd-sep">:</div>
-<div class="rm-cd-unit"><div class="rm-cd-num" id="rm-hours">--</div><div class="rm-cd-lbl">Цаг</div></div>
-<div class="rm-cd-sep">:</div>
+<div class="rm-cd-unit"><div class="rm-cd-num" id="rm-days">--</div><div class="rm-cd-lbl">Өдөр</div></div><div class="rm-cd-sep">:</div>
+<div class="rm-cd-unit"><div class="rm-cd-num" id="rm-hours">--</div><div class="rm-cd-lbl">Цаг</div></div><div class="rm-cd-sep">:</div>
 <div class="rm-cd-unit"><div class="rm-cd-num" id="rm-mins">--</div><div class="rm-cd-lbl">Минут</div></div>
 </div>
 <div class="rm-exit-info">
-<div class="rm-exit-title">GogoShop → ProductDrop Full-time — September 1, 2026</div>
-<div class="rm-exit-sub">June 1: Явцын шалгалт (60 гишүүн хүрсэн эсэх) · <strong>Sept 1: Full exit</strong>— 250+ Pro гишүүн · ~₮4M MRR</div>
+<div class="rm-exit-title">2027 Scale Gate — 2027 оны 1-р сарын 1</div>
+<div class="rm-exit-sub"><strong>113 өдрийн зорилго:</strong> хэмжилт → acquisition → activation → retention → systemize. Jan 1 gate: <strong>250+ Pro · 10+ Business · ₮5M+ MRR equivalent · 60%+ renewal</strong>.</div>
 <div class="rm-exit-prog-wrap"><div class="rm-exit-prog-fill" id="rm-prog-fill" style="width:0%"></div></div>
 <div class="rm-exit-prog-lbl" id="rm-prog-lbl">Тооцоолж байна...</div>
-</div>
-</div>
-<!-- STAT CARDS -->
+<div class="rm-next-gate" id="rm-next-gate">Дараагийн gate тооцоолж байна...</div>
+</div></div>
+
 <div class="rm-stat-row">
-<div class="rm-stat-card">
-<div class="rm-stat-val" style="color:var(--gold)">₮49,900</div>
-<div class="rm-stat-lbl">Pro план / 3 сар</div>
-<div class="rm-stat-tag grn">Голлох бүтээгдэхүүн</div>
+<div class="rm-stat-card"><div class="rm-stat-val" id="rm-pro-count" style="color:var(--gold)">—</div><div class="rm-stat-lbl">Одоогийн идэвхтэй Pro</div><div class="rm-stat-tag ylw">Jan 1 → 250+</div></div>
+<div class="rm-stat-card"><div class="rm-stat-val" id="rm-business-count" style="color:var(--blue)">—</div><div class="rm-stat-lbl">Одоогийн Business</div><div class="rm-stat-tag grn">Jan 1 → 10+</div></div>
+<div class="rm-stat-card"><div class="rm-stat-val" id="rm-mrr-current" style="color:var(--green)">—</div><div class="rm-stat-lbl">Одоогийн MRR equivalent</div><div class="rm-stat-tag grn">Jan 1 → ₮5M+</div></div>
+<div class="rm-stat-card"><div class="rm-stat-val" id="rm-exec-pct" style="color:var(--purple)">0%</div><div class="rm-stat-lbl">Roadmap execution</div><div class="rm-stat-tag pur" id="rm-exec-detail">0 / 25 ажил</div></div>
 </div>
-<div class="rm-stat-card">
-<div class="rm-stat-val" id="rm-pro-count">~15</div>
-<div class="rm-stat-lbl">Одоогийн Pro гишүүн</div>
-<div class="rm-stat-tag ylw">Зорилт: Sept → 250</div>
-</div>
-<div class="rm-stat-card">
-<div class="rm-stat-val" style="color:var(--red)">250</div>
-<div class="rm-stat-lbl">Exit-д хэрэгтэй Pro</div>
-<div class="rm-stat-tag red">Sept 1 threshold</div>
-</div>
-<div class="rm-stat-card">
-<div class="rm-stat-val">95%+</div>
-<div class="rm-stat-lbl">Ашгийн margin</div>
-<div class="rm-stat-tag grn">SaaS давуу тал</div>
-</div>
-</div>
-<!-- ═══ PHASE 0 — ЗАСВАР ═══ -->
+
+<!-- PHASE 0 -->
 <div class="rm-phase">
-<div class="rm-phase-hdr" onclick="rmTogglePhase('p0')">
-<div class="rm-phase-badge" style="background:var(--redbg);color:var(--red);border:1px solid rgba(100,100,100,.25)">P0 — Засвар</div>
-<div class="rm-phase-title">Суурь засварлалт</div>
-<div class="rm-phase-date">Апр 13 — Май 1</div>
-<div class="rm-phase-prog" id="rm-p0-prog" style="background:var(--redbg);color:var(--red)">0/7</div>
-<svg class="rm-chevron open" fill="none" id="rm-chev-p0" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
-</div>
-<div class="rm-phase-body" id="rm-body-p0">
-<div class="rm-item" data-key="p0_1" onclick="rmToggle(this,'p0_1')">
-<div class="rm-cb" id="rmc-p0_1"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">QPay автоматжуулалт — Webhook → GAS → Telegram bot</div>
-<div class="rm-item-sub">Шинэ гишүүн 2 минутын дотор автоматаар нэвтэрч болох болгох. 100+ болоход гарын авлагатай onboarding боломжгүй.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-red">Яаралтай</span><span class="rm-tag rm-tag-muted">~1 хоног ажил</span></div>
-</div>
-</div>
-<div class="rm-item" data-key="p0_2" onclick="rmToggle(this,'p0_2')">
-<div class="rm-cb" id="rmc-p0_2"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">Renewal Telegram sequence — 10/3/0 хоногт сануулга + ₮5,000 хөнгөлөлт</div>
-<div class="rm-item-sub">GAS тогтмол ажиллаж хугацаа дуусах 10 хоногт мессеж явуулна. Churn-г 30% → 70%+ болгох хамгийн шууд арга.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-red">Яаралтай</span><span class="rm-tag rm-tag-muted">+₮1M/сар нөлөөтэй</span></div>
-</div>
-</div>
-<div class="rm-item" data-key="p0_3" onclick="rmToggle(this,'p0_3')">
-<div class="rm-cb" id="rmc-p0_3"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">7 хоногийн "Remember Me" session — 12 цагийн friction арилгах</div>
-<div class="rm-item-sub">localStorage TTL = 7×24×3600×1000. 2 цагийн ажил, retention-д томоохон нөлөө. Өдөр бүр дахин нэвтэрдэг хэрэглэгч цуцлана.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-red">Яаралтай</span><span class="rm-tag rm-tag-muted">2 цаг ажил</span></div>
-</div>
-</div>
-<div class="rm-item" data-key="p0_4" onclick="rmToggle(this,'p0_4')">
-<div class="rm-cb" id="rmc-p0_4"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">Drop #05 гаргах — 8/10 бараа бэлэн, 2 нэмж Apr 20-д нийтлэх</div>
-<div class="rm-item-sub">Шинэ Drop = retention-ын шалтгаан + BOFU контентын материал. Supplier: 1688/Taobao баталгаажуулах.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-ylw">Чухал</span><span class="rm-tag rm-tag-muted">Apr 20 дуусах</span></div>
-</div>
-</div>
-<div class="rm-item" data-key="p0_5" onclick="rmToggle(this,'p0_5')">
-<div class="rm-cb" id="rmc-p0_5"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">BOFU reel скрипт бичих —  хугацаа хэтэрсэн (Apr 12)</div>
-<div class="rm-item-sub">7 хоног бүр 2 BOFU Reel: амжилтын story + бараа showcase. Органик CAC ≈ ₮0. Нэг BOFU Reel → 3–15 шинэ гишүүн.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-red">Хоцорсон</span><span class="rm-tag rm-tag-muted">IG+TikTok+FB+Shorts</span></div>
-</div>
-</div>
-<div class="rm-item" data-key="p0_6" onclick="rmToggle(this,'p0_6')">
-<div class="rm-cb" id="rmc-p0_6"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">Mobile 375px responsive засах — Pro.html sidebar, card, detail panel</div>
-<div class="rm-item-sub">Монгол хэрэглэгчдийн 80%+ утасаар нэвтэрнэ. Буруу харагдвал retention −15–25%. Хянагдаж байна — хурдан дуусгах.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-ylw">Чухал</span><span class="rm-tag rm-tag-muted">+15–25% retention</span></div>
-</div>
-</div>
-<div class="rm-item" data-key="p0_7" onclick="rmToggle(this,'p0_7')">
-<div class="rm-cb" id="rmc-p0_7"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">ManyChat DM automation дуусгах + Churn rate тодруулах</div>
-<div class="rm-item-sub">Comment keyword → DM sequence (Apr 18). Мөн одоогийн гишүүдийн renewal түүхийг шалгах: 50%+ = сайн, 30%- = яараад onboarding sequence нэм.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-ylw">Чухал</span><span class="rm-tag rm-tag-muted">Apr 18 дуусах</span></div>
-</div>
-</div>
-<div class="rm-target-row">
-<div class="rm-target-cell"><div class="rm-target-lbl">P0 дуусахад зорилт</div><div class="rm-target-val">Автомат</div><div class="rm-target-sub">Шинэ гишүүн бүр автоматаар</div></div>
-<div class="rm-target-cell"><div class="rm-target-lbl">Churn sequence</div><div class="rm-target-val">Ажиллаж байна</div><div class="rm-target-sub">10/3/0 хоногт сануулга</div></div>
-<div class="rm-target-cell"><div class="rm-target-lbl">Session friction</div><div class="rm-target-val">Алга</div><div class="rm-target-sub">7 хоногийн remember me</div></div>
-</div>
-</div>
-</div>
-<!-- ═══ PHASE 1 — КОНТЕНТ ═══ -->
+<div class="rm-phase-hdr" onclick="rmTogglePhase('q4p0')"><div class="rm-phase-badge" style="background:var(--redbg);color:var(--red);border:1px solid rgba(100,100,100,.25)">P0 — Measure</div><div class="rm-phase-title">Funnel хэмжиж, алдагдлыг хаах</div><div class="rm-phase-date">Sep 10 — Sep 30</div><div class="rm-phase-prog" id="rm-q4p0-prog" style="background:var(--redbg);color:var(--red)">0/6</div><svg class="rm-chevron open" id="rm-chev-q4p0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+<div class="rm-phase-body" id="rm-body-q4p0">
+<div class="rm-item" data-key="q4p0_1" onclick="rmToggle(this,'q4p0_1')"><div class="rm-cb" id="rmc-q4p0_1"></div><div class="rm-item-body"><div class="rm-item-title">Нэг funnel dashboard: Visitor → Lite → Activated → Pro → Renewal</div><div class="rm-item-sub">GA4/UTM, Sheets ба төлбөрийн өгөгдлийг нэг урсгал болго. Аль шатанд хэдэн % алдаж байгааг долоо хоног бүр яг тоогоор хардаг болно.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-red">№1 Priority</span><span class="rm-tag rm-tag-muted">Baseline эхлээд</span></div></div></div>
+<div class="rm-item" data-key="q4p0_2" onclick="rmToggle(this,'q4p0_2')"><div class="rm-cb" id="rmc-q4p0_2"></div><div class="rm-item-body"><div class="rm-item-title">Activation event тодорхойлох + 24 цагийн onboarding</div><div class="rm-item-sub">Lite хэрэглэгчийг “бүртгүүлсэн” гэж биш, бодит үнэ цэнэ авсан эсэхээр хэмж. 3 алхамтай onboarding + Telegram reminder хий.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-blu">Activation</span><span class="rm-tag rm-tag-muted">24h window</span></div></div></div>
+<div class="rm-item" data-key="q4p0_3" onclick="rmToggle(this,'q4p0_3')"><div class="rm-cb" id="rmc-q4p0_3"></div><div class="rm-item-body"><div class="rm-item-title">Landing A/B test — Hero, proof, CTA, pricing friction</div><div class="rm-item-sub">Нэг удаад ганц хувьсагч соль. 7 хоног бүр winner үлдээнэ. Зорилт: baseline-аас Lite conversion +20% сайжруулах.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-ylw">Conversion</span><span class="rm-tag rm-tag-muted">1 test / week</span></div></div></div>
+<div class="rm-item" data-key="q4p0_4" onclick="rmToggle(this,'q4p0_4')"><div class="rm-cb" id="rmc-q4p0_4"></div><div class="rm-item-body"><div class="rm-item-title">Төлбөр → эрх нээх процессыг 2 минутаас доош болгох</div><div class="rm-item-sub">QPay/банк баталгаажуулалт, admin approval, welcome message. Өсөлт эхлэхээс өмнө manual bottleneck үлдээхгүй.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-red">Ops</span><span class="rm-tag rm-tag-muted">&lt;2 min</span></div></div></div>
+<div class="rm-item" data-key="q4p0_5" onclick="rmToggle(this,'q4p0_5')"><div class="rm-cb" id="rmc-q4p0_5"></div><div class="rm-item-body"><div class="rm-item-title">Pro offer-оо нэг өгүүлбэрээр ойлгогдох value stack болгох</div><div class="rm-item-sub">Feature list биш: хэрэглэгч ямар үр дүнг, ямар хугацаанд, ямар ажлыг хэмнэж авахыг тодорхой харуул. Pricing page дээр Pro / Annual / Business ялгааг цэвэр болго.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-ylw">Offer</span></div></div></div>
+<div class="rm-item" data-key="q4p0_6" onclick="rmToggle(this,'q4p0_6')"><div class="rm-cb" id="rmc-q4p0_6"></div><div class="rm-item-body"><div class="rm-item-title">10 хэрэглэгчтэй friction interview + support log review</div><div class="rm-item-sub">“Яагаад Pro аваагүй?”, “хаана гацсан?”, “ямар үр дүн хүлээсэн?” гэсэн бодит шалтгааныг цуглуул. Feature биш bottleneck-оо зас.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-pur">Research</span><span class="rm-tag rm-tag-muted">10 users</span></div></div></div>
+<div class="rm-target-row"><div class="rm-target-cell"><div class="rm-target-lbl">Sep 30 gate</div><div class="rm-target-val">40+ Pro</div><div class="rm-target-sub">эсвэл baseline-аас ≥2× net adds</div></div><div class="rm-target-cell"><div class="rm-target-lbl">Funnel</div><div class="rm-target-val">100% measured</div><div class="rm-target-sub">source → renewal</div></div><div class="rm-target-cell"><div class="rm-target-lbl">Ops</div><div class="rm-target-val">&lt;2 минут</div><div class="rm-target-sub">payment → access</div></div></div>
+</div></div>
+
+<!-- PHASE 1 -->
 <div class="rm-phase">
-<div class="rm-phase-hdr" onclick="rmTogglePhase('p1')">
-<div class="rm-phase-badge" style="background:var(--amberbg);color:var(--gold);border:1px solid rgba(161,161,161,.25)">P1 — Контент</div>
-<div class="rm-phase-title">Контентын машин эхлүүлэх</div>
-<div class="rm-phase-date">Май 1 — Июнь 1</div>
-<div class="rm-phase-prog" id="rm-p1-prog" style="background:var(--amberbg);color:var(--gold)">0/5</div>
-<svg class="rm-chevron" fill="none" id="rm-chev-p1" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
-</div>
-<div class="rm-phase-body" id="rm-body-p1" style="display:none">
-<div class="rm-item" data-key="p1_1" onclick="rmToggle(this,'p1_1')">
-<div class="rm-cb" id="rmc-p1_1"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">BOFU Reel систем: 7 хоног бүр 2 Reel × 4 платформ</div>
-<div class="rm-item-sub">Hook: "Би ₮X олоход ProductDrop хэрхэн тусласан бэ". Одоогийн гишүүдийг testimonial болгон хэрэглэ. Сайн нийтлэлийг boost хий.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-red">Өсөлтийн гол</span><span class="rm-tag rm-tag-muted">CAC ≈ ₮0</span></div>
-</div>
-</div>
-<div class="rm-item" data-key="p1_2" onclick="rmToggle(this,'p1_2')">
-<div class="rm-cb" id="rmc-p1_2"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">Business план нээх — ₮99,900/сар + Academy placeholder</div>
-<div class="rm-item-sub">Pro-д хязгаарлалт нэмж Business attractiveness нэмэх. 15 гишүүний 10% = ₮150,000 нэмэлт/сар. Academy content цааш нэмэгдэнэ.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-ylw">Upsell</span><span class="rm-tag rm-tag-muted">₮99,900/сар</span></div>
-</div>
-</div>
-<div class="rm-item" data-key="p1_3" onclick="rmToggle(this,'p1_3')">
-<div class="rm-cb" id="rmc-p1_3"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">Referral программ — "Найзаа оруулаад 1 сар үнэгүй ав"</div>
-<div class="rm-item-sub">GAS-д referral code систем нэмэх. Монголд word-of-mouth хамгийн хүчтэй маркетинг. CAC тэг болно.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-grn">CAC = ₮0</span><span class="rm-tag rm-tag-muted">Вирал өсөлт</span></div>
-</div>
-</div>
-<div class="rm-item" data-key="p1_4" onclick="rmToggle(this,'p1_4')">
-<div class="rm-cb" id="rmc-p1_4"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">Telegram community нээх — Гишүүдийн хаалттай group</div>
-<div class="rm-item-sub">Хэрэглэгчид амжилтаа хуваалцана → retention нэмэгдэнэ → шинэ гишүүд татна. Ганцаараа ажиллах feeling арилна.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-blu">Retention</span><span class="rm-tag rm-tag-muted">Community</span></div>
-</div>
-</div>
-<div class="rm-item" data-key="p1_5" onclick="rmToggle(this,'p1_5')">
-<div class="rm-cb" id="rmc-p1_5"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">Drop #06 бэлдэх — Seasonal (зундааны бараа)</div>
-<div class="rm-item-sub">Drop бүр = retention-ын шалтгаан + BOFU контентын материал. Зундааны бараа → June 1-д нийтлэх хуваарь.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-grn">Content fuel</span></div>
-</div>
-</div>
-<div class="rm-target-row">
-<div class="rm-target-cell"><div class="rm-target-lbl">June 1 зорилт</div><div class="rm-target-val" style="color:var(--gold)">60 гишүүн</div><div class="rm-target-sub">₮1,000,000 MRR</div></div>
-<div class="rm-target-cell"><div class="rm-target-lbl">Шинэ / долоо хоног</div><div class="rm-target-val" style="color:var(--gold)">~10</div><div class="rm-target-sub">= 40 шинэ P1-д</div></div>
-<div class="rm-target-cell"><div class="rm-target-lbl">June 1 шийдвэр</div><div class="rm-target-val" style="font-size:13px">GogoShop үргэлжлүүл</div><div class="rm-target-sub">Sept exit бэлтгэл</div></div>
-</div>
-</div>
-</div>
-<!-- ═══ PHASE 2 — ХУРДАСГАХ ═══ -->
+<div class="rm-phase-hdr" onclick="rmTogglePhase('q4p1')"><div class="rm-phase-badge" style="background:var(--amberbg);color:var(--gold);border:1px solid rgba(161,161,161,.25)">P1 — Acquire</div><div class="rm-phase-title">Тогтмол хэрэглэгч татах хөдөлгүүр</div><div class="rm-phase-date">Oct 1 — Oct 31</div><div class="rm-phase-prog" id="rm-q4p1-prog" style="background:var(--amberbg);color:var(--gold)">0/6</div><svg class="rm-chevron" id="rm-chev-q4p1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+<div class="rm-phase-body" id="rm-body-q4p1" style="display:none">
+<div class="rm-item" data-key="q4p1_1" onclick="rmToggle(this,'q4p1_1')"><div class="rm-cb" id="rmc-q4p1_1"></div><div class="rm-item-body"><div class="rm-item-title">4 Reel / 7 хоног контент систем</div><div class="rm-item-sub">2 BOFU proof/sales · 1 educational · 1 product/opportunity. IG → TikTok → FB → Shorts repurpose. View биш lead ба Pro conversion-оор winner сонго.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-red">Growth engine</span><span class="rm-tag rm-tag-muted">16+ / month</span></div></div></div>
+<div class="rm-item" data-key="q4p1_2" onclick="rmToggle(this,'q4p1_2')"><div class="rm-cb" id="rmc-q4p1_2"></div><div class="rm-item-body"><div class="rm-item-title">Referral loop — найзаа оруулаад бонус эрх</div><div class="rm-item-sub">Referral code → attribution → reward автоматаар. Шинэ Pro-ийн хэдэн % referral-аас ирж байгааг тусад нь хэмж.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-grn">Low CAC</span></div></div></div>
+<div class="rm-item" data-key="q4p1_3" onclick="rmToggle(this,'q4p1_3')"><div class="rm-cb" id="rmc-q4p1_3"></div><div class="rm-item-body"><div class="rm-item-title">Retargeting: Visitor/Lite → Pro</div><div class="rm-item-sub">Cold ads-аас өмнө warm audience. Testimonial, use-case, before/after workflow creative ашигла. CAC ₮15K-аас давбал scale хийхгүй.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-ylw">Paid</span><span class="rm-tag rm-tag-muted">CAC ≤ ₮15K</span></div></div></div>
+<div class="rm-item" data-key="q4p1_4" onclick="rmToggle(this,'q4p1_4')"><div class="rm-cb" id="rmc-q4p1_4"></div><div class="rm-item-body"><div class="rm-item-title">3–5 creator collaboration тест</div><div class="rm-item-sub">Audience fit өндөр micro creator сонго. Flat fee-аас илүү affiliate/revenue share. Creator бүрийг unique code/UTM-аар хэмж.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-blu">Distribution</span></div></div></div>
+<div class="rm-item" data-key="q4p1_5" onclick="rmToggle(this,'q4p1_5')"><div class="rm-cb" id="rmc-q4p1_5"></div><div class="rm-item-body"><div class="rm-item-title">10 бодит testimonial / case proof цуглуулах</div><div class="rm-item-sub">“Хэдэн бараа олсон, хэдэн цаг хэмнэсэн, хэдэн борлуулалт хийсэн” гэх мэт specific proof. Landing болон BOFU Reel-д шууд ашиглана.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-grn">Proof</span><span class="rm-tag rm-tag-muted">10 assets</span></div></div></div>
+<div class="rm-item" data-key="q4p1_6" onclick="rmToggle(this,'q4p1_6')"><div class="rm-cb" id="rmc-q4p1_6"></div><div class="rm-item-body"><div class="rm-item-title">7 хоног бүр 1 growth experiment</div><div class="rm-item-sub">CTA, pricing anchor, free→Pro gate, referral, creator, retargeting зэргээс нэгийг турш. Winner-аа SOP болгож, loser-аа зогсоо.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-pur">Experiment</span><span class="rm-tag rm-tag-muted">4 tests</span></div></div></div>
+<div class="rm-target-row"><div class="rm-target-cell"><div class="rm-target-lbl">Oct 31 gate</div><div class="rm-target-val" style="color:var(--gold)">75+ Pro</div><div class="rm-target-sub">net active</div></div><div class="rm-target-cell"><div class="rm-target-lbl">CAC</div><div class="rm-target-val">≤ ₮15K</div><div class="rm-target-sub">paid channel</div></div><div class="rm-target-cell"><div class="rm-target-lbl">Proof library</div><div class="rm-target-val">10+</div><div class="rm-target-sub">testimonial/case</div></div></div>
+</div></div>
+
+<!-- PHASE 2 -->
 <div class="rm-phase">
-<div class="rm-phase-hdr" onclick="rmTogglePhase('p2')">
-<div class="rm-phase-badge" style="background:var(--bluebg);color:var(--blue);border:1px solid rgba(106,106,106,.25)">P2 — Хурдасгах</div>
-<div class="rm-phase-title">Гол өсөлтийн үе</div>
-<div class="rm-phase-date">Июнь 1 — Авг 31</div>
-<div class="rm-phase-prog" id="rm-p2-prog" style="background:var(--bluebg);color:var(--blue)">0/4</div>
-<svg class="rm-chevron" fill="none" id="rm-chev-p2" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+<div class="rm-phase-hdr" onclick="rmTogglePhase('q4p2')"><div class="rm-phase-badge" style="background:var(--bluebg);color:var(--blue);border:1px solid rgba(106,106,106,.25)">P2 — Retain</div><div class="rm-phase-title">Retention + ARPU өсгөх</div><div class="rm-phase-date">Nov 1 — Nov 30</div><div class="rm-phase-prog" id="rm-q4p2-prog" style="background:var(--bluebg);color:var(--blue)">0/6</div><svg class="rm-chevron" id="rm-chev-q4p2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+<div class="rm-phase-body" id="rm-body-q4p2" style="display:none">
+<div class="rm-item" data-key="q4p2_1" onclick="rmToggle(this,'q4p2_1')"><div class="rm-cb" id="rmc-q4p2_1"></div><div class="rm-item-body"><div class="rm-item-title">Lifecycle automation — Day 0/1/3/7/21 + Renewal 14/7/3/0</div><div class="rm-item-sub">Нэг welcome message хангалтгүй. Usage trigger + proof + reminder + renewal sequence-ийг автоматжуул.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-red">Retention</span></div></div></div>
+<div class="rm-item" data-key="q4p2_2" onclick="rmToggle(this,'q4p2_2')"><div class="rm-cb" id="rmc-q4p2_2"></div><div class="rm-item-body"><div class="rm-item-title">Churn reason бүртгэдэг болгох</div><div class="rm-item-sub">Renew хийгээгүй хэрэглэгч бүрээс 1-click reason: үнэ / ашиглаагүй / контент / UX / өөр. Top-2 reason дээр дараагийн sprint ажиллана.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-blu">Data</span></div></div></div>
+<div class="rm-item" data-key="q4p2_3" onclick="rmToggle(this,'q4p2_3')"><div class="rm-cb" id="rmc-q4p2_3"></div><div class="rm-item-body"><div class="rm-item-title">Шинэ Drop-ийн тогтмол cadence — 1 / 7 хоног</div><div class="rm-item-sub">Шинэ бараа = хэрэглэгч дахин нэвтрэх шалтгаан. Publish day тогтмол, Telegram/FB reminder дагалдана.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-grn">Habit loop</span></div></div></div>
+<div class="rm-item" data-key="q4p2_4" onclick="rmToggle(this,'q4p2_4')"><div class="rm-cb" id="rmc-q4p2_4"></div><div class="rm-item-body"><div class="rm-item-title">Business plan beta — эхний 10 хэрэглэгч</div><div class="rm-item-sub">₮99,900/сар offer-оо beta байдлаар борлуул. Нэмэлт үнэ цэнэ: priority support, workflow, team/advanced tools. Demand батлагдвал л feature build хий.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-pur">ARPU</span><span class="rm-tag rm-tag-muted">10 beta</span></div></div></div>
+<div class="rm-item" data-key="q4p2_5" onclick="rmToggle(this,'q4p2_5')"><div class="rm-cb" id="rmc-q4p2_5"></div><div class="rm-item-body"><div class="rm-item-title">Annual plan + renewal incentive</div><div class="rm-item-sub">Урьдчилсан cash flow ба churn бууруулах. Discount-аа random биш renewal/annual commitment-д өг.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-grn">Cash flow</span></div></div></div>
+<div class="rm-item" data-key="q4p2_6" onclick="rmToggle(this,'q4p2_6')"><div class="rm-cb" id="rmc-q4p2_6"></div><div class="rm-item-body"><div class="rm-item-title">Expired / inactive хэрэглэгчийн win-back campaign</div><div class="rm-item-sub">Бүгдэд ижил blast биш. Ашиглаж байсан, огт ашиглаагүй, payment expired гэсэн segment бүрт өөр message + шинэ value proof өг.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-ylw">Win-back</span></div></div></div>
+<div class="rm-target-row"><div class="rm-target-cell"><div class="rm-target-lbl">Nov 30 gate</div><div class="rm-target-val" style="color:var(--blue)">150+ Pro</div><div class="rm-target-sub">net active</div></div><div class="rm-target-cell"><div class="rm-target-lbl">Renewal</div><div class="rm-target-val">55%+</div><div class="rm-target-sub">cohort based</div></div><div class="rm-target-cell"><div class="rm-target-lbl">Business</div><div class="rm-target-val">5+</div><div class="rm-target-sub">paying beta</div></div></div>
+</div></div>
+
+<!-- PHASE 3 -->
+<div class="rm-phase" style="margin-bottom:18px">
+<div class="rm-phase-hdr" onclick="rmTogglePhase('q4p3')"><div class="rm-phase-badge" style="background:var(--purplebg);color:var(--purple);border:1px solid rgba(153,153,153,.25)">P3 — Systemize</div><div class="rm-phase-title">Founder bottleneck арилгаж scale хийх</div><div class="rm-phase-date">Dec 1 — Dec 31</div><div class="rm-phase-prog" id="rm-q4p3-prog" style="background:var(--purplebg);color:var(--purple)">0/7</div><svg class="rm-chevron" id="rm-chev-q4p3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+<div class="rm-phase-body" id="rm-body-q4p3" style="display:none">
+<div class="rm-item" data-key="q4p3_1" onclick="rmToggle(this,'q4p3_1')"><div class="rm-cb" id="rmc-q4p3_1"></div><div class="rm-item-body"><div class="rm-item-title">Бараа catalog-ийг Supabase/API source of truth болгох</div><div class="rm-item-sub">HTML-д embedded data өсөх тусам update ба load удааширна. CRUD → QA → publish flow-г database төвтэй болго.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-pur">Infrastructure</span></div></div></div>
+<div class="rm-item" data-key="q4p3_2" onclick="rmToggle(this,'q4p3_2')"><div class="rm-cb" id="rmc-q4p3_2"></div><div class="rm-item-body"><div class="rm-item-title">AI research pipeline — Draft → QA → Publish</div><div class="rm-item-sub">AI шууд publish хийхгүй. Confidence, duplicate check, human QA gate-тай. Бараа боловсруулах хугацааг хэмжиж 50%+ бууруул.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-pur">Automation</span></div></div></div>
+<div class="rm-item" data-key="q4p3_3" onclick="rmToggle(this,'q4p3_3')"><div class="rm-cb" id="rmc-q4p3_3"></div><div class="rm-item-body"><div class="rm-item-title">Weekly metrics report автоматаар гардаг болгох</div><div class="rm-item-sub">Pro adds, churn, renewal, MRR, CAC, activation, source mix, top content. Founder spreadsheet ухаж суухгүй — exception дээр л ажиллана.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-blu">Reporting</span></div></div></div>
+<div class="rm-item" data-key="q4p3_4" onclick="rmToggle(this,'q4p3_4')"><div class="rm-cb" id="rmc-q4p3_4"></div><div class="rm-item-body"><div class="rm-item-title">Support SLA + FAQ + chatbot triage</div><div class="rm-item-sub">Түгээмэл 20 асуултыг self-serve болго. Төлбөр/эрхийн алдааг priority queue. Founder DM support-оос гарах.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-grn">Ops</span></div></div></div>
+<div class="rm-item" data-key="q4p3_5" onclick="rmToggle(this,'q4p3_5')"><div class="rm-cb" id="rmc-q4p3_5"></div><div class="rm-item-body"><div class="rm-item-title">Зөвхөн батлагдсан channel-аа 2× scale хийх</div><div class="rm-item-sub">CAC ≤ ₮15K, activation тогтвортой, renewal 55%+ үед budget нэм. Metric эвдэрвэл budget-аа автоматаар/гараар бууруул.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-red">Scale rule</span></div></div></div>
+<div class="rm-item" data-key="q4p3_6" onclick="rmToggle(this,'q4p3_6')"><div class="rm-cb" id="rmc-q4p3_6"></div><div class="rm-item-body"><div class="rm-item-title">Founder SOP — давтагддаг 5 ажлыг delegate/automate</div><div class="rm-item-sub">Support, content repurpose, product entry, reporting, payment follow-up. Founder = offer, growth, product direction дээр төвлөрнө.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-ylw">Leverage</span></div></div></div>
+<div class="rm-item" data-key="q4p3_7" onclick="rmToggle(this,'q4p3_7')"><div class="rm-cb" id="rmc-q4p3_7"></div><div class="rm-item-body"><div class="rm-item-title">Dec 31 review → 2027 Q1 operating plan</div><div class="rm-item-sub">Channel бүрийн ROI, churn reason, feature usage, top 20% content, Business demand дээр үндэслээд Q1 OKR гарга. Vanity goal биш bottleneck-driven plan.</div><div class="rm-item-meta"><span class="rm-tag rm-tag-pur">2027</span></div></div></div>
+<div class="rm-target-row"><div class="rm-target-cell"><div class="rm-target-lbl">Jan 1 gate</div><div class="rm-target-val" style="color:var(--purple)">250+ Pro</div><div class="rm-target-sub">active paid</div></div><div class="rm-target-cell"><div class="rm-target-lbl">MRR equivalent</div><div class="rm-target-val">₮5M+</div><div class="rm-target-sub">Pro + Business</div></div><div class="rm-target-cell"><div class="rm-target-lbl">Renewal</div><div class="rm-target-val">60%+</div><div class="rm-target-sub">cohort renewal</div></div></div>
+</div></div>
+
+<div style="font-size:15px;font-weight:800;color:var(--text);letter-spacing:-.3px;margin:18px 0 12px">Scale хийх 4 дүрэм</div>
+<div class="rm-bn-grid">
+<div class="rm-bn-card"><div class="rm-bn-num" style="color:var(--red)">01</div><div class="rm-bn-title">Measure before scale</div><div class="rm-bn-desc">Conversion хаана алдагдаж байгааг мэдэхгүй үед traffic нэмэх нь мөнгө шатаана.</div><div class="rm-bn-sol">Paid budget нэмэхээс өмнө source → activation → Pro → renewal бүгд хэмжигдсэн байна.</div></div>
+<div class="rm-bn-card"><div class="rm-bn-num" style="color:var(--gold)">02</div><div class="rm-bn-title">Retention before acquisition</div><div class="rm-bn-desc">Шинэ хэрэглэгч авахад focus хийгээд renewal муу байвал MRR тогтохгүй.</div><div class="rm-bn-sol">Renewal &lt;55% бол эхлээд onboarding, usage habit, value delivery зас.</div></div>
+<div class="rm-bn-card"><div class="rm-bn-num" style="color:var(--blue)">03</div><div class="rm-bn-title">One experiment at a time</div><div class="rm-bn-desc">Олон зүйл зэрэг өөрчилбөл яг юу ажилласныг мэдэхгүй.</div><div class="rm-bn-sol">7 хоног бүр 1 hypothesis → 1 metric → 1 winner/loser decision.</div></div>
+<div class="rm-bn-card"><div class="rm-bn-num" style="color:var(--purple)">04</div><div class="rm-bn-title">Founder is not the system</div><div class="rm-bn-desc">Таны гараар явдаг процесс scale болохгүй.</div><div class="rm-bn-sol">Dec 31 гэхэд давтагддаг 5 ажлыг SOP + automation/delegation-д шилжүүл.</div></div>
 </div>
-<div class="rm-phase-body" id="rm-body-p2" style="display:none">
-<div class="rm-item" data-key="p2_1" onclick="rmToggle(this,'p2_1')">
-<div class="rm-cb" id="rmc-p2_1"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">Influencer collaboration — 3–5 Монгол influencer (10K–100K) тест</div>
-<div class="rm-item-sub">₮0–₮50,000 + revenue share эсвэл Pro эрх. Туршлагатай холбоо барих. Нэг амжилттай influencer → 20–50 гишүүн нэмнэ.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-blu">Growth lever</span><span class="rm-tag rm-tag-muted">60 → 150 гишүүн</span></div>
+
+<div style="font-size:15px;font-weight:800;color:var(--text);letter-spacing:-.3px;margin:18px 0 12px">7 хоногийн Operating Loop</div>
+<div class="rm-loop-grid">
+<div class="rm-loop-card"><div class="rm-loop-day">Даваа · Measure</div><div class="rm-loop-title">30 минут metric review</div><div class="rm-loop-sub">Visitor → Lite → Activated → Pro → Renewal, CAC, MRR. Энэ 7 хоногийн ганц bottleneck-оо сонго.</div><div class="rm-loop-rule">Output: 1 metric + 1 hypothesis</div></div>
+<div class="rm-loop-card"><div class="rm-loop-day">Мягмар–Лхагва · Ship</div><div class="rm-loop-title">Нэг experiment + контент</div><div class="rm-loop-sub">Landing/offer/CTA/channel-аас зөвхөн нэг хувьсагч турш. Контентын winner-ийг view биш lead ба paid conversion-оор хар.</div><div class="rm-loop-rule">Output: test live + 2–4 Reel</div></div>
+<div class="rm-loop-card"><div class="rm-loop-day">Пүрэв · Customer</div><div class="rm-loop-title">Retention signal цуглуулах</div><div class="rm-loop-sub">Support log, churn reason, 3 хэрэглэгчийн feedback. Feature хүсэлт бүрийг шууд build хийхгүй — давтагдсан асуудлыг л backlog-д оруул.</div><div class="rm-loop-rule">Output: top friction + evidence</div></div>
+<div class="rm-loop-card"><div class="rm-loop-day">Баасан · Decide</div><div class="rm-loop-title">Keep · Fix · Kill · Scale</div><div class="rm-loop-sub">Metric сайжирсан бол SOP болго. Сайжраагүй бол hypothesis-оо хаа. CAC/activation/renewal тогтвортой үед л budget өсгө.</div><div class="rm-loop-rule">Output: 1 decision + next bottleneck</div></div>
 </div>
-</div>
-<div class="rm-item" data-key="p2_2" onclick="rmToggle(this,'p2_2')">
-<div class="rm-cb" id="rmc-p2_2"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">Facebook/IG paid зар — ₮50K–₮100K/долоо хоног тест</div>
-<div class="rm-item-sub">ROAS шалгалт: 1 гишүүн ₮49,900 → зар ₮15,000 доор байх. Сайн органик нийтлэлийг boost хийх стратеги.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-ylw">Paid growth</span><span class="rm-tag rm-tag-muted">ROAS 3x+ зорилт</span></div>
-</div>
-</div>
-<div class="rm-item" data-key="p2_3" onclick="rmToggle(this,'p2_3')">
-<div class="rm-cb" id="rmc-p2_3"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">Annual план нэмэх — ₮119,900/жил (20% хэмнэлт)</div>
-<div class="rm-item-sub">Cash flow урьдчилж орно, churn буурна. Жилийн гишүүн renewal-д "дарагдана". ARPU харьцангуй буурах ч LTV нэмэгдэнэ.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-grn">Churn buster</span><span class="rm-tag rm-tag-muted">Cash flow сайжрах</span></div>
-</div>
-</div>
-<div class="rm-item" data-key="p2_4" onclick="rmToggle(this,'p2_4')">
-<div class="rm-cb" id="rmc-p2_4"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">Group coaching upsell — Сардаа нэг Zoom live session</div>
-<div class="rm-item-sub">20–30 хүн × ₮15,000 = ₮450,000 нэмэлт/сар. Expertise-ийг monetize хийнэ. Community retention нэмэгдэнэ.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-pur">Upsell</span><span class="rm-tag rm-tag-muted">+₮450K/сар</span></div>
-</div>
-</div>
-<div class="rm-target-row">
-<div class="rm-target-cell"><div class="rm-target-lbl">Sept 1 зорилт</div><div class="rm-target-val" style="color:var(--blue)">250 гишүүн</div><div class="rm-target-sub">Full exit threshold</div></div>
-<div class="rm-target-cell"><div class="rm-target-lbl">Зорилт MRR</div><div class="rm-target-val" style="color:var(--blue)">₮6M</div><div class="rm-target-sub">GogoShop цалин 2× болно</div></div>
-<div class="rm-target-cell"><div class="rm-target-lbl">Sept 1 шийдвэр</div><div class="rm-target-val" style="font-size:13px;color:var(--blue)">Full-time exit</div><div class="rm-target-sub">ProductDrop-д бүрэн орно</div></div>
-</div>
-</div>
-</div>
-<!-- ═══ PHASE 3 — SCALE ═══ -->
-<div class="rm-phase" style="margin-bottom:22px">
-<div class="rm-phase-hdr" onclick="rmTogglePhase('p3')">
-<div class="rm-phase-badge" style="background:var(--purplebg);color:var(--purple);border:1px solid rgba(153,153,153,.25)">P3 — Scale</div>
-<div class="rm-phase-title">Техникийн дэд бүтэц</div>
-<div class="rm-phase-date">Sept 2026+</div>
-<div class="rm-phase-prog" id="rm-p3-prog" style="background:var(--purplebg);color:var(--purple)">0/3</div>
-<svg class="rm-chevron" fill="none" id="rm-chev-p3" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
-</div>
-<div class="rm-phase-body" id="rm-body-p3" style="display:none">
-<div class="rm-item" data-key="p3_1" onclick="rmToggle(this,'p3_1')">
-<div class="rm-cb" id="rmc-p3_1"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">Бараа каталог → Supabase database руу шилжүүлэх</div>
-<div class="rm-item-sub">723KB HTML-д 200 бараа embedded. 1000+ болоход 5MB+ → ачаалалт удааширна. Database API-аар татвал instant update болно.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-pur">Техникийн шаардлага</span></div>
-</div>
-</div>
-<div class="rm-item" data-key="p3_2" onclick="rmToggle(this,'p3_2')">
-<div class="rm-cb" id="rmc-p3_2"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">AI бараа судалгаа хагас автоматжуулах — Draft → QA → Publish</div>
-<div class="rm-item-sub">Бараа бүрд 1600+ контентийн элемент гараар хийгдэж байна. AI draft pipeline хийвэл контент ачаалал 60%+ буурна.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-pur">Scale шаардлага</span></div>
-</div>
-</div>
-<div class="rm-item" data-key="p3_3" onclick="rmToggle(this,'p3_3')">
-<div class="rm-cb" id="rmc-p3_3"></div>
-<div class="rm-item-body">
-<div class="rm-item-title">Хэрэглэгчийн амжилтын метрик + Churn prediction систем</div>
-<div class="rm-item-sub">Аль бараа хамгийн их захиалга өгдөг? Аль хэрэглэгч churn эрсдэлтэй? GA4 UTM тохиргоо + traffic source analysis.</div>
-<div class="rm-item-meta"><span class="rm-tag rm-tag-pur">Шинжилгээ</span></div>
-</div>
-</div>
-</div>
-</div>
-<!-- KPI TABLE -->
+
 <div style="font-size:15px;font-weight:800;color:var(--text);letter-spacing:-.3px;margin-bottom:12px">Тогтмол хэмжих KPI</div>
-<div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);margin-bottom:22px">
-<table class="rm-kpi-table">
-<thead><tr><th>Метрик</th><th>Тайлбар</th><th>Давтамж</th><th>Зорилт</th></tr></thead>
-<tbody>
-<tr><td><div class="rm-kpi-name">MRR</div></td><td>Pro+Starter гишүүд × сарын үнэ</td><td><span class="rm-kpi-freq">7 хоног</span></td><td style="color:var(--green);font-weight:700">₮4,000,000+</td></tr>
-<tr><td><div class="rm-kpi-name">Pro гишүүн</div></td><td>Идэвхтэй, хугацаа дуусаагүй</td><td><span class="rm-kpi-freq">7 хоног</span></td><td style="color:var(--green);font-weight:700">250+ (Sept)</td></tr>
-<tr><td><div class="rm-kpi-name">Lite → Pro %</div></td><td>Pro шинэ / Lite шинэ бүртгэл</td><td><span class="rm-kpi-freq">Сар бүр</span></td><td style="color:var(--gold);font-weight:700">30%+</td></tr>
-<tr><td><div class="rm-kpi-name">Pro renewal rate</div></td><td>Дахин авсан / 3 сар дуусах ёстой</td><td><span class="rm-kpi-freq">Сар бүр</span></td><td style="color:var(--gold);font-weight:700">70%+</td></tr>
-<tr><td><div class="rm-kpi-name">CAC</div></td><td>Зарцуулсан зар / шинэ Pro гишүүн</td><td><span class="rm-kpi-freq">Сар бүр</span></td><td style="color:var(--green);font-weight:700">₮15,000 дор</td></tr>
-<tr><td><div class="rm-kpi-name">LTV</div></td><td>Дундаж гишүүн × сарын үнэ × renewal</td><td><span class="rm-kpi-freq">Улирал</span></td><td style="color:var(--green);font-weight:700">₮100,000+</td></tr>
-</tbody>
-</table>
-</div>
+<div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:auto;box-shadow:var(--shadow);margin-bottom:22px">
+<table class="rm-kpi-table"><thead><tr><th>Метрик</th><th>Яагаад</th><th>Давтамж</th><th>Jan 1 зорилт</th></tr></thead><tbody>
+<tr><td><div class="rm-kpi-name">Active Pro</div></td><td>Scale-ийн үндсэн paid base</td><td><span class="rm-kpi-freq">7 хоног</span></td><td style="color:var(--green);font-weight:700">250+</td></tr>
+<tr><td><div class="rm-kpi-name">Business members</div></td><td>ARPU өсөлт, өндөр intent сегмент</td><td><span class="rm-kpi-freq">7 хоног</span></td><td style="color:var(--green);font-weight:700">10+</td></tr>
+<tr><td><div class="rm-kpi-name">MRR equivalent</div></td><td>3 сарын Pro төлбөрийг сарын дүнд хувааж + Business</td><td><span class="rm-kpi-freq">7 хоног</span></td><td style="color:var(--green);font-weight:700">₮5M+</td></tr>
+<tr><td><div class="rm-kpi-name">Visitor → Lite</div></td><td>Landing conversion</td><td><span class="rm-kpi-freq">7 хоног</span></td><td style="color:var(--gold);font-weight:700">Baseline-аас +20%</td></tr>
+<tr><td><div class="rm-kpi-name">Lite → Activated</div></td><td>Бүртгэл биш бодит value авсан эсэх</td><td><span class="rm-kpi-freq">7 хоног</span></td><td style="color:var(--gold);font-weight:700">50%+</td></tr>
+<tr><td><div class="rm-kpi-name">Activated → Pro</div></td><td>Offer + product value conversion</td><td><span class="rm-kpi-freq">7 хоног</span></td><td style="color:var(--gold);font-weight:700">20%+</td></tr>
+<tr><td><div class="rm-kpi-name">Renewal rate</div></td><td>3 сарын cohort дахин авсан хувь</td><td><span class="rm-kpi-freq">Сар бүр</span></td><td style="color:var(--gold);font-weight:700">60%+</td></tr>
+<tr><td><div class="rm-kpi-name">Paid CAC</div></td><td>Paid spend / шинэ paid member</td><td><span class="rm-kpi-freq">7 хоног</span></td><td style="color:var(--green);font-weight:700">≤ ₮15,000</td></tr>
+<tr><td><div class="rm-kpi-name">LTV : CAC</div></td><td>Paid growth ашигтай эсэх</td><td><span class="rm-kpi-freq">Сар бүр</span></td><td style="color:var(--green);font-weight:700">≥ 3 : 1</td></tr>
+</tbody></table></div>
 </div><!-- /page-roadmap -->
 <div class="page" id="page-ai">
 <style>
@@ -6321,7 +6216,7 @@ ProductDrop Pro-д шинэ 100 бараа нэмэгдлээ
 </div>
 <div class="at-mobile-select-wrap" id="at-mobile-select-wrap">
   <label for="at-mobile-select">Tool</label>
-  <select id="at-mobile-select" onchange="AT_switchTab(this.value, document.querySelector('#page-admin-tools .tab-btn[data-tab=\"'+this.value+'\"]'))">
+  <select aria-label="Admin Tools хэсэг сонгох" id="at-mobile-select" onchange="AT_switchTab(this.value)">
     <option value="price">01 · Үнийн засварлагч</option>
     <option value="urlmanager">02 · URL Менежер</option>
     <option value="weeklyrank">03 · 7 Хоногийн шилдэг</option>
@@ -7390,7 +7285,7 @@ ProductDrop Pro-д шинэ 100 бараа нэмэгдлээ
 <div>
 <label class="lbl">Дуусах огноо</label>
 <input class="fi2" id="fd" style="margin-bottom:0;" type="date">
-</input></div>
+</div>
 <div>
 <label class="lbl">Статус</label>
 <select class="fi2" id="fst" style="margin-bottom:0;">
@@ -7411,7 +7306,7 @@ ProductDrop Pro-д шинэ 100 бараа нэмэгдлээ
 <button class="bcancel" onclick="closeM()">Болих</button>
 <button class="bsave" onclick="goStep2()">Үргэлжлүүлэх →</button>
 </div>
-</input></input></div>
+</div>
 <!-- STEP 2 -->
 <div id="mstep2" style="display:none;">
 <label class="lbl" style="margin-bottom:8px;">Үе шатын тоо сонгох</label>
@@ -7451,7 +7346,7 @@ ProductDrop Pro-д шинэ 100 бараа нэмэгдлээ
 <div>
 <label class="cnt-lbl">Нийтлэх өдөр</label>
 <input class="cnt-fi" id="cp-date" type="date">
-</input></div>
+</div>
 <div>
 <label class="cnt-lbl">Статус</label>
 <select class="cnt-fi" id="cp-status" onchange="refreshCntBadges()">
@@ -7520,21 +7415,21 @@ ProductDrop Pro-д шинэ 100 бараа нэмэгдлээ
 <div>
 <label class="cnt-lbl">Бараа нэр</label>
 <input class="cnt-fi" id="pb-name" placeholder="Жишээ: Posture Corrector Belt" style="margin-bottom:0;">
-</input></div>
+</div>
 <div>
 <label class="cnt-lbl">Ангилал</label>
 <input class="cnt-fi" id="pb-cat" placeholder="Жишээ: Эрүүл мэнд" style="margin-bottom:0;">
-</input></div>
+</div>
 </div>
 <div class="cnt-frow" style="margin-bottom:10px;">
 <div>
 <label class="cnt-lbl">Өртөг ₮</label>
 <input class="cnt-fi" id="pb-buy" placeholder="12000" style="margin-bottom:0;" type="number">
-</input></div>
+</div>
 <div>
 <label class="cnt-lbl">Зарах үнэ ₮</label>
 <input class="cnt-fi" id="pb-sell" placeholder="39900" style="margin-bottom:0;" type="number">
-</input></div>
+</div>
 </div>
 <label class="cnt-lbl">Давуу тал / онцлог</label>
 <textarea class="cnt-ta" id="pb-benefit" placeholder="Жишээ: 30 минутад нуруу тэгшилдэг, эмчийн баталгаатай, 3 хэмжээ байдаг..." style="min-height:55px;margin-bottom:8px;"></textarea>
@@ -7547,7 +7442,7 @@ ProductDrop Pro-д шинэ 100 бараа нэмэгдлээ
 </div>
 <!-- ── ГОЛ САНАА ҮҮСГЭГЧ ── -->
 <div style="margin-bottom:10px;">
-<div id="idea-gen-toggle" onclick="(function(){var b=document.getElementById('idea-gen-box');var ic=document.getElementById('idea-gen-chev');var open=b.style.display==='block';b.style.display=open?'none':'block';ic.style.transform=open?'rotate(0deg)':'rotate(180deg)';})()" style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 11px;border-radius:10px;background:linear-gradient(135deg,rgba(112,112,112,0.12),rgba(106,106,106,0.08));border:1.5px solid rgba(112,112,112,0.28);user-select:none;transition:all .15s;">
+<div aria-controls="idea-gen-box" aria-expanded="false" id="idea-gen-toggle" onclick="(function(el){var b=document.getElementById('idea-gen-box');var ic=document.getElementById('idea-gen-chev');var open=b.style.display==='block';b.style.display=open?'none':'block';ic.style.transform=open?'rotate(0deg)':'rotate(180deg)';el.setAttribute('aria-expanded',open?'false':'true');})(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" role="button" tabindex="0" style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 11px;border-radius:10px;background:linear-gradient(135deg,rgba(112,112,112,0.12),rgba(106,106,106,0.08));border:1.5px solid rgba(112,112,112,0.28);user-select:none;transition:all .15s;">
 <span style="font-size:11px;font-weight:800;color:var(--purple);flex:1;letter-spacing:.03em;">ГОЛ САНАА ҮҮСГЭГЧ</span>
 <span style="font-size:10px;color:var(--text3);font-weight:500;margin-right:4px;">Funnel-д тохирсон олон санаа</span>
 <svg fill="none" height="13" id="idea-gen-chev" stroke="var(--purple)" stroke-width="2.5" style="transition:transform .2s;flex-shrink:0;" viewbox="0 0 24 24" width="13"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -7557,7 +7452,7 @@ ProductDrop Pro-д шинэ 100 бараа нэмэгдлээ
 <div style="margin-bottom:8px;">
 <label class="cnt-lbl" style="color:var(--purple);">Зорилтот хүн</label>
 <input class="cnt-fi" id="ig-audience" placeholder="Жишээ: их сургуулийн оюутан, онлайн бизнес эхлүүлмээр" style="margin-bottom:0;border-color:rgba(112,112,112,0.3);">
-</input></div>
+</div>
 <label class="cnt-lbl" style="color:var(--purple);">Хүн ямар асуудалтай байна? / Яг юу өвдөж байна?</label>
 <textarea class="cnt-ta" id="ig-pain" placeholder="Жишээ: Ямар бараа зарахаа мэдэхгүй, Alibaba хайхад цаг алдаж байна, туршивал алдаж магадгүй гэж айна..." style="min-height:55px;margin-bottom:8px;border-color:rgba(112,112,112,0.3);"></textarea>
 <button id="ig-run-btn" onclick="aiGenMainIdeas()" style="width:100%;padding:10px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .18s;margin-bottom:8px;">
@@ -7575,14 +7470,14 @@ ProductDrop Pro-д шинэ 100 бараа нэмэгдлээ
 <label class="cnt-lbl" style="color:var(--purple);">Санаа / Гол утга</label>
 <!-- ── САНАА БАНК inline ── -->
 <div id="idea-bank-wrap" style="margin-bottom:8px;">
-<div id="idea-bank-toggle" onclick="toggleIdeaBank()" style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:6px 10px;border-radius:9px;background:rgba(112,112,112,0.07);border:1.5px solid rgba(112,112,112,0.18);user-select:none;transition:all .15s;margin-bottom:0;">
+<div aria-controls="idea-bank-chips" aria-expanded="false" id="idea-bank-toggle" onclick="toggleIdeaBank()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" role="button" tabindex="0" style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:6px 10px;border-radius:9px;background:rgba(112,112,112,0.07);border:1.5px solid rgba(112,112,112,0.18);user-select:none;transition:all .15s;margin-bottom:0;">
 <span style="font-size:11px;font-weight:800;color:var(--purple);flex:1;">Хадгалсан Санаа Банк</span>
 <span id="idea-bank-count" style="font-size:10px;color:var(--text4);font-weight:600;"></span>
 <svg fill="none" height="12" id="idea-bank-chev" stroke="var(--purple)" stroke-width="2.5" style="transition:transform .2s;" viewbox="0 0 24 24" width="12"><polyline points="6 9 12 15 18 9"></polyline></svg>
 </div>
 <div id="idea-bank-chips" style="display:none;padding:8px 2px;flex-wrap:wrap;gap:5px;"></div>
 </div>
-<textarea class="ai-av-textarea" id="ai-idea" placeholder="Жишээ: Alibaba-аас бараа хайхад 3 цаг зарцуулдаг, ProductDrop 30 минутад шийддэг. Цагийн тооцоог харуулна."></textarea>
+<textarea aria-label="Санаа эсвэл гол утга" class="ai-av-textarea" id="ai-idea" placeholder="Жишээ: Alibaba-аас бараа хайхад 3 цаг зарцуулдаг, ProductDrop 30 минутад шийддэг. Цагийн тооцоог харуулна."></textarea>
 <div style="display:flex;gap:7px;margin-bottom:6px;">
 <button class="ai-gen-btn" id="ai-gen-btn" onclick="aiGenScript()" style="flex:1;">
 <svg fill="none" height="15" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="15"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
@@ -7621,7 +7516,7 @@ Hook 3: ..."></textarea>
 <span style="font-size:11px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.05em;">Script Revision</span>
 <span style="font-size:10px;color:var(--text3);font-weight:500;">— AI-д feedback өгч дахин бичүүл</span>
 </div>
-<textarea class="cnt-ta" id="cp-revision-fb" placeholder="Жишээ: Hook дахь тоо нэм. VILLAIN хэсгийг илүү hyper-specific болго. CTA-г offer stack-тай болго..." style="min-height:60px;margin-bottom:8px;border-color:rgba(106,106,106,0.25);"></textarea>
+<textarea aria-label="Script засварын санал" class="cnt-ta" id="cp-revision-fb" placeholder="Жишээ: Hook дахь тоо нэм. VILLAIN хэсгийг илүү hyper-specific болго. CTA-г offer stack-тай болго..." style="min-height:60px;margin-bottom:8px;border-color:rgba(106,106,106,0.25);"></textarea>
 <button id="cp-revision-btn" onclick="aiReviseScript()" style="width:100%;padding:9px;border-radius:9px;border:none;background:var(--blue);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .15s;">
 <svg fill="none" height="13" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="13"><path d="M23 4v6h-6M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
         Дахин бичих
@@ -7638,21 +7533,21 @@ Hook 3: ..."></textarea>
 <div>
 <label class="cnt-lbl">Хандалт</label>
 <input class="cnt-fi" id="cp-views" min="0" oninput="perfCalc()" placeholder="0" style="margin-bottom:0;border-color:rgba(106,106,106,0.3);" type="number">
-</input></div>
+</div>
 <div>
 <label class="cnt-lbl">DM</label>
 <input class="cnt-fi" id="cp-dms" min="0" oninput="perfCalc()" placeholder="0" style="margin-bottom:0;border-color:rgba(112,112,112,0.3);" type="number">
-</input></div>
+</div>
 <div>
 <label class="cnt-lbl">Хөрвөлт</label>
 <input class="cnt-fi" id="cp-orders" min="0" oninput="perfCalc()" placeholder="0" style="margin-bottom:0;border-color:rgba(160,160,160,0.3);" type="number">
-</input></div>
+</div>
 </div>
 <div class="cnt-frow">
 <div>
 <label class="cnt-lbl">Орлого ₮</label>
 <input class="cnt-fi" id="cp-revenue" min="0" placeholder="0" style="margin-bottom:0;border-color:rgba(160,160,160,0.3);" type="number">
-</input></div>
+</div>
 <div style="display:flex;flex-direction:column;justify-content:flex-end;">
 <div id="cp-perf-calc" style="font-size:11px;color:var(--text3);padding:5px 0;line-height:1.8;">
 <span id="cp-perf-rpo"></span>
@@ -7678,7 +7573,7 @@ Hook 3: ..."></textarea>
 </div>
 </div>
 </div>
-</input></input></div>
+</div>
 <div class="cnt-pfooter">
 <button class="cnt-bsave" id="cnt-save-btn" onclick="saveCntPanel()">Хадгалах</button>
 <button class="cnt-bdel" id="cnt-del-btn" onclick="delCntPanel()" style="display:none;">Устгах</button>
@@ -7704,7 +7599,7 @@ Hook 3: ..."></textarea>
 <option value="turshij">Туршиж байгаа</option>
 <option value="hiij">Хийж байгаа</option>
 </select>
-</input></div>
+</div>
 <div id="hb-list" style="display:flex;flex-direction:column;gap:6px;"></div>
 <div id="hb-empty" style="text-align:center;padding:20px;color:var(--text4);font-size:12px;display:none;">Хадгалсан hook байхгүй байна. 10 Hook үүсгээд, таалагдсан hook дээрх хадгалах товч дээр дараарай.</div>
 </div>
@@ -7724,7 +7619,7 @@ Hook 3: ..."></textarea>
 <input id="ib-search" oninput="renderIdeaBankModal()" placeholder="Санаа хайх..." style="width:100%;padding:8px 12px;border-radius:10px;border:1.5px solid var(--border2);background:var(--bg3);color:var(--text);font-size:12px;font-family:inherit;outline:none;margin-bottom:14px;" type="text">
 <div id="ib-list" style="display:flex;flex-direction:column;gap:6px;"></div>
 <div id="ib-empty" style="display:none;text-align:center;padding:28px 20px;color:var(--text4);font-size:12px;">Хадгалсан санаа байхгүй байна.<br/><span style="font-size:11px;opacity:.7;">AI-аар script үүсгэж Save дарж хадгал.</span></div>
-</input></div>
+</div>
 </div>
 </div>
 <!-- ══ BATCH PLANNER MODAL ══ -->
@@ -7825,8 +7720,6 @@ Hook 3: ..."></textarea>
 </div>
 <script>
 /* ── CONFIG ── */
-var TELEGRAM_BOT_TOKEN='8695289865:AAGGjH1TLin2_W8AzHkIT7rtYLR6VIZxxTo';
-var TELEGRAM_CHAT_ID='5877604772';
 function GAS_URL(){
   var saved = localStorage.getItem('pd_gas_url');
   if(saved && saved.indexOf('script.google.com') !== -1) return saved;
@@ -9384,7 +9277,7 @@ function updateRevGoal(){
 }
 
 /* ── USERS — Google Sheets data ── */
-function loadUsers(){
+function loadUsersLegacy(){
   var tbody=document.getElementById('users-table-body');
   tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:28px;">Уншиж байна...</td></tr>';
   var _gu=localStorage.getItem('pd_gas_url');
@@ -9416,7 +9309,7 @@ function loadUsers(){
     });
 }
 
-function updateUserStats(data){
+function updateUserStatsLegacy(data){
   var now=Date.now();
   var active=data.filter(function(p){return p.expiry>now;}).length;
   var expired=data.filter(function(p){return p.expiry<=now;}).length;
@@ -9430,11 +9323,15 @@ function updateUserStats(data){
   var badge=document.getElementById('admin-user-total-badge');
   if(badge)badge.textContent=data.length?data.length+' нийт':'';
   // Pro болон Starter гишүүдийг analytics-т шинэчлэх
-  var proCount=data.filter(function(p){return p.plan==='pro'&&p.expiry>now;}).length;
-  var starterCount=data.filter(function(p){return p.plan==='starter'&&p.expiry>now;}).length;
+  var proCount=data.filter(function(p){return String(p.plan||'').toLowerCase()==='pro'&&p.expiry>now;}).length;
+  var starterCount=data.filter(function(p){return String(p.plan||'').toLowerCase()==='starter'&&p.expiry>now;}).length;
+  var businessCount=data.filter(function(p){return String(p.plan||'').toLowerCase()==='business'&&p.expiry>now;}).length;
   analytics.pro=proCount;analytics.starter=starterCount;saveAll();renderAnalytics();
   // Push live counts to Roadmap + AI context cards
-  var rmc=document.getElementById('rm-pro-count');if(rmc)rmc.textContent=proCount||'~15';
+  var rmc=document.getElementById('rm-pro-count');if(rmc)rmc.textContent=String(proCount);
+  var rmb=document.getElementById('rm-business-count');if(rmb)rmb.textContent=String(businessCount);
+  var mrrEq=Math.round((proCount*49900/3)+(businessCount*99900));
+  var rmm=document.getElementById('rm-mrr-current');if(rmm)rmm.textContent='₮'+mrrEq.toLocaleString('en-US');
   var amc=document.getElementById('ai-ctx-members');if(amc)amc.textContent=proCount+(starterCount?' (+'+starterCount+' starter)':'');
   // ── Finance auto-sync: Pro plan revenue ──
   if(proCount>0 && typeof _fin!=='undefined'){
@@ -9469,7 +9366,7 @@ function delUser(pw){
 }
 
 /* ── REGISTRATIONS ── */
-function loadRegistrations(){
+function loadRegistrationsLegacy(){
   var container=document.getElementById('regs-grid-body');
   if(!container)container=document.getElementById('regs-table-body');
   container.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:24px;">Уншиж байна...</div>';
@@ -10193,7 +10090,7 @@ function genPW(){
   document.getElementById('result').style.display='block';
   // Telegram
   var tgText='Сайн байна уу '+name+'? \n\nТаны бүртгэл амжилттай үүслээ!\n\n Нэр: '+name+'\n Нууц үг: '+pw+'\n Plan: '+plan.toUpperCase()+'\n Дуусах: '+new Date(expiry).toLocaleString('mn-MN')+'\n\n Нэвтрэх: https://productdrops.netlify.app/landing';
-  fetch('https://api.telegram.org/bot'+TELEGRAM_BOT_TOKEN+'/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:TELEGRAM_CHAT_ID,text:tgText})}).catch(function(){});
+  fetch('https://api.telegram.org/botSERVER_MANAGED/sendMessage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:tgText})}).catch(function(){});
   // GAS save
   var btn=document.getElementById('gen-btn');btn.disabled=true;
   var st=document.getElementById('sync-status');st.className='sync-st';
@@ -10901,7 +10798,7 @@ function renderFgrid(){
       iconHtml='<div class="fi" style="background:'+lk.color+';flex-shrink:0;"><svg viewBox="0 0 24 24" fill="none" stroke="'+lk.stroke+'" stroke-width="1.9">'+_qsvgPath(lk.icon)+'</svg></div>';
     }
     var delBtn=lk.custom?'<span onclick="event.stopPropagation();removeCustomLink(\''+lk.id+'\')" style="position:absolute;top:6px;right:6px;width:16px;height:16px;border-radius:50%;background:var(--redbg);color:var(--red);display:none;align-items:center;justify-content:center;font-weight:800;cursor:pointer;" class="ql-del"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>':'';
-    html+='<div class="fc ql-card" style="position:relative;" onclick="window.open(\''+lk.url+'\',\'_blank\')" onmouseenter="this.querySelector(\'.ql-del\')&&(this.querySelector(\'.ql-del\').style.display=\'flex\')" onmouseleave="this.querySelector(\'.ql-del\')&&(this.querySelector(\'.ql-del\').style.display=\'none\')">'
+    html+='<div class="fc ql-card" style="position:relative;" onclick="window.open(\''+lk.url+'\',\'_blank\',\'noopener,noreferrer\')" onmouseenter="this.querySelector(\'.ql-del\')&&(this.querySelector(\'.ql-del\').style.display=\'flex\')" onmouseleave="this.querySelector(\'.ql-del\')&&(this.querySelector(\'.ql-del\').style.display=\'none\')">'
       +iconHtml
       +'<div style="min-width:0;"><div class="fc-n">'+lk.name+'</div><div class="fc-s">'+lk.sub+'</div></div>'
       +delBtn+'</div>';
@@ -13229,7 +13126,7 @@ function exportCSV(type){
     '<div class="gs-box">'+
       '<div class="gs-input-wrap">'+
         '<svg viewBox="0 0 24 24" class="gs-icon"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>'+
-        '<input class="gs-input" id="gs-inp" placeholder="Хайх... (Task, Drop, Script)" oninput="runGSearch(this.value)" autocomplete="off"/>'+
+        '<input aria-label="Dashboard хайлт" class="gs-input" id="gs-inp" placeholder="Хайх... (Task, Drop, Script)" oninput="runGSearch(this.value)" autocomplete="off"/>'+
         '<button class="gs-clear" onclick="closeGSearch()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>'+
       '</div>'+
       '<div class="gs-results" id="gs-results"><div class="gs-empty">Хайх үгээ бичнэ үү...</div></div>'+
@@ -14259,7 +14156,7 @@ var _hookPomo=setInterval(function(){
 <div id="cmd-input-row">
 <svg viewbox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
 <input autocomplete="off" id="cmd-input" placeholder="Хайх эсвэл шилжих... ажил, хуудас, үйлдэл" spellcheck="false">
-</input></div>
+</div>
 <div id="cmd-results"></div>
 <div id="cmd-footer">
 <span class="cmd-fk"><kbd class="kbd">↑↓</kbd> шилжих</span>
@@ -14306,7 +14203,7 @@ var _hookPomo=setInterval(function(){
 <input accept=".json" id="exp-file-inp" onchange="importJSON(this)" type="file">
 <button class="exp-import-btn" onclick="document.getElementById('exp-file-inp').click()">JSON файлаас импортлох</button>
 <button class="exp-close-btn" onclick="closeExport()">Хаах</button>
-</input></div>
+</div>
 </div>
 </div>
 <!-- ── GOALS MODAL ── -->
@@ -14384,13 +14281,13 @@ function openCmd(){
   inp.focus();
   renderCmd('');
 }
-window.openCmd=openCmd;
+if(typeof openCmd!=='undefined')window.openCmd=openCmd;
 
 function closeCmd(){
   cmdOpen=false;
   document.getElementById('cmd-overlay').classList.add('hidden');
 }
-window.closeCmd=closeCmd;
+if(typeof closeCmd!=='undefined')window.closeCmd=closeCmd;
 
 function renderCmd(q){
   q=(q||'').toLowerCase().trim();
@@ -14848,11 +14745,17 @@ scheduleAllReminders();
    ROADMAP PAGE — Countdown + Checklist + Phase toggle
    ───────────────────────────────────────────────────── */
 (function(){
-  var EXIT_DATE  = new Date('2026-09-01T09:00:00+08:00');
-  var START_DATE = new Date('2026-01-01T00:00:00+08:00');
+  var EXIT_DATE  = new Date('2027-01-01T00:00:00+08:00');
+  var START_DATE = new Date('2026-09-10T00:00:00+08:00');
 
-  // Phase item counts
-  var PHASE_COUNTS = { p0: 7, p1: 5, p2: 4, p3: 3 };
+  // Phase item counts + dates
+  var PHASE_COUNTS = { q4p0: 6, q4p1: 6, q4p2: 6, q4p3: 7 };
+  var PHASES = [
+    {id:'q4p0',start:new Date('2026-09-10T00:00:00+08:00'),end:new Date('2026-09-30T23:59:59+08:00'),gate:'Sep 30 · Funnel measured · 40+ Pro'},
+    {id:'q4p1',start:new Date('2026-10-01T00:00:00+08:00'),end:new Date('2026-10-31T23:59:59+08:00'),gate:'Oct 31 · 75+ Pro · CAC ≤ ₮15K'},
+    {id:'q4p2',start:new Date('2026-11-01T00:00:00+08:00'),end:new Date('2026-11-30T23:59:59+08:00'),gate:'Nov 30 · 150+ Pro · 5+ Business · Renewal 55%+'},
+    {id:'q4p3',start:new Date('2026-12-01T00:00:00+08:00'),end:new Date('2027-01-01T00:00:00+08:00'),gate:'Jan 1 · 250+ Pro · 10+ Business · ₮5M+ MRR'}
+  ];
 
   function rmUpdateCountdown(){
     var now  = Date.now();
@@ -14864,6 +14767,9 @@ scheduleAllReminders();
       if(dEl) dEl.textContent = '0';
       if(hEl) hEl.textContent = '00';
       if(mEl) mEl.textContent = '00';
+      var f0=document.getElementById('rm-prog-fill');if(f0)f0.style.width='100%';
+      var l0=document.getElementById('rm-prog-lbl');if(l0)l0.textContent='100% — 2027 Scale Gate хугацаа болсон';
+      var n0=document.getElementById('rm-next-gate');if(n0)n0.textContent='Одоо: Dec 31 review хийж 2027 Q1 operating plan-аа батална.';
       return;
     }
     var days = Math.floor(diff / 86400000);
@@ -14878,30 +14784,52 @@ scheduleAllReminders();
     var fill    = document.getElementById('rm-prog-fill');
     var lbl     = document.getElementById('rm-prog-lbl');
     if(fill) fill.style.width = pct.toFixed(1) + '%';
-    if(lbl)  lbl.textContent  = pct.toFixed(1) + '% — ' + days + ' өдөр үлдлээ (Sept 1 хүртэл)';
+    if(lbl)  lbl.textContent  = pct.toFixed(1) + '% — ' + days + ' өдөр үлдлээ (2027.01.01 хүртэл)';
+    var next=PHASES.find(function(p){return now<=p.end.getTime();})||PHASES[PHASES.length-1];
+    var gateDays=Math.max(0,Math.ceil((next.end.getTime()-now)/86400000));
+    var ng=document.getElementById('rm-next-gate');if(ng)ng.textContent='Дараагийн gate: '+next.gate+' · '+gateDays+' өдөр';
   }
 
-  function rmUpdatePhaseProg(phase){
-    var saved = JSON.parse(localStorage.getItem('pd_roadmap_checks') || '{}');
+  function rmGetSaved(){try{return JSON.parse(localStorage.getItem('pd_roadmap_checks')||'{}');}catch(e){return {};}}
+  function rmUpdateOverall(saved){
+    saved=saved||rmGetSaved();var total=0,done=0;
+    Object.keys(PHASE_COUNTS).forEach(function(p){total+=PHASE_COUNTS[p];for(var i=1;i<=PHASE_COUNTS[p];i++)if(saved[p+'_'+i])done++;});
+    var pct=total?Math.round(done/total*100):0;
+    var pe=document.getElementById('rm-exec-pct');if(pe)pe.textContent=pct+'%';
+    var de=document.getElementById('rm-exec-detail');if(de)de.textContent=done+' / '+total+' ажил';
+  }
+  function rmUpdatePhaseProg(phase,saved){
+    saved=saved||rmGetSaved();
     var total = PHASE_COUNTS[phase] || 0;
     var done  = 0;
-    for(var i = 1; i <= total; i++){
-      if(saved[phase + '_' + i]) done++;
-    }
+    for(var i = 1; i <= total; i++) if(saved[phase + '_' + i]) done++;
     var el = document.getElementById('rm-' + phase + '-prog');
     if(el) el.textContent = done + '/' + total;
   }
+  var rmInitialPhaseApplied=false;
+  function rmMarkCurrentPhase(openCurrent){
+    var now=Date.now();
+    PHASES.forEach(function(p){
+      var body=document.getElementById('rm-body-'+p.id),phase=body&&body.closest('.rm-phase'),chev=document.getElementById('rm-chev-'+p.id);if(!phase)return;
+      var current=now>=p.start.getTime()&&now<=p.end.getTime();
+      var overdue=now>p.end.getTime();
+      phase.classList.toggle('rm-current',current);phase.classList.toggle('rm-overdue',overdue&&!current);
+      if(openCurrent&&!rmInitialPhaseApplied){
+        body.style.display=current?'block':'none';
+        if(chev)chev.classList.toggle('open',current);
+      } else if(current&&openCurrent){body.style.display='block';if(chev)chev.classList.add('open');}
+    });
+    if(openCurrent)rmInitialPhaseApplied=true;
+  }
 
   window.rmLoadChecks = function rmLoadChecks(){
-    var saved = JSON.parse(localStorage.getItem('pd_roadmap_checks') || '{}');
-    Object.keys(saved).forEach(function(k){
-      if(!saved[k]) return;
-      var cb   = document.getElementById('rmc-' + k);
-      var item = document.querySelector('[data-key="' + k + '"]');
-      if(cb)   cb.classList.add('checked');
-      if(item) item.classList.add('rm-done');
+    var saved = rmGetSaved();
+    document.querySelectorAll('#page-roadmap .rm-item[data-key]').forEach(function(item){
+      var k=item.getAttribute('data-key'),on=!!saved[k],cb=document.getElementById('rmc-'+k);
+      if(cb)cb.classList.toggle('checked',on);item.classList.toggle('rm-done',on);
     });
-    ['p0','p1','p2','p3'].forEach(function(p){ rmUpdatePhaseProg(p); });
+    ['q4p0','q4p1','q4p2','q4p3'].forEach(function(p){ rmUpdatePhaseProg(p,saved); });
+    rmUpdateOverall(saved);
   }
 
   window.rmToggle = function(item, key){
@@ -14909,49 +14837,20 @@ scheduleAllReminders();
     if(!cb) return;
     var isChecked = cb.classList.toggle('checked');
     item.classList.toggle('rm-done', isChecked);
-    var saved = JSON.parse(localStorage.getItem('pd_roadmap_checks') || '{}');
+    var saved = rmGetSaved();
     saved[key] = isChecked;
     localStorage.setItem('pd_roadmap_checks', JSON.stringify(saved));
     var phase = key.split('_')[0];
-    rmUpdatePhaseProg(phase);
+    rmUpdatePhaseProg(phase,saved);
+    rmUpdateOverall(saved);
     // Flash sync dot
     var dot = document.getElementById('rm-sync-dot');
     if(dot){ dot.classList.add('show'); setTimeout(function(){ dot.classList.remove('show'); }, 1800); }
     if(typeof toast === 'function') toast(isChecked ? ' Дууслаа!' : '↩ Буцаагдлаа');
-    // Supabase sync
-    rmSaveToSB(saved);
+    // pd_roadmap_checks нь global Supabase settings sync-ээр автоматаар хадгалагдана.
   };
 
-  // ── Supabase save ──
-  var RM_SB_URL = 'https://xpxotgpqxrupkgcppzmn.supabase.co';
-  var RM_SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhweG90Z3BxeHJ1cGtnY3Bwem1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyOTk4NTUsImV4cCI6MjA4ODg3NTg1NX0.7wtm3YXDj2lWL61y4pfZFud4LL2BkchAjGkTJMvhLqo';
-  var RM_HDR = {'Content-Type':'application/json','apikey':RM_SB_KEY,'Authorization':'Bearer '+RM_SB_KEY};
-
-  function rmSaveToSB(data){
-    fetch(RM_SB_URL+'/rest/v1/user_settings', {
-      method:'POST',
-      headers:Object.assign({},RM_HDR,{'Prefer':'resolution=merge-duplicates'}),
-      body:JSON.stringify({key:'rm_checks', value:JSON.stringify(data)})
-    }).catch(function(){});
-  }
-
-  function rmLoadFromSB(){
-    fetch(RM_SB_URL+'/rest/v1/user_settings?select=value&key=eq.rm_checks', {headers:RM_HDR})
-      .then(function(r){return r.json();})
-      .then(function(rows){
-        if(!rows||!rows.length) return;
-        try{
-          var remote = JSON.parse(rows[0].value||'{}');
-          // Merge: remote wins over localStorage
-          var local = JSON.parse(localStorage.getItem('pd_roadmap_checks')||'{}');
-          var merged = Object.assign({}, local, remote);
-          localStorage.setItem('pd_roadmap_checks', JSON.stringify(merged));
-          rmLoadChecks();
-          var dot = document.getElementById('rm-sync-dot');
-          if(dot){ dot.classList.add('show'); setTimeout(function(){ dot.classList.remove('show'); },1200); }
-        }catch(e){}
-      }).catch(function(){});
-  }
+  // Cross-device sync: global sbSet/sbPullAll handles pd_roadmap_checks.
 
   window.rmTogglePhase = function(phase){
     var body  = document.getElementById('rm-body-' + phase);
@@ -14963,9 +14862,9 @@ scheduleAllReminders();
   };
 
   rmUpdateCountdown();
-  setInterval(rmUpdateCountdown, 30000);
+  rmMarkCurrentPhase(true);
+  setInterval(function(){rmUpdateCountdown();rmMarkCurrentPhase(false);}, 30000);
   setTimeout(rmLoadChecks, 300);
-  setTimeout(rmLoadFromSB, 600); // load from Supabase after local
 
   var origSP = window.showPage;
   window.showPage = function(p, el){
@@ -14973,8 +14872,9 @@ scheduleAllReminders();
     if(p === 'roadmap'){
       setTimeout(function(){
         rmUpdateCountdown();
+        rmMarkCurrentPhase(true);
         rmLoadChecks();
-        rmLoadFromSB();
+        if(typeof loadUsers==='function') loadUsers();
       }, 80);
     }
   };
@@ -15004,7 +14904,7 @@ function injectReminderBtns(){
 // 8. MASS MESSAGE SYSTEM (Telegram + SMS)
 // ─────────────────────────────────────────────────────
 (function(){
-  var BOT_TOKEN = TELEGRAM_BOT_TOKEN;
+  var BOT_TOKEN = 'SERVER_MANAGED';
   var _seg = 'tg_leads';
   var _channel = 'telegram'; // 'telegram' | 'sms'
   var _tgRecipients = []; // [{chat_id, label}]
@@ -18115,8 +18015,10 @@ function toggleIdeaBank(){
   _ideaBankOpen=!_ideaBankOpen;
   var chips=document.getElementById('idea-bank-chips');
   var chev=document.getElementById('idea-bank-chev');
+  var toggle=document.getElementById('idea-bank-toggle');
   if(chips){chips.style.display=_ideaBankOpen?'flex':'none';}
   if(chev){chev.style.transform=_ideaBankOpen?'rotate(180deg)':'rotate(0deg)';}
+  if(toggle){toggle.setAttribute('aria-expanded',_ideaBankOpen?'true':'false');}
   if(_ideaBankOpen) renderIdeaBank();
 }
 
@@ -20051,7 +19953,7 @@ window.load=loadTasks;window.loadContents=loadContent;window.showPage=nav;window
 window.ctxEdit=()=>{if(typeof _ctxTask!=='undefined'&&_ctxTask){if(typeof _closeCtxMenu==='function')_closeCtxMenu();openTask(_ctxTask.id);}};
 window.switchView=(v)=>{options.view=v;if($('ux-task-view'))$('ux-task-view').value=v;renderTasks();};
 window.setPriFilter=(p)=>{options.priority=p;if($('ux-task-pri'))$('ux-task-pri').value=p;renderTasks();};
-window.setGreet=greeting;
+if(typeof greeting!=='undefined')window.setGreet=greeting;
 const legacyTheme=window.setSidebarTheme;window.setSidebarTheme=function(mode){mode=mode==='light'?'light':'dark';try{localStorage.setItem('pd_theme',mode);}catch(e){}legacyTheme(mode);const meta=$('meta-theme-color');if(meta)meta.content=mode==='dark'?'#000000':'#ffffff';};
 const legacyApplySettings=window._applyAllSettings;if(legacyApplySettings)window._applyAllSettings=function(){legacyApplySettings();document.documentElement.setAttribute('data-theme',(localStorage.getItem('pd_theme')||'dark')==='dark'?'dark':'');_syncThemeIcons();};
 window.x=C.escape;
@@ -21585,7 +21487,7 @@ function AT_switchTab(id, btn){
   }
   try{localStorage.setItem('pd_last_tab',id);}catch(e){}
   try{
-    if(id==='creator' && typeof AT_renderInfGrid==='function') AT_renderInfGrid();
+    if(id==='creator') AT_loadCreators();
     if(id==='contentscript' && typeof AT_csRender==='function') AT_csRender();
     if(id==='urlmanager'){ if(typeof AT_urlmgrRender==='function') AT_urlmgrRender(); if(typeof AT_urlmgrUpdateStats==='function') AT_urlmgrUpdateStats(); }
     if(id==='weeklyrank'){
@@ -21629,15 +21531,13 @@ async function AT_supaFetch(fields){
 }
 async function AT_supaPatch(id,n,payload){
   const _h={'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation'};
-  // Primary: PATCH by ID
+  // Stable IDs must never fall back to another row with the same name.
   if(id){
-    const res=await fetch(SUPA_URL+'/rest/v1/products?id=eq.'+id,{method:'PATCH',headers:_h,body:JSON.stringify(payload)});
-    if(res.ok){
-      const rows=await res.json();
-      if(rows&&rows.length>0) return rows[0];
-      // ID lookup returned 0 rows — fall through to name fallback
-    }
-    // HTTP error → also try name fallback before giving up
+    const res=await fetch(SUPA_URL+'/rest/v1/products?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:_h,body:JSON.stringify(payload)});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const rows=await res.json();
+    if(!Array.isArray(rows)||rows.length!==1)throw new Error('Бараа олдсонгүй. Жагсаалтаа шинэчилнэ үү.');
+    return rows[0];
   }
   // Fallback: PATCH by name
   if(n){
@@ -21722,7 +21622,7 @@ function AT_loadFile(file){
   reader.onload=function(e){
     rawHTML=e.target.result;
     // Parse PRODUCTS
-    const pm=rawHTML.match(/const PRODUCTS\s*=\s*(\[[\s\S]*?\]);/);
+    const pm=rawHTML.match(/(?:let|const|var) PRODUCTS\s*=\s*(\[[\s\S]*?\]);/);
     if(!pm){ AT_showToast('PRODUCTS датагийн бүтэц олдсонгүй!','error'); return; }
     try{
       PRODUCTS=JSON.parse(pm[1]);
@@ -21739,7 +21639,7 @@ function AT_loadFile(file){
         // Assign rank from score if missing
         creator.forEach(function(inf, i){ if(!inf.rank) inf.rank = inf.score||i+1; });
       }
-      catch(e){ creator=[]; }
+      catch(e){ AT_showToast('Creator өгөгдөл JSON биш байна. Зассан pro.html файлыг импортлоно уу.','error'); return; }
     }
 
     // Parse WEEKLY_TOP_NAMES
@@ -22011,17 +21911,17 @@ function AT_saveFile(){
 
   // Update PRODUCTS (includes new hook/script edits + price edits + reorder)
   const allProds=[...PRODUCTS,...newProducts];
-  const prodStr='const PRODUCTS = '+JSON.stringify(allProds,null,2)+';';
-  out=out.replace(/const PRODUCTS\s*=\s*\[[\s\S]*?\];/, prodStr);
+  const prodStr='let PRODUCTS = '+JSON.stringify(allProds,null,2).replace(/</g,'\\u003c')+';';
+  out=out.replace(/(?:let|const|var) PRODUCTS\s*=\s*\[[\s\S]*?\];/, ()=>prodStr);
 
   // Update creator (sort by rank)
   const sortedInf=[...creator].sort((a,b)=>(a.rank||99)-(b.rank||99));
-  const infStr='var creator = '+JSON.stringify(sortedInf,null,2)+';';
-  out=out.replace(/var creator\s*=\s*\[[\s\S]*?\];/, infStr);
+  const infStr='var creator = '+JSON.stringify(sortedInf,null,2).replace(/</g,'\\u003c')+';';
+  out=out.replace(/var creator\s*=\s*\[[\s\S]*?\];/, ()=>infStr);
 
   // Update WEEKLY_TOP_NAMES
-  const topNamesStr='var WEEKLY_TOP_NAMES = '+JSON.stringify(WEEKLY_TOP_NAMES)+';';
-  out=out.replace(/var WEEKLY_TOP_NAMES\s*=\s*\[.*?\];/, topNamesStr);
+  const topNamesStr='var WEEKLY_TOP_NAMES = '+JSON.stringify(WEEKLY_TOP_NAMES).replace(/</g,'\\u003c')+';';
+  out=out.replace(/var WEEKLY_TOP_NAMES\s*=\s*\[.*?\];/, ()=>topNamesStr);
 
   const blob=new Blob([out],{type:'text/html'});
   const a=document.createElement('a');
@@ -22145,7 +22045,7 @@ function AT_buildRow(p,i){
           <input type="text" value="${AT_esc(p._en||'')}" data-idx="${i}" data-field="_en" oninput="AT_updateNameField(this)" placeholder="English name" style="flex:1;min-width:0;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;border:1px solid transparent;border-radius:5px;padding:2px 5px;background:transparent;outline:none;transition:all .15s" onfocus="this.style.borderColor='var(--purple)';this.style.background='#f5f3ff'" onblur="this.style.borderColor='transparent';this.style.background='transparent'">
           <button onclick="AT_copyText(this,document.querySelector('input[data-idx=\\'${i}\\'][data-field=\\'_en\\']').value)" title="Англи нэр хуулах" style="flex-shrink:0;width:20px;height:20px;border:1px solid var(--border2);border-radius:4px;background:#fff;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;color:var(--muted2)">⎘</button>
         </div>
-        <div class="prod-cat" style="font-size:9px">${p.mc} · ${p.sc||''}</div>
+        <div class="prod-cat" style="font-size:9px">${AT__biEscH(p.mc)} · ${AT__biEscH(p.sc||'')}</div>
         ${p.aiReason?`<div style="font-size:9px;color:#7c3aed;margin-top:1px">${p.aiReason}</div>`:''}
         <div>
           <button onclick="AT_toggleDesc(${i})" id="desc-toggle-${i}" style="font-size:9px;font-weight:700;padding:2px 7px;border:1px solid var(--border2);border-radius:4px;background:${p.desc?'var(--accent-bg)':'#fff'};color:${p.desc?'var(--accent)':'var(--muted2)'};cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:3px">
@@ -22434,6 +22334,24 @@ async function AT_cloudUpload(file,publicId){
 function AT_addLog(log,type,name,detail){const row=document.createElement('div');row.className='log-row';row.innerHTML='<span class="log-'+type+' log-name">'+name+'</span><span class="log-url">'+detail+'</span>';log.appendChild(row);log.scrollTop=log.scrollHeight;}
 
 /* ═══════════════════ Контент бүтээгч EDITOR ═══════════════════ */
+async function AT_loadCreators(){
+ try{
+  const r=await fetch(SUPA_URL+'/rest/v1/creators?select=*&order=rank.asc,id.asc');if(!r.ok)throw Error('HTTP '+r.status);
+  const rows=await r.json();if(!Array.isArray(rows))throw Error('Invalid creator response');
+  creator=rows.map(r=>({...r.profile,id:r.id,rank:r.rank}));
+  const empty=document.getElementById('inf-no-file'),app=document.getElementById('inf-app');if(empty)empty.classList.add('hidden');if(app)app.classList.remove('hidden');
+  AT_renderInfGrid();AT_renderCreatorRank();AT_updateStats();AT_saveToLS();
+ }catch(e){AT_showToast('Creator серверийн холболт: '+e.message,'error');}
+}
+if(typeof AT_loadCreators!=='undefined')window.AT_loadCreators=AT_loadCreators;
+async function AT_storeCreator(inf){
+ const profile={...inf};delete profile.id;
+ const handle=String(inf.handle||'').trim().toLowerCase();
+ const id=inf.id;const path=id?'/rest/v1/creators?id=eq.'+encodeURIComponent(id):'/rest/v1/creators';
+ const r=await fetch(SUPA_URL+path,{method:id?'PATCH':'POST',headers:{'Content-Type':'application/json',Prefer:'return=representation'},body:JSON.stringify({handle,rank:Number(inf.rank)||99,profile})});
+ if(!r.ok)throw Error('HTTP '+r.status);const rows=await r.json();if(!Array.isArray(rows)||rows.length!==1)throw Error('Creator олдсонгүй. Шинэчилнэ үү.');
+ return {...rows[0].profile,id:rows[0].id,rank:rows[0].rank};
+}
 function AT_renderInfGrid(){
   if(!creator.length&&rawHTML){ }
   const sorted=[...creator].sort((a,b)=>(a.rank||99)-(b.rank||99));
@@ -22696,6 +22614,8 @@ async function AT_syncToGoogleSheet(inf, isEdit){
     body: JSON.stringify(row)
   });
   if(!res.ok) throw new Error('HTTP '+res.status);
+  const result=await res.json();
+  if(result.error||result.ok===false||result.success===false)throw new Error(result.error||'Sheet хадгалалт амжилтгүй');
   return true;
 }
 
@@ -22729,41 +22649,25 @@ async function AT_saveInf(){
     rank:parseInt(document.getElementById('inf-score').value)||99
   };
 
-  const isEdit = editInfIdx >= 0;
-  if(isEdit){ creator[editInfIdx]=inf; }
-  else{ creator.push(inf); }
-
-  /* ── Google Sheet sync ── */
-  const gasUrl = (document.getElementById('gas-url-inp')||{}).value || localStorage.getItem(GAS_LS_KEY)||'';
-  if(gasUrl){
-    const saveBtn = document.getElementById('inf-save-btn');
-    if(saveBtn){ saveBtn.disabled=true; saveBtn.textContent='Хадгалж байна...'; }
-    AT_gsStatus('loading','Google Sheet рүү хадгалж байна...');
-    try{
-      await AT_syncToGoogleSheet(inf, isEdit);
-      AT_gsStatus('success','Google Sheet-д хадгалагдлаа');
-      AT_gsBadge('ok','Sheet sync');
-      setTimeout(()=>{ AT_closeInfModal(); AT_renderInfGrid(); AT_updateStats(); AT_saveToLS(); },900);
-    }catch(e){
-      AT_gsStatus('error','Sheet алдаа: '+e.message+' — дотоод хадгалагдсан.');
-      AT_gsBadge('err','Sheet алдаа');
-      setTimeout(()=>{ AT_closeInfModal(); AT_renderInfGrid(); AT_updateStats(); AT_saveToLS(); },1400);
-    }
-    if(saveBtn){ saveBtn.disabled=false; saveBtn.textContent='Хадгалах'; }
-  } else {
-    AT_closeInfModal();
-    AT_renderInfGrid();
-    AT_updateStats();
-    AT_saveToLS();
-  }
+  const isEdit=editInfIdx>=0,saveBtn=document.getElementById('inf-save-btn');
+  if(isEdit&&creator[editInfIdx].id)inf.id=creator[editInfIdx].id;
+  if(saveBtn){if(saveBtn.disabled)return;saveBtn.disabled=true;}
+  try{
+   const saved=await AT_storeCreator(inf);
+   if(isEdit)creator[editInfIdx]=saved;else creator.push(saved);
+   AT_closeInfModal();AT_renderInfGrid();AT_updateStats();AT_saveToLS();
+   AT_showToast('Creator серверт хадгалагдлаа. Pro руу буцахад шинэчлэгдэнэ.','success');
+  }catch(e){AT_showToast('Creator хадгалагдсангүй: '+e.message,'error');}
+  finally{if(saveBtn)saveBtn.disabled=false;}
 }
 function AT_deleteInf(idx){
-  AT_pdConfirm('"'+creator[idx].name+'"-г устгахдаа итгэлтэй байна уу?', function(){
-    creator.splice(idx,1);
-    AT_renderInfGrid();
-    AT_updateStats();
-    AT_saveToLS();
-  },{danger:true,okLabel:'Устгах'});
+ const inf=creator[idx];if(!inf)return;
+ AT_pdConfirm('Creator-ийг устгах уу?',async function(){
+  try{
+   if(inf.id){const r=await fetch(SUPA_URL+'/rest/v1/creators?id=eq.'+encodeURIComponent(inf.id),{method:'DELETE',headers:{Prefer:'return=representation'}});if(!r.ok)throw Error('HTTP '+r.status);const rows=await r.json();if(rows.length!==1)throw Error('Creator олдсонгүй');}
+   creator=creator.filter(c=>c!==inf);AT_renderInfGrid();AT_updateStats();AT_saveToLS();AT_showToast(inf.id?'Creator серверээс устгагдлаа':'Локал импортын creator хасагдлаа','success');
+  }catch(e){AT_showToast('Устгагдсангүй: '+e.message,'error');}
+ },{danger:true,okLabel:'Устгах'});
 }
 
 /* ═══════════════════ PRODUCT ADDER IMG SLOTS ═══════════════════ */
@@ -23431,6 +23335,21 @@ function AT_apDownloadSQL(){
   a.click();
 }
 
+async function AT_publishSQL(index){
+  const entry=apSQLRows[index];if(!entry||entry.publishing||entry.published)return;
+  entry.publishing=true;
+  try{
+    const res=await fetch(SUPA_URL+'/rest/v1/products',{method:'POST',headers:{apikey:SUPA_KEY,Authorization:'Bearer '+SUPA_KEY,'Content-Type':'application/json',Prefer:'return=representation'},body:JSON.stringify(entry.prod)});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const rows=await res.json();
+    if(!Array.isArray(rows)||rows.length!==1||rows[0].id==null)throw new Error('Хадгалалтын хариуг баталгаажуулж чадсангүй. Галерейг шалгана уу.');
+    entry.published=true;entry.prod=rows[0];entry.sql='-- Серверт аль хэдийн хадгалсан: ID '+rows[0].id;
+    AT_showToast('Бараа серверт нэмэгдлээ. Pro/Lite каталогоо шинэчилнэ үү.','success');
+  }catch(e){AT_showToast('Серверт нэмэх амжилтгүй: '+e.message,'error');}
+  finally{entry.publishing=false;AT_apRefreshSQLOutput();}
+}
+if(typeof AT_publishSQL!=='undefined')window.AT_publishSQL=AT_publishSQL;
+
 async function AT_addProduct(){
   const name=document.getElementById('ap-name').value.trim();
   if(!name){ AT_showToast('Барааны нэр оруулна уу!','error'); return; }
@@ -23438,7 +23357,7 @@ async function AT_addProduct(){
   const sc=document.getElementById('ap-sc').value.trim();
   const cn=parseInt(document.getElementById('ap-cn').value)||0;
   const pn=parseInt(document.getElementById('ap-pn').value)||0;
-  if(!cn||!pn){ AT_showToast('Авах болон зарах үнэ оруулна уу!','error'); return; }
+  if(cn<=0||pn<=0){ AT_showToast('Авах болон зарах үнэ оруулна уу!','error'); return; }
   const sh=AT_calcShipping(cn);
   const cus=AT_calcCustoms(cn);
   const tc=cn+sh+cus+FIXED_OTHER;
@@ -23503,11 +23422,11 @@ function AT_renderAddedList(){
       <div class="added-num">${PRODUCTS.length+i+1}</div>
       <div style="font-size:18px">${CAT_EMOJI[p.mc]||'GD'}</div>
       <div style="flex:1;min-width:0">
-        <div class="added-name">${p.n}</div>
-        <div class="added-cat">${p.mc} · ${p.sc||''}</div>
+        <div class="added-name">${AT__biEscH(p.n)}</div>
+        <div class="added-cat">${AT__biEscH(p.mc)} · ${AT__biEscH(p.sc||'')}</div>
       </div>
       <div class="added-val">${AT_fmtN(p.npN)}</div>
-      <button class="btn btn-red btn-sm" onclick="AT_removeSQL(${i})">✕</button>
+      <button class="btn btn-primary btn-sm" ${r.published||r.publishing?'disabled':''} onclick="AT_publishSQL(${i})">${r.published?'Серверт хадгалсан':'Серверт нэмэх'}</button><button class="btn btn-red btn-sm" onclick="AT_removeSQL(${i})">✕</button>
     </div>`;}).join('');
 }
 function AT_removeNewProd(i){ newProducts.splice(i,1);AT_apUpdateCount();AT_renderAddedList();AT_updateStats();AT_saveToLS(); }
@@ -23903,7 +23822,8 @@ function AT_renderCreatorRank() {
   }).join('');
 }
 
-function AT_creatorRankChange(inp) {
+async function AT_creatorRankChange(inp) {
+  const previous=creator.map(c=>({...c}));
   const origIdx = parseInt(inp.dataset.origIdx);
   const newRank = Math.max(1, Math.min(creator.length, parseInt(inp.value)||1));
   const oldRank = creator[origIdx].rank || 99;
@@ -23920,6 +23840,12 @@ function AT_creatorRankChange(inp) {
   creator[origIdx].rank = newRank;
   AT_renderCreatorRank();
   AT_saveToLS();
+  try{
+   const data=creator.filter(c=>c.id).map(c=>({id:c.id,handle:String(c.handle).trim().toLowerCase(),rank:c.rank,profile:{...c}}));
+   if(data.length){const r=await fetch(SUPA_URL+'/rest/v1/creators?on_conflict=id',{method:'POST',headers:{'Content-Type':'application/json',Prefer:'resolution=merge-duplicates,return=representation'},body:JSON.stringify(data)});if(!r.ok)throw Error('HTTP '+r.status);}
+   AT_saveToLS();AT_showToast('Ranking серверт хадгалагдлаа','success');
+  }catch(e){creator=previous;AT_renderCreatorRank();AT_renderInfGrid();AT_saveToLS();AT_showToast('Ranking хадгалагдсангүй: '+e.message,'error');}
+
 }
 
 /* AT_switchTab is defined above — handles weeklyrank tab */
@@ -24536,6 +24462,7 @@ function AT_urlmgrLinkUpdate(inp){
       });
       if(!res.ok)throw new Error('HTTP '+res.status);
       _allProds=_allProds.filter(function(p){return p.id!==id;});
+      const deletedIndex=PRODUCTS.findIndex(p=>p.id===id);if(deletedIndex>=0){PRODUCTS.splice(deletedIndex,1);origProducts.splice(deletedIndex,1);AT_saveToLS();AT_renderTable();AT_updateStats();}
       if(card)card.remove();
       var countEl=document.getElementById('supa-gal-count');
       if(countEl)countEl.textContent=_allProds.length+' бараа';
@@ -24685,7 +24612,7 @@ function AT_arProcessFile(file){
   r.onload=function(e){
     arHtml=e.target.result;
     // Full PRODUCTS parse - mc, imgUrl-г grid-д ашиглана
-    var pm=arHtml.match(/const PRODUCTS\s*=\s*(\[[\s\S]*?\]);/);
+    var pm=arHtml.match(/(?:let|const|var) PRODUCTS\s*=\s*(\[[\s\S]*?\]);/);
     var parsed=false;
     if(pm){
       try{
@@ -25595,7 +25522,7 @@ window.atSaveToPro=function(){
   }
   var out=rawHTML;
   var allProds=[...PRODUCTS,...newProducts];
-  var prodStr='const PRODUCTS = '+JSON.stringify(allProds,null,2)+';';
+  var prodStr='const PRODUCTS = '+JSON.stringify(allProds,null,2).replace(/</g,'\\u003c')+';';
   out=out.replace(/const PRODUCTS\s*=\s*\[[\s\S]*?\];/,prodStr);
   var blob=new Blob([out],{type:'text/html'});
   var a=document.createElement('a');
@@ -25964,7 +25891,7 @@ window.adSaveAllRows=async function(){
     srchProds.forEach(function(p){
       var AT_q=encodeURIComponent(p.name);
       var url=plat==='ali'?'https://www.alibaba.com/trade/search?SearchText='+AT_q:'https://www.tiktok.com/search?AT_q='+AT_q;
-      window.open(url,'_blank');
+      window.open(url,'_blank','noopener,noreferrer');
     });
   };
 
@@ -26014,7 +25941,7 @@ window.adSaveAllRows=async function(){
     if(count>10&&!confirm(count+' tab нэгэн зэрэг нээх уу?'))return;
     prods.forEach(function(p){
       var s=encodeURIComponent(p._en||p.n);
-      window.open(plat==='ali'?'https://www.alibaba.com/trade/search?SearchText='+s:'https://www.tiktok.com/search?AT_q='+s,'_blank');
+      window.open(plat==='ali'?'https://www.alibaba.com/trade/search?SearchText='+s:'https://www.tiktok.com/search?AT_q='+s,'_blank','noopener,noreferrer');
     });
   };
 
@@ -26761,264 +26688,264 @@ document.getElementById('sf-add-modal').addEventListener('click', function(e){
   if(e.target === this) AT_sfCloseModal();
 });
 
-window.AT_updateSaveBarsForSupabase=AT_updateSaveBarsForSupabase;
-window.AT_sfRenderModalProducts=AT_sfRenderModalProducts;
-window.AT_sqlRenderRenameTable=AT_sqlRenderRenameTable;
-window.AT_csUpdateChangedCount=AT_csUpdateChangedCount;
-window.AT__biSQLRefreshMargin=AT__biSQLRefreshMargin;
-window.AT_urlmgrLoadSupabase=AT_urlmgrLoadSupabase;
-window.AT_updatePlatformIcon=AT_updatePlatformIcon;
-window.AT_apRefreshSQLOutput=AT_apRefreshSQLOutput;
-window.AT_confirmDraftImport=AT_confirmDraftImport;
-window.AT_updateColorPreview=AT_updateColorPreview;
-window.AT_biConfirmSQLImport=AT_biConfirmSQLImport;
-window.AT_urlmgrSaveSupabase=AT_urlmgrSaveSupabase;
-window.AT_sqlRenderDescTable=AT_sqlRenderDescTable;
-window.AT_biCancelSQLImport=AT_biCancelSQLImport;
-window.AT_updateDollarPrice=AT_updateDollarPrice;
-window.AT_sfUpdateCfgStatus=AT_sfUpdateCfgStatus;
-window.AT_cancelDraftImport=AT_cancelDraftImport;
-window.AT_csRenderCardBadge=AT_csRenderCardBadge;
-window.AT_applyAutoPriceAll=AT_applyAutoPriceAll;
-window.AT_refreshPriceCells=AT_refreshPriceCells;
-window.AT_generateInsertSQL=AT_generateInsertSQL;
-window.AT_sfAddUrlToProduct=AT_sfAddUrlToProduct;
-window.AT_atGridUpdateBadge=AT_atGridUpdateBadge;
-window.AT_urlmgrUpdateStats=AT_urlmgrUpdateStats;
-window.AT_sfRenderSuppliers=AT_sfRenderSuppliers;
-window.AT_syncToGoogleSheet=AT_syncToGoogleSheet;
-window.AT_adGridUpdateBadge=AT_adGridUpdateBadge;
-window.AT_renderCreatorRank=AT_renderCreatorRank;
-window.AT_creatorRankChange=AT_creatorRankChange;
-window.AT_arGridUpdateBadge=AT_arGridUpdateBadge;
-window.AT_loadFromSupabase=AT_loadFromSupabase;
-window.AT_syncStagingCount=AT_syncStagingCount;
-window.AT__biRenderSQLGrid=AT__biRenderSQLGrid;
-window.AT_moveSelectedRows=AT_moveSelectedRows;
-window.AT_renderWeeklyRank=AT_renderWeeklyRank;
-window.AT_urlmgrLinkUpdate=AT_urlmgrLinkUpdate;
-window.AT_confirmSQLImport=AT_confirmSQLImport;
-window.AT_exportChangedSQL=AT_exportChangedSQL;
-window.AT_showRestoreToast=AT_showRestoreToast;
-window.AT_sfEnableAutoFind=AT_sfEnableAutoFind;
-window.AT_clearLSAndReload=AT_clearLSAndReload;
-window.AT_weeklyRankChange=AT_weeklyRankChange;
-window.AT_removeWeeklyProd=AT_removeWeeklyProd;
-window.AT_biParseSQLImport=AT_biParseSQLImport;
-window.AT__biSQLUploadImg=AT__biSQLUploadImg;
-window.AT_cancelSQLImport=AT_cancelSQLImport;
-window.AT_toggleSelectAll=AT_toggleSelectAll;
-window.AT_apSlotDragLeave=AT_apSlotDragLeave;
-window.AT_toggleAutoPrice=AT_toggleAutoPrice;
-window.AT_apResetImgSlots=AT_apResetImgSlots;
-window.AT_wrInitCatFilter=AT_wrInitCatFilter;
-window.AT_importDraftJSON=AT_importDraftJSON;
-window.AT_adGridBuildCats=AT_adGridBuildCats;
-window.AT__parseSQLTuples=AT__parseSQLTuples;
-window.AT_atGridSyncProds=AT_atGridSyncProds;
-window.AT_getUploadPreset=AT_getUploadPreset;
-window.AT_updateNameField=AT_updateNameField;
-window.AT_atGridBuildCats=AT_atGridBuildCats;
-window.AT_renderAddedList=AT_renderAddedList;
-window.AT_adGridSyncProds=AT_adGridSyncProds;
-window.AT_sfToggleGasCode=AT_sfToggleGasCode;
-window.AT_arGridBuildCats=AT_arGridBuildCats;
-window.AT_arGridSyncProds=AT_arGridSyncProds;
-window.AT_atRenderPreview=AT_atRenderPreview;
-window.AT_sfSaveServerUrl=AT_sfSaveServerUrl;
-window.AT_fetchAllAliImgs=AT_fetchAllAliImgs;
-window.AT_updateDescField=AT_updateDescField;
-window.AT__biSQLClearImg=AT__biSQLClearImg;
-window.AT_sqlApplyRename=AT_sqlApplyRename;
-window.AT_sqlParseRename=AT_sqlParseRename;
-window.AT_getSmartMargin=AT_getSmartMargin;
-window.AT_slotFilePicked=AT_slotFilePicked;
-window.AT_sfTogglePrompt=AT_sfTogglePrompt;
-window.AT_deleteSelected=AT_deleteSelected;
-window.AT_sfFileSelected=AT_sfFileSelected;
-window.AT_execSupaDelete=AT_execSupaDelete;
-window.AT_inlineSlotHTML=AT_inlineSlotHTML;
-window.AT_sfOpenAddModal=AT_sfOpenAddModal;
-window.AT__biMakeSQLCard=AT__biMakeSQLCard;
-window.AT_parseSQLImport=AT_parseSQLImport;
-window.AT_clearSelection=AT_clearSelection;
-window.AT_biRestoreState=AT_biRestoreState;
-window.AT_apSlotDragOver=AT_apSlotDragOver;
-window.AT_sfRenderResult=AT_sfRenderResult;
-window.AT_sfToggleKeyVis=AT_sfToggleKeyVis;
-window.AT_buildCatFilter=AT_buildCatFilter;
-window.AT_extractAliImgs=AT_extractAliImgs;
-window.AT_apAutoCategory=AT_apAutoCategory;
-window.AT_calcAutoPrice=AT_calcAutoPrice;
-window.AT__biSQLImgDrop=AT__biSQLImgDrop;
-window.AT_wrUpdateCount=AT_wrUpdateCount;
-window.AT_arProcessFile=AT_arProcessFile;
-window.AT_apUpdateCount=AT_apUpdateCount;
-window.AT_renderInfGrid=AT_renderInfGrid;
-window.AT_sfAutoFindAll=AT_sfAutoFindAll;
-window.AT_sfCopyGasCode=AT_sfCopyGasCode;
-window.AT_triggerUpload=AT_triggerUpload;
-window.AT_slotDragLeave=AT_slotDragLeave;
-window.AT_supaGalRender=AT_supaGalRender;
-window.AT_adProcessFile=AT_adProcessFile;
-window.AT_apDownloadSQL=AT_apDownloadSQL;
-window.AT_recalcProduct=AT_recalcProduct;
-window.AT_apSetSlotFile=AT_apSetSlotFile;
-window.AT_urlmgrSetPlat=AT_urlmgrSetPlat;
-window.AT_srchParseName=AT_srchParseName;
-window.AT__biSQLImgPick=AT__biSQLImgPick;
-window.AT_restoreSlotUI=AT_restoreSlotUI;
-window.AT_removeNewProd=AT_removeNewProd;
-window.AT_srchImgRender=AT_srchImgRender;
-window.AT_parseInputVal=AT_parseInputVal;
-window.AT_closeInfModal=AT_closeInfModal;
-window.AT_wrRenderTable=AT_wrRenderTable;
-window.AT_cloudUploadBI=AT_cloudUploadBI;
-window.AT_biUpdateStats=AT_biUpdateStats;
-window.AT_sfModalFilter=AT_sfModalFilter;
-window.AT_biRenderGrid=AT_biRenderGrid;
-window.AT_saveSupabase=AT_saveSupabase;
-window.AT_sqlParseDesc=AT_sqlParseDesc;
-window.AT_sfCallFinder=AT_sfCallFinder;
-window.AT_runAiMargins=AT_runAiMargins;
-window.AT_fetchAliImgs=AT_fetchAliImgs;
-window.AT_clearStaging=AT_clearStaging;
-window.AT_urlmgrFilter=AT_urlmgrFilter;
-window.AT_setCatFilter=AT_setCatFilter;
-window.AT_toggleRowSel=AT_toggleRowSel;
-window.AT_wrToggleProd=AT_wrToggleProd;
-window.AT_sqlApplyDesc=AT_sqlApplyDesc;
-window.AT_atGridRender=AT_atGridRender;
-window.AT_sfCloseModal=AT_sfCloseModal;
-window.AT_fetchImgBlob=AT_fetchImgBlob;
-window.AT_sfSaveGasUrl=AT_sfSaveGasUrl;
-window.AT_arGridRender=AT_arGridRender;
-window.AT_srchParseNum=AT_srchParseNum;
-window.AT_openInfModal=AT_openInfModal;
-window.AT_tryRestoreLS=AT_tryRestoreLS;
-window.AT_slotDragOver=AT_slotDragOver;
-window.AT_apRemoveSlot=AT_apRemoveSlot;
-window.AT_sfUrlChanged=AT_sfUrlChanged;
-window.AT_csRenderList=AT_csRenderList;
-window.AT_adGridRender=AT_adGridRender;
-window.AT__runSQLParse=AT__runSQLParse;
-window.AT_urlmgrRender=AT_urlmgrRender;
-window.AT_calcShipping=AT_calcShipping;
-window.AT_cloudUpload=AT_cloudUpload;
-window.AT_setMgPreset=AT_setMgPreset;
-window.AT_atToggleKey=AT_atToggleKey;
-window.AT_updateSelUI=AT_updateSelUI;
-window.AT_updatePrice=AT_updatePrice;
-window.AT_sfDragLeave=AT_sfDragLeave;
-window.AT_updateRowMg=AT_updateRowMg;
-window.AT_biSaveState=AT_biSaveState;
-window.AT_sfCopyQuery=AT_sfCopyQuery;
-window.AT_sfShowError=AT_sfShowError;
-window.AT_calcCustoms=AT_calcCustoms;
-window.AT_renderTable=AT_renderTable;
-window.AT_clearAllSQL=AT_clearAllSQL;
-window.AT_biUploadAll=AT_biUploadAll;
-window.AT_wrGetSorted=AT_wrGetSorted;
-window.AT_sfHideError=AT_sfHideError;
-window.AT_updateStats=AT_updateStats;
-window.AT_srchLoadLS=AT_srchLoadLS;
-window.AT_loadGasUrl=AT_loadGasUrl;
-window.AT_removeSlot=AT_removeSlot;
-window.AT_adBuildSQL=AT_adBuildSQL;
-window.AT_copyAllSQL=AT_copyAllSQL;
-window.AT_onMgSlider=AT_onMgSlider;
-window.AT_filterRows=AT_filterRows;
-window.AT_arBuildSQL=AT_arBuildSQL;
-window.AT_addProduct=AT_addProduct;
-window.AT_csOnChange=AT_csOnChange;
-window.AT_roundTo900=AT_roundTo900;
-window.AT_hasChanged=AT_hasChanged;
-window.AT_sfLoadFile=AT_sfLoadFile;
-window.AT_sfDragOver=AT_sfDragOver;
-window.AT_handleDrop=AT_handleDrop;
-window.AT_saveGasUrl=AT_saveGasUrl;
-window.AT_igUrlInput=AT_igUrlInput;
-window.AT_srchSaveLS=AT_srchSaveLS;
-window.AT_apSlotPick=AT_apSlotPick;
-window.AT_sfAutoFind=AT_sfAutoFind;
-window.AT_apAliPaste=AT_apAliPaste;
-window.AT_toggleDesc=AT_toggleDesc;
-window.AT_apSlotDrop=AT_apSlotDrop;
-window.AT_updateLink=AT_updateLink;
-window.AT_supaFetch=AT_supaFetch;
-window.AT_sfAnalyze=AT_sfAnalyze;
-window.AT_adExtract=AT_adExtract;
-window.AT_atSaveKey=AT_atSaveKey;
-window.AT_arCallGPT=AT_arCallGPT;
-window.AT_supaPatch=AT_supaPatch;
-window.AT_arExtract=AT_arExtract;
-window.AT_apPreview=AT_apPreview;
-window.AT_stageFile=AT_stageFile;
-window.AT_deleteInf=AT_deleteInf;
-window.AT_sfSaveKey=AT_sfSaveKey;
-window.AT_showToast=AT_showToast;
-window.AT_pdConfirm=AT_pdConfirm;
-window.AT_adCallGPT=AT_adCallGPT;
-window.AT_switchTab=AT_switchTab;
-window.AT_arSetProg=AT_arSetProg;
-window.AT_uploadAll=AT_uploadAll;
-window.AT_removeSQL=AT_removeSQL;
-window.AT_adSetProg=AT_adSetProg;
-window.AT_toggleTag=AT_toggleTag;
-window.AT_copyName=AT_copyName;
-window.AT_csRender=AT_csRender;
-window.AT_saveFile=AT_saveFile;
-window.AT_csFilter=AT_csFilter;
-window.AT_buildRow=AT_buildRow;
-window.AT_biFinish=AT_biFinish;
-window.AT_loadFile=AT_loadFile;
-window.AT_wrSetCat=AT_wrSetCat;
-window.AT_saveToLS=AT_saveToLS;
-window.AT_slotDrop=AT_slotDrop;
-window.AT_adAddRow=AT_adAddRow;
-window.AT_fmtInput=AT_fmtInput;
-window.AT_resetAll=AT_resetAll;
-window.AT_arAddRow=AT_arAddRow;
-window.AT_resetRow=AT_resetRow;
-window.AT_gsStatus=AT_gsStatus;
-window.AT_wrSearch=AT_wrSearch;
-window.AT_csSetCat=AT_csSetCat;
-window.AT_igStatus=AT_igStatus;
-window.AT_copyText=AT_copyText;
-window.AT_sfVision=AT_sfVision;
-window.AT_igFetch=AT_igFetch;
-window.AT_adSleep=AT_adSleep;
-window.AT_fmtThis=AT_fmtThis;
-window.AT__biEscH=AT__biEscH;
-window.AT_adBuild=AT_adBuild;
-window.AT_arBuild=AT_arBuild;
-window.AT_sfReset=AT_sfReset;
-window.AT_csReset=AT_csReset;
-window.AT_arSleep=AT_arSleep;
-window.AT_saveInf=AT_saveInf;
-window.AT_setGrad=AT_setGrad;
-window.AT_slotKey=AT_slotKey;
-window.AT_gsBadge=AT_gsBadge;
-window.AT_apReset=AT_apReset;
-window.AT_sqlEsc=AT_sqlEsc;
-window.AT_escSQL=AT_escSQL;
-window.AT_wrSort=AT_wrSort;
-window.AT_apCalc=AT_apCalc;
-window.AT_addLog=AT_addLog;
-window.AT_sfInit=AT_sfInit;
-window.AT_csCopy=AT_csCopy;
-window.AT_sfDrop=AT_sfDrop;
-window.AT_atLog=AT_atLog;
-window.AT_normN=AT_normN;
-window.AT_sfEsc=AT_sfEsc;
-window.AT_close=AT_close;
-window.AT_arLog=AT_arLog;
-window.AT_adLog=AT_adLog;
-window.AT_cssId=AT_cssId;
-window.AT_fmtN=AT_fmtN;
-window.AT_esc2=AT_esc2;
-window.AT_esc=AT_esc;
-window.AT_q=AT_q;
+if(typeof AT_updateSaveBarsForSupabase!=='undefined')window.AT_updateSaveBarsForSupabase=AT_updateSaveBarsForSupabase;
+if(typeof AT_sfRenderModalProducts!=='undefined')window.AT_sfRenderModalProducts=AT_sfRenderModalProducts;
+if(typeof AT_sqlRenderRenameTable!=='undefined')window.AT_sqlRenderRenameTable=AT_sqlRenderRenameTable;
+if(typeof AT_csUpdateChangedCount!=='undefined')window.AT_csUpdateChangedCount=AT_csUpdateChangedCount;
+if(typeof AT__biSQLRefreshMargin!=='undefined')window.AT__biSQLRefreshMargin=AT__biSQLRefreshMargin;
+if(typeof AT_urlmgrLoadSupabase!=='undefined')window.AT_urlmgrLoadSupabase=AT_urlmgrLoadSupabase;
+if(typeof AT_updatePlatformIcon!=='undefined')window.AT_updatePlatformIcon=AT_updatePlatformIcon;
+if(typeof AT_apRefreshSQLOutput!=='undefined')window.AT_apRefreshSQLOutput=AT_apRefreshSQLOutput;
+if(typeof AT_confirmDraftImport!=='undefined')window.AT_confirmDraftImport=AT_confirmDraftImport;
+if(typeof AT_updateColorPreview!=='undefined')window.AT_updateColorPreview=AT_updateColorPreview;
+if(typeof AT_biConfirmSQLImport!=='undefined')window.AT_biConfirmSQLImport=AT_biConfirmSQLImport;
+if(typeof AT_urlmgrSaveSupabase!=='undefined')window.AT_urlmgrSaveSupabase=AT_urlmgrSaveSupabase;
+if(typeof AT_sqlRenderDescTable!=='undefined')window.AT_sqlRenderDescTable=AT_sqlRenderDescTable;
+if(typeof AT_biCancelSQLImport!=='undefined')window.AT_biCancelSQLImport=AT_biCancelSQLImport;
+if(typeof AT_updateDollarPrice!=='undefined')window.AT_updateDollarPrice=AT_updateDollarPrice;
+if(typeof AT_sfUpdateCfgStatus!=='undefined')window.AT_sfUpdateCfgStatus=AT_sfUpdateCfgStatus;
+if(typeof AT_cancelDraftImport!=='undefined')window.AT_cancelDraftImport=AT_cancelDraftImport;
+if(typeof AT_csRenderCardBadge!=='undefined')window.AT_csRenderCardBadge=AT_csRenderCardBadge;
+if(typeof AT_applyAutoPriceAll!=='undefined')window.AT_applyAutoPriceAll=AT_applyAutoPriceAll;
+if(typeof AT_refreshPriceCells!=='undefined')window.AT_refreshPriceCells=AT_refreshPriceCells;
+if(typeof AT_generateInsertSQL!=='undefined')window.AT_generateInsertSQL=AT_generateInsertSQL;
+if(typeof AT_sfAddUrlToProduct!=='undefined')window.AT_sfAddUrlToProduct=AT_sfAddUrlToProduct;
+if(typeof AT_atGridUpdateBadge!=='undefined')window.AT_atGridUpdateBadge=AT_atGridUpdateBadge;
+if(typeof AT_urlmgrUpdateStats!=='undefined')window.AT_urlmgrUpdateStats=AT_urlmgrUpdateStats;
+if(typeof AT_sfRenderSuppliers!=='undefined')window.AT_sfRenderSuppliers=AT_sfRenderSuppliers;
+if(typeof AT_syncToGoogleSheet!=='undefined')window.AT_syncToGoogleSheet=AT_syncToGoogleSheet;
+if(typeof AT_adGridUpdateBadge!=='undefined')window.AT_adGridUpdateBadge=AT_adGridUpdateBadge;
+if(typeof AT_renderCreatorRank!=='undefined')window.AT_renderCreatorRank=AT_renderCreatorRank;
+if(typeof AT_creatorRankChange!=='undefined')window.AT_creatorRankChange=AT_creatorRankChange;
+if(typeof AT_arGridUpdateBadge!=='undefined')window.AT_arGridUpdateBadge=AT_arGridUpdateBadge;
+if(typeof AT_loadFromSupabase!=='undefined')window.AT_loadFromSupabase=AT_loadFromSupabase;
+if(typeof AT_syncStagingCount!=='undefined')window.AT_syncStagingCount=AT_syncStagingCount;
+if(typeof AT__biRenderSQLGrid!=='undefined')window.AT__biRenderSQLGrid=AT__biRenderSQLGrid;
+if(typeof AT_moveSelectedRows!=='undefined')window.AT_moveSelectedRows=AT_moveSelectedRows;
+if(typeof AT_renderWeeklyRank!=='undefined')window.AT_renderWeeklyRank=AT_renderWeeklyRank;
+if(typeof AT_urlmgrLinkUpdate!=='undefined')window.AT_urlmgrLinkUpdate=AT_urlmgrLinkUpdate;
+if(typeof AT_confirmSQLImport!=='undefined')window.AT_confirmSQLImport=AT_confirmSQLImport;
+if(typeof AT_exportChangedSQL!=='undefined')window.AT_exportChangedSQL=AT_exportChangedSQL;
+if(typeof AT_showRestoreToast!=='undefined')window.AT_showRestoreToast=AT_showRestoreToast;
+if(typeof AT_sfEnableAutoFind!=='undefined')window.AT_sfEnableAutoFind=AT_sfEnableAutoFind;
+if(typeof AT_clearLSAndReload!=='undefined')window.AT_clearLSAndReload=AT_clearLSAndReload;
+if(typeof AT_weeklyRankChange!=='undefined')window.AT_weeklyRankChange=AT_weeklyRankChange;
+if(typeof AT_removeWeeklyProd!=='undefined')window.AT_removeWeeklyProd=AT_removeWeeklyProd;
+if(typeof AT_biParseSQLImport!=='undefined')window.AT_biParseSQLImport=AT_biParseSQLImport;
+if(typeof AT__biSQLUploadImg!=='undefined')window.AT__biSQLUploadImg=AT__biSQLUploadImg;
+if(typeof AT_cancelSQLImport!=='undefined')window.AT_cancelSQLImport=AT_cancelSQLImport;
+if(typeof AT_toggleSelectAll!=='undefined')window.AT_toggleSelectAll=AT_toggleSelectAll;
+if(typeof AT_apSlotDragLeave!=='undefined')window.AT_apSlotDragLeave=AT_apSlotDragLeave;
+if(typeof AT_toggleAutoPrice!=='undefined')window.AT_toggleAutoPrice=AT_toggleAutoPrice;
+if(typeof AT_apResetImgSlots!=='undefined')window.AT_apResetImgSlots=AT_apResetImgSlots;
+if(typeof AT_wrInitCatFilter!=='undefined')window.AT_wrInitCatFilter=AT_wrInitCatFilter;
+if(typeof AT_importDraftJSON!=='undefined')window.AT_importDraftJSON=AT_importDraftJSON;
+if(typeof AT_adGridBuildCats!=='undefined')window.AT_adGridBuildCats=AT_adGridBuildCats;
+if(typeof AT__parseSQLTuples!=='undefined')window.AT__parseSQLTuples=AT__parseSQLTuples;
+if(typeof AT_atGridSyncProds!=='undefined')window.AT_atGridSyncProds=AT_atGridSyncProds;
+if(typeof AT_getUploadPreset!=='undefined')window.AT_getUploadPreset=AT_getUploadPreset;
+if(typeof AT_updateNameField!=='undefined')window.AT_updateNameField=AT_updateNameField;
+if(typeof AT_atGridBuildCats!=='undefined')window.AT_atGridBuildCats=AT_atGridBuildCats;
+if(typeof AT_renderAddedList!=='undefined')window.AT_renderAddedList=AT_renderAddedList;
+if(typeof AT_adGridSyncProds!=='undefined')window.AT_adGridSyncProds=AT_adGridSyncProds;
+if(typeof AT_sfToggleGasCode!=='undefined')window.AT_sfToggleGasCode=AT_sfToggleGasCode;
+if(typeof AT_arGridBuildCats!=='undefined')window.AT_arGridBuildCats=AT_arGridBuildCats;
+if(typeof AT_arGridSyncProds!=='undefined')window.AT_arGridSyncProds=AT_arGridSyncProds;
+if(typeof AT_atRenderPreview!=='undefined')window.AT_atRenderPreview=AT_atRenderPreview;
+if(typeof AT_sfSaveServerUrl!=='undefined')window.AT_sfSaveServerUrl=AT_sfSaveServerUrl;
+if(typeof AT_fetchAllAliImgs!=='undefined')window.AT_fetchAllAliImgs=AT_fetchAllAliImgs;
+if(typeof AT_updateDescField!=='undefined')window.AT_updateDescField=AT_updateDescField;
+if(typeof AT__biSQLClearImg!=='undefined')window.AT__biSQLClearImg=AT__biSQLClearImg;
+if(typeof AT_sqlApplyRename!=='undefined')window.AT_sqlApplyRename=AT_sqlApplyRename;
+if(typeof AT_sqlParseRename!=='undefined')window.AT_sqlParseRename=AT_sqlParseRename;
+if(typeof AT_getSmartMargin!=='undefined')window.AT_getSmartMargin=AT_getSmartMargin;
+if(typeof AT_slotFilePicked!=='undefined')window.AT_slotFilePicked=AT_slotFilePicked;
+if(typeof AT_sfTogglePrompt!=='undefined')window.AT_sfTogglePrompt=AT_sfTogglePrompt;
+if(typeof AT_deleteSelected!=='undefined')window.AT_deleteSelected=AT_deleteSelected;
+if(typeof AT_sfFileSelected!=='undefined')window.AT_sfFileSelected=AT_sfFileSelected;
+if(typeof AT_execSupaDelete!=='undefined')window.AT_execSupaDelete=AT_execSupaDelete;
+if(typeof AT_inlineSlotHTML!=='undefined')window.AT_inlineSlotHTML=AT_inlineSlotHTML;
+if(typeof AT_sfOpenAddModal!=='undefined')window.AT_sfOpenAddModal=AT_sfOpenAddModal;
+if(typeof AT__biMakeSQLCard!=='undefined')window.AT__biMakeSQLCard=AT__biMakeSQLCard;
+if(typeof AT_parseSQLImport!=='undefined')window.AT_parseSQLImport=AT_parseSQLImport;
+if(typeof AT_clearSelection!=='undefined')window.AT_clearSelection=AT_clearSelection;
+if(typeof AT_biRestoreState!=='undefined')window.AT_biRestoreState=AT_biRestoreState;
+if(typeof AT_apSlotDragOver!=='undefined')window.AT_apSlotDragOver=AT_apSlotDragOver;
+if(typeof AT_sfRenderResult!=='undefined')window.AT_sfRenderResult=AT_sfRenderResult;
+if(typeof AT_sfToggleKeyVis!=='undefined')window.AT_sfToggleKeyVis=AT_sfToggleKeyVis;
+if(typeof AT_buildCatFilter!=='undefined')window.AT_buildCatFilter=AT_buildCatFilter;
+if(typeof AT_extractAliImgs!=='undefined')window.AT_extractAliImgs=AT_extractAliImgs;
+if(typeof AT_apAutoCategory!=='undefined')window.AT_apAutoCategory=AT_apAutoCategory;
+if(typeof AT_calcAutoPrice!=='undefined')window.AT_calcAutoPrice=AT_calcAutoPrice;
+if(typeof AT__biSQLImgDrop!=='undefined')window.AT__biSQLImgDrop=AT__biSQLImgDrop;
+if(typeof AT_wrUpdateCount!=='undefined')window.AT_wrUpdateCount=AT_wrUpdateCount;
+if(typeof AT_arProcessFile!=='undefined')window.AT_arProcessFile=AT_arProcessFile;
+if(typeof AT_apUpdateCount!=='undefined')window.AT_apUpdateCount=AT_apUpdateCount;
+if(typeof AT_renderInfGrid!=='undefined')window.AT_renderInfGrid=AT_renderInfGrid;
+if(typeof AT_sfAutoFindAll!=='undefined')window.AT_sfAutoFindAll=AT_sfAutoFindAll;
+if(typeof AT_sfCopyGasCode!=='undefined')window.AT_sfCopyGasCode=AT_sfCopyGasCode;
+if(typeof AT_triggerUpload!=='undefined')window.AT_triggerUpload=AT_triggerUpload;
+if(typeof AT_slotDragLeave!=='undefined')window.AT_slotDragLeave=AT_slotDragLeave;
+if(typeof AT_supaGalRender!=='undefined')window.AT_supaGalRender=AT_supaGalRender;
+if(typeof AT_adProcessFile!=='undefined')window.AT_adProcessFile=AT_adProcessFile;
+if(typeof AT_apDownloadSQL!=='undefined')window.AT_apDownloadSQL=AT_apDownloadSQL;
+if(typeof AT_recalcProduct!=='undefined')window.AT_recalcProduct=AT_recalcProduct;
+if(typeof AT_apSetSlotFile!=='undefined')window.AT_apSetSlotFile=AT_apSetSlotFile;
+if(typeof AT_urlmgrSetPlat!=='undefined')window.AT_urlmgrSetPlat=AT_urlmgrSetPlat;
+if(typeof AT_srchParseName!=='undefined')window.AT_srchParseName=AT_srchParseName;
+if(typeof AT__biSQLImgPick!=='undefined')window.AT__biSQLImgPick=AT__biSQLImgPick;
+if(typeof AT_restoreSlotUI!=='undefined')window.AT_restoreSlotUI=AT_restoreSlotUI;
+if(typeof AT_removeNewProd!=='undefined')window.AT_removeNewProd=AT_removeNewProd;
+if(typeof AT_srchImgRender!=='undefined')window.AT_srchImgRender=AT_srchImgRender;
+if(typeof AT_parseInputVal!=='undefined')window.AT_parseInputVal=AT_parseInputVal;
+if(typeof AT_closeInfModal!=='undefined')window.AT_closeInfModal=AT_closeInfModal;
+if(typeof AT_wrRenderTable!=='undefined')window.AT_wrRenderTable=AT_wrRenderTable;
+if(typeof AT_cloudUploadBI!=='undefined')window.AT_cloudUploadBI=AT_cloudUploadBI;
+if(typeof AT_biUpdateStats!=='undefined')window.AT_biUpdateStats=AT_biUpdateStats;
+if(typeof AT_sfModalFilter!=='undefined')window.AT_sfModalFilter=AT_sfModalFilter;
+if(typeof AT_biRenderGrid!=='undefined')window.AT_biRenderGrid=AT_biRenderGrid;
+if(typeof AT_saveSupabase!=='undefined')window.AT_saveSupabase=AT_saveSupabase;
+if(typeof AT_sqlParseDesc!=='undefined')window.AT_sqlParseDesc=AT_sqlParseDesc;
+if(typeof AT_sfCallFinder!=='undefined')window.AT_sfCallFinder=AT_sfCallFinder;
+if(typeof AT_runAiMargins!=='undefined')window.AT_runAiMargins=AT_runAiMargins;
+if(typeof AT_fetchAliImgs!=='undefined')window.AT_fetchAliImgs=AT_fetchAliImgs;
+if(typeof AT_clearStaging!=='undefined')window.AT_clearStaging=AT_clearStaging;
+if(typeof AT_urlmgrFilter!=='undefined')window.AT_urlmgrFilter=AT_urlmgrFilter;
+if(typeof AT_setCatFilter!=='undefined')window.AT_setCatFilter=AT_setCatFilter;
+if(typeof AT_toggleRowSel!=='undefined')window.AT_toggleRowSel=AT_toggleRowSel;
+if(typeof AT_wrToggleProd!=='undefined')window.AT_wrToggleProd=AT_wrToggleProd;
+if(typeof AT_sqlApplyDesc!=='undefined')window.AT_sqlApplyDesc=AT_sqlApplyDesc;
+if(typeof AT_atGridRender!=='undefined')window.AT_atGridRender=AT_atGridRender;
+if(typeof AT_sfCloseModal!=='undefined')window.AT_sfCloseModal=AT_sfCloseModal;
+if(typeof AT_fetchImgBlob!=='undefined')window.AT_fetchImgBlob=AT_fetchImgBlob;
+if(typeof AT_sfSaveGasUrl!=='undefined')window.AT_sfSaveGasUrl=AT_sfSaveGasUrl;
+if(typeof AT_arGridRender!=='undefined')window.AT_arGridRender=AT_arGridRender;
+if(typeof AT_srchParseNum!=='undefined')window.AT_srchParseNum=AT_srchParseNum;
+if(typeof AT_openInfModal!=='undefined')window.AT_openInfModal=AT_openInfModal;
+if(typeof AT_tryRestoreLS!=='undefined')window.AT_tryRestoreLS=AT_tryRestoreLS;
+if(typeof AT_slotDragOver!=='undefined')window.AT_slotDragOver=AT_slotDragOver;
+if(typeof AT_apRemoveSlot!=='undefined')window.AT_apRemoveSlot=AT_apRemoveSlot;
+if(typeof AT_sfUrlChanged!=='undefined')window.AT_sfUrlChanged=AT_sfUrlChanged;
+if(typeof AT_csRenderList!=='undefined')window.AT_csRenderList=AT_csRenderList;
+if(typeof AT_adGridRender!=='undefined')window.AT_adGridRender=AT_adGridRender;
+if(typeof AT__runSQLParse!=='undefined')window.AT__runSQLParse=AT__runSQLParse;
+if(typeof AT_urlmgrRender!=='undefined')window.AT_urlmgrRender=AT_urlmgrRender;
+if(typeof AT_calcShipping!=='undefined')window.AT_calcShipping=AT_calcShipping;
+if(typeof AT_cloudUpload!=='undefined')window.AT_cloudUpload=AT_cloudUpload;
+if(typeof AT_setMgPreset!=='undefined')window.AT_setMgPreset=AT_setMgPreset;
+if(typeof AT_atToggleKey!=='undefined')window.AT_atToggleKey=AT_atToggleKey;
+if(typeof AT_updateSelUI!=='undefined')window.AT_updateSelUI=AT_updateSelUI;
+if(typeof AT_updatePrice!=='undefined')window.AT_updatePrice=AT_updatePrice;
+if(typeof AT_sfDragLeave!=='undefined')window.AT_sfDragLeave=AT_sfDragLeave;
+if(typeof AT_updateRowMg!=='undefined')window.AT_updateRowMg=AT_updateRowMg;
+if(typeof AT_biSaveState!=='undefined')window.AT_biSaveState=AT_biSaveState;
+if(typeof AT_sfCopyQuery!=='undefined')window.AT_sfCopyQuery=AT_sfCopyQuery;
+if(typeof AT_sfShowError!=='undefined')window.AT_sfShowError=AT_sfShowError;
+if(typeof AT_calcCustoms!=='undefined')window.AT_calcCustoms=AT_calcCustoms;
+if(typeof AT_renderTable!=='undefined')window.AT_renderTable=AT_renderTable;
+if(typeof AT_clearAllSQL!=='undefined')window.AT_clearAllSQL=AT_clearAllSQL;
+if(typeof AT_biUploadAll!=='undefined')window.AT_biUploadAll=AT_biUploadAll;
+if(typeof AT_wrGetSorted!=='undefined')window.AT_wrGetSorted=AT_wrGetSorted;
+if(typeof AT_sfHideError!=='undefined')window.AT_sfHideError=AT_sfHideError;
+if(typeof AT_updateStats!=='undefined')window.AT_updateStats=AT_updateStats;
+if(typeof AT_srchLoadLS!=='undefined')window.AT_srchLoadLS=AT_srchLoadLS;
+if(typeof AT_loadGasUrl!=='undefined')window.AT_loadGasUrl=AT_loadGasUrl;
+if(typeof AT_removeSlot!=='undefined')window.AT_removeSlot=AT_removeSlot;
+if(typeof AT_adBuildSQL!=='undefined')window.AT_adBuildSQL=AT_adBuildSQL;
+if(typeof AT_copyAllSQL!=='undefined')window.AT_copyAllSQL=AT_copyAllSQL;
+if(typeof AT_onMgSlider!=='undefined')window.AT_onMgSlider=AT_onMgSlider;
+if(typeof AT_filterRows!=='undefined')window.AT_filterRows=AT_filterRows;
+if(typeof AT_arBuildSQL!=='undefined')window.AT_arBuildSQL=AT_arBuildSQL;
+if(typeof AT_addProduct!=='undefined')window.AT_addProduct=AT_addProduct;
+if(typeof AT_csOnChange!=='undefined')window.AT_csOnChange=AT_csOnChange;
+if(typeof AT_roundTo900!=='undefined')window.AT_roundTo900=AT_roundTo900;
+if(typeof AT_hasChanged!=='undefined')window.AT_hasChanged=AT_hasChanged;
+if(typeof AT_sfLoadFile!=='undefined')window.AT_sfLoadFile=AT_sfLoadFile;
+if(typeof AT_sfDragOver!=='undefined')window.AT_sfDragOver=AT_sfDragOver;
+if(typeof AT_handleDrop!=='undefined')window.AT_handleDrop=AT_handleDrop;
+if(typeof AT_saveGasUrl!=='undefined')window.AT_saveGasUrl=AT_saveGasUrl;
+if(typeof AT_igUrlInput!=='undefined')window.AT_igUrlInput=AT_igUrlInput;
+if(typeof AT_srchSaveLS!=='undefined')window.AT_srchSaveLS=AT_srchSaveLS;
+if(typeof AT_apSlotPick!=='undefined')window.AT_apSlotPick=AT_apSlotPick;
+if(typeof AT_sfAutoFind!=='undefined')window.AT_sfAutoFind=AT_sfAutoFind;
+if(typeof AT_apAliPaste!=='undefined')window.AT_apAliPaste=AT_apAliPaste;
+if(typeof AT_toggleDesc!=='undefined')window.AT_toggleDesc=AT_toggleDesc;
+if(typeof AT_apSlotDrop!=='undefined')window.AT_apSlotDrop=AT_apSlotDrop;
+if(typeof AT_updateLink!=='undefined')window.AT_updateLink=AT_updateLink;
+if(typeof AT_supaFetch!=='undefined')window.AT_supaFetch=AT_supaFetch;
+if(typeof AT_sfAnalyze!=='undefined')window.AT_sfAnalyze=AT_sfAnalyze;
+if(typeof AT_adExtract!=='undefined')window.AT_adExtract=AT_adExtract;
+if(typeof AT_atSaveKey!=='undefined')window.AT_atSaveKey=AT_atSaveKey;
+if(typeof AT_arCallGPT!=='undefined')window.AT_arCallGPT=AT_arCallGPT;
+if(typeof AT_supaPatch!=='undefined')window.AT_supaPatch=AT_supaPatch;
+if(typeof AT_arExtract!=='undefined')window.AT_arExtract=AT_arExtract;
+if(typeof AT_apPreview!=='undefined')window.AT_apPreview=AT_apPreview;
+if(typeof AT_stageFile!=='undefined')window.AT_stageFile=AT_stageFile;
+if(typeof AT_deleteInf!=='undefined')window.AT_deleteInf=AT_deleteInf;
+if(typeof AT_sfSaveKey!=='undefined')window.AT_sfSaveKey=AT_sfSaveKey;
+if(typeof AT_showToast!=='undefined')window.AT_showToast=AT_showToast;
+if(typeof AT_pdConfirm!=='undefined')window.AT_pdConfirm=AT_pdConfirm;
+if(typeof AT_adCallGPT!=='undefined')window.AT_adCallGPT=AT_adCallGPT;
+if(typeof AT_switchTab!=='undefined')window.AT_switchTab=AT_switchTab;
+if(typeof AT_arSetProg!=='undefined')window.AT_arSetProg=AT_arSetProg;
+if(typeof AT_uploadAll!=='undefined')window.AT_uploadAll=AT_uploadAll;
+if(typeof AT_removeSQL!=='undefined')window.AT_removeSQL=AT_removeSQL;
+if(typeof AT_adSetProg!=='undefined')window.AT_adSetProg=AT_adSetProg;
+if(typeof AT_toggleTag!=='undefined')window.AT_toggleTag=AT_toggleTag;
+if(typeof AT_copyName!=='undefined')window.AT_copyName=AT_copyName;
+if(typeof AT_csRender!=='undefined')window.AT_csRender=AT_csRender;
+if(typeof AT_saveFile!=='undefined')window.AT_saveFile=AT_saveFile;
+if(typeof AT_csFilter!=='undefined')window.AT_csFilter=AT_csFilter;
+if(typeof AT_buildRow!=='undefined')window.AT_buildRow=AT_buildRow;
+if(typeof AT_biFinish!=='undefined')window.AT_biFinish=AT_biFinish;
+if(typeof AT_loadFile!=='undefined')window.AT_loadFile=AT_loadFile;
+if(typeof AT_wrSetCat!=='undefined')window.AT_wrSetCat=AT_wrSetCat;
+if(typeof AT_saveToLS!=='undefined')window.AT_saveToLS=AT_saveToLS;
+if(typeof AT_slotDrop!=='undefined')window.AT_slotDrop=AT_slotDrop;
+if(typeof AT_adAddRow!=='undefined')window.AT_adAddRow=AT_adAddRow;
+if(typeof AT_fmtInput!=='undefined')window.AT_fmtInput=AT_fmtInput;
+if(typeof AT_resetAll!=='undefined')window.AT_resetAll=AT_resetAll;
+if(typeof AT_arAddRow!=='undefined')window.AT_arAddRow=AT_arAddRow;
+if(typeof AT_resetRow!=='undefined')window.AT_resetRow=AT_resetRow;
+if(typeof AT_gsStatus!=='undefined')window.AT_gsStatus=AT_gsStatus;
+if(typeof AT_wrSearch!=='undefined')window.AT_wrSearch=AT_wrSearch;
+if(typeof AT_csSetCat!=='undefined')window.AT_csSetCat=AT_csSetCat;
+if(typeof AT_igStatus!=='undefined')window.AT_igStatus=AT_igStatus;
+if(typeof AT_copyText!=='undefined')window.AT_copyText=AT_copyText;
+if(typeof AT_sfVision!=='undefined')window.AT_sfVision=AT_sfVision;
+if(typeof AT_igFetch!=='undefined')window.AT_igFetch=AT_igFetch;
+if(typeof AT_adSleep!=='undefined')window.AT_adSleep=AT_adSleep;
+if(typeof AT_fmtThis!=='undefined')window.AT_fmtThis=AT_fmtThis;
+if(typeof AT__biEscH!=='undefined')window.AT__biEscH=AT__biEscH;
+if(typeof AT_adBuild!=='undefined')window.AT_adBuild=AT_adBuild;
+if(typeof AT_arBuild!=='undefined')window.AT_arBuild=AT_arBuild;
+if(typeof AT_sfReset!=='undefined')window.AT_sfReset=AT_sfReset;
+if(typeof AT_csReset!=='undefined')window.AT_csReset=AT_csReset;
+if(typeof AT_arSleep!=='undefined')window.AT_arSleep=AT_arSleep;
+if(typeof AT_saveInf!=='undefined')window.AT_saveInf=AT_saveInf;
+if(typeof AT_setGrad!=='undefined')window.AT_setGrad=AT_setGrad;
+if(typeof AT_slotKey!=='undefined')window.AT_slotKey=AT_slotKey;
+if(typeof AT_gsBadge!=='undefined')window.AT_gsBadge=AT_gsBadge;
+if(typeof AT_apReset!=='undefined')window.AT_apReset=AT_apReset;
+if(typeof AT_sqlEsc!=='undefined')window.AT_sqlEsc=AT_sqlEsc;
+if(typeof AT_escSQL!=='undefined')window.AT_escSQL=AT_escSQL;
+if(typeof AT_wrSort!=='undefined')window.AT_wrSort=AT_wrSort;
+if(typeof AT_apCalc!=='undefined')window.AT_apCalc=AT_apCalc;
+if(typeof AT_addLog!=='undefined')window.AT_addLog=AT_addLog;
+if(typeof AT_sfInit!=='undefined')window.AT_sfInit=AT_sfInit;
+if(typeof AT_csCopy!=='undefined')window.AT_csCopy=AT_csCopy;
+if(typeof AT_sfDrop!=='undefined')window.AT_sfDrop=AT_sfDrop;
+if(typeof AT_atLog!=='undefined')window.AT_atLog=AT_atLog;
+if(typeof AT_normN!=='undefined')window.AT_normN=AT_normN;
+if(typeof AT_sfEsc!=='undefined')window.AT_sfEsc=AT_sfEsc;
+if(typeof AT_close!=='undefined')window.AT_close=AT_close;
+if(typeof AT_arLog!=='undefined')window.AT_arLog=AT_arLog;
+if(typeof AT_adLog!=='undefined')window.AT_adLog=AT_adLog;
+if(typeof AT_cssId!=='undefined')window.AT_cssId=AT_cssId;
+if(typeof AT_fmtN!=='undefined')window.AT_fmtN=AT_fmtN;
+if(typeof AT_esc2!=='undefined')window.AT_esc2=AT_esc2;
+if(typeof AT_esc!=='undefined')window.AT_esc=AT_esc;
+if(typeof AT_q!=='undefined')window.AT_q=AT_q;
 })();
 </script>
 <script>document.addEventListener('DOMContentLoaded',function(){try{var id=localStorage.getItem('pd_last_tab')||'price';var b=document.querySelector('#page-admin-tools .tab-btn[data-tab=\"'+id+'\"]');if(b&&window.AT_switchTab)AT_switchTab(id,b);}catch(e){console.warn('Admin Tools init',e);}});</script><script>(function(){var old=window.showPage;if(typeof old!=='function')return;window.showPage=function(route,el){try{return old.call(this,route,el);}catch(e){console.error('Navigation error:',route,e);var p=document.getElementById('page-'+route);if(p){document.querySelectorAll('.content>.page').forEach(function(x){x.classList.remove('active')});p.classList.add('active');}return false;}};})();</script><style id="at-stable-ux">
@@ -27646,5 +27573,52 @@ html[data-theme="dark"] #page-admin-tools .admin-tools-surface [style*="backgrou
 html[data-theme="dark"] #page-admin-tools .admin-tools-surface [style*="background:#eff6ff"]{background:#16263a!important;color:#93c5fd!important}
 </style>
 
+<script id="dd-accessibility-guard">
+(function(){
+ const fieldNames={
+  'ux-import-file':'Нөөц файл сонгох','rs-rapid-key':'RapidAPI Key','rs-oai-key':'OpenAI Key','rs-server-url':'Server URL',
+  'rs-m-type':'Script төрөл','rs-m-platform':'Платформ','rs-m-format':'Формат','rs-m-date':'Нийтлэх огноо',
+  'sheets-picker-sel':'Sheets бараа сонгох','dw-sel':'Бичлэг сонгох','fi-cat':'Ангилал','hlt-eye-speed':'Нүд амраах хурд',
+  'hlt-eye-size':'Нүд амраах хэмжээ','file-input':'Барааны файл сонгох','mg-target-slider':'Margin зорилго',
+  'sel-all-chk':'Бүгдийг сонгох','bi-file-input':'Bulk import файл сонгох','bi-add-more-input':'Нэмэлт файл сонгох',
+  'bi-fill-cat':'Ангилал нөхөх','srch-file-input':'Хайлтын файл сонгох','ar-model':'AI Rename model','ar-file':'AI Rename файл',
+  'ad-model':'AI Description model','ad-file':'AI Description файл','at-model':'AI Targeting model','sf-file-input':'Supplier файл',
+  'hb-filter-avatar':'Avatar шүүлтүүр','rp-output':'Шинэчилсэн script','exp-file-inp':'Импорт файл сонгох','remind-dt':'Сануулах огноо'
+ };
+ function labelField(el){if(el.labels?.length||el.hasAttribute('aria-label')||el.hasAttribute('aria-labelledby'))return;let name=fieldNames[el.id];if(!name&&/^wq-cat-/.test(el.id))name='Барааны ангилал';if(!name&&el.type==='file')name='Файл сонгох';if(name)el.setAttribute('aria-label',name);}
+ function labelButton(btn){if(btn.textContent.trim()||btn.hasAttribute('aria-label')||btn.hasAttribute('title'))return;const hint=((btn.className||'')+' '+(btn.getAttribute('onclick')||'')+' '+(btn.id||'')).toLowerCase();let name=/close|mclose|pclose|remove\(\)/.test(hint)?'Хаах':/del|delete|remove/.test(hint)?'Устгах':/clear/.test(hint)?'Цэвэрлэх':/toggle|chevron/.test(hint)?'Нээх эсвэл хаах':'Үйлдэл';btn.setAttribute('aria-label',name);}
+ function apply(root){if(root.nodeType!==1&&root.nodeType!==9)return;const fields=root.matches?.('input,textarea,select')?[root]:[...root.querySelectorAll('input,textarea,select')];fields.forEach(labelField);const buttons=root.matches?.('button')?[root]:[...root.querySelectorAll('button')];buttons.forEach(labelButton);}
+ function init(){apply(document);new MutationObserver(records=>records.forEach(record=>record.addedNodes.forEach(node=>apply(node)))).observe(document.body,{subtree:true,childList:true});}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+<style id="dd-ux-fixes">
+[role="button"]:focus-visible{outline:2px solid var(--text)!important;outline-offset:3px!important}
+.dd-registration-password .dd-copy-password{margin:0!important;min-height:34px!important}
+@media(max-width:768px){
+  #page-admin button,#page-admin [role="button"],#page-admin-tools button{min-height:44px}
+  #page-admin #admin-users-body{padding:10px!important}
+  #page-admin #admin-users-body .list-wrap{overflow:visible!important}
+  #page-admin #admin-users-body table,#page-admin #admin-users-body tbody{display:block;width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box}
+  #page-admin #admin-users-body thead{display:none!important}
+  #page-admin #users-table-body tr{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 10px;width:100%;margin:0 0 10px;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--bg2);box-sizing:border-box}
+  #page-admin #users-table-body td{display:block!important;min-width:0;padding:9px 4px!important;border:0!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+  #page-admin #users-table-body td::before{display:block;margin-bottom:4px;color:var(--text4);font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+  #page-admin #users-table-body td:nth-child(1){order:-5}#page-admin #users-table-body td:nth-child(1)::before{content:'Бүртгэсэн'}
+  #page-admin #users-table-body td:nth-child(2){order:-10;grid-column:1/-1}#page-admin #users-table-body td:nth-child(2)::before{content:'Хэрэглэгч'}
+  #page-admin #users-table-body td:nth-child(3){order:-9}#page-admin #users-table-body td:nth-child(3)::before{content:'Багц'}
+  #page-admin #users-table-body td:nth-child(4){order:-8;grid-column:1/-1}#page-admin #users-table-body td:nth-child(4)::before{content:'Нууц үг'}
+  #page-admin #users-table-body td:nth-child(5){order:-7}#page-admin #users-table-body td:nth-child(5)::before{content:'Дуусах хугацаа'}
+  #page-admin #users-table-body td:nth-child(6){order:-6}#page-admin #users-table-body td:nth-child(6)::before{content:'Төлөв'}
+  #page-admin #users-table-body td:nth-child(7){order:-4;grid-column:1/-1}#page-admin #users-table-body td:nth-child(7)::before{content:'Үйлдэл'}
+  #page-admin #users-table-body td[colspan]{order:0!important;grid-column:1/-1!important;text-align:center!important}
+  #page-admin #users-table-body td[colspan]::before{display:none!important}
+  #page-admin .dd-password-cell{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:8px!important}
+  #page-admin .dd-password-cell::before{grid-column:1/-1}
+  #page-admin .dd-password-cell code{overflow-wrap:anywhere}
+  #page-admin .dd-copy-password,#page-admin #users-table-body td:nth-child(7) button{min-height:40px!important}
+  #page-admin-tools .admin-tools-surface .tab-btn,#page-admin-tools .admin-tools-surface .btn{min-height:44px}
+}
+</style>
 </body>
 </html>
